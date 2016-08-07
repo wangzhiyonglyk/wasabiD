@@ -1,5 +1,5 @@
 /**
- * desc:webpck 标准配置文件
+ * desc:webpack 标准配置文件
  */
 var webpack = require('webpack');
 var commonsPlugin = new webpack.optimize.CommonsChunkPlugin('common.js');
