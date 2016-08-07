@@ -1,9 +1,4 @@
 
-/**
- * Created by wangzy
- * date 2016-01-28
- * desc:打包入口
- */
 var webpack = require('webpack');
 var commonsPlugin = new webpack.optimize.CommonsChunkPlugin('common.js');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
@@ -19,7 +14,6 @@ module.exports = {
     output: {
         path: './build/js',
         filename: '[name].js',
-        //publicPath: 'http://0.0.0.0:8080/'
     },
     module: {
         //加载器配置
