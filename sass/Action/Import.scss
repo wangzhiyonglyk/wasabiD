@@ -1,0 +1,93 @@
+/*/
+create by wangzy
+date:2016-05-17
+desc:导入功能组件样式
+ */
+@import url("../Base/base.scss");
+
+.import-section
+{
+  position: relative;
+  height: 50px;
+  display: block;
+  margin-top: 20px;
+  padding-left: 35px;
+}
+
+.import-text
+{
+  display: inline;
+  float:left;
+  width:258px;
+  padding-top:6px;
+  padding-bottom: 6px;
+  padding-left: 2px;
+  padding-right: 18px;
+  font-size: 12px;
+  font-size: 1.2rem;
+  line-height: 20px;
+  height: 20px;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #d7dde2;
+  box-shadow: none!important;
+  -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+  transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+  outline: none;
+}
+.import-file
+{
+  height: 28px;
+  width: 100px;
+  z-index: 3;
+  right: 38px;
+  position: absolute;
+  opacity: 0;
+  top: 3px;
+  filter:alpha(opacity=0);
+}
+.import-chose
+{
+  background-color: #DADADA;
+  color: #555354;
+  width: 100px;
+  display: inline;
+  right: 28px;
+  position: absolute;
+  top: 2px;
+
+}
+
+.import-downloadmodel
+{
+  position: absolute;
+  top: 70px;
+  left: 45px;
+  color: #1ec9c3;
+}
+
+.import-downloadmodel:before
+{
+  content:"111";
+  color:transparent;
+  background-image: url('../../img/icons/downloadmodel.png');
+  width: 12px;
+  height: 12px;
+  background-size: 12px 12px;
+  position: absolute;
+  left: -12px;
+  top: 0px;
+}
+
+.import-submit
+{
+  display: block;
+  text-align: right;
+  position: absolute;
+  height: 60px;
+  bottom: 0px;
+  background-color: #fafafa;
+  width: 100%;
+  line-height: 60px;
+  border-top: 1px solid #ebebeb;
+}

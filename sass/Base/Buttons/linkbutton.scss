@@ -1,0 +1,95 @@
+/*create by wangzy
+date:2016-03-02
+desc:小图标按钮样式
+*/
+@import url("../base.scss");
+.wasabi-linkbutton
+{
+    display: inline-block;
+    position: relative;
+    border: 1px solid #bbb;
+    background-color: #FAFAFA;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-right:10px;
+    padding-top:5px;
+    padding-bottom:7px;
+    padding-left:10px;
+    padding-right:10px;
+}
+.wasabi-linkbutton.default {
+    border: 1px solid #bbb;
+    background-color: #FAFAFA;
+}
+
+.wasabi-linkbutton.default:hover
+{
+    background: #eaf2ff;
+    border: 1px solid #b7d2ff;
+
+}
+
+.wasabi-linkbutton.primary {
+    border: 1px solid #2e6da4;
+    background-color: #337ab7;
+    color:#fff;
+}
+
+.wasabi-linkbutton.primary:hover
+{
+    color: #fff;
+    background-color: #204d74;
+    border-color: #122b40;
+
+}
+
+.wasabi-linkbutton[disabled] {
+    opacity: 0.40;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.wasabi-linkbutton.onlyicon
+{
+    border: none;
+    text-decoration: none;
+    width: 16px;
+    height: 16px;
+    position: relative;
+    background-color: transparent;
+    margin: 0px;
+    padding: 0px;
+    margin-right: 5px;
+
+}
+.wasabi-linkbutton.onlyicon:hover
+{
+    background-color: transparent;
+   border: none;
+}
+
+.wasabi-linkbutton.onlytext
+{
+    padding: 0px;
+    margin-right: 5px;
+}
+.wasabi-linkbutton.onlyicon[disabled] {
+    border: none;
+    -khtml-opacity: 0.40;
+    -moz-opacity: 0.40;
+    opacity: 0.40;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.wasabi-linkbutton-text
+{
+   display: inline-block;
+    height: 14px;
+}
+.wasabi-linkbutton-text.right
+{
+    display: inline-block;
+    height: 14px;
+    margin-right: 8px;
+}

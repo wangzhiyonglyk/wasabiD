@@ -1,0 +1,40 @@
+//create by wangzy
+//date:2016-07-22
+//desc:筛选框
+/*
+筛选框
+*/
+.wasabi-searchbox
+{
+  width:100%;
+  position: relative;
+  text-align: center;
+  height: 50px;
+  line-height: 50px;
+  background-color: #eff0f1;
+}
+.wasabi-searchbox input {
+  width: 90%;
+  border: 1px solid #d7dde2;
+  box-shadow: none !important;
+  outline: none;
+  height: 25px;
+  position: relative;
+  border-radius: 15px;
+  margin: auto;
+  padding-left: 20px;
+}
+.wasabi-searchbox .icon {
+
+  content: "111111";
+  color: transparent;
+  background-image: url('../../../img/icons/searchbox.png');
+  background-repeat: no-repeat;
+  background-position: center center;
+  position: absolute;
+  right: 5%;
+  top: 18px;
+  width: 14px;
+  height: 14px;
+  background-size: 14px 14px;
+}

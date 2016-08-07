@@ -1,0 +1,136 @@
+/*create by wangzy
+date:2016-04-01
+desc:表单输入框样式
+*/
+@import url("../base.scss");
+.wasabi-checkul
+{
+  list-style: none;
+  padding-left: 0px;
+  padding: 0px;
+  height: 27px;
+  margin: 0px;
+  margin-top: 6px;
+
+}
+.wasabi-checkul li
+{
+  float: left;
+  margin-right: 5px;
+  position: relative;
+  list-style-type: none;
+  max-width:150px;
+}
+.wasabi-checkul .checktext
+{
+  float: left;
+  padding-top: 2px;
+  padding-left: 5px;
+  cursor: default;
+  margin-top: -20px;
+  margin-left: 20px;
+  max-width: 130px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  height: 20px;
+  line-height: 20px;
+}
+
+.wasabi-checkul .checkbox{
+  display: block;
+  width: 12px;
+  height: 12px;
+  position: relative;
+  visibility: hidden;
+}
+.wasabi-checkul .checkbox + label {
+  width:12px;
+  height:12px;
+  border: 1px solid #afb3b8;
+  display: inline-block;
+  margin-right: 3px;
+  position: absolute;
+  top: 2px;
+  left: 3px;
+
+}
+
+.wasabi-checkul .checkbox + label[readonly] {
+  background-color: #eee;
+  cursor: not-allowed;
+}
+.wasabi-checkul .checkbox:hover + label {
+  border: 1px solid #1ec9c3;
+}
+
+.wasabi-checkul .checkbox:checked + label {
+  background-color: #1ec9c3;
+  border: 1px solid transparent;
+}
+.wasabi-checkul .checkbox:checked + label:after {
+  content: '';
+  height: 8px;
+  width: 8px;
+  position: absolute;
+  top: 1px;
+  left: 2px;
+background-image: url("../../../img/icons/draw.png");
+  background-size: 8px 8px;
+  background-repeat: no-repeat;
+  color:transparent;
+}
+
+/*radio*/
+
+
+.wasabi-radio-btn {
+  width: 18px;
+  height: 18px;
+  display: inline-block;
+  float: left;
+  margin: -1px 5px 0 0;
+  cursor: pointer;
+  position: relative;
+  -webkit-border-radius: 100%;
+  -moz-border-radius: 100%;
+  border-radius: 100%;
+  border: 2px solid #1ec9c3;
+  box-sizing: border-box;
+
+}
+.wasabi-radio-btn.readonly{
+  background-color: #eee;
+  cursor: not-allowed;
+}
+.wasabi-radio-btn input[type="radio"]{
+  visibility: hidden;
+  width: 23px;
+  height: 23px;
+  margin-top: -3px;
+  margin-left: -3px;
+
+}
+
+.wasabi-radio-btn i {
+  width: 8px;
+  height: 8px;
+  position: absolute;
+  left: 3.4444px;
+  top: 3.4444px;
+  -webkit-border-radius: 100%;
+  -moz-border-radius: 100%;
+  border-radius: 100%;
+  box-sizing: border-box;
+}
+.checkedRadio i {
+  background-color: #1ec9c3;
+}
+.wasabi-checkul .radiotext
+{
+  float:right;
+  padding-top:2px;
+  padding-left:2px;
+  cursor: default;
+
+}

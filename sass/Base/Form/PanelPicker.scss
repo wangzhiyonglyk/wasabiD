@@ -1,0 +1,59 @@
+.content-container{
+  background-color: #fff;
+  position: absolute;
+  top:34px;
+  left:0px;
+  padding: 10px;
+  border:1px solid #ccc;
+  z-index: 999999;
+  height:300px;
+}
+
+.item-container{
+    width:500px;
+    height:300px;
+
+}
+
+.item-container *{
+  vertical-align: top;
+}
+
+.itemwrap{
+  display: inline-block;
+  width:50%;
+  box-sizing: border-box;
+  position: relative;
+  padding: 5px 0px  5px 70px;
+  min-height: 50px;
+
+}
+
+.item-left{
+  position: absolute;
+  top:5px;
+  left:0;
+  width:70px;
+  font-size: 14px;
+  text-align: right;
+}
+
+.item-left span{
+  font-weight: bolder;
+  cursor: pointer;
+}
+
+.item-right{
+  width: 100%;
+  height:100%;
+  box-sizing: border-box;
+}
+
+.item-right span{
+  margin: 5px;
+  cursor: pointer;
+}
+
+.wasabi-form-group{
+  white-space:normal;
+}

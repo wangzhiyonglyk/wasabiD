@@ -1,0 +1,88 @@
+/*create by wangzy
+date:2016-03-30
+desc:下拉框样式
+*/
+@import url("../base.scss");
+.nice-select {
+  width: 100%;
+  height: 34px;
+  display: block;
+  position: relative;
+  max-width: 300px;
+}
+.nice-select ul{
+  padding:0px;
+  margin: 0px;;
+}
+.nice-select .icon {
+  content: "";
+  display: block;
+  background-image: url(../../../img/icons/selecticon.png);
+  background-repeat: no-repeat;
+  width: 32px;
+  height: 32px;
+  border-left: 1px solid #d7dde2;
+  position: absolute;
+  top: 0px;
+
+  background-size: 32px;
+  cursor: default;
+
+}
+.nice-select .icon.default
+{
+  right: -12px;
+}
+.nice-select .icon.large
+{
+  right: 9px;
+}
+.nice-select .icon.large
+{
+  right:56px;
+}
+
+.nice-select ul {
+  width: 106%;
+  display: none;
+  position: absolute;
+  left: 0px;
+  overflow: hidden;
+  background-color: #fff;
+  max-height: 150px;
+  overflow-y: auto;
+  border: 1px solid #999;
+  border-top: 0;
+  box-shadow: 0 3px 5px #999;
+  z-index:3;
+  top:34px;
+}
+.nice-select ul li {
+  height: 30px;
+  line-height: 30px;
+  overflow: hidden;
+  padding: 0 10px;
+  cursor: pointer;
+  position: relative;
+}
+.nice-select ul li:hover {
+  background-color: #dcf9f8;
+}
+
+.nice-select ul li.active {
+  background-color: #dcf9f8;
+}
+.nice-select ul li.active:after
+{
+  content: '11';
+  color:transparent;
+  position: absolute;
+  top:8px;
+  right: 20px;
+  width:12px;
+  height:12px;
+  background-image: url('../../../img/icons/yes.png') ;
+  background-repeat: no-repeat;
+  background-position:  center center;
+  background-size: 12px 12px;
+}

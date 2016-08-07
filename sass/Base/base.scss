@@ -1,0 +1,56 @@
+/*create by wangzy
+date:2016-03-02
+desc:基本样式
+*/
+/*@import url("//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css") screen, print;*/
+*{
+    text-underline: none;
+    text-decoration: none;
+    font-family: 微软雅黑;
+    font-weight: normal;
+    color:#666666;
+}
+html {
+    font-size: 62.5%;
+     height: 100%;
+}
+
+
+body{
+    font-size: 12px;
+    font-size: 1.2rem;
+    overflow: auto;
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+    height: 100%;
+}
+
+a{
+    color:#1ec9c3;
+  cursor:pointer;
+    margin-right: 5px;
+}
+a:hover{
+    color:#1ec9c3;
+}
+.ellipsis
+{
+
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    display: inline;
+    float:left;
+}
+::-webkit-scrollbar {
+    width: 5px;
+    height: 8px;
+}
+::-webkit-scrollbar-track-piece {
+    background-color: #ffffff;
+}
+::-webkit-scrollbar-thumb {
+    background-color: #D1D1D1;
+    border-radius: 5px;
+}

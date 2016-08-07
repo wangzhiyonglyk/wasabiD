@@ -1,0 +1,63 @@
+
+@import url("../base.scss");
+.wasabi-tabs {
+}
+.wasabi-tab
+{
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+  height: 34px;
+  line-height: 34px;
+  vertical-align: middle;
+  margin-right: 5px;
+  padding-left: 8px;
+  padding-right: 8px;
+  font-weight: bold;
+
+}
+
+.wasabi-tab.default {
+  border: 1px solid #d9d9d9;
+  background-color: #f9f9f9;
+  border-bottom-color: transparent;
+}
+.wasabi-tab.default.active {
+  background: transparent;
+  color: #2db7f5;
+}
+
+  /*
+  此处专门心怡制定
+  */
+.wasabi-tab.green {
+  font-weight: normal;
+  border: 1px solid #0ec2bc;
+  color:#0ec2bc;
+}
+
+
+.wasabi-tab.green.active {
+  background: #0ec2bc;
+  color: #ffffff;
+}
+
+.wasabi-tabs .section.default {
+  border-top: 1px solid #d9d9d9;
+  height:100%;
+}
+
+.wasabi-tabs .section.green {
+  border-top: 1px solid #0ec2bc;
+  height:100%;
+}
+
+
+
+.wasabi-tabs .section>div {
+  display:none;
+}
+.wasabi-tabs .section>.active
+{
+  display:block;
+}

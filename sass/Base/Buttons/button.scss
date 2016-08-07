@@ -1,0 +1,143 @@
+/*
+按钮样式
+*/
+@import url("../base.scss");
+.wasabi-button
+{
+  display: inline-block;
+  font-size:16px;
+  font-size: 1.6rem;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  margin-right: 10px;
+  padding-left:10px;
+  padding-right: 10px;
+  padding-bottom: 4px;
+  outline:none;
+  cursor:pointer;
+  position: relative;
+}
+.wasabi-button.size-large{
+  height: 34px;
+
+}
+.wasabi-button.size-default{
+  height: 30px;
+  font-size:14px;
+  font-size: 1.4rem;
+
+}
+.wasabi-button.size-small{
+  height: 22px;
+  font-size:12px;
+  font-size: 1.2rem;
+
+}
+.wasabi-button.primary {
+  color: #fff;
+  background-color: #337ab7;
+  border-color: #2e6da4;
+}
+.wasabi-button.primary:hover,.wasabi-button.primary:active{
+  color: #fff;
+  background-color: #204d74;
+  border-color: #122b40;
+}
+.wasabi-button.default{
+  min-width:80px;
+  color:#ffffff;
+  background: linear-gradient(#b0bcc0,#9caaaf);
+  border:none;
+}
+.wasabi-button.default:active
+{
+  color:#ffffff;
+  background: linear-gradient(#9caaaf,#b0bcc0);
+  border:none;
+}
+
+.wasabi-button.success {
+  color: #fff;
+  background-color: #5cb85c;
+  border-color: #4cae4c;
+}
+.wasabi-button.success:hover,.wasabi-button.success:active{
+  color: #fff;
+  background-color: #449d44;
+  border-color: #398439;
+}
+
+.wasabi-button.info {
+  color: #fff;
+  background-color: #5bc0de;
+  border-color: #46b8da;
+}
+.wasabi-button.info:hover,.wasabi-button.info:active{
+  color: #fff;
+  background-color: #31b0d5;
+  border-color: #269abc;
+}
+
+.wasabi-button.warning {
+  color: #fff;
+  background-color: #f0ad4e;
+  border-color: #eea236;
+}
+.wasabi-button.warning:hover,.wasabi-button.warning:active{
+  color: #fff;
+  background-color: #ec971f;
+  border-color: #d58512;
+}
+
+.wasabi-button.danger {
+  color: #fff;
+  background-color: #d9534f;
+  border-color: #d43f3a;
+}
+.wasabi-button.danger:hover,.wasabi-button.danger:active{
+  color: #fff;
+  background-color: #c9302c;
+  border-color: #ac2925;
+}
+
+.wasabi-button.cancel
+{
+  min-width:80px;
+  color:#606568;
+  background: linear-gradient(#ffffff ,#f0f2f4);
+  border: 1px solid #dbdee1;
+}
+
+.wasabi-button.cancel:active {
+  color:#606568;
+  background: linear-gradient(#f0f2f4,#ffffff);
+  border: 1px solid transparent;
+}
+
+.wasabi-button[disabled] {
+  border: none;
+  -khtml-opacity: 0.40;
+  -moz-opacity: 0.40;
+  opacity: 0.40;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/*
+此处专门心怡制定
+*/
+.wasabi-button.green {
+  min-width:80px;
+  color:#ffffff;
+  background: linear-gradient(#27dcbd,#0ec2bc);
+  border:none;
+}
+.wasabi-button.green:active
+{
+  color:#ffffff;
+  background: linear-gradient( #0ec2bc,#27dcbd);
+  border:none;
+}
+
+
+

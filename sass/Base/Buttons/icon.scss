@@ -1,0 +1,183 @@
+
+/*create by wangzy
+date:2016-03-03
+desc:小图标按钮样式
+*/
+@import url("../base.scss");
+.wasabi-icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 8px;
+    padding-left: 1px;
+    display: inline-block;
+    background-size: 16px 16px;
+    vertical-align: bottom;
+
+
+}
+.wasabi-onlyicon .wasabi-icon
+{
+    top: 0px;
+    position: absolute;
+}
+.wasabi-icon-rightTop
+{
+    position: absolute;
+    margin-top: -12px;
+    margin-right: -15px;
+}
+
+
+/*添加*/
+.icon-add {
+    background-image: url('../../../img/icons/add.png');
+    background-repeat: no-repeat;
+    background-position:  center center;;
+
+}
+/*  勾选选中  */
+.icon-select{
+    background-image: url('../../../img/icons/select.png');
+    background-repeat: no-repeat;
+    background-position:  center center;
+}
+/*复制*/
+.icon-copy {
+    background-image: url('../../../img/icons/copy.png') ;
+    background-repeat: no-repeat;
+    background-position:  center center;;
+}
+
+/*修改*/
+.icon-modify
+{
+    background-image: url('../../../img/icons/modify.png') ;
+    background-repeat: no-repeat;
+    background-position:  center center;;
+}
+/*删除*/
+.icon-delete
+{
+    background-image: url('../../../img/icons/delete.png');
+    background-repeat: no-repeat;
+    background-position:  center center;;
+}
+/*查询*/
+.icon-search
+{
+    background-image: url('../../../img/icons/search.png') ;
+    background-repeat: no-repeat;
+    background-position:  center center;;
+}
+
+
+/*下载*/
+.icon-download
+ {
+    background-image: url('../../../img/icons/download.png') ;
+    background-repeat: no-repeat;
+    background-position:  center center;;
+
+ }
+.icon-export{
+    background-image: url('../../../img/icons/export.png') ;
+    background-repeat: no-repeat;
+    background-position:  center center;;
+}
+
+
+/*展开*/
+.icon-expand{
+    background-image: url('../../../img/icons/expand.png') ;
+    background-repeat: no-repeat;
+    background-position:  center center;
+}
+/*折叠*/
+.icon-fold{
+    background-image: url('../../../img/icons/fold.png') ;
+    background-repeat: no-repeat;
+    background-position:  center center;
+}
+
+/*是*/
+.icon-yes{
+    background-image: url('../../../img/icons/yes.png') ;
+    background-repeat: no-repeat;
+    background-position:  center center;
+}
+/*否*/
+.icon-no{
+    background-image: url('../../../img/icons/no.png') ;
+    background-repeat: no-repeat;
+    background-position:  center center;
+}
+
+/*添加*/
+.icon-show {
+    background-image: url('../../../img/icons/show.png');
+    background-repeat: no-repeat;
+    background-position:  center center;;
+
+}
+
+
+/*等待*/
+.icon-pending {
+    background-image: url('../../../img/icons/pending.png');
+    background-repeat: no-repeat;
+    background-position:  center center;;
+
+}
+/*确认*/
+.icon-check {
+    background-image: url('../../../img/icons/check.png');
+    background-repeat: no-repeat;
+    background-position:  center center;;
+
+}
+/*异常*/
+.icon-error {
+    background-image: url('../../../img/icons/error.png');
+    background-repeat: no-repeat;
+    background-position:  center center;;
+
+}
+/*交换*/
+.icon-change {
+    background-image: url('../../../img/icons/change.png');
+    background-repeat: no-repeat;
+    background-position:  center center;;
+
+}
+/*退回*/
+.icon-return {
+    background-image: url('../../../img/icons/return.png');
+    background-repeat: no-repeat;
+    background-position:  center center;;
+
+}
+
+
+/*列表详情图标*/
+.icon-detail{
+    background-image: url('../../../img/icons/expand.png') ;
+    background-repeat: no-repeat;
+    background-position:  center center;
+    width:12px!important;
+    height: 12px!important;
+    background-size: 12px 12px!important;
+}
+
+
+
+/*锁定*/
+.icon-lock{
+    background-image: url('../../../img/icons/lock.png') ;
+    background-repeat: no-repeat;
+    background-position:  center center;
+    width: 12px!important;
+    height:12px!important;
+    display: inline-block;
+    background-size: 12px 12px!important;
+}
+

@@ -1,0 +1,28 @@
+{
+  "name": "wasabiD",
+  "version": "0.4.53",
+  "description": "wasabi design——心怡科技物流PC前端框架",
+  "main": "index.js",
+  "keywords": [
+    "react",
+    "wasabi",
+    "alog"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wangzhiyonglyk/wasabi.git"
+  },
+  "author": {
+    "name": "wangzhiyong"
+  },
+  "maintainers": [
+    {
+      "name": "wangzhiyong",
+      "email": "wangzhiyonglyk@163.com"
+    }
+  ],
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wangzhiyonglyk/wasabi/issues"
+  }
+}

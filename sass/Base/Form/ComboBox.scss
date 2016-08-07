@@ -1,0 +1,196 @@
+/*create by wangzy
+date:2016-04-26
+desc:日期选择样式
+*/
+@import url("../base.scss");
+.combobox {
+  width: 100%;
+  height: 34px;
+  display: block;
+  position: relative;
+}
+
+.combobox .pickericon{
+  content: "";
+  display: block;
+  background-image: url(../../../img/icons/selecticon.png) ;
+  background-repeat: no-repeat;
+  width: 32px;
+  height: 32px;
+  border-left: 1px solid #d7dde2;
+  position: absolute;
+  top: 0px;
+  background-size: 32px;
+  cursor: default;
+}
+.combobox .pickericon.default
+{
+
+  right: -12px;
+}
+
+.combobox .pickericon.large {
+  right: 9px;
+}
+.combobox .pickericon.online {
+  right:56px;
+}
+
+.combobox .dropdate {
+  width:249px;
+  height:248px;
+  padding:0px;
+  margin: 0px;;
+  display: none;
+  position: absolute;
+  overflow: visible;
+  z-index:9999;
+  top:34px;
+  border:1px solid #d7dde2;
+  box-shadow: 0px 0px 20px #dddddd;
+}
+.combobox .dropdate .left
+{
+  left:0px;
+}
+.combobox .dropdate .default
+{
+  left:0px;
+}
+.combobox .dropdate .right
+{
+  left:0px;
+}
+.combobox .droptime
+{
+  width: 168px;
+  height: 177px;
+  position: absolute;
+  transition: height 0.5s;
+  top:34px;
+
+}
+
+.combobox .droprange
+{
+  width:528px;
+  height:287px;
+  padding:0px;
+  margin: 0px;;
+  left: -100px;
+  position: absolute;
+  overflow: hidden;
+  z-index:4;
+  top:34px;
+  left: 0px;
+  box-shadow: 0px 0px 20px #dddddd;
+  background: white;
+}
+.combobox .droprange.default
+{
+  left:0px;
+}
+.combobox .droprange.left
+{
+  left: 0px;
+}
+.combobox .droprange.right
+{
+  left: -170px;
+}
+.combobox .droppicker
+{
+  width:410px;
+  height:527px;
+  padding:0px;
+  margin: 0px;;
+  display: none;
+  position: absolute;
+  z-index:4;
+  top:34px;
+
+}
+.combobox .droppicker.default
+{
+  left: 0px;
+}
+.combobox .droppicker.left
+{
+  left:0px;
+}
+.combobox .droppicker.right
+{
+  left:-170px;
+}
+
+.combobox .dropgridpicker{
+  width:410px;
+  height:527px;
+  padding:0px;
+  margin: 0px;;
+  display: none;
+  overflow: auto;
+  position: absolute;
+  left: 0px;
+  z-index:4;
+  top:34px;
+  border:1px solid #d7dde2;
+  box-shadow: 0px 0px 20px #dddddd;
+}
+.combobox .dropgridpicker.default
+{
+  left: 0px;
+}
+.combobox .dropgridpicker.left
+{
+  left:0px;
+}
+.combobox .dropgridpicker.right
+{
+  left:-60px;
+}
+
+
+.combobox .droppanelpicker
+{
+  width:410px;
+  height:527px;
+  padding:0px;
+  margin: 0px;;
+  display: none;
+  position: absolute;
+  z-index:4;
+  top:34px;
+
+}
+.combobox .droppanelpicker.default
+{
+  left: 0px;
+}
+.combobox .droppanelpicker.left
+{
+  left:0px;
+}
+.combobox .droppanelpicker.right
+{
+  left:-170px;
+}
+
+.combobox .ok
+{
+  display: block;
+  width: 528px;
+  height:40px;
+  border-top: 1px solid #f0f0f0;
+  border-bottom: none;
+  text-align: right;
+  float: left;
+
+}
+.combobox .ok .wasabi-button
+{
+  margin-top:5px;
+  margin-bottom: 5px;
+  min-width: 66px;
+  width:66px;
+}

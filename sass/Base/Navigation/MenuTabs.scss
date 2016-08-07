@@ -1,0 +1,158 @@
+
+@import url("../base.scss") ;
+.tabsection
+{
+    width: 100%;
+    display: none;
+    padding-top: 10px;
+}
+.checkedsection
+{
+    width: 100%;
+}
+iframe
+{
+    width: 100%;
+    border: none;
+}
+.wasabi-nav-tabs {
+    margin-bottom: 0;
+    padding-left: 0;
+    list-style: none;
+    margin-top: 0px;
+    height: 40px;
+    background-color:#0d4043;
+}
+.wasabi-nav-tabs .tabmenu
+{
+    background-image:url('../../../img/menu.png');
+    background-size: 40px 40px;
+    width: 40px;
+    height:40px;
+    background-repeat:no-repeat;
+
+}
+.wasabi-nav-tabs .tabmenu.close
+{
+    background-image:url('../../../img/menuactive.png');
+    background-size: 40px 40px;
+    width: 40px;
+    height:40px;
+    background-repeat:no-repeat;
+
+}
+
+.wasabi-nav-tabs .tabhome {
+    width: 40px;
+    height:40px;
+    background-image:url('../../../img/icons/home.png');
+    background-size: 18px 18px;
+    background-position: center center;
+    background-repeat:no-repeat;
+}
+.wasabi-nav-tabs .tabhome:hover,
+.wasabi-nav-tabs .tabhome.active
+{
+    width: 40px;
+    height:40px;
+    background-image:url('../../../img/icons/homehover.png');
+    background-size: 18px 18px;
+    background-position: center center;
+    background-repeat:no-repeat;
+}
+.wasabi-nav-tabs > li {
+    float:left;
+    position: relative;
+    display: block;
+    height: 40px;
+    width:120px;
+    padding-right: 1px;
+}
+
+.wasabi-nav-tabs > li > a {
+    position: relative;
+    display: block;
+    height: 40px;
+    line-height: 40px;
+    border-radius: 0;
+    margin-right: 0px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    padding-left:0px;
+    width:120px;
+    padding-right: 1px;
+    overflow: hidden;
+}
+.wasabi-nav-tabs > li > a:hover
+{
+    background-color: #114e52;
+
+}
+.wasabi-nav-tabs > li.active > a{
+    background-color: #114e52;
+}
+
+.wasabi-nav-tabs > li > a .text{
+    color:#86a0a1;
+    font-size: 1.2rem;
+    font-size: 12px;
+    width:70px;
+    padding-left: 25px;
+    padding-right: 25px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    text-align: center;
+}
+
+.wasabi-nav-tabs > li > a:hover .text{
+    color: #ffffff;
+}
+.wasabi-nav-tabs > li.active > a .text{
+    color: #ffffff;
+}
+
+.wasabi-nav-tabs > li .icon{
+    float: left;
+    width: 12px;
+    height: 12px;
+    background-size: 12px 12px;
+    top: 13px;
+    left:10px;
+    position: absolute;
+
+
+}
+.wasabi-nav-tabs > li .closeicon{
+
+    position: absolute;
+    width: 8px;
+    height:8px;
+    top:15px;
+    right:8px;
+    background-image:url('../../../img/icons/close.png') ;
+    background-size: 8px 8px;
+}
+
+.wasabi-nav-tabs > li .closeicon:hover{
+
+    background-image:url('../../../img/icons/closehover.png') ;
+
+}
+
+.wasabi-nav-tabs > li .split{
+    float: right;
+    or: transparent;
+    width: 1px;
+    height: 20px;
+    background-color: #265356;
+    position: absolute;
+    right: 0px;
+    top: 12px;
+}
+
+
+
+
+

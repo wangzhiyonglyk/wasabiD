@@ -1,0 +1,119 @@
+.wasabi-message
+{
+  display: inline-block;
+  width: auto;
+  max-width:500px;
+  min-width: 80px;
+  min-height: 30px;
+  line-height: 30px;
+ padding-top: 10px;
+  padding-bottom: 10px;
+  border-radius: 10px;
+  overflow: visible;
+  padding-left: 60px;
+  padding-right: 20px;
+  position: absolute;
+  top: 20px;
+  left: 45%;
+  z-index: 9999999;
+  white-space: pre-wrap;
+}
+.wasabi-message.success
+{
+  background-color: #25d7b9;
+}
+.wasabi-message.error
+{
+  background-color: #f93123;
+}
+.wasabi-message.alert
+{
+  background-color: #f58030;
+}
+
+
+.wasabi-message .notice
+{
+  font-size: 18px;
+  color: #ffffff;
+  font-family: 微软雅黑;
+  font-weight: normal;
+  position: relative;
+  bottom: 1px;
+
+}
+.wasabi-message .notice:before
+{
+  content: "111111";
+  color: transparent;
+  width: 32px;
+  display: inline-block;
+  height: 32px;
+  background-size: 32px;
+  background-repeat: no-repeat;
+  position: absolute;
+  top: 0px;
+  left: -40px;
+
+}
+.wasabi-message.success .notice:before
+{
+  background-image: url("../../../img/icons/message_success.png");
+}
+.wasabi-message.error .notice:before
+{
+  background-image: url("../../../img/icons/message_error.png");
+}
+.wasabi-message.alert .notice:before
+{
+  background-image: url("../../../img/icons/message_info.png");
+}
+
+.wasabi-confirm {
+  width: 422px;
+  height: 140px;
+  box-shadow: 0px 0px 40px #d8d8d8;
+  background-color: #ffffff;
+  position: absolute;
+  top: 30%;
+  left: 30%;
+  z-index: 9999999;
+
+}
+.wasabi-confirm .message {
+  height: 50px;
+  padding-left: 110px;
+  padding-top: 10px;
+  padding-right: 10px;
+  margin-top: 20px;
+  display: inline-block;
+  position: absolute;
+  font-size: 18px;
+  color: #666666;
+  text-align: center;
+  font-family: 微软雅黑;
+  font-weight: normal;
+}
+.wasabi-confirm .message:before
+{
+  content: "111111";
+  color: transparent;
+  width: 54px;
+  display: inline-block;
+  height: 48px;
+  background-size: 54px 48px;
+  background-repeat: no-repeat;
+  position: absolute;
+  top: 0px;
+  left: 30px;
+  background-image: url("../../../img/icons/message_confirm.png");
+}
+.wasabi-confirm .buttons
+{
+  height: 28px;
+  display: block;
+  bottom: 20px;
+  position: absolute;
+  width: 100%;
+  text-align: right;
+}
