@@ -1,4 +1,6 @@
-
+/**
+ * desc:webpck 标准配置文件
+ */
 var webpack = require('webpack');
 var commonsPlugin = new webpack.optimize.CommonsChunkPlugin('common.js');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
