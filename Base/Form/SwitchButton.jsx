@@ -8,14 +8,16 @@
 require('../../sass/Base/Form/SwitchButton.scss');
 let React = require('react');
 let setStyle=require("../../Mixins/setStyle.js");
-
+var shouldComponentUpdate=require("../../Mixins/shouldComponentUpdate.js");
 let SwitchButton = React.createClass({
-    mixins:[setStyle],
+    mixins:[setStyle,shouldComponentUpdate],
     propTypes:{
         name:React.PropTypes.string.isRequired,//字段名
         label:React.PropTypes.string,//字段文字说明属性
         width:React.PropTypes.number,//宽度
         height:React.PropTypes.number,//高度
+        value:React.PropTypes.oneOfType([React.PropTypes.number,React.PropTypes.string]),//默认值,
+        text:React.PropTypes.oneOfType([React.PropTypes.number,React.PropTypes.string]),//默认文本值
         placeholder:React.PropTypes.string,//输入框预留文字
         readonly:React.PropTypes.bool,//是否只读
         required:React.PropTypes.bool,//是否必填
@@ -46,7 +48,7 @@ let SwitchButton = React.createClass({
             label:null,
             width:null,
             height:null,
-            value:"",
+            value:0,
             text:"",
             placeholder:"",
             readonly:false,
@@ -65,19 +67,15 @@ let SwitchButton = React.createClass({
     },
     getInitialState:function(){
         return {
-            checked:this.props.value==this.props.checked,
-            value:this.props.checked?1:0,//用于回传给表单组件
+            checked:this.props.value==1?true:this.props.checked,
+            value:this.props.value,//用于回传给表单组件
             readonly:this.props.readonly,
         }
     },
     componentWillReceiveProps:function(nextProps) {
-        var checked=nextProps.checked;
-        if(!checked)
-        {
-            checked=nextProps.value==1?true:false
-        }
+
           this.setState({
-              checked:checked,
+              checked:nextProps.value==1?true:nextProps.checked,
               value:nextProps.value,
               readonly:nextProps.readonly,
           })
@@ -98,7 +96,7 @@ let SwitchButton = React.createClass({
         });
         if(this.props.onClick!=null)
         {//单独使用时
-            this.props.onClick(!this.state.checked,!this.state.checked?1:0,this.props.name);
+            this.props.onClick(!this.state.checked,!this.state.checked?1:0,this.props.name,null);
         }
         if(this.props.onSelect!=null)
         {//返回给comboBox组件

@@ -12,13 +12,16 @@ var validation=require("../Lang/validation.js");
 let setStyle=require("../../Mixins/setStyle.js");
 var validate=require("../../Mixins/validate.js");
 var showUpdate=require("../../Mixins/showUpdate.js");
+var shouldComponentUpdate=require("../../Mixins/shouldComponentUpdate.js");
 let GridPicker=React.createClass({
-    mixins:[setStyle,validate,showUpdate],
+    mixins:[setStyle,validate,showUpdate,shouldComponentUpdate],
     propTypes: {
         name:React.PropTypes.string.isRequired,//字段名
         label:React.PropTypes.string,//字段文字说明属性
         width:React.PropTypes.number,//宽度
         height:React.PropTypes.number,//高度
+        value:React.PropTypes.oneOfType([React.PropTypes.number,React.PropTypes.string]),//默认值,
+        text:React.PropTypes.oneOfType([React.PropTypes.number,React.PropTypes.string]),//默认文本值
         placeholder:React.PropTypes.string,//输入框预留文字
         readonly:React.PropTypes.bool,//是否只读
         required:React.PropTypes.bool,//是否必填
@@ -113,6 +116,7 @@ let GridPicker=React.createClass({
             value:this.props.value,
             text:this.props.text,
             readonly:this.props.readonly,
+            data:this.props.data,
             //验证
             required:this.props.required,
             validateClass:"",//验证的样式
@@ -122,11 +126,12 @@ let GridPicker=React.createClass({
         }
     },
     componentWillReceiveProps:function(nextProps) {
+        //只更新不查询,注意了
         if(nextProps.data!=null&&nextProps.data instanceof  Array &&(!nextProps.url||nextProps.url=="")) {
             this.setState({
                 data: nextProps.data,
-                value: nextProps.value,
-                text: nextProps.text,
+                value:nextProps.value,
+                text:nextProps.text,
                 readonly: nextProps.readonly,
                 required: nextProps.required,
                 params:nextProps.params,
@@ -135,19 +140,19 @@ let GridPicker=React.createClass({
         }
         else {
             if (this.showUpdate(nextProps.params)) {//如果不相同则更新
-                this.loadData(nextProps.url, nextProps.params);
+                this.setState({
+                    value:nextProps.value,
+                    text: nextProps.text,
+                    readonly: nextProps.readonly,
+                    required: nextProps.required,
+                    params:nextProps.params,
+                })
             }
-            else {
+            else
+            {
 
             }
 
-            this.setState({
-                value: nextProps.value,
-                text: nextProps.text,
-                readonly: nextProps.readonly,
-                required: nextProps.required,
-                params:nextProps.params,
-            })
         }
 
     },
@@ -188,8 +193,18 @@ let GridPicker=React.createClass({
         }
     },
     onSearch:function(params) {
+        var newparams=this.state.params;
+        if(!newparams)
+        {
+            newparams={};
+        }
+           for(var v in params)
+           {
+               newparams[v]=params[v];
+           }
+
             this.setState({
-                params: params,
+                params: newparams,
                 url:this.props.url,//查询的时候再赋值
             });
     },
@@ -202,6 +217,7 @@ let GridPicker=React.createClass({
                 this.props.onSelect(rowData[this.props.valueField],rowData[this.props.textField],this.props.name,rowData);
             }
         }
+        this.validate(rowData[this.props.valueField]);
         this.setState({
             value: rowData[this.props.valueField],
             text: rowData[this.props.textField],
@@ -215,13 +231,13 @@ let GridPicker=React.createClass({
         let inputProps=
         {
             readOnly:this.state.readonly==true?"readonly":null,
-            style:this.props.style,
+            style:style,
             name:this.props.name,
             placeholder:this.props.placeholder,
             className:"wasabi-form-control  "+(this.props.className!=null?this.props.className:"")
 
         }//文本框的属性
-        let props={...this.props};
+        let props= {...this.props};
         props.onClick = this.onSelect;//生定向，但是仍然保留原来的属性
         props.width=410;
         props.url=this.state.url;
@@ -233,9 +249,9 @@ let GridPicker=React.createClass({
                 <div className="combobox"  style={{display:this.props.hide==true?"none":"block"}}   >
                     <i className={"pickericon"+" "+this.props.size} onClick={this.showPicker}></i>
                     <input type="text" {...inputProps}  value={this.state.text}   onChange={this.changeHandler}     />
-                    <div className={"dropgridpicker"+" "+size+" "+this.props.position} style={{display:this.state.show==true?"block":"none"}} onMouseOut={this.mouseOutHandler} >
+                    <div className={"dropgridpicker"+" "+size+" "+this.props.position} style={{height:this.props.height,display:this.state.show==true?"block":"none"}} onMouseOut={this.mouseOutHandler} >
                         <div>
-                            <SearchBox params={this.state.params} name={this.props.name} valueField={this.props.valueField} textField={this.props.textField} onSearch={this.onSearch}></SearchBox>
+                            <SearchBox name={this.props.name} valueField={this.props.valueField} textField={this.props.textField} onSearch={this.onSearch}></SearchBox>
                             <DataGrid {...props} height={398} params={this.state.params}></DataGrid>
                         </div>
 

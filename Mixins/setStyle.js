@@ -6,6 +6,11 @@ let SetStyle= {
     setStyle: function (type) {
         var style = this.props.style;
         if (style) {
+        }
+        else {
+            style = {};
+        }
+
             if (this.props.width != null) {
                 style.width = this.props.width;//设置了宽度属性为最先级别
                 if (type && type == "input") {//因为表单组件设置了一个最小宽度，所以一定除去这个属性
@@ -22,10 +27,8 @@ let SetStyle= {
                 }
             }
 
-        }
-        else {
-            style = {};
-        }
+
+
         if (type && type == "input") {
 
             style.display = this.props.hide == true ? "none" : "block";

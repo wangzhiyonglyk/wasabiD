@@ -6,7 +6,9 @@ var React=require("react");
 var Input=require("./Input.jsx");
 var Button=require("../Buttons/Button.jsx");
 var unit=require("../../libs/unit.js");
+var shouldComponentUpdate=require("../../Mixins/shouldComponentUpdate.js");
 var SearchBar=React.createClass({
+    mixins:[shouldComponentUpdate],
     propTypes: {
         model:React.PropTypes.array.isRequired,
         searchTitle:React.PropTypes.string,
@@ -97,6 +99,10 @@ var SearchBar=React.createClass({
     getData:function() {
         var data={}
         for(let v in this.refs) {
+            if(this.refs[v].props.type=="button")
+            {
+                continue;//如果按钮则跳过
+            }
             if(this.refs[v].props.name.indexOf(",")>-1)
             {//含有多个字段
                 var nameSplit=this.refs[v].props.name.split(",");

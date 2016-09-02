@@ -1,56 +1,41 @@
 /*/
 create by wangzy
 date:2016-05-17
-desc:导入功能组件
+desc:excel数据导入组件
  */
 let  React=require("react");
 let Modal=require("../Base/Layout/Modal.jsx");
 let Button=require("../Base/Buttons/Button.jsx");
 let Message=require("../Base/unit/Message.jsx");
 let fileType=require("../libs/fileType.js");
+var unit=require("../libs/unit.js");
 require("../sass/Action/Import.scss");
 let  Import=React.createClass({
     propTypes: {
-        name:React.PropTypes.string,//字段名称
-        uploadurl: React.PropTypes.string.isRequired,//上传地址
-        multiple: React.PropTypes.bool,//是否允许多选
-        accept: React.PropTypes.oneOf([//上传文件类型
-            "word",
-            "excel",
-            "ppt",
-            "office",
-            "txt",
-            "pdf",
-            "html",
-            "image",
-            "media",
-            "zip",
-            null,
-        ]),
-        downloadurl: React.PropTypes.string.isRequired,//下载地址
+        name:React.PropTypes.string,//文件字段名称
+        uploadurl: React.PropTypes.string.isRequired,//导入地址
+       modelurl: React.PropTypes.string.isRequired,//模板下载地址
+        failloadurl: React.PropTypes.string.isRequired,//导入失败下载地址
         uploadSuccess: React.PropTypes.func//上传成功事件
     },
     getDefaultProps: function () {
         return {
             name:"",
-            multiple: false,
-            accept: null,
             uploadurl: null,
-            downloadurl: "javascript:void(0)",
+            failloadurl: "javascript:void(0)",
 
         }
     },
     getInitialState: function () {
         return {
             name:this.props.name,
-            visible:false,
-            filenames: "",//选择的文件名集合
+            filename: "",//选择的文件名集合
+            uploadDisabled:true,//是否允许导入
+            choseDisabled:false,//是否允许选择文件
             uploadurl: this.props.uploadurl,
-            multiple: this.props.multiple,
-            accept: this.props.accept,
-            downloadurl: this.props.downloadurl,
-            uploadTitle:"导入",
-            uploadDisabled:false,
+            failloadurl: this.props.failloadurl,
+            showfail:false,
+            uploadInfo:[],
 
         }
     },
@@ -58,9 +43,7 @@ let  Import=React.createClass({
         this.setState({
             name:nextProps.name,
             uploadurl: nextProps.uploadurl,
-            multiple: nextProps.multiple,
-            accept: nextProps.accept,
-            downloadurl: nextProps.downloadurl,
+            failloadurl: nextProps.failloadurl,
         })
     },
     close: function () {//关闭
@@ -70,163 +53,268 @@ let  Import=React.createClass({
         this.refs.modal.open();
     },
     onChange: function (event) {//选择文件
-        if(this.state.uploadDisabled)
+        if(this.state.choseDisabled)
         {
             return ;
         }
-        var files = this.refs.import.files;
 
-        let filenames = "";
-        this.typevalidate = true;
+        var files=(event.target.files);
+        let filename = "";//文件名称
+        var typevalidate = true;//文件类型正确
         if (files.length > 0) {
-            for (let index = 0; index < files.length; files++) {
-                if (this.state.accept != null && !fileType[this.state.accept](files[index].type)) {
-                    this.typevalidate = false;
-                    break;
+            if(files[0].type=="")
+            {//苹果电脑存在的现象
+                if((files[0].name.lastIndexOf(".xls")>-1&&files[0].name.lastIndexOf(".xls")+3==files[0].name.length-1)||(files[0].name.lastIndexOf(".xlsx")>-1&&files[0].name.lastIndexOf(".xlsx")+3==files[0].name.length-1))
+                {
+                    typevalidate = true;
+                    filename = files[0].name;
                 }
-                if (filenames == "") {
-                    filenames += files[index].name;
+                else
+                {
+                    typevalidate = false;
+                }
+            }
+            else {
+                if (!fileType.isExcel(files[0].type)) {
+                    typevalidate = false;
                 }
                 else {
-                    filenames += "," + files[index].name;
+                    filename = files[0].name;
                 }
 
             }
-
 
         }
         else
         {
-            this.typevalidate=false;
+            typevalidate=false;
         }
+
+        if(typevalidate)
+        {
+            this.file=files[0];
+            this.setState({
+                filename: filename,
+                uploadDisabled:false,//可以导入
+                showfail:false,
+            })
+        }
+        else
+        {
+            this.file=null;
+            this.setState({
+                filename: filename,
+                uploadDisabled:true,//不可以导入
+                showfail:false,
+            })
+        }
+
+
+    },
+    importBegin:function(name,title) {//开始的导入
+        this.total=0;//设置总记录数初始值
+        this.failNum=0;//失败数
+        this.successNum=0;//成功数
+        this.importHandler(null);//开始导入
         this.setState({
-            filenames: filenames,
-            visible:true,
+            choseDisabled: true,//不可以再选择
+            uploadDisabled:true//不可以再导入
         })
 
     },
-    importHandler: function () {//执行导入事件
-        if (this.typevalidate) {//格式正确
-            // 实例化一个表单数据对象
-            var formData = new FormData();
-            // 遍历文件列表，插入到表单数据中
-            var files = this.refs.import.files;
-                if ( files.length > 0) {
-                    if (this.state.uploadurl) {
-                        for (let index = 0, file; file = files[index]; index++) {
-                            // 文件名称，文件对象
-                            formData.append(this.state.name, file);
-                        }
-                        // 实例化一个AJAX对象
-                        var xhr = new XMLHttpRequest();
-                        xhr.upload.addEventListener("progress", this.uploadProgress, false);
-                        xhr.addEventListener("load", this.uploadComplete, false);
-                        xhr.addEventListener("error", this.uploadFailed, false);
-                        xhr.addEventListener("abort", this.uploadCanceled, false);
-                        xhr.open("POST", this.state.uploadurl, true);
-                        // 发送表单数据
-                        xhr.send(formData);
-                        this.setState({
-                            uploadTitle: "上传0%",
-                            uploadDisabled: true,
-                        })
+    importHandler: function (index) {//执行导入事件
+        var formData = new FormData(); // 实例化一个表单数据对象
+        if(index==null) {
+            //导入文件
+            if (this.file!=null) {
 
-                    }
-                    else {
-                        Message.alert("您没有设置上传路径");
-                    }
+                if (this.state.uploadurl) {
+                    formData.append(this.state.name, this.file);
+
                 }
-
+                else {
+                    Message.alert("您没有设置上传路径");
+                    return;
+                }
+            }
         }
         else {
-            Message.alert("选择的文件格式有误");
+            //执行数据导入
+            var image=new Image();
+            formData.append(this.state.name, image);
+            formData.append("index",index);
+
+
         }
+        // 实例化一个AJAX对象
+        var xhr = new XMLHttpRequest();
+        xhr.upload.addEventListener("progress", this.uploadProgress.bind(this,index), false);
+        xhr.addEventListener("load", this.uploadComplete.bind(this,index), false);
+        xhr.addEventListener("error", this.uploadFailed, false);
+        xhr.addEventListener("abort", this.uploadCanceled, false);
+        xhr.open("POST", this.state.uploadurl, true);
+        // 发送表单数据
+        xhr.send(formData);
 
     },
-    uploadProgress:function (event) {
+    uploadProgress:function (index,event) {
         if (event.lengthComputable) {
-            var percentComplete = Math.round(event.loaded * 100 / event.total);
-            if(percentComplete<100) {
-                this.setState({
-                    uploadTitle: "上传" + percentComplete + "%",
-                })
+            if(index==null) {//导入文件
+                var percentComplete = Math.round(event.loaded * 100 / event.total);
+                if(percentComplete<100)
+                {
+                    this.setState({
+                        uploadInfo: [<div key={"upload"+percentComplete.toString()} className="success">{"文件上传" + percentComplete + "%"}</div>],
+                    })
+                }
+              else
+                {
+                    this.setState({
+                        uploadInfo: [<div key={"upload"+percentComplete.toString()} className="success">{"文件上传" + percentComplete + "%,开始读取文件"}</div>],
+                    })
+                }
             }
-            else
-            {
-                this.setState({
-                    uploadTitle: "处理中...",
-                })
-            }
-
         }
         else {
             this.uploadFailed();
         }
     },
-    uploadComplete:function (event) {
+    uploadComplete:function (index,event) {
        var xhr= (event.target);
+        let uploadInfo = this.state.uploadInfo;
         if ( xhr.readyState == 4 && xhr.status == 200 ) {
            var result=JSON.parse(xhr.responseText);
-            if(result&&result.success!=null&&result.success!=undefined)
-            {
-               if(result.success==true)
-               {
-                   if(result.data.failNum>0) {
-                       Message.error("有" + result.data.failNum + "条数据处理失败");
+            if(result&&result.success!=null&&result.success!=undefined) {
+               if(result.success==true) {
+                    if(index==null)
+                    {//导入文件成功
+                     this.total=result.data.total; //得到总记录数
+                        uploadInfo.unshift(<div key="read" className="success">{"文件读取成功,总共"+this.total+"条数据,开始处理..."}</div>);
+                        this.setState({
+                            uploadInfo: uploadInfo,
+                        });
+                    }
+                   else {
+                        if (result.data.success) {
+                             this.successNum+=1;
+                            uploadInfo.unshift(<div className="success" key={"success"+(index+2).toString()}>{"序号为" + (index + 2).toString() + "行,导入成功"}</div>)
+                        }
+                        else {
+                            this.failNum+=1;
+                            uploadInfo.unshift(
+                                <div className="fail" key={"fail"+(index+2).toString()}>{"序号为" + (index + 2).toString() + "行,导入失败," + result.data.message}</div>)
+                        }
+                        this.setState({
+                            uploadInfo: uploadInfo
+                        })
+                    }
+                   if(index==null)
+                   {
+                       this.importHandler(0);//开始导入第一条数据
+                   }
+                   else {
+
+                       if(index>=this.total-1) {//代表已经执行完最后一条记录了
+                           uploadInfo.unshift(<div className="info" key={"success"+(index+2).toString()} >{"所有数据执行完成,成功数:"+this.successNum.toString()+"失败数:"+this.failNum.toString()}</div>)
+                           this.setState({
+                               choseDisabled: false,//可以再选择
+                               uploadDisabled:true,//不可以再导入
+                               filename:"",
+                               showfail:this.failNum>0?true:false,
+                           })
+                           this.clearFile();
+                       }
+                       else
+                       {
+                           this.importHandler(index*1+1);//再次执行
+                       }
+
+                   }
+               }
+                else {
+                   this.clearFile();
+                   if(index==null) {
+                       Message.error("文件读取失败,原因:"+result.message);
+                       this.setState({
+                           uploadDisabled:true,//不可以再导入
+                           choseDisabled:false,//可以再选择
+                       })
+
                    }
                    else
                    {
-                       Message.success("处理成功");
-                       if(this.props.uploadSuccess!=null)
-                       {
-                           this.props.uploadSuccess();
-                       }
+                       Message.error("服务器处理失败,导入中断,原因:"+result.message);
+                       this.setState({
+                           uploadDisabled:true,//不可以再导入
+                           choseDisabled:false,//可以再选择
+                       })
                    }
 
                }
-                else
-               {
-                   Message.error(result.message);
-               }
             }
-            else
-            {
+            else {
+                this.clearFile();
                 Message.error("服务器返回值非标准JSON格式,无法处理,请联系管理员");
+                this.setState({
+
+                    uploadDisabled:true,//不可以再导入
+                    choseDisabled:false,//可以再选择
+                })
 
             }
 
         }
        else {
+            this.clearFile();
            if( xhr.statusText.indexOf("404"))
            {
                Message.error("服务器没有响应,请检查您的上传路径");
+               this.setState({
+
+                   uploadDisabled:true,//不可以再导入
+                   choseDisabled:false,//可以再选择
+               })
            }
             else
            {
                Message.error("服务器处理错误");
+               this.setState({
+
+                   uploadDisabled:true,//不可以再导入
+                   choseDisabled:false,//可以再选择
+               })
            }
 
 
         }
 
-        this.setState({
-            uploadTitle: "导入",
-            uploadDisabled: false,
-        });
-
-        this.state.visible = false;
     },
     uploadFailed:function(event) {
-        Message.alert("上传文件失败");
+        this.clearFile();
+        this.setState({
+
+            choseDisabled: false,//可以再选择
+            uploadDisabled:true,//不可以再导入
+
+
+        })
+       Message.error("上传失败");
     },
     uploadCanceled:function uploadCanceled(evt) {
         //保留这个方法
     },
+    clearFile:function()
+    {
+        try {
+            this.refs.import.value="";//清空,以方便可以重新选择相同文件
+        }
+        catch (e) {
+
+        }
+    },
     render:function() {
         let accepts=null;//接受的文件类型
-        if(this.state.accept!=null)
-        {
-            let acceptMap=fileType.type(this.state.accept);
+            let acceptMap=fileType.getTypeMap("excel");
             if(acceptMap!=null)
             {
 
@@ -241,27 +329,29 @@ let  Import=React.createClass({
                     }
                 }
             }
-        }
-
         let props={
             accept:accepts,
-            multiple:this.state.multiple,
+            multiple:false,
         }
 
 
-         return(   <Modal  ref="modal" visible={this.state.visible} width={460} height={340} title="请选择导入文件">
+         return(   <Modal  ref="modal"  width={460} height={340} title="请选择导入文件">
 
 
                       <div className="import-section">
-                    <input type="text" name={this.state.name} className="import-text" value={this.state.filenames} readOnly={true} ></input>
-                <input type="file" ref="import" className="import-file" onChange={this.onChange} {...props} style={{display:this.state.uploadDisabled?"none":"inline"}}></input><Button type="button" disabled={this.state.uploadDisabled} className="import-chose" theme="cancel" title="选择文件"></Button>
+                    <input type="text" name={this.state.name} className="import-text" value={this.state.filename} readOnly={true} ></input>
+                <input type="file" ref="import" className="import-file" onChange={this.onChange} {...props} style={{display:this.state.choseDisabled?"none":"inline"}}></input>
+                          <Button type="button" disabled={this.state.choseDisabled} className="import-chose" theme="cancel" title="选择文件"></Button>
                      </div>
 
                        <div className="import-submit">
-                 <Button title={this.state.uploadTitle}  disabled={this.state.uploadDisabled} onClick={this.importHandler} theme="green"></Button>
+                           <a className="import-failload" target="blank" href={this.props.failloadurl} style={{display:this.state.showfail==true?"inline":"none"}}>下载失败信息</a>
+                 <Button title="导入" disabled={this.state.uploadDisabled}  onClick={this.importBegin} theme="green"></Button>
                  <Button title="取消"  onClick={this.close} theme="cancel"></Button>
              </div>
-                 <a className="import-downloadmodel" href={this.props.downloadurl}>下载模版</a>
+                 <a className="import-downloadmodel" href={this.props.modelurl}>下载模版</a>
+
+             <div className="import-upload-info">{this.state.uploadInfo}</div>
             </Modal>);
 
     }

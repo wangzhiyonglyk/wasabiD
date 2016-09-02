@@ -3,17 +3,19 @@
  * 列表表头模型
  */
 class HeaderModel {
-    constructor(name,header,content=null,hidden=false,sortAble=false,width=null,align="left",rowspan=null,colspan=null)
+    constructor(name,label,content=null,hidden=false,sortAble=false,width=null,fixed=false, align="left",rowspan=null,colspan=null)
     {
         this.name=name;
+        this.label=label;
         this.content=content;
         this.hidden=hidden;
         this.sortAble=sortAble;
         this.width=width;
-        this.header=header;
+        this.fixed=fixed;
         this.align=align;
         this.rowspan=rowspan;
         this.colspan=colspan;
+
 
     }
 }

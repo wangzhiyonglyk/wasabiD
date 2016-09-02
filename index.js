@@ -5,7 +5,7 @@
 
 'use strict';
 
-
+require("whatwg-fetch");
 /*****************按钮组件******************/
 exports.Button = require('./Base/Buttons/Button.jsx');//普通按钮
  exports.LinkButton = require('./Base/Buttons/LinkButton.jsx');//可移动，可带图标，可带链接的按钮
@@ -31,7 +31,6 @@ exports.SwitchButton = require('./Base/Form/SwitchButton.jsx');//开关组件
 
 /*****************日期组件******************/
 exports.Time = require('./Base/Form/Time.jsx');//时间选择组件
-exports.Date = require('./Base/Form/Date.jsx');//日期选择组件
 exports.DateTime = require('./Base/Form/DateTime.jsx');//日期时间选择组件
 exports.DateRange = require('./Base/Form/DateRange.jsx');//日期范围选择组件
 exports.DateTimeRange = require('./Base/Form/DateTimeRange.jsx');//日期时间范围选择组件
@@ -55,13 +54,14 @@ exports.Modal = require('./Base/Layout/Modal.jsx');//模态层组件
  exports.Panel = require('./Base/Layout/Panel.jsx');//面板组件
  exports.Resize = require('./Base/Layout/Resize.jsx');//可调整大小组件
  exports.Reverse = require('./Base/Layout/Reverse.jsx');//翻转组件
- exports.Tabs = require('./Base/Layout/Tabs.jsx');//页签组件
+
  exports.SlidePanel = require('./Base/Layout/SlidePanel.jsx');//滑动面板
  exports.Message = require('./Base/Unit/Message.jsx');//消息组件
  exports.ToolTip = require('./Base/Unit/ToolTip.jsx');//提示信息组件
 
 /*****************导航组件******************/
 exports.MenuTabs = require('./Base/Navigation/MenuTabs.jsx');//菜单tab组件
+exports.Tabs = require('./Base/Navigation/Tabs.jsx');//页签组件
 exports.Track = require('./Base/Navigation/Track.jsx');//物流跟踪
 
 

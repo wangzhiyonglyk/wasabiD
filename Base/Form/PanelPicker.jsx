@@ -5,8 +5,9 @@ var React = require("react");
 var validation=require("../Lang/validation.js");
 let setStyle=require("../../Mixins/setStyle.js");
 var validate=require("../../Mixins/validate.js");
+var shouldComponentUpdate=require("../../Mixins/shouldComponentUpdate.js");
 var PanelPicker = React.createClass({
-    mixins:[setStyle,validate],
+    mixins:[setStyle,validate,shouldComponentUpdate],
     PropTypes:{
         type:React.PropTypes.oneOf[
             "date",//日期选择
@@ -19,7 +20,8 @@ var PanelPicker = React.createClass({
         label:React.PropTypes.string,//字段文字说明属性
         width:React.PropTypes.number,//宽度
         height:React.PropTypes.number,//高度
-        text:React.PropTypes.string,//默认文本值
+        value:React.PropTypes.oneOfType([React.PropTypes.number,React.PropTypes.string]),//默认值,
+        text:React.PropTypes.oneOfType([React.PropTypes.number,React.PropTypes.string]),//默认文本值
         placeholder:React.PropTypes.string,//输入框预留文字
         readonly:React.PropTypes.bool,//是否只读
         required:React.PropTypes.bool,//是否必填
@@ -88,8 +90,8 @@ var PanelPicker = React.createClass({
     componentWillReceiveProps:function(nextProps) {
 
         this.setState({
-            value: nextProps.value,
-            text:nextProps.text,
+            value:nextProps.value,
+            text: nextProps.text,
             readonly: nextProps.readonly,
 
             //验证
@@ -113,7 +115,13 @@ var PanelPicker = React.createClass({
         }
     },
     onSelect:function(value,txt) {
+        this.setState({
+            show: false
+        })
+        this.validate(value);
         this.props.onSelect(value,txt,this.props.name,null);
+
+
     },
     render:function (){
         let controlDropClassName = "droppanelpicker";

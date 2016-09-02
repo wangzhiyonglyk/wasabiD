@@ -6,13 +6,16 @@ let Lang=require("../Lang/language.js");
 require("../../sass/Base/Form/DateTime.scss");
 let CalendarHeader=require("./CalendarHeader.jsx");
 let CalendarBody=require("./CalendarBody.jsx");
+var shouldComponentUpdate=require("../../Mixins/shouldComponentUpdate.js");
 let DateTime = React.createClass({
+    mixins:[shouldComponentUpdate],
     PropTypes:{
         name:React.PropTypes.string,//字段名称，对应于表单
         year: React.PropTypes.number,//年
         month:React.PropTypes.number,//月
         day:React.PropTypes.number,//日
         isRange:React.PropTypes.bool,//是否为范围选择
+        showTime:React.PropTypes.bool,//是否显示时间
         min:React.PropTypes.number,//最小值，用于日期范围选择
         max:React.PropTypes.number,//最大值,用于日期范围选择
         onSelect:React.PropTypes.func,//选择后的事件
@@ -24,6 +27,7 @@ let DateTime = React.createClass({
             month:null,
             day:null,
             isRange:false,///默认否
+            showTime:false,
             min:null,//默认为空，不属于日期范围选择
             max:null,//默认为空，不属于日期范围选择
         }

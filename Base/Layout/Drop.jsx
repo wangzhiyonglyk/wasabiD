@@ -19,29 +19,37 @@ var Drop=React.createClass({
         event.preventDefault();
         return  true;
     },
-    dragEnterHandler:function()
-    {
+    dragEnterHandler:function() {
         this.setState({
             dropClass:"drop dragEnter"//停靠的背景色
         })
     },
-    dropHandler:function()
+    dragLeaveHandler:function()
     {
+        this.setState({
+            dropClass:"drop"//
+        })
+    },
+    dropHandler:function() {
         this.setState({
             dropClass:"drop"
         })
-        this.props.onDrop();
-    },
-    render:function()
-    {
-
-
-        var props=
+        var eleProps=(window.localStorage.getItem("wasabidrageleProps"));
+        if(eleProps)
         {
-            style:this.props.style,
+            eleProps=JSON.parse(eleProps);
+        }
+        this.props.onDrop(eleProps);
+        window.localStorage.removeItem("wasabidrageleProps")
+    },
+    render:function() {
+        var props =
+        {
+            style: this.props.style,
         }
         return (
-            <div className={this.props.className+" "+this.state.dropClass} {...props}   onDrop={this.dropHandler} onDragEnter={this.dragEnterHandler} onDragOver={this.dragOverHandler}>
+            <div className={this.props.className+" "+this.state.dropClass} {...props} onDrop={this.dropHandler}
+                 onDragEnter={this.dragEnterHandler} onDragOver={this.dragOverHandler} onDragLeave={this.dragLeaveHandler}>
                 {
                     this.props.children
                 }

@@ -7,8 +7,12 @@ let React=require("react");
 var validation=require("../Base/Lang/validation.js");
 var regexp=require("../Base/Lang/regs.js");
 let Validate={
-    validate:function() {
-        var  value=this.state.value;
+    validate:function(value) {
+        if(!value)
+        {
+            value=this.state.value;
+        }
+
         var isvalidate=true;
         var readonly=this.state.readonly;
         var required=this.state.required;
@@ -25,7 +29,7 @@ let Validate={
                     isvalidate = this.props.regexp.test(value);
                     if (!isvalidate) {
 
-                        if (!this.props.invalidTip && this.props.invalidTip != "") {//用户自定义错误提示信息
+                        if (!this.props.invalidTip && this.props.invalidTip !== "") {//用户自定义错误提示信息
                             helpTip = this.props.invalidTip;
                         }
                         else {
@@ -37,6 +41,7 @@ let Validate={
                 }
                 else {
                     //没有正则表达式，则验证默认正则
+
                     if (regexp[this.props.type]) {
 
                         if(typeof regexp[this.props.type] =="function")

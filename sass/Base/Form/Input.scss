@@ -7,6 +7,14 @@ desc:表单输入框样式
 外层div
 */
 
+.wasabi-form .wasabi-form-group ,.wasabi-searchbar .wasabi-form-group{
+min-width: 290px;
+}
+.wasabi-form .wasabi-form-group-label,.wasabi-searchbar .wasabi-form-group
+
+{
+  width: 72px;
+}
  .wasabi-form-group {
   padding-left:0px;
   padding-right:10px;
@@ -16,7 +24,6 @@ desc:表单输入框样式
   display: block;
   float: left;
   white-space: nowrap;
-   min-width: 290px;
 }
 
   /*
@@ -26,14 +33,15 @@ desc:表单输入框样式
     .wasabi-form-group-label {
       padding-right: 4px;
       height: 34px;
-      font-weight: normal;
       line-height: 34px;
-      width: 72px;
       float: left;
       overflow: hidden;
       text-align: right;
       text-overflow: ellipsis;
       white-space: nowrap;
+      font-size: 12px;
+      font-size: 1.2rem;
+      font-weight: normal!important;
     }
   }
     /*
@@ -58,6 +66,7 @@ desc:表单输入框样式
       padding-right: 18px;
       font-size: 12px;
       font-size: 1.2rem;
+      font-weight: normal!important;
       line-height: 20px;
       height: 20px;
       background-color: #fff;

@@ -10,32 +10,30 @@ var Modal=React.createClass({
     propTypes: {
         width: React.PropTypes.number,
         height: React.PropTypes.number,
-        fit:React.PropTypes.bool,
-        visible: React.PropTypes.bool,
+        resize:React.PropTypes.bool,
         closedHandler: React.PropTypes.func,
         showOK: React.PropTypes.bool,
         showCancel:React.PropTypes.bool,
         OKHandler: React.PropTypes.func,
         cancelHandler:React.PropTypes.func,
-        timeout:React.PropTypes.number,
-        resize:React.PropTypes.bool,
+
+
     },
     getDefaultProps:function() {
        return{
            width:730,//宽度
            height:650,//高度
-           fit:false,//是否占全屏
-           visible:false,//是否可见,
+           resize:false,
            modal:true,//默认没有遮罩层
            showOK:false,//是否显示确定按钮
            showCancel:false,//是否显示取消按钮
            OKHandler:null,//确定按钮的事件,
-           timeout:null,//自动消失时间
+
        }
     },
     getInitialState:function() {
         return {
-            visible:this.props.visible,
+            visible:false,
             width:this.props.width,
             height:this.props.height,
             left:(document.body.clientWidth-this.props.width)/2,
@@ -48,7 +46,6 @@ var Modal=React.createClass({
     },
     componentWillReceiveProps:function(nextProps) {
         this.setState({
-            visible:(nextProps.visible!=null&&nextProps.visible!=undefined)?nextProps.visible:this.state.visible,
                width:nextProps.width,
             height:nextProps.height
             }
@@ -56,18 +53,8 @@ var Modal=React.createClass({
 
     },
     componentDidMount:function() {
-        this.timeout();
     },
-    timeout:function() {
-        if(this.props.timeout!=null) {
-            setTimeout(()=> {
-                this.setState({
-                    visible: false
-                })
 
-            }, this.props.timeout)
-        }
-    },
     close:function() {//关闭事件
         this.setState({visible:false});
         if(this.props.closedHandler!=null)
@@ -116,14 +103,14 @@ var Modal=React.createClass({
         {
             this.props.OKHandler();
         }
-        this.closeHandler();//关闭
+        this.close();//关闭
     },
     cancelHandler:function() {
         if(this.props.cancelHandler!=null)
         {
             this.props.cancelHandler();
         }
-        this.closeHandler();//关闭
+        this.close();//关闭
     },
     render:function() {
 
@@ -143,13 +130,13 @@ var Modal=React.createClass({
             if(this.props.showOK)
             {
                 buttons.push(
-                    <Button title="确定" key="ok" onClick={this.OKHandler} style={{width:60,height:30}}></Button>
+                    <Button title="确定" key="ok" theme="green" onClick={this.OKHandler} style={{width:60,height:30}}></Button>
                 )
             }
             if(this.props.showCancel)
             {
                 buttons.push(
-                    <Button title="取消" key="cancel" onClick={this.cancelHandler} style={{width:60,height:30,backgroundColor:"gray"}}></Button>
+                    <Button title="取消" key="cancel" theme="cancel"  onClick={this.cancelHandler} style={{width:60,height:30,backgroundColor:"gray"}}></Button>
                 )
             }
             footer=<div className="wasabi-modal-footer">

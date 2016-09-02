@@ -72,6 +72,7 @@ desc:小图标按钮样式
 {
     padding: 0px;
     margin-right: 5px;
+   
 }
 .wasabi-linkbutton.onlyicon[disabled] {
     border: none;
@@ -85,11 +86,11 @@ desc:小图标按钮样式
 .wasabi-linkbutton-text
 {
    display: inline-block;
-    height: 14px;
+    height: 12px;
 }
 .wasabi-linkbutton-text.right
 {
     display: inline-block;
-    height: 14px;
+    height: 12px;
     margin-right: 8px;
 }

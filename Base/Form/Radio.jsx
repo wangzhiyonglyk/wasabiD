@@ -11,13 +11,16 @@ var validation=require("../Lang/validation.js");
 let setStyle=require("../../Mixins/setStyle.js");
 var validate=require("../../Mixins/validate.js");
 var showUpdate=require("../../Mixins/showUpdate.js");
+var shouldComponentUpdate=require("../../Mixins/shouldComponentUpdate.js");
 let Radio=React.createClass({
-    mixins:[setStyle,validate,showUpdate],
+    mixins:[setStyle,validate,showUpdate,shouldComponentUpdate],
     PropTypes:{
         name:React.PropTypes.string.isRequired,//字段名
         label:React.PropTypes.string,//字段文字说明属性
         width:React.PropTypes.number,//宽度
         height:React.PropTypes.number,//高度
+        value:React.PropTypes.oneOfType([React.PropTypes.number,React.PropTypes.string]),//默认值,
+        text:React.PropTypes.oneOfType([React.PropTypes.number,React.PropTypes.string]),//默认文本值
         placeholder:React.PropTypes.string,//输入框预留文字
         readonly:React.PropTypes.bool,//是否只读
         required:React.PropTypes.bool,//是否必填
@@ -95,7 +98,7 @@ let Radio=React.createClass({
             }
         }
         return {
-            params:this.props.params,//参数
+            params:unit.clone( this.props.params),//参数
             data:newData,
             value:this.props.value,
             text:text,
@@ -125,8 +128,9 @@ let Radio=React.createClass({
             }
             this.setState({
                 data:newData,
-                value: nextProps.value,
+                value:nextProps.value,
                 text: text,
+                params:unit.clone( nextProps.params),
                 readonly:nextProps.readonly,
                 required:nextProps.required,
             })
@@ -147,9 +151,9 @@ let Radio=React.createClass({
             }
 
             this.setState({
-                value: nextProps.value,
-                text: nextProps.text,
-                params:nextProps.params,
+                value:nextProps.value,
+                text: text,
+                params:unit.clone( nextProps.params),
                 readonly:nextProps.readonly,
                 required:nextProps.required,
             })
@@ -235,6 +239,7 @@ let Radio=React.createClass({
             value:value,
             text:text,
         });
+        this.validate(value);
         if( this.props.onChange) {
             this.props.onChange(value,text,this.props.name,data);
         }

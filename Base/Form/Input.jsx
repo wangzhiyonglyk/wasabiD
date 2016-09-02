@@ -12,10 +12,12 @@ var CheckBox=require("./CheckBox.jsx");
 var SwitchButton=require("./SwitchButton.jsx");
 var ComboBox=require("./ComboBox.jsx");
 var Text=require("./Text.jsx");
+var Button=require("../Buttons/Button.jsx");
 let setStyle=require("../../Mixins/setStyle.js");
 var unit=require("../../libs/unit.js");
+var shouldComponentUpdate=require("../../Mixins/shouldComponentUpdate.js");
 var Input=React.createClass({
-    mixins:[setStyle],
+    mixins:[setStyle,shouldComponentUpdate],
     propTypes: {
         type:React.PropTypes.oneOf([
             "text",//普通输入框
@@ -41,11 +43,14 @@ var Input=React.createClass({
             "picker",//级联选择组件
             "gridpicker",//列表选择
             "panelpicker",//面板选择
+            "button"//普通按钮
         ]),//输入框的类型
         name:React.PropTypes.string.isRequired,//字段名
         label:React.PropTypes.string,//字段文字说明属性
         width:React.PropTypes.number,//宽度
         height:React.PropTypes.number,//高度
+        value:React.PropTypes.oneOfType([React.PropTypes.number,React.PropTypes.string]),//默认值,
+        text:React.PropTypes.oneOfType([React.PropTypes.number,React.PropTypes.string]),//默认文本值
         placeholder:React.PropTypes.string,//输入框预留文字
         readonly:React.PropTypes.bool,//是否只读
         required:React.PropTypes.bool,//是否必填
@@ -162,7 +167,7 @@ var Input=React.createClass({
     },
     componentWillReceiveProps:function(nextProps) {
         this.setState({
-            value: nextProps.value,
+            value:nextProps.value,
             text: nextProps.text,
             readonly: nextProps.readonly,
             required: nextProps.required,
@@ -182,6 +187,13 @@ var Input=React.createClass({
             this.props.backFormHandler(event.target.value, event.target.value, this.props.name);
         }
     },
+    backFormHandler:function(value,text,name,rows)
+    {
+        //回传给表单组件
+        if (this.props.backFormHandler != null) {
+            this.props.backFormHandler(event.target.value, event.target.value, this.props.name);
+        }
+    },
     clickHandler:function(event) {//单击事件
         if(this.props.onClick!=null) {
             var model = {};
@@ -196,8 +208,21 @@ var Input=React.createClass({
             this.props.onClick(this.props.name,this.state.value,model);
         }
     },
+    buttonClick:function(name,title) {//按钮的单击事件
+        if(this.props.onClick!=null) {
+            this.props.onClick(name,title);
+        }
+    },
     validate:function(value) {
-        return this.refs.input.validate();
+        if(this.props.type=="button")
+        {
+            return true;
+        }
+        else
+        {
+            return this.refs.input.validate();
+        }
+
 
     },
     onSelect:function(value,text,name,data) {//保存选中的值
@@ -255,6 +280,11 @@ var Input=React.createClass({
         var componentClassName=  "wasabi-form-group "+size+" "+(this.props.className?this.props.className:"");//组件的基本样式
         var style =this.setStyle("input");//设置样式
         var control;//组件
+        if(this.props.type=="button")
+        {
+
+           return <div className={componentClassName}>    <label className="wasabi-form-group-label" /><Button {...this.props} title={this.props.label} onClick={this.buttonClick}></Button></div>
+        }
         if(this.props.type=="text"||this.props.type=="email"
             ||this.props.type=="url"||this.props.type=="number"
             ||this.props.type=="integer"||this.props.type=="alpha"

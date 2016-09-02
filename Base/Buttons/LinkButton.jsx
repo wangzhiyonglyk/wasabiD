@@ -40,7 +40,7 @@ var LinkButton=React.createClass({
             theme:"default",//主题
             iconAlign:"left",//图标位置
             href:"javascript:void(0)",//连接地址
-            iconCls:"",//默认为空
+            iconCls:null,//默认为空
             onClick:null,//单击事件
             draggable:false,//是否允许拖动
             dragStartHandler:null,//拖动事件
@@ -81,26 +81,20 @@ var LinkButton=React.createClass({
         }
     },
     dragStartHandler:function(event) {
-        event.dataTransfer.effectAllowed = "move";
-        event.dataTransfer.setDragImage(event.target, 0, 0);
-        var timestamp = Date.parse(new Date());
-
-        var newLinkButton=<LinkButton  key={this.props.name+timestamp} name={this.props.name} title={this.props.title}
-                                      iconCls={this.props.iconCls} iconAlign={this.props.iconAlign}  disabled={this.state.disabled}
-                                           href={this.props.href} hide={this.state.hide}
-                                      onClick={this.clickHandler}
-                            ></LinkButton>
-
-        this.props.dragStartHandler(newLinkButton,{name:this.props.name,
-                                                        title:this.props.title,
-                                                        iconCls: this.props.iconCls,
-                                                        iconAlign:this.props.iconAlign,
-                                                         disabled:this.state.disabled,
-                                                           hide:this.state.hide,
-                                                          href:this.props.href,
-                                                             onClick:this.clickHandler
-                                                            });//传回父组件
-        return true;
+        //event.dataTransfer.effectAllowed = "move";
+        //event.dataTransfer.setDragImage(event.target, 0, 0);
+        //var timestamp = Date.parse(new Date());
+        //
+        var newele={name:this.props.name,
+            title:this.props.title,
+            iconCls: this.props.iconCls,
+            iconAlign:this.props.iconAlign,
+            disabled:this.state.disabled,
+            hide:this.state.hide,
+            href:this.props.href,
+            onClick:this.clickHandler
+        };
+        window.localStorage.setItem("wasabidrageleProps",JSON.stringify(newele));
     },
     render:function() {
         if(this.state.hide==true){
@@ -122,6 +116,12 @@ var LinkButton=React.createClass({
             style.backgroundColor=this.props.backgroundColor;
             style.border="1px solid transparent";
             linkTextStyle={};linkTextStyle.color="#ffffff";
+
+
+        }
+        if(this.props.iconCls==null||this.props.iconCls==undefined||this.props.iconCls=="")
+        {
+            style.border="none";
         }
         if(this.props.color) {
             linkTextStyle={};  linkTextStyle.color=this.props.color;
@@ -171,7 +171,7 @@ var LinkButton=React.createClass({
                        href={this.props.href} onClick={this.clickHandler} className={className}
                        disabled={this.state.disabled} name={this.props.name} name={this.props.name}  style={style}>
                         <i className={iconClass+" "+this.props.iconCls}
-                           style={{display:this.props.iconCls==""?"none":"inline-block"}}></i>
+                           style={{display:(this.props.iconCls==null||this.props.iconCls=="")?"none":"inline-block"}}></i>
                         <div className="wasabi-linkbutton-text" style={linkTextStyle}>{this.props.title}</div>
 
                     </a>

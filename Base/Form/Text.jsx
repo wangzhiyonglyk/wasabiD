@@ -7,8 +7,9 @@ let React=require("react");
 var validation=require("../Lang/validation.js");
 let setStyle=require("../../Mixins/setStyle.js");
 var validate=require("../../Mixins/validate.js");
+var shouldComponentUpdate=require("../../Mixins/shouldComponentUpdate.js");
 var Text=React.createClass({
-    mixins:[setStyle,validate],
+    mixins:[setStyle,validate,shouldComponentUpdate],
     propTypes: {
         type:React.PropTypes.oneOf([
             "text",//普通输入框
@@ -27,6 +28,8 @@ var Text=React.createClass({
         label:React.PropTypes.string,//字段文字说明属性
         width:React.PropTypes.number,//宽度
         height:React.PropTypes.number,//高度
+        value:React.PropTypes.oneOfType([React.PropTypes.number,React.PropTypes.string]),//默认值,
+        text:React.PropTypes.oneOfType([React.PropTypes.number,React.PropTypes.string]),//默认文本值
         placeholder:React.PropTypes.string,//输入框预留文字
         readonly:React.PropTypes.bool,//是否只读
         required:React.PropTypes.bool,//是否必填
@@ -114,17 +117,21 @@ var Text=React.createClass({
     changeHandler:function(event) {
         if (this.validateInput==true) {
             this.validate(event.target.value);
-            if(this.props.type=="integer"||this.props.type=="number") {//如果定义为数字
-                if(event.target.value=="-")
-                {
-                    this.setState({
-                        value: event.target.value,
-                        text:event.target.value,
-                    });
-                    return ;
-                }
-
-            }
+            //if(this.props.type=="integer"||this.props.type=="number") {//如果定义为数字
+            //    if(event.target.value=="-")
+            //    {
+            //        this.setState({
+            //            value: event.target.value,
+            //            text:event.target.value,
+            //        });
+            //        return ;
+            //    }
+            //
+            //}
+            this.setState({
+                value: event.target.value,
+                text:event.target.value,
+            });
 
             if (this.props.onChange != null) {
                 this.props.onChange(event.target.value);//自定义的改变事件

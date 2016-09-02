@@ -13,6 +13,7 @@ desc:基本样式
 html {
     font-size: 62.5%;
      height: 100%;
+     width:100%;
 }
 
 
@@ -24,12 +25,14 @@ body{
     padding: 0px;
     box-sizing: border-box;
     height: 100%;
+    width: 100%;
 }
-
+table{border:0;margin:0;border-collapse:collapse;border-spacing:0;}
 a{
     color:#1ec9c3;
   cursor:pointer;
     margin-right: 5px;
+    position: absolute;
 }
 a:hover{
     color:#1ec9c3;

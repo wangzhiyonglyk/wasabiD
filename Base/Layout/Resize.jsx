@@ -11,7 +11,7 @@ var Resize=React.createClass({
         top:React.PropTypes.number,
         onlyWidth:React.PropTypes.bool,//是否只允许改变宽度
         className:React.PropTypes.string,
-        resize:React.PropTypes.bool,
+        resize:React.PropTypes.bool,//属性内部使用
     },
     getDefaultProps:function() {
         return{

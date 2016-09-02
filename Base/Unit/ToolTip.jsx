@@ -1,5 +1,5 @@
 let React=require("react");
-require("../../sass/Base/Unit/ToolTip.scss");
+require("../../sass/Base/Unit/newToolTip.scss");
 let ToolTip=React.createClass({
     propTypes:{
         theme:React.PropTypes.oneOf([
@@ -46,13 +46,16 @@ let ToolTip=React.createClass({
         var tipLeft = tarLeft+((tarWidth-tipWidth)/2);
 
         if(tarClientRect.left+tipLeft<0){
-            tipLeft = 0;
+            if(this.state.direction!="west"){
+                tipLeft = 0;
+                toolTip.style.left = tipLeft+5+"px";
+            }
         }else if(tarClientRect.left+Math.abs((tarWidth-tipWidth)/2)>=document.body.clientWidth){
-            tipLeft = tarLeft+(tarWidth-tipWidth);
+            if(this.state.direction!="west") {
+                tipLeft = tarLeft + (tarWidth - tipWidth);
+                toolTip.style.left = tipLeft+5+"px";
+            }
         }
-
-        toolTip.style.left = tipLeft+"px";
-
         //判断方向位置
     },
     mouseOutHandler:function(event) {//鼠标移开时隐藏下拉

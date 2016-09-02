@@ -6,139 +6,141 @@ let fileType={};
 /*
 media
  */
-let media=new Map();
+fileType. media=new Map();
 
-media.set(  "audio/mpeg",".mp2" );
-media.set(  "audio/mp3",".mp3" );
-media.set( "audio/mp4",".mp4");
-media.set(   "audio/mpeg",".mpeg");
-media.set( "audio/mpeg",".mpg"  );
-media.set( "application/vnd.ms-project",".mpp" );
-media.set(  "audio/ogg",".ogg" );
+fileType.media.set(  "audio/mpeg",".mp2" );
+fileType.media.set(  "audio/mp3",".mp3" );
+fileType.media.set( "audio/mp4",".mp4");
+fileType.media.set(   "audio/mpeg",".mpeg");
+fileType.media.set( "audio/mpeg",".mpg"  );
+fileType.media.set( "application/vnd.ms-project",".mpp" );
+fileType.media.set(  "audio/ogg",".ogg" );
 
 
 /*
 txt
  */
 
-let txt=new Map();
-txt.set(  "text/rtf",".rtf");
-txt.set( "text/plain",".txt");
-txt.set( "text/csv",".csv");
+fileType.txt=new Map();
+fileType.txt.set(  "text/rtf",".rtf");
+fileType.txt.set( "text/plain",".txt");
+fileType.txt.set( "text/csv",".csv");
 /*
 pdf
  */
-let pdf=new Map();
-pdf.set( "application/pdf",".pdf");
+fileType. pdf=new Map();
+fileType.pdf.set( "application/pdf",".pdf");
 /*
 html
 
  */
-let html=new Map();
-html.set("application/xhtml+xml",".xhtml");
-html.set("text/xml",".xml" );
-html.set("text/html",".htm" );
-html.set("text/html",".html");
-html.set( "text/javascript",".js");
-html.set( "application/json",".json");
-html.set(  "text/css",".css" );
+fileType. html=new Map();
+fileType.html.set("application/xhtml+xml",".xhtml");
+fileType.html.set("text/xml",".xml" );
+fileType.html.set("text/html",".htm" );
+fileType.html.set("text/html",".html");
+fileType.html.set( "text/javascript",".js");
+fileType.html.set( "application/json",".json");
+fileType.html.set(  "text/css",".css" );
     /*
     excel
      */
 
-    let excel=new Map();
+    fileType. excel=new Map();
 
-excel.set("application/vnd.ms-excel",".xls" );
-excel.set("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",".xlsx" );
+fileType.excel.set("application/vnd.ms-excel",".xls" );
+fileType.excel.set("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",".xlsx" );
 /*
  word
  */
-let word=new Map();
-word.set("application/msword",".doc");
-word.set("application/vnd.openxmlformats-officedocument.wordprocessingml.document",".docx" );
+fileType. word=new Map();
+fileType.word.set("application/msword",".doc");
+fileType.word.set("application/vnd.openxmlformats-officedocument.wordprocessingml.document",".docx" );
 
 /*
  ppt
  */
-let ppt=new Map();
+fileType. ppt=new Map();
 
 
-ppt.set("application/vnd.openxmlformats-officedocument.presentationml.presentation",".pptx");
-ppt.set("application/vnd.ms-powerpoint",".ppt");
+fileType.ppt.set("application/vnd.openxmlformats-officedocument.presentationml.presentation",".pptx");
+fileType.ppt.set("application/vnd.ms-powerpoint",".ppt");
 
-/*
-image
- */
-let image=new Map();
-image.set("image/bmp",".bmp");
-image.set("image/vnd.dwg",".dwg");
-image.set("image/vnd.dxf",".dxf");
-image.set("image/gif",".gif" );
-image.set("image/jp2",".jp2" );
-image.set("image/jpeg",".jpe");
-image.set("image/jpeg",".jpeg");
-image.set("image/jpeg",".jpg" );
-image.set("image/vnd.svf",".svf");
-image.set( "image/tiff",".tif");
-image.set("image/tiff",".tiff");
-image.set("image/png",".png");
+
 
 /*
 压缩
  */
-let zip=new Map();
-zip.set(".zip"  , "aplication/zip");
-zip.set("application/x-rar",".rar");
+fileType. zip=new Map();
+fileType.zip.set(".zip"  , "aplication/zip");
+fileType.zip.set("application/x-rar",".rar");
 
-fileType.word=function(type) {//word文件
-    if(word.has(type))
-    {
-        return true;
-    }
-    else {
-        return false;
-    }
-}
-fileType.excel=function(type) {//excel文件
-    if(excel.has(type))
-    {
-        return true;
-    }
-    else {
-        return false;
-    }
-}
-fileType.ppt=function(type) {//ppt文件
-    if(ppt.has(type))
-    {
-        return true;
-    }
-    else {
-        return false;
-    }
-}
-fileType.office=function(type) {//office格式文件
+/*
+ image
+ */
+fileType. image=new Map();
+fileType.image.set("image/bmp",".bmp");
+fileType.image.set("image/vnd.dwg",".dwg");
+fileType.image.set("image/vnd.dxf",".dxf");
+fileType.image.set("image/gif",".gif" );
+fileType.image.set("image/jp2",".jp2" );
+fileType.image.set("image/jpeg",".jpe");
+fileType.image.set("image/jpeg",".jpeg");
+fileType.image.set("image/jpeg",".jpg" );
+fileType.image.set("image/vnd.svf",".svf");
+fileType.image.set( "image/tiff",".tif");
+fileType.image.set("image/tiff",".tiff");
+fileType.image.set("image/png",".png");
 
-    if(fileType.word(type))
+fileType.isWord=function(type) {//word文件
+    if(fileType.word.has(type))
     {
         return true;
     }
-    else if(fileType.excel(type))
+    else {
+        return false;
+    }
+}
+fileType.isExcel=function(type) {//excel文件
+    if(fileType.excel.has(type))
     {
         return true;
     }
-    else if(fileType.ppt(type))
+    else {
+        return false;
+    }
+}
+fileType.isPpt=function(type) {//ppt文件
+    if(fileType.ppt.has(type))
     {
         return true;
+    }
+    else {
+        return false;
+    }
+}
+fileType.isOffice=function(type) {//office格式文件
+
+    if(fileType.isword(type))
+    {
+        return false;
+    }
+    else if(fileType.isexcel(type))
+    {
+        return false;
+    }
+    else if(fileType.isppt(type))
+    {
+        return false;
     }
     else
     {
-        return false;
+        return true;
     }
 
 }
-fileType.pdf=function(type) {//pdf 文件
-    if(pdf.has(type))
+fileType.isPdf=function(type) {//pdf 文件
+    if(fileType.pdf.has(type))
     {
         return true;
     }
@@ -146,8 +148,8 @@ fileType.pdf=function(type) {//pdf 文件
         return false;
     }
 }
-fileType.txt=function(type) {//txt 文件
-    if(txt.has(type))
+fileType.isTxt=function(type) {//txt 文件
+    if(fileType.txt.has(type))
     {
         return true;
     }
@@ -155,7 +157,7 @@ fileType.txt=function(type) {//txt 文件
         return false;
     }
 }
-fileType.html=function(type) {//html 文件
+fileType.isHtml=function(type) {//html 文件
     if(html.has(type))
     {
         return true;
@@ -164,8 +166,8 @@ fileType.html=function(type) {//html 文件
         return false;
     }
 }
-fileType.image=function(type) {//image 文件
-    if(image.has(type))
+fileType.isImage=function(type) {//image 文件
+    if(fileType.image.has(type))
     {
         return true;
     }
@@ -173,8 +175,8 @@ fileType.image=function(type) {//image 文件
         return false;
     }
 }
-fileType.media=function(type) {//media 文件
-    if(media.has(type))
+fileType.isMedia=function(type) {//media 文件
+    if(fileType.media.has(type))
     {
         return true;
     }
@@ -182,8 +184,8 @@ fileType.media=function(type) {//media 文件
         return false;
     }
 }
-fileType.zip=function(type) {//压缩 文件
-    if(zip.has(type))
+fileType.isZip=function(type) {//压缩 文件
+    if(fileType.zip.has(type))
     {
         return true;
     }
@@ -192,28 +194,28 @@ fileType.zip=function(type) {//压缩 文件
     }
 }
 
-fileType.type=function(value) {
+fileType.getTypeMap=function(value) {
     switch (value) {
         case "word":
-            return word;
+            return fileType.word;
         case "excel":
-            return excel;
+            return fileType.excel;
         case     "ppt":
-            return ppt;
+            return fileType.ppt;
         case      "office":
-            return office;
+            return fileType.office;
         case      "txt":
-            return txt;
+            return fileType.txt;
         case     "pdf":
-            return pdf;
+            return fileType.pdf;
         case     "html":
-            return html;
+            return fileType. html;
         case     "image":
-            return image;
+            return fileType.image;
         case     "media":
-            return media;
+            return fileType.media;
         case      "zip":
-            return zip;
+            return fileType.zip;
         default:
             return null;
     }

@@ -9,7 +9,7 @@ let Track=React.createClass({
     {
         model:React.PropTypes.array,//跟踪信息
         expressName:React.PropTypes.string,//快递公司名称
-        exrepssId:React.PropTypes.string,//快递单号
+        exrepssId:React.PropTypes.oneOfType([React.PropTypes.number,React.PropTypes.string]),//快递单号
 
 
     },

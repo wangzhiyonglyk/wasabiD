@@ -12,8 +12,8 @@ background-color: #0d3f42;
 表格基本样式
 */
 .wasabi-detail .wasabi-table .table {
-    border-left: 1px solid #204f52;
-    border-top: 1px solid #204f52;
+    border: 1px solid #204f52;
+
     border-spacing: 0;
     border-collapse: collapse;
     overflow-y: auto;
@@ -63,25 +63,20 @@ background-color: #0d3f42;
     width:9px;
 }
 
-/*
-没有边框的时候
-*/
-.wasabi-detail .wasabi-table .table.table-no-bordered {
-    border: none;
-    border-bottom: 1px solid #204f52;
-}
-
-.wasabi-detail .wasabi-table .table.table-no-bordered > thead > tr > th
-{
-    border: none;
+.wasabi-detail .wasabi-table .table > thead > tr > th,
+.wasabi-detail .wasabi-table .table > tbody > tr > td {
     border-right: 1px solid #204f52;
     border-bottom: 1px solid #204f52;
 }
-.wasabi-detail .wasabi-table .table.table-no-bordered > thead > tr > th:last-child {
-    border: none;
-    border-bottom: 1px solid #204f52;
+.wasabi-detail .wasabi-table .table > thead > tr > th:last-child
+{
+    border-right: 0px solid #204f52;
 }
-.wasabi-detail .wasabi-table .table.table-no-bordered > tbody > tr > td {
+/*
+没有边框的时候
+*/
+
+.wasabi-detail .wasabi-table .table.table-no-bordered  > tbody > tr > td {
     border: none;
 }
 
@@ -89,10 +84,9 @@ background-color: #0d3f42;
 /*
   有边框的时候
  */
-.wasabi-detail .wasabi-table .table > thead > tr > th,
-.wasabi-detail .wasabi-table .table > tbody > tr > td {
+
+.wasabi-detail .wasabi-table .table > tbody > tr > td :last-child{
     border-right: 1px solid #204f52;
-    border-bottom: 1px solid #204f52;
 }
 
 

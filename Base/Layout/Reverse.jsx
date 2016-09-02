@@ -6,16 +6,13 @@ var React=require("react");
 require("../../sass/Base/Layout/reverse.scss");
 var Reverse=React.createClass({
     propTypes: {
-        front: React.PropTypes.object.isRequired,//正面
-        reverse: React.PropTypes.object.isRequired,//反面
-        dblReverse: React.PropTypes.bool,//是否允许双击翻转
+        dblAble: React.PropTypes.bool,//是否允许双击翻转
         className: React.PropTypes.string,
     },
-
     getDefaultProps:function() {
         return {
             className:"",
-            dblReverse:true
+            dblAble:true
         }
     },
     getInitialState: function () {
@@ -67,10 +64,13 @@ var Reverse=React.createClass({
         )
     },
     onDblClick:function() {
-        if(!this.props.dblReverse)
+        if(!this.props.dblAble)
         {
             return ;
         }
+        this.reverseHandler();
+    },
+    reverseHandler:function() {//用于父组件调用
         if (this.state.isReverse) {
 
             this.mouseOutHandler();
@@ -83,12 +83,7 @@ var Reverse=React.createClass({
         }
 
     },
-    reverseHandler:function()
-    {//用于父组件调用
-      this.onDblClick();
-    },
-    render:function()
-    {
+    render:function() {
         var props=
         {
             style:this.props.style,

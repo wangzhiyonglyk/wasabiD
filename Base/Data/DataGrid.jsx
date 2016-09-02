@@ -13,8 +13,10 @@ var FetchModel=require("../../model/FetchModel.js");
 var LinkButton=require("../Buttons/LinkButton.jsx");
 var CheckBox=require("../Form/CheckBox.jsx");
 var Message=require("../unit/Message.jsx");
+var shouldComponentUpdate=require("../../Mixins/shouldComponentUpdate.js");
 
 var DataGrid=React.createClass({
+    mixins:[shouldComponentUpdate],
     propTypes: {
         width:React.PropTypes.number,//宽度
         height:React.PropTypes.number,//高度
@@ -27,7 +29,10 @@ var DataGrid=React.createClass({
         pageIndex:React.PropTypes.number,//当前页号
         pageSize:React.PropTypes.number,//分页大小，默认20
         sortName:React.PropTypes.string,//排序字段,
-        sortOrder:React.PropTypes.string,//排序方式,默认asc,
+        sortOrder:React.PropTypes.oneOf([
+            "asc",
+            "desc",
+        ]),//排序方式,默认asc,
         keyField:React.PropTypes.string,//关键字段
         headers:React.PropTypes.array.isRequired,//表头设置
         total:React.PropTypes.number,// 总条目数，默认为 0
@@ -41,10 +46,12 @@ var DataGrid=React.createClass({
         onDoubleClick:React.PropTypes.func,//双击事件
         onChecked:React.PropTypes.func,//表格中有一行被选中
         detailHandler:React.PropTypes.func,//展示详情的函数，父组件一定要有返回值,返回详情组件
+        footer:React.PropTypes.array,//页脚,
+        footerSource:React.PropTypes.string,//页脚数据源,
     },
     getDefaultProps:function(){
         return{
-            width:null,
+            width:document.body.clientWidth,
             height:null,
             selectAble:false,
             detailAble:false,
@@ -62,14 +69,16 @@ var DataGrid=React.createClass({
             updateHandler:null,
             detailHandler:null,
             url:null,//
-            backSource:"data.object",//TODO,此处的默认值在正式框架下改为data,
-            totalSource:"data.totalResult",//TODO,此处的默认值在正式框架下改为total
+            backSource:"data.data",//
+            totalSource:"data.total",//
             params:null,
             footer:null,//页脚
-            footerSource:"footer",//页脚数据源
+            onClick:null,
             onDoubleClick:null,
-            selectChecked:false,
             onChecked:null,
+            footerSource:"data.footer",//页脚数据源
+            selectChecked:false,
+
 
         }
     },
@@ -96,9 +105,6 @@ var DataGrid=React.createClass({
             tdwidth:null,//用于计算宽度
         }
     },
-    shouldComponentUpdate:function(nextProps,nextState) {
-        return true;
-    },
     componentWillReceiveProps:function(nextProps) {
         if(nextProps.url&&nextProps.url!="") {
             //如果存在url
@@ -112,7 +118,7 @@ var DataGrid=React.createClass({
             if(nextProps.data!=null&&nextProps.data!=undefined&&nextProps.data instanceof Array)
             {
                 this.setState({
-                    data:(nextProps.pagination==true? nextProps.data.slice(0,nextProps.pageSize):nextProps.data),
+                    data:(this.props.pagination==true? nextProps.data.slice(0,nextProps.pageSize):nextProps.data),
                     total:nextProps.total,
                     pageIndex:nextProps.pageIndex,
                     pageSize:nextProps.pageSize,
@@ -150,7 +156,7 @@ var DataGrid=React.createClass({
 
             headers.push(
                 <th  key="headercheckbox" className="check-column">
-                    <CheckBox {...props} style={{width:20}}></CheckBox>
+                    <CheckBox {...props} ></CheckBox>
                 </th>
 
             );
@@ -179,7 +185,7 @@ var DataGrid=React.createClass({
                 } else {
                     headers.push(
                         <th key={"header"+index.toString()} {...props}  className={""+sortOrder} style={{textAlign:(header.align?header.align:"left"), width:(header.width==null?"auto":header.width)}}>
-                            {header.header}
+                            {header.label}
                         </th>)
                 }
             }
@@ -214,7 +220,7 @@ var DataGrid=React.createClass({
                 }
                 tds.push(
                     <td  key ={"bodycheckbox"+rowIndex.toString()}  className="check-column">
-                        <CheckBox {...props} style={{width:20}}></CheckBox> </td>
+                        <CheckBox {...props} ></CheckBox> </td>
                 );
 
             }
@@ -395,6 +401,17 @@ var DataGrid=React.createClass({
         return paginationCom;
 
     },
+    divXScrollHandler:function(){//虚拟滚动条滚动事件
+        var scrollLeft=this.refs.scrollX.scrollLeft;
+        this.refs.tableTitle.scrollLeft=scrollLeft;
+        this.refs.tableBody.scrollLeft=scrollLeft;
+
+    },
+    divYScrollHandler:function(){//虚拟滚动条滚动事件
+        var scrollTop=this.refs.scrollX.scrollTop;
+        this.refs.tableY.scrollTop=scrollTop;
+
+    },
     paginationHandler:function(pageIndex) {
         if(pageIndex==this.state.pageIndex)
         {
@@ -550,10 +567,7 @@ var DataGrid=React.createClass({
     },
     updateHandler:function(url,pageSize,pageIndex,sortName,sortOrder,params){
         //更新事件
-        if(params==undefined)
-        {
-            params=unit.clone(this.state.params);
-        }
+
         if(url==undefined)
         {
             url=this.state.url;
@@ -563,25 +577,36 @@ var DataGrid=React.createClass({
             this.setState({
                 loading:true,
             })
-            //TODO /*公共组件调用下面的代码*/
-            //params.pageSize=pageSize;
-            //params.pageIndex=pageIndex;
-            //params.sortName=sortName;
-            //params.sortOrder=sortOrder;
-            //var fetchmodel=new FetchModel(this.state.url,this.loadSuccess.bind(this,pageSize,pageIndex,sortName,sortOrder),params);
-            //unit.fetch.post(fetchmodel);
 
-            //TODO /*专为OMS服务*/
-            var padgingParams=new Object();//
-            if(this.props.pagination)
+            var actualParams={};
+
+            if(!params&&this.state.params&&typeof this.state.params =="object")
             {
-                padgingParams=unit.paging(pageSize,pageIndex,sortName,sortOrder,params);
+                  actualParams=unit.clone(this.state.params);
             }
-            else {
-                padgingParams=params;
+            else
+            {
+                if(this.props.pagination==true) {
+                    actualParams.data = params;
+
+                }
+                else
+                {
+                    actualParams=params;
+                }
             }
 
-            var fetchmodel=new FetchModel(url,this.loadSuccess.bind(this,url,pageSize,pageIndex,sortName,sortOrder,params),padgingParams,this.loadError);
+            if(this.props.pagination==true)
+            {
+                actualParams.pageSize=pageSize;
+                actualParams.pageIndex=pageIndex;
+                actualParams.sortName=sortName;
+                actualParams.sortOrder=sortOrder;
+            }
+            else
+            {
+            }
+            var fetchmodel=new FetchModel(url,this.loadSuccess.bind(this,url,pageSize,pageIndex,sortName,sortOrder,params),actualParams,this.loadError);
               console.log("datagrid-",fetchmodel);
             unit.fetch.post(fetchmodel);
         }
@@ -600,12 +625,19 @@ var DataGrid=React.createClass({
         var totalSource;
         var footerSource;
         if(this.props.backSource&&this.props.backSource!="") {
-            dataSource= unit.getSource( data,this.props.backSource);
+            if(this.props.pagination==false&&this.props.backSource=="data.data")
+            {
+                dataSource= unit.getSource( data,"data");
+            }else {
+                dataSource= unit.getSource( data,this.props.backSource);
+
+            }
+
         }
         else {
             dataSource=data;
         }
-        if(this.props.totalSource&&this.props.totalSource!="") {
+        if(this.props.pagination&&this.props.totalSource&&this.props.totalSource!="") {
 
             totalSource=unit.getSource( data,this.props.totalSource);
         }
@@ -624,7 +656,7 @@ var DataGrid=React.createClass({
         this.setState({
             url:url,
             pageSize:pageSize,
-            params:unit.clone(params),
+            params:unit.clone(params),//这里一定要复制
             pageIndex:pageIndex,
             sortName:sortName,
             sortOrder:sortOrder,
@@ -639,8 +671,8 @@ var DataGrid=React.createClass({
             this.clearCheck=false;
         }
     },
-    loadError:function(errorCode,error) {//查询失败
-        Message. alert(error);
+    loadError:function(errorCode,message) {//查询失败
+        Message. alert(message);
         this.setState({
             loading:false,
         })
@@ -767,8 +799,16 @@ var DataGrid=React.createClass({
     getFocusIndex:function() {
         return this.state.focusIndex;
     },
-    getFocusRowData:function() {
-        return this.state.data[this.state.focusIndex];
+    getFocusRowData:function(index) {
+        if(index!=null&&index!=undefined)
+        {
+
+        }
+        else
+        {
+            index=this.state.focusIndex;
+        }
+        return this.state.data[index];
     },
     checkCurrentPageCheckedAll:function() {//判断当前页是否全部选中
         if(this.state.data instanceof Array )
@@ -795,7 +835,7 @@ var DataGrid=React.createClass({
         }
         return ischeckall;
     },
-    checkedAllHandler:function(value){
+    checkedAllHandler:function(value){//全选按钮的单击事件
         if(this.state.data instanceof  Array)
         {
 
@@ -889,15 +929,15 @@ var DataGrid=React.createClass({
     },
     render:function() {
         var padddingRight;
-        var tablepwidth=this.props.width;//计算宽度
+        var tableDefinedWidth=this.props.width;//自定义宽度
         var className="table table-no-bordered";
         if(this.props.borderAble===true)
         {
             className="table";
         }
-        return (<div className="wasabi-table"   style={{height:this.props.height}} >
+        return (<div className="wasabi-table"    style={{width:tableDefinedWidth}}>
 
-            <table  className={className} style={{width:tablepwidth}}>
+            <table  className={className}>
                 <thead>
                 <tr>
                     {this.renderHeader()}
@@ -911,14 +951,14 @@ var DataGrid=React.createClass({
                     this.renderFooter()
                 }
                 </tbody>
-            </table>
-            <div className="wasabi-table-pagination"  style={{width:tablepwidth,display:(this.props.pagination?"block":"none")}}>
-                {this.renderTotal()}
+             </table>
 
-            <div style={{width:tablepwidth,display:(this.props.pagination?"block":"none")}}>
+            <div className="wasabi-table-pagination"  style={{width:tableDefinedWidth,display:(this.props.pagination?"block":"none")}}>
+                {this.renderTotal()}
+            <div style={{width:tableDefinedWidth,display:(this.props.pagination?"block":"none")}}>
                 {this.renderPagination()}
             </div>
-            </div>
+                </div>
             <div className="table-loading" style={{display:this.state.loading==true?"block":"none"}}></div>
             <div className="load-icon"  style={{display:this.state.loading==true?"block":"none"}}></div>
         </div>);

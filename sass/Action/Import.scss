@@ -70,7 +70,7 @@ desc:导入功能组件样式
 {
   content:"111";
   color:transparent;
-  background-image: url('../../img/icons/downloadmodel.png');
+  background-image: url('../../img/icons/download.png');
   width: 12px;
   height: 12px;
   background-size: 12px 12px;
@@ -90,4 +90,34 @@ desc:导入功能组件样式
   width: 100%;
   line-height: 60px;
   border-top: 1px solid #ebebeb;
+}
+.import-upload-info
+{
+  position: absolute;
+  top: 100px;
+  left: 34px;
+  width: 400px;
+  text-align: left;
+  height: 120px;
+  overflow: auto;
+
+}
+.import-upload-info .success
+{
+  color:#1ec9c3;
+}
+.import-upload-info .fail
+{
+  color: #d9534f;
+}
+.import-failload
+{
+  position:absolute;
+  left:20px;
+}
+.import-upload-info .info
+{
+  color: #666666;
+  font-size: 14px;
+  font-size: 1.4rem;
 }

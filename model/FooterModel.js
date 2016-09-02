@@ -7,7 +7,7 @@ class ButtonModel
 {
     constructor(name,type,value=null) {
         this.name=name;
-        this.type=type;
+        this.type=type;//sum,avg
         this.value=value;
     }
 }

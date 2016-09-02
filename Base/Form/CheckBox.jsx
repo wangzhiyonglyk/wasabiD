@@ -10,14 +10,16 @@ var validation=require("../Lang/validation.js");
 let setStyle=require("../../Mixins/setStyle.js");
 var validate=require("../../Mixins/validate.js");
 var showUpdate=require("../../Mixins/showUpdate.js");
+var shouldComponentUpdate=require("../../Mixins/shouldComponentUpdate.js");
 let CheckBox=React.createClass({
-    mixins:[setStyle,validate,showUpdate],
+    mixins:[setStyle,validate,showUpdate,shouldComponentUpdate],
     PropTypes:{
         name:React.PropTypes.string.isRequired,//字段名
         label:React.PropTypes.string,//字段文字说明属性
         width:React.PropTypes.number,//宽度
         height:React.PropTypes.number,//高度
-        text:React.PropTypes.string,//默认文本值
+        value:React.PropTypes.oneOfType([React.PropTypes.number,React.PropTypes.string]),//默认值,
+        text:React.PropTypes.oneOfType([React.PropTypes.number,React.PropTypes.string]),//默认文本值
         placeholder:React.PropTypes.string,//输入框预留文字
         readonly:React.PropTypes.bool,//是否只读
         required:React.PropTypes.bool,//是否必填
@@ -37,7 +39,7 @@ let CheckBox=React.createClass({
             "default",
             "right"
         ]),//组件在表单一行中的位置
-
+        //其他属性
         min:React.PropTypes.number,//最少选择几个
         max:React.PropTypes.number,//最多选择几个
 
@@ -106,7 +108,7 @@ let CheckBox=React.createClass({
         return {
             min:this.props.min,
             max:this.props.max,
-            params:this.props.params,//参数
+            params:unit.clone(this.props.params),//参数
             data:newData,
             value:this.props.value,
             text:text,
@@ -139,8 +141,9 @@ let CheckBox=React.createClass({
                 data:newData,
                 min:nextProps.min,
                 max:nextProps.max,
-                value: nextProps.value,
+                value:nextProps.value,
                 text: text,
+                params:unit.clone( nextProps.params),
                 readonly:nextProps.readonly,
                 required:nextProps.required,
             })
@@ -163,9 +166,9 @@ let CheckBox=React.createClass({
             this.setState({
                 min:nextProps.min,
                 max:nextProps.max,
-                value: nextProps.value,
-                text: nextProps.text,
-                params:nextProps.params,
+                 value:nextProps.value,
+                 text: text,
+                params:unit.clone( nextProps.params),
                 readonly:nextProps.readonly,
                 required:nextProps.required,
             })
@@ -175,7 +178,6 @@ let CheckBox=React.createClass({
     componentWillMount:function() {//如果指定url,先查询数据再绑定
         this.loadData(this.props.url,this.state.params);//查询数据
     },
-
     loadData:function(url,params) {
         if(url!=null&&url!="")
         {
@@ -251,29 +253,32 @@ let CheckBox=React.createClass({
             return ;
         }
         var newvalue="";var newtext="";
-        if(!this.state.value||this.state.value=="") {//对异常进行处理
-            newvalue=value;
-            newtext=text;
+        var oldvalue="";
+        var oldtext="";
+        if(!this.state.value||this.state.value==="") {//没有选择任何项
         }
         else {
-            var oldvalue=","+this.state.value.toString();//加逗号是为了防止判断失误，国为某些可能正好包含在另外一个值中
-            var oldtext=","+this.state.text.toString();
+            oldvalue=","+this.state.value.toString();//加逗号是为了防止判断失误，国为某些可能正好包含在另外一个值中
+        }
+        if(!this.state.text||this.state.text==="") {//没有选择任何项
+        }
+        else {
+            oldtext=","+this.state.text.toString();//加逗号是为了防止判断失误，国为某些可能正好包含在另外一个值中
+        }
             if(oldvalue.indexOf("," +value)>-1) {
                 //取消选中
                 newvalue=oldvalue.replace("," + value.toString(), "");
                 newtext=oldtext.replace("," + text.toString(), "");
-
             }
             else {//选中
-                newvalue=this.state.value+","+value;
-                newtext=this.state.text+","+text;
+                newvalue= oldvalue===""?value:oldvalue+","+value;
+                newtext=oldvalue===""?text:oldtext+","+text;
             }
-        }
             this.setState({
                 value:newvalue,
                 text:newtext
             });
-
+        this.validate(newvalue);
         if( this.props.onSelect!=null) {
           this.props.onSelect(newvalue,newtext,this.props.name,data);
         }
@@ -299,7 +304,7 @@ let CheckBox=React.createClass({
                 <input type="checkbox"  id={"checkbox"+this.props.name+child.value}  value={child.value}
                                    onClick={this.onSelect.bind(this,child.value,child.text,child)}
                                    onChange={this.changeHandler} className="checkbox"  {...props}></input>
-                    <label htmlFor={"checkbox"+this.props.name+child.value}{...props}></label>
+                    <label htmlFor={"checkbox"+this.props.name+child.value} {...props}></label>
                  <div  className="checktext">{child.text}</div>
                     </li >
             });

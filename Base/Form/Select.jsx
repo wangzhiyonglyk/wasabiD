@@ -11,15 +11,17 @@ var validation=require("../Lang/validation.js");
 let setStyle=require("../../Mixins/setStyle.js");
 var validate=require("../../Mixins/validate.js");
 var showUpdate=require("../../Mixins/showUpdate.js");
+var shouldComponentUpdate=require("../../Mixins/shouldComponentUpdate.js");
 let Select=React.createClass({
-    mixins:[setStyle,validate,showUpdate],
+    mixins:[setStyle,validate,showUpdate,shouldComponentUpdate],
     PropTypes:{
 
         name:React.PropTypes.string.isRequired,//字段名
         label:React.PropTypes.string,//字段文字说明属性
         width:React.PropTypes.number,//宽度
         height:React.PropTypes.number,//高度
-        text:React.PropTypes.string,//默认文本值
+        value:React.PropTypes.oneOfType([React.PropTypes.number,React.PropTypes.string]),//默认值,
+        text:React.PropTypes.oneOfType([React.PropTypes.number,React.PropTypes.string]),//默认文本值
         placeholder:React.PropTypes.string,//输入框预留文字
         readonly:React.PropTypes.bool,//是否只读
         required:React.PropTypes.bool,//是否必填
@@ -114,7 +116,7 @@ let Select=React.createClass({
 
             return {
 
-                params:this.props.params,//参数
+                params:unit.clone(this.props.params),//参数
                 data:newData,
                 value:this.props.value,
                 text:text,
@@ -133,6 +135,9 @@ let Select=React.createClass({
             }
         },
     componentWillReceiveProps:function(nextProps) {
+        /*
+        this.isChange :代表自身发生了改变,防止父组件没有绑定value,text,而导致无法选择的结果
+         */
         var text = nextProps.text;
         var newData = null;
         if(nextProps.data!=null&&nextProps.data instanceof  Array &&(!nextProps.url||nextProps.url=="")) {
@@ -148,9 +153,10 @@ let Select=React.createClass({
                 newData.push(obj);
             }
             this.setState({
-                value: nextProps.value,
-                text: text,
+                value:this.isChange?this.state.value: nextProps.value,
+                text: this.isChange?this.state.text:text,
                 data: newData,
+                params:unit.clone( nextProps.params),
                 multiple: nextProps.multiple,
                 min: nextProps.min,
                 max: nextProps.max,
@@ -166,19 +172,30 @@ let Select=React.createClass({
 
             }
             this.setState({
-                value: nextProps.value,
-                text: text,
+                value:this.isChange?this.state.value: nextProps.value,
+                text: this.isChange?this.state.text:text,
                 multiple: nextProps.multiple,
                 min: nextProps.min,
                 max: nextProps.max,
+                params:unit.clone( nextProps.params),
                 readonly: nextProps.readonly,
                 required: nextProps.required,
             })
         }
-
+        this.isChange=false;//重置
     },
     componentWillMount:function() {//如果指定url,先查询数据再绑定
      this.loadData(this.props.url,this.state.params);//查询数据
+    },
+    componentDidUpdate:function()
+    {
+      if(this.isChange==true)
+      {
+          if( this.props.onSelect!=null)
+          {
+              this.props.onSelect(this.state.value,this.state.text,this.props.name,this.rowData);
+          }
+      }
     },
     mouseOutHandler:function(event) {//鼠标移开时隐藏下拉
         var parentE=event.relatedTarget;//相关节点
@@ -267,7 +284,6 @@ let Select=React.createClass({
             })
     },
     showItem:function() {//显示下拉选项
-        console.log(this.state.data);
         if (this.state.readonly) {
             return;
         }
@@ -281,7 +297,8 @@ let Select=React.createClass({
     changeHandler:function(event) {
     },
     onSelect:function(value,text,rowData) {//选中事件
-
+          this.isChange=true;//代表自身发生了改变,防止父组件没有绑定value,text,而导致无法选择的结果
+        this.rowData=rowData;
         if(value==undefined)
         {
             console.error("绑定的valueField没有")
@@ -316,20 +333,13 @@ let Select=React.createClass({
                 text:text,
             });
         }
+        this.validate(value);
 
-        if( this.props.onSelect!=null)
-        {
-          this.props.onSelect(value,text,this.props.name,rowData);
-        }
     },
     getComponentData:function() {//只读属性，获取当前下拉的数据源
         return this.state.data;
     },
     render:function() {
-        if(this.props.name=="仓库名称")
-        {
-            console.log(this.state);
-        }
         var size=this.props.onlyline==true?"onlyline":this.props.size;//组件大小
         var componentClassName=  "wasabi-form-group "+size+" "+(this.props.className?this.props.className:"");//组件的基本样式
         var style =this.setStyle("input");//设置样式

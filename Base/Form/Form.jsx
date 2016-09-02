@@ -6,7 +6,9 @@ var React=require("react");
 var Input=require("./Input.jsx");
 var Button=require("../Buttons/Button.jsx");
 var unit=require("../../libs/unit.js");
+var shouldComponentUpdate=require("../../Mixins/shouldComponentUpdate.js");
 var Form=React.createClass({
+    mixins:[shouldComponentUpdate],
     propTypes: {
         model:React.PropTypes.array.isRequired,//表单数据模型
         width:React.PropTypes.number,///宽度
@@ -215,6 +217,10 @@ var Form=React.createClass({
             var textData={};//各个字段对应的文本值
             let isva=true;
          for(let v in this.refs) {
+             if(this.refs[v].props.type=="button")
+             {
+                 continue;//如果按钮则跳过
+             }
                 if(isva) {
                     //验证成功，则继续验证
                     isva = this.refs[v].validate();

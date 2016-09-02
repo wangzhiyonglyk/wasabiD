@@ -4,23 +4,24 @@
  */
 class ButtonModel
 {
-    constructor(name,title,theme="default",size="default",onClick=null,disabled=false,backgroundColor=null,iconCls=null,iconAlign="left",hide=false,href="javascript:void(0);")
+    constructor(name,title,theme="default")
     {
         this.name=name;
         this.title=title;
-        this.disabled=disabled;
-        this.iconCls=iconCls;
-        this.iconAlign=iconAlign;
-        this.href=href;
-        this.onClick=onClick;
-        this.backgroundColor=backgroundColor;
+        this.disabled=false;
+        this.iconCls=null;
+        this.iconAlign="left";
+        this.href="javascript:void(0);";
+        this.onClick=null;
+        this.backgroundColor=null;
         this.tip=null;
         this.theme=theme;
-        this.size=size;
+        this.size="default";
         this.color=null;
-        this.hide=hide;
+        this.hide=false;
         this.className=null;
         this.style=null;
+        this.draggable=false;
 
     }
 }

@@ -8,10 +8,9 @@ require("../../sass/Base/Form/SearchBox.scss");
 let SearchBox=React.createClass({
     propTypes: {
         name:React.PropTypes.string,//表单名称，
-        placeHolder:React.PropTypes.func,//输入框提示信息
+        placeholder:React.PropTypes.string,//输入框提示信息
         valueField:React.PropTypes.string.isRequired,//表单value字段
         textField:React.PropTypes.string.isRequired,//表单text字段
-        params:React.PropTypes.object,//其他参数
         width:React.PropTypes.number,//宽度
         onSearch:React.PropTypes.func,//查询事件
 
@@ -30,7 +29,8 @@ let SearchBox=React.createClass({
     },
     getInitialState:function() {
         return {
-            params:this.props.params,//默认筛选条件
+
+            params:null,
             filterValue:"",//筛选框的值
         }
     },
@@ -47,16 +47,14 @@ let SearchBox=React.createClass({
         let params = this.state.params;
 
         if (params) {
-            for(let v in params)
-            {
-                params[v]=this.state.filterValue;
-            }
+
+
         }
         else {
             params = {};//初始化
-            params[this.props.valueField] = this.state.filterValue;
-            params[this.props.textField] = this.state.filterValue;
         }
+        params[this.props.valueField] = this.state.filterValue;
+        params[this.props.textField] = this.state.filterValue;
 
         this.setState({
             params: params
@@ -75,7 +73,7 @@ let SearchBox=React.createClass({
         })
     },
     render:function() {
-        return<div   className="wasabi-searchbox"><input type="text" placeHolder={this.state.placeHolder}  onKeyUp={this.onKeyUp} value={this.state.filterValue} onChange={this.onChange} />
+        return<div   className="wasabi-searchbox" style={{width:this.props.width}}><input type="text" placeholder={this.props.placeholder}  onKeyUp={this.onKeyUp} value={this.state.filterValue} onChange={this.onChange} />
                 <div className="icon" onClick={this.beginSearch}></div>
             </div>
     }

@@ -7,17 +7,21 @@
   overflow: auto;;
   position: relative;
 }
+.wasabi-table .wasabi-form-group
+{
+  padding:0px;
+}
 .wasabi-table .wasabi-checkul
 {
   margin: 0px;
   padding: 0px;
- height: 13px;
+ height: 12px;
 }
 .wasabi-table .wasabi-checkul li
 {
   margin:0px;
   padding:0px;
-  height: 13px;
+  height: 12px;
   width: 12px;
 }
 .wasabi-table .wasabi-checkul .checkbox + label {
@@ -30,8 +34,8 @@
 表格基本样式
 */
 .wasabi-table .table {
-  border-top: 1px solid #e3e4e5;
-  border-bottom: 1px solid #e3e4e5;
+  border: 1px solid #e3e4e5;
+
   border-spacing: 0;
   border-collapse: collapse;
   overflow-y: auto;
@@ -63,31 +67,30 @@
 .wasabi-table .table > thead > tr > th.check-column
 {
   padding-left: 20px;
-  padding-right: 10px;
+  padding-right: 20px;
   width:9px;
 }
 .wasabi-table .table > tbody > tr > td.check-column
 {
   padding-left: 20px;
-  padding-right: 10px;
+  padding-right: 20px;
   width:9px;
 }
 
+.wasabi-table .table > thead > tr > th,
+.wasabi-table .table > tbody > tr > td {
+  border-right: 1px solid #e3e4e5;
+  border-bottom: 1px solid #e3e4e5;
+}
+.wasabi-table .table > thead > tr > th:last-child
+{
+  border-right: 0px solid #e3e4e5;
+}
 /*
 没有边框的时候
 */
 
-.wasabi-table .table.table-no-bordered > thead > tr > th
-{
-  border: none;
-  border-right: 1px solid #e3e4e5;
-  border-bottom: 1px solid #e3e4e5;
-}
-.wasabi-table .table.table-no-bordered > thead > tr > th:last-child {
-  border: none;
-  border-bottom: 1px solid #e3e4e5;
-}
-.wasabi-table .table.table-no-bordered > tbody > tr > td {
+.wasabi-table .table.table-no-bordered  > tbody > tr > td {
   border: none;
 }
 
@@ -95,12 +98,10 @@
 /*
   有边框的时候
  */
-.wasabi-table .table > thead > tr > th,
-.wasabi-table .table > tbody > tr > td {
-  border-right: 1px solid #e3e4e5;
-  border-bottom: 1px solid #e3e4e5;
-}
 
+.wasabi-table .table > tbody > tr > td:last-child{
+  border-right: 1px solid #e3e4e5;
+}
 
 
 /*

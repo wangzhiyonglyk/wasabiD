@@ -7,7 +7,6 @@ require("../../sass/Base/Form/ComboBox.scss");
 let React=require("react");
 var unit=require("../../libs/unit.js");
 let Time=require("./Time.jsx");
-let Date=require("./Date.jsx");
 let DateTime=require("./DateTime.jsx");
 let DateRange=require("./DateRange.jsx");
 let DateTimeRange=require("./DateTimeRange.jsx");
@@ -15,8 +14,9 @@ let DateTimeRange=require("./DateTimeRange.jsx");
 var validation=require("../Lang/validation.js");
 let setStyle=require("../../Mixins/setStyle.js");
 var validate=require("../../Mixins/validate.js");
+var shouldComponentUpdate=require("../../Mixins/shouldComponentUpdate.js");
 let ComboBox=React.createClass({
-    mixins:[setStyle,validate],
+    mixins:[setStyle,validate,shouldComponentUpdate],
     PropTypes:{
         type:React.PropTypes.oneOf[
                 "date",//日期选择
@@ -29,7 +29,8 @@ let ComboBox=React.createClass({
         label:React.PropTypes.string,//字段文字说明属性
         width:React.PropTypes.number,//宽度
         height:React.PropTypes.number,//高度
-        text:React.PropTypes.string,//默认文本值
+        value:React.PropTypes.oneOfType([React.PropTypes.number,React.PropTypes.string]),//默认值,
+        text:React.PropTypes.oneOfType([React.PropTypes.number,React.PropTypes.string]),//默认文本值
         placeholder:React.PropTypes.string,//输入框预留文字
         readonly:React.PropTypes.bool,//是否只读
         required:React.PropTypes.bool,//是否必填
@@ -85,8 +86,8 @@ let ComboBox=React.createClass({
             text = this.props.value;
         }
         return {
-            value: this.props.value,
-            text:text,
+            value:this.props.value,
+            text: text,
             readonly: this.props.readonly,
             //验证
             required:this.props.required,
@@ -174,6 +175,7 @@ let ComboBox=React.createClass({
             value:value,
             text:text,
         });
+        this.validate(value);
         if( this.props.onSelect!=null)
         {
             this.props.onSelect(value,text,this.props.name,null);
@@ -183,12 +185,12 @@ let ComboBox=React.createClass({
     },
     renderDate:function() {
         var dateobj=this.splitDate(this.state.value);
-        return <Date ref="combobox" {...dateobj}  onSelect={this.onSelect}></Date>
+        return <DateTime ref="combobox"  name={this.props.name} showTime={false} {...dateobj}  onSelect={this.onSelect}></DateTime>
 
     },
     renderDateTime:function() {
         var dateobj=this.splitDate(this.state.value);
-        return <DateTime ref="combobox" {...dateobj}  onSelect={this.onSelect}></DateTime>
+        return <DateTime ref="combobox" {...dateobj} name={this.props.name} showTime={true} onSelect={this.onSelect}></DateTime>
 
     },
     renderDateTimeRange:function() {
@@ -204,7 +206,7 @@ let ComboBox=React.createClass({
                 secondDate=(dateArray[1]);
             }
         }
-        return <DateTimeRange ref="combobox" firstDate={firstDate} secondDate={secondDate}  onSelect={this.onSelect}></DateTimeRange>
+        return <DateTimeRange ref="combobox" name={this.props.name} firstDate={firstDate} secondDate={secondDate}  onSelect={this.onSelect}></DateTimeRange>
     },
     renderDateRange:function() {
         var firstDate=null;var secondDate=null;
@@ -219,7 +221,7 @@ let ComboBox=React.createClass({
                 secondDate=(dateArray[1]);
             }
         }
-        return <DateRange ref="combobox" firstDate={firstDate} secondDate={secondDate}  onSelect={this.onSelect}></DateRange>
+        return <DateRange ref="combobox"  name={this.props.name} firstDate={firstDate} secondDate={secondDate}  onSelect={this.onSelect}></DateRange>
     },
     render:function() {
         let control = null;

@@ -12,8 +12,9 @@ let Picker=require("./Picker.jsx");
 let Select=require("./Select.jsx");
 let GridPicker=require("./GridPicker.jsx");
 let PanelPicker=require("./PanelPicker.jsx");
-
+var shouldComponentUpdate=require("../../Mixins/shouldComponentUpdate.js");
 let ComboBox=React.createClass({
+    mixins:[shouldComponentUpdate],
     PropTypes:{
         type:React.PropTypes.oneOf[
             "select",//普通下拉
@@ -30,7 +31,8 @@ let ComboBox=React.createClass({
         label:React.PropTypes.string,//字段文字说明属性
         width:React.PropTypes.number,//宽度
         height:React.PropTypes.number,//高度
-        text:React.PropTypes.string,//默认文本值
+        value:React.PropTypes.oneOfType([React.PropTypes.number,React.PropTypes.string]),//默认值,
+        text:React.PropTypes.oneOfType([React.PropTypes.number,React.PropTypes.string]),//默认文本值
         placeholder:React.PropTypes.string,//输入框预留文字
         readonly:React.PropTypes.bool,//是否只读
         required:React.PropTypes.bool,//是否必填

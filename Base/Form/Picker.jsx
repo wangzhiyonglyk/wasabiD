@@ -14,13 +14,16 @@ var validation=require("../Lang/validation.js");
 let setStyle=require("../../Mixins/setStyle.js");
 var validate=require("../../Mixins/validate.js");
 var showUpdate=require("../../Mixins/showUpdate.js");
+var shouldComponentUpdate=require("../../Mixins/shouldComponentUpdate.js");
 let  Picker =  React.createClass({
-    mixins:[setStyle,validate,showUpdate],
+    mixins:[setStyle,validate,showUpdate,shouldComponentUpdate],
      propTypes: {
         name:React.PropTypes.string.isRequired,//字段名
         label:React.PropTypes.string,//字段文字说明属性
         width:React.PropTypes.number,//宽度
         height:React.PropTypes.number,//高度
+         value:React.PropTypes.oneOfType([React.PropTypes.number,React.PropTypes.string]),//默认值,
+         text:React.PropTypes.oneOfType([React.PropTypes.number,React.PropTypes.string]),//默认文本值
         placeholder:React.PropTypes.string,//输入框预留文字
         readonly:React.PropTypes.bool,//是否只读
         required:React.PropTypes.bool,//是否必填
@@ -106,7 +109,7 @@ let  Picker =  React.createClass({
             value:this.props.value,
             text:this.props.text,
             readonly:this.props.readonly,
-            params:this.props.params,
+            params:unit.clone( this.props.params),
 
             provinceActiveIndex:null,//一级激活节点下标
             cityActiveIndex:null,//二级激活节点下标
@@ -129,12 +132,11 @@ let  Picker =  React.createClass({
         if(nextProps.data!=null&&nextProps.data instanceof  Array &&(!nextProps.url||nextProps.url=="")) {
             this.setState({
                 data:nextProps.data,
-                value: nextProps.value,
-                text: nextProps.text,
+                value:nextProps.value,
+                text:nextProps.text,
                 readonly: nextProps.readonly,
                 required: nextProps.required,
-
-                params:nextProps.params,
+                params:unit.clone( nextProps.params),
                 secondParams:nextProps.secondParams,
                 secondParamsKey:nextProps.secondParamsKey,
                 thirdParams:nextProps.thirdParams,
@@ -153,12 +155,12 @@ let  Picker =  React.createClass({
 
             }
             this.setState({
-                value: nextProps.value,
+                value:nextProps.value,
                 text: nextProps.text,
                 readonly: nextProps.readonly,
                 required: nextProps.required,
 
-                params:nextProps.params,
+                params:unit.clone(nextProps.params),
                 secondParams:nextProps.secondParams,
                 secondParamsKey:nextProps.secondParamsKey,
                 thirdParams:nextProps.thirdParams,
@@ -235,7 +237,14 @@ let  Picker =  React.createClass({
         return realData;
     },
     activeHot:function(value,text) {
+        this.setState({
+            show:false,
+            value:value,
+            text:text,
+        });
+        this.validate(value);//验证
         if (this.props.onSelect != null) {
+
             this.props.onSelect(value, text, this.props.name);
         }
     },
@@ -252,15 +261,20 @@ let  Picker =  React.createClass({
             }
             else {//没有则立即执行选中事件
                 if (this.props.onSelect != null) {
-                    this.props.onSelect(newData[currentProvinceIndex].value, newData[currentProvinceIndex].text, this.props.name);
+                    selectValue=newData[currentProvinceIndex].value;
+                    selectText=newData[currentProvinceIndex].text;
+                    this.props.onSelect(selectValue, selectText, this.props.name);
                     this.showPicker();
                 }
             }
+            this.validate(selectValue);//验证
             this.setState({
                 value:selectValue,
                 text:selectText,
                 data:newData,
                 provinceActiveIndex:currentProvinceIndex,
+                cityActiveIndex:null,
+                distinctActiveIndex:null,
             })
         }
         else {
@@ -299,15 +313,20 @@ let  Picker =  React.createClass({
                 }
                 else {//没有则立即执行选中事件
                     if (this.props.onSelect != null) {
-                        this.props.onSelect(newData[currentProvinceIndex].value, newData[currentProvinceIndex].text, this.props.name);
+                        selectValue=newData[currentProvinceIndex].value;
+                        selectText=newData[currentProvinceIndex].text;
+                        this.props.onSelect(selectValue, selectText, this.props.name);
                         this.showPicker();
                     }
                 }
+                this.validate(selectValue);//验证
                 this.setState({
                     value:selectValue,
                     text:selectText,
                     data:newData,
                     provinceActiveIndex:currentProvinceIndex,
+                    cityActiveIndex:null,
+                    distinctActiveIndex:null,
                 })
             }
         }
@@ -341,24 +360,28 @@ let  Picker =  React.createClass({
                 selectValue=newData[currentProviceIndex].value;
                 selectText=newData[currentProviceIndex].text;
 
-                this.props.onSelect(newData[currentProviceIndex].value, newData[currentProviceIndex].text, this.props.name);
+                this.props.onSelect(selectValue, selectText, this.props.name);
                 this.showPicker();
             }
         }
+        this.validate(selectValue);//验证
         this.setState({
             value:selectValue,
             text:selectText,
             data:newData,
             provinceActiveIndex:currentProviceIndex,
+            cityActiveIndex:null,
+            distinctActiveIndex:null,
         })
 
     },
-    activeCity:function(currentCityIndex,currentCityValue) {//二级节点激活
+    activeCity:function(currentProvinceIndex,currentCityIndex,currentCityValue) {//二级节点激活
+
         var newData=this.state.data;
         let selectValue=this.state.value;
         let selectText=this.state.text;
-        if(this.state.cityActiveIndex===currentCityIndex){
-
+        if(this.state.provinceActiveIndex===currentProvinceIndex&&this.state.cityActiveIndex===currentCityIndex){
+            //当前节点为激活节点
             if((newData[this.state.provinceActiveIndex].childrens[currentCityIndex].childrens instanceof  Array)&&newData[this.state.provinceActiveIndex].childrens[currentCityIndex].childrens.length>0) {
                 //有子节点(三级节点)则不执行选中事件
                 newData[this.state.provinceActiveIndex].childrens[currentCityIndex].expand=!newData[this.state.provinceActiveIndex].childrens[currentCityIndex].expand;//如果为展开状态则隐藏,否则展开
@@ -374,11 +397,13 @@ let  Picker =  React.createClass({
                     this.showPicker();
                 }
             }
+            this.validate(selectValue);//验证
             this.setState({
                 value:selectValue,
                 text:selectText,
                 data:newData,
                 cityActiveIndex:currentCityIndex,
+                distinctActiveIndex:null,
             });
 
         }
@@ -422,11 +447,13 @@ let  Picker =  React.createClass({
                         this.showPicker();
                     }
                 }
+                this.validate(selectValue);//验证
                 this.setState({
                     value:selectValue,
                     text:selectText,
                     data:newData,
                     cityActiveIndex:currentCityIndex,
+                    distinctActiveIndex:null,
                 });
             }
         }
@@ -463,11 +490,13 @@ let  Picker =  React.createClass({
                 this.showPicker();
             }
         }
+        this.validate(selectValue);//验证
         this.setState({
             value:selectValue,
             text:selectText,
             data:newData,
             cityActiveIndex:currentCityIndex,
+            distinctActiveIndex:null,
 
         })
 
@@ -493,6 +522,7 @@ let  Picker =  React.createClass({
             this.props.onSelect(selectValue, selectText, this.props.name,null);
             this.showPicker();
         }
+        this.validate(selectValue);//验证
         this.setState({
             value:selectValue,
             text:selectText,
@@ -528,7 +558,7 @@ let  Picker =  React.createClass({
                 provinceComponents.push (<li key={"province"+index} className={"picker-container  "+(child.expand?"expand":"")}>
                         <ul className="picker-container-wrap" style={{display:(child.expand?"block":"none"),left:left}}>
                             {
-                                this.renderCity(child.childrens)
+                                this.renderCity(index,child.childrens)
                             }
                         </ul>
                         <div className={"picker-container-name "+(child.expand?"expand":"")} onClick={this.activeProvince.bind(this,index,child.value)} title={child.text}>{child.text}</div>
@@ -542,7 +572,7 @@ let  Picker =  React.createClass({
             return null;
         }
     },
-    renderCity:function(cityData) {//二级节点渲染
+    renderCity:function(provinceIndex,cityData) {//二级节点渲染
         var cityComponents=[];
         if(cityData instanceof  Array)
         {
@@ -560,7 +590,7 @@ let  Picker =  React.createClass({
                                 this.renderDistinct(child.childrens)
                             }
                         </ul>
-                        <div className={"picker-container-name "+(child.expand?"expand":"")} onClick={this.activeCity.bind(this,index,child.value)} title={child.text}>{child.text}</div>
+                        <div className={"picker-container-name "+(child.expand?"expand":"")} onClick={this.activeCity.bind(this,provinceIndex,index,child.value)} title={child.text}>{child.text}</div>
                     </li>
                 )
             });
