@@ -280,8 +280,10 @@ let DateRange=React.createClass({
 
         if(this.props.onSelect!=null)
         {
+               if(firstDate&&secondDate) {
+                   this.props.onSelect(firstDate + "," + secondDate, firstDate + "," + secondDate, this.props.name);
+               }
 
-            this.props.onSelect(firstDate+","+secondDate,firstDate+","+secondDate,this.props.name);
         }
 
     },

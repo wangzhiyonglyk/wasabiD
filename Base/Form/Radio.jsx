@@ -113,8 +113,9 @@ let Radio=React.createClass({
         }
     },
     componentWillReceiveProps:function(nextProps) {
+        var newData=[];var text=nextProps.text;
         if(nextProps.data!=null&&nextProps.data instanceof  Array &&(!nextProps.url||nextProps.url=="")) {
-            var newData=[];var text=nextProps.text;
+
             for(let i=0;i<nextProps.data.length;i++)
             {
                 let obj=nextProps.data[i];

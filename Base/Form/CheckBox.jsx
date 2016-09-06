@@ -124,8 +124,9 @@ let CheckBox=React.createClass({
         }
     },
     componentWillReceiveProps:function(nextProps) {
+        var newData=[];var text=nextProps.text;
         if(nextProps.data!=null&&nextProps.data instanceof  Array &&(!nextProps.url||nextProps.url=="")) {
-            var newData=[];var text=nextProps.text;
+
             for(let i=0;i<nextProps.data.length;i++)
             {
                 let obj=nextProps.data[i];
@@ -255,22 +256,35 @@ let CheckBox=React.createClass({
         var newvalue="";var newtext="";
         var oldvalue="";
         var oldtext="";
-        if(!this.state.value||this.state.value==="") {//没有选择任何项
+        if(!this.state.value) {//没有选择任何项
         }
         else {
-            oldvalue=","+this.state.value.toString();//加逗号是为了防止判断失误，国为某些可能正好包含在另外一个值中
+            oldvalue=this.state.value.toString();
         }
-        if(!this.state.text||this.state.text==="") {//没有选择任何项
+        if(!this.state.text) {//没有选择任何项
         }
         else {
-            oldtext=","+this.state.text.toString();//加逗号是为了防止判断失误，国为某些可能正好包含在另外一个值中
+            oldtext=this.state.text.toString();
         }
-            if(oldvalue.indexOf("," +value)>-1) {
+            if((","+oldvalue).indexOf("," +value)>-1) {
                 //取消选中
-                newvalue=oldvalue.replace("," + value.toString(), "");
-                newtext=oldtext.replace("," + text.toString(), "");
+                if(oldvalue.indexOf(","+value)>-1)
+                {//说明不是第一个
+                    newvalue=(oldvalue).replace(","+value,"");
+                    newtext=(oldtext).replace(","+text,"");
+                }
+                else   if(oldvalue.indexOf(value+",")>-1){//第一个
+                    newvalue=(oldvalue).replace(value+",","");
+                    newtext=(oldtext).replace(text+",","");
+                }
+                else   if(oldvalue.indexOf(value)>-1) {//只有一个
+                    newvalue=(oldvalue).replace(value,"");
+                    newtext=(oldtext).replace(text,"");
+                }
+
             }
             else {//选中
+
                 newvalue= oldvalue===""?value:oldvalue+","+value;
                 newtext=oldvalue===""?text:oldtext+","+text;
             }
@@ -304,7 +318,7 @@ let CheckBox=React.createClass({
                 <input type="checkbox"  id={"checkbox"+this.props.name+child.value}  value={child.value}
                                    onClick={this.onSelect.bind(this,child.value,child.text,child)}
                                    onChange={this.changeHandler} className="checkbox"  {...props}></input>
-                    <label htmlFor={"checkbox"+this.props.name+child.value} {...props}></label>
+                    <label className="checkbox-label" htmlFor={"checkbox"+this.props.name+child.value} {...props}></label>
                  <div  className="checktext">{child.text}</div>
                     </li >
             });

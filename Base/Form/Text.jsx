@@ -116,29 +116,35 @@ var Text=React.createClass({
     },
     changeHandler:function(event) {
         if (this.validateInput==true) {
-            this.validate(event.target.value);
-            //if(this.props.type=="integer"||this.props.type=="number") {//如果定义为数字
-            //    if(event.target.value=="-")
-            //    {
-            //        this.setState({
-            //            value: event.target.value,
-            //            text:event.target.value,
-            //        });
-            //        return ;
-            //    }
-            //
-            //}
+            var istrue=true;
+            if((this.props.type=="integer"||this.props.type=="number")&&event.target.value=="-") {
+                //输入负号时不验证
+            }
+            else {
+                istrue = this.validate(event.target.value);
+            }
+
+
             this.setState({
                 value: event.target.value,
                 text:event.target.value,
             });
 
             if (this.props.onChange != null) {
-                this.props.onChange(event.target.value);//自定义的改变事件
+                if(istrue)
+                {
+
+                    this.props.onChange(event.target.value);//自定义的改变事件
+
+
+                }
+
             }
             //回传给表单组件
             if (this.props.backFormHandler != null) {
-                this.props.backFormHandler(event.target.value,event.target.value,this.props.name);
+                if(istrue) {
+                    this.props.backFormHandler(event.target.value, event.target.value, this.props.name);
+                }
             }
 
         }

@@ -8,7 +8,7 @@ var validation=require("../Base/Lang/validation.js");
 var regexp=require("../Base/Lang/regs.js");
 let Validate={
     validate:function(value) {
-        if(!value)
+        if(value==null||value==undefined)
         {
             value=this.state.value;
         }
