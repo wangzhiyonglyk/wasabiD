@@ -161,13 +161,11 @@ let DateTimeRange=React.createClass({
            first_time:value
        })
     },
-    secondTimeHandler:function(value)
-    {
+    secondTimeHandler:function(value) {
         this.setState({
             second_time:value
         })
     },
-
     firstHandler:function(value) {//开始日期选择事件
         var min_day=this.state.first_min;
         var max_day=this.state.first_max;
@@ -276,38 +274,35 @@ let DateTimeRange=React.createClass({
          });
     },
     onSelectHandler:function() {
-        var firstDate,secondDate;
-        if(this.state.first_min!=null)
-        {
-            firstDate=this.state.first_year+"-"+(this.state.first_month.toString().length==1?"0"+this.state.first_month:this.state.first_month)+"-"+(this.state.first_min.toString().length==1?"0"+this.state.first_min:this.state.first_min);
+        var firstDate, secondDate;
+        if (this.state.first_min != null) {
+            firstDate = this.state.first_year + "-" + (this.state.first_month.toString().length == 1 ? "0" + this.state.first_month : this.state.first_month) + "-" + (this.state.first_min.toString().length == 1 ? "0" + this.state.first_min : this.state.first_min);
         }
-        else if(this.state.second_min!=null){
-            firstDate=this.state.second_year+"-"+(this.state.second_month.toString().length==1?"0"+this.state.second_month:this.state.second_month)+"-"+(this.state.second_min.toString().length==1?"0"+this.state.second_min:this.state.second_min);
-        }
-
-        if(this.state.second_max!=null){
-            secondDate=this.state.second_year+"-"+(this.state.second_month.toString().length==1?"0"+this.state.second_month:this.state.second_month)+"-"+(this.state.second_max.toString().length==1?"0"+this.state.second_max:this.state.second_max);
-        }
-        else   if(this.state.first_max!=null)
-        {
-            secondDate=this.state.first_year+"-"+(this.state.first_month.toString().length==1?"0"+this.state.first_month:this.state.first_month)+"-"+(this.state.first_max.toString().length==1?"0"+this.state.first_max:this.state.first_max);
+        else if (this.state.second_min != null) {
+            firstDate = this.state.second_year + "-" + (this.state.second_month.toString().length == 1 ? "0" + this.state.second_month : this.state.second_month) + "-" + (this.state.second_min.toString().length == 1 ? "0" + this.state.second_min : this.state.second_min);
         }
 
-        if(this.props.onSelect!=null)
-        {
-            var first_time="";
-            if(this.state.first_time!=null)
-            {
-                first_time=" "+this.state.first_time;
+        if (this.state.second_max != null) {
+            secondDate = this.state.second_year + "-" + (this.state.second_month.toString().length == 1 ? "0" + this.state.second_month : this.state.second_month) + "-" + (this.state.second_max.toString().length == 1 ? "0" + this.state.second_max : this.state.second_max);
+        }
+        else if (this.state.first_max != null) {
+            secondDate = this.state.first_year + "-" + (this.state.first_month.toString().length == 1 ? "0" + this.state.first_month : this.state.first_month) + "-" + (this.state.first_max.toString().length == 1 ? "0" + this.state.first_max : this.state.first_max);
+        }
+        if (firstDate && secondDate) {
+            if (this.state.first_time && this.state.second_time) {
+                if (this.props.onSelect != null) {
+                    var first_time = "";
+                    if (this.state.first_time != null) {
+                        first_time = " " + this.state.first_time;
+                    }
+                    let second_time = "";
+                    if (this.state.second_time != null) {
+                        second_time = " " + this.state.second_time;
+                    }
+                    this.props.onSelect(firstDate + first_time + "," + secondDate + second_time, firstDate + first_time + "," + secondDate + second_time, this.props.name);
+                }
             }
-            let second_time="";
-            if(this.state.second_time!=null)
-            {
-                second_time=" "+this.state.second_time;
-            }
-            this.props.onSelect(firstDate+first_time+","+secondDate+second_time,firstDate+first_time+","+secondDate+second_time,this.props.name);
         }
-
     },
     cancelNandler:function() {
         this.props.onSelect(null,null,this.props.name);

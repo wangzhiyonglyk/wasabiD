@@ -37,8 +37,6 @@ let SwitchButton = React.createClass({
             "default",
             "right"
         ]),//组件在表单一行中的位置
-        checked:React.PropTypes.bool,//默认是否选中
-        onClick:React.PropTypes.func,//单击事件，回传当前值,用于单独使用
         onSelect:React.PropTypes.func,//单击事件，专门用于表单
 
     },
@@ -49,7 +47,7 @@ let SwitchButton = React.createClass({
             width:null,
             height:null,
             value:0,
-            text:"",
+            text:"false",
             placeholder:"",
             readonly:false,
             required:false,
@@ -62,21 +60,21 @@ let SwitchButton = React.createClass({
             size:"default",
             position:"default",
 
-            checked:false,
         }
     },
     getInitialState:function(){
         return {
-            checked:this.props.value==1?true:this.props.checked,
-            value:this.props.value,//用于回传给表单组件
+            value:this.props.value===""?0:this.props.value,//用于回传给表单组件
+            text:this.props.value===""?"false":"true",
             readonly:this.props.readonly,
         }
     },
     componentWillReceiveProps:function(nextProps) {
-
+console.log(nextProps);
           this.setState({
-              checked:nextProps.value==1?true:nextProps.checked,
-              value:nextProps.value,
+
+              value:(nextProps.value!=0&&nextProps.value!=1)?0:nextProps.value,
+              text:(nextProps.value!=0&&nextProps.value!=1)?"false":nextProps.text,
               readonly:nextProps.readonly,
           })
 
@@ -91,16 +89,13 @@ let SwitchButton = React.createClass({
             return ;
         }
         this.setState({
-            checked:!this.state.checked,
-            value:!this.props.checked?1:0
+            value:this.state.value==1?0:1,
+            text:this.state.value==1?"false":"true",
         });
-        if(this.props.onClick!=null)
-        {//单独使用时
-            this.props.onClick(!this.state.checked,!this.state.checked?1:0,this.props.name,null);
-        }
+
         if(this.props.onSelect!=null)
         {//返回给comboBox组件
-            this.props.onSelect(!this.state.checked?1:0,!this.state.checked?1:0,this.props.name);
+            this.props.onSelect(this.state.value==1?0:1,this.state.value==1?"false":"true",this.props.name);
         }
 
     },
@@ -113,7 +108,7 @@ let SwitchButton = React.createClass({
         var componentClassName=  "wasabi-form-group "+size+" "+(this.props.className?this.props.className:"");//组件的基本样式
         var style =this.setStyle("input");//设置样式
         var className = "syncbtn ";
-        if(this.state.checked){
+        if(this.state.value==1){
             className+="checktrue";
         }else{
             className += "checkfalse";

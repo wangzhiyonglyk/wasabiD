@@ -254,9 +254,8 @@ var Form=React.createClass({
                 }
                 else
                 {
-                    data[this.refs[v].props.name]=this.refs[v].state.value;
-                    textData[this.refs[v].props.name]=this.refs[v].state.text;
-
+                    data[this.refs[v].props.name] = this.refs[v].state.value;
+                    textData[this.refs[v].props.name] = this.refs[v].state.text;
 
                 }
 
