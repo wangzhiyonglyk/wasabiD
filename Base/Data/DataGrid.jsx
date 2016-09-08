@@ -48,6 +48,11 @@ var DataGrid=React.createClass({
         detailHandler:React.PropTypes.func,//展示详情的函数，父组件一定要有返回值,返回详情组件
         footer:React.PropTypes.array,//页脚,
         footerSource:React.PropTypes.string,//页脚数据源,
+        lang:React.PropTypes.oneOf([
+            "java",
+            "C#",
+            "php"
+        ])//后端语言
     },
     getDefaultProps:function(){
         return{
@@ -78,6 +83,7 @@ var DataGrid=React.createClass({
             onChecked:null,
             footerSource:"data.footer",//页脚数据源
             selectChecked:false,
+            lang:"java"
 
 
         }
@@ -607,6 +613,7 @@ var DataGrid=React.createClass({
             {
             }
             var fetchmodel=new FetchModel(url,this.loadSuccess.bind(this,url,pageSize,pageIndex,sortName,sortOrder,params),actualParams,this.loadError);
+            fetchmodel.lang=this.props.lang;
               console.log("datagrid-",fetchmodel);
             unit.fetch.post(fetchmodel);
         }
