@@ -6,12 +6,13 @@
 
 class FetchModel
 {
-    constructor(url,success,params=null,error=null)
+    constructor(url,success,params=null,error=null,lang="java")
     {
         this.url=url;
         this.params=params;
         this.success=success;
         this.error=error;
+        this.lang=lang
     }
 }
 module .exports=FetchModel;

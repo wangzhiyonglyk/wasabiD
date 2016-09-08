@@ -270,11 +270,11 @@ baseUtil.fetch = {
         fetch(
             fetchmodel.url,
             {
-                method:"POST",
-                headers:{
-                    "Content-Type": "application/json;charset=UTF-8"
+                method: "POST",
+                headers: {
+                    "Content-Type": fetchmodel.lang == "C#" ? "application/x-www-form-urlencoded" : "application/json;charset=UTF-8"
                 },
-                body:fetchmodel.params?JSON.stringify(fetchmodel.params):''
+                body:this.setParams(fetchmodel.lang,fetchmodel.params)
             }
         ).then(function(res){
             if(res.ok){
@@ -308,6 +308,28 @@ baseUtil.fetch = {
                 baseUtil.showError(baseUtil.Error.HttpError + e.message);
             }
         });
+    },
+    setParams:function(lang,params)
+    {
+       if(lang=="C#")
+       {
+           let cparams="";
+             if(params!=undefined&&params!=null&&params!=="") {
+                 for (let v in params) {
+                     if (cparams == "") {
+                         cparams += v.toString() + "=" + params[v].toString();
+                     }
+                     else {
+                         cparams += "&" + v.toString() + "=" + params[v].toString();
+                     }
+                 }
+             }
+           return cparams;
+       }
+        else {
+        return params ? JSON.stringify(params) : ""
+       }
+        return "";
     }
 }
 baseUtil.showError=function(msg) {

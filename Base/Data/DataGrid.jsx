@@ -683,7 +683,8 @@ var DataGrid=React.createClass({
     },
     clearData:function() {//清空数据
         this.setState({
-            data:[]
+            data:[],
+            params:[],
         });
     },
     shouldUpdate:function(url,pageSize,pageIndex,sortName,sortOrder,params) {//判断是否更新

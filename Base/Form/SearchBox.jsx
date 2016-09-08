@@ -65,6 +65,12 @@ let SearchBox=React.createClass({
         }
 
     },
+    clearData:function() {
+        this.setState({
+            filterValue: "",
+            params: null,
+        })
+    },
     onChange:function(event) {
 
 
