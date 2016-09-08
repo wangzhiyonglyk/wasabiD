@@ -119,6 +119,11 @@ var Text=React.createClass({
             var istrue=true;
             if((this.props.type=="integer"||this.props.type=="number")&&event.target.value=="-") {
                 //输入负号时不验证
+                this.setState({
+                    value: event.target.value,
+                    text:event.target.value,
+                });
+                return ;
             }
             else {
                 istrue = this.validate(event.target.value);
