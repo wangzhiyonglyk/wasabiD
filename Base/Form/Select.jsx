@@ -132,6 +132,7 @@ let Select=React.createClass({
                 helpShow:"none",//提示信息是否显示
                 helpTip:validation["required"],//提示信息
                 invalidTip:"",
+                filterValue:"",//筛选框的值
             }
         },
     componentWillReceiveProps:function(nextProps) {
@@ -187,8 +188,7 @@ let Select=React.createClass({
     componentWillMount:function() {//如果指定url,先查询数据再绑定
      this.loadData(this.props.url,this.state.params);//查询数据
     },
-    componentDidUpdate:function()
-    {
+    componentDidUpdate:function() {
       if(this.isChange==true)
       {
           if( this.props.onSelect!=null)
@@ -339,6 +339,24 @@ let Select=React.createClass({
     getComponentData:function() {//只读属性，获取当前下拉的数据源
         return this.state.data;
     },
+    filterChangeHandler:function(event) {//筛选查询
+        let filterData=[];
+        this.state.data.filter((item,index)=>{
+            if(item.text.toLowerCase().indexOf(event.target.value.toLowerCase())>-1)
+            {
+                filterData.unshift(item);
+            }
+            else
+            {
+                filterData.push((item));
+            }
+        })
+        this.setState({
+            data:filterData,
+            filterValue:event.target.value,
+        })
+
+    },
     render:function() {
         var size=this.props.onlyline==true?"onlyline":this.props.size;//组件大小
         var componentClassName=  "wasabi-form-group "+size+" "+(this.props.className?this.props.className:"");//组件的基本样式
@@ -355,6 +373,11 @@ let Select=React.createClass({
         var control=null;
         if(this.state.data&&this.state.data.length>0) {
             control = <ul style={{display:this.state.ulShow==true?"block":"none"}} >
+                <li key="searchli"  className="searchli" style={{display:this.state.data.length>8?"block":"none"}}><div   className="search" style={{width:this.props.width}}>
+                    <input type="text" placeholder={this.props.placeholder}
+                            value={this.state.filterValue} onChange={this.filterChangeHandler } />
+                    <div className="icon" ></div>
+                </div></li>
                 {
                     this.state.data.map((child, i)=> {
                         var checked=false;
@@ -380,6 +403,7 @@ let Select=React.createClass({
                 <div className={"nice-select "} style={style}  onMouseOut={this.mouseOutHandler}   >
                     <i className={"icon "+this.props.size} onClick={this.showItem}></i>
                     <input type="text" {...inputProps} value={this.state.text}    onChange={this.changeHandler}  />
+
                     {
                         control
                     }

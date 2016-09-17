@@ -86,3 +86,41 @@ desc:下拉框样式
   background-position:  center center;
   background-size: 12px 12px;
 }
+
+.nice-select .search
+{
+  width: 100%;
+  position: relative;
+  text-align: center;
+  height: 30px;
+  line-height: 30px;
+  padding: 0px;
+
+}
+.nice-select .searchli:hover{
+  background-color: transparent;
+}
+.nice-select .search input
+{
+  width: 80%;
+  border: none;
+  outline: none;
+  height: 30px;
+  position: relative;
+
+}
+.nice-select .search .icon
+{
+  content: "111111";
+  color: transparent;
+  background-image: url('../../../img/icons/searchbox.png');
+  background-repeat: no-repeat;
+  background-position: center center;
+  position: absolute;
+  right: 5%;
+  width: 14px;
+  height: 14px;
+  background-size: 14px 14px;
+  top:10px;
+  opacity:0.6;
+}
