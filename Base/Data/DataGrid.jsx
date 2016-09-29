@@ -150,11 +150,11 @@ var DataGrid=React.createClass({
     },
     componentDidUpdate:function(){
         if(document.documentElement.clientHeight<document.documentElement.offsetHeight)
-        {
+        {//有滚动条
            if(this.state.width==document.documentElement.clientWidth)
-           {
+           {//没有设置固定宽度
                this.setState({
-                   width:document.documentElement.clientWidth
+                   width:document.documentElement.clientWidth-10
                })
            }
         }
