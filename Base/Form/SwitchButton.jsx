@@ -9,6 +9,7 @@ require('../../sass/Base/Form/SwitchButton.scss');
 let React = require('react');
 let setStyle=require("../../Mixins/setStyle.js");
 var shouldComponentUpdate=require("../../Mixins/shouldComponentUpdate.js");
+var Label=require("../Unit/Label.jsx");
 let SwitchButton = React.createClass({
     mixins:[setStyle,shouldComponentUpdate],
     propTypes:{
@@ -64,15 +65,15 @@ let SwitchButton = React.createClass({
     },
     getInitialState:function(){
         return {
+            hide:this.props.hide,
             value:this.props.value===""?0:this.props.value,//用于回传给表单组件
             text:this.props.value===""?"false":"true",
             readonly:this.props.readonly,
         }
     },
     componentWillReceiveProps:function(nextProps) {
-console.log(nextProps);
           this.setState({
-
+               hide:nextProps.hide,
               value:(nextProps.value!=0&&nextProps.value!=1)?0:nextProps.value,
               text:(nextProps.value!=0&&nextProps.value!=1)?"false":nextProps.text,
               readonly:nextProps.readonly,
@@ -121,8 +122,7 @@ console.log(nextProps);
 
         return (
         <div className={componentClassName+this.state.validateClass} style={style}>
-            <label className="wasabi-form-group-label" style={{display:(this.props.label&&this.props.label!="")?"block":"none"}}>{this.props.label}
-            </label>
+            <Label name={this.props.label} hide={this.state.hide} required={this.state.required}></Label>
             <div className={ "wasabi-form-group-body"}>
                 <div className={className} onClick={this.handleClick}>
                     <div className={"slideblock "}></div>

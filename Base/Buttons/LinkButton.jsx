@@ -15,6 +15,7 @@ var LinkButton=React.createClass({
         theme: React.PropTypes.oneOf([//主题
             "primary",
             "default",
+            "green",
         ]),//主题
         width:React.PropTypes.number,//宽度
         height:React.PropTypes.number,//高度

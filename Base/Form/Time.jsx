@@ -5,7 +5,7 @@ desc:时间选择组件
  */
 let React=require("react");
 let Time=React.createClass({
-    PropTypes: {
+    propTypes: {
         name:React.PropTypes.string,//表单字段名称
         hour: React.PropTypes.number,//小时
         minute: React.PropTypes.number,//分钟
@@ -21,15 +21,24 @@ let Time=React.createClass({
       }
     },
     getInitialState:function() {
+return this.setInitValue(this.props);
+    },
+    componentWillReceiveProps:function(nextProps) {
+
+     this.setState( this.setInitValue(nextProps));
+    },
+    setInitValue:function(props)
+    {
+        var date=new Date();
+        var hour=props.hour?props.hour:date.getHours();
+        var minute=props.hour?props.minute:date.getMinutes();
+        var second=props.hour?props.second:date.getSeconds();
         return {
-            hour:(this.props.hour<10)?"0"+this.props.hour:this.props.hour,
-            minute:(this.props.minute<10)?"0"+this.props.minute:this.props.minute,
-            second:(this.props.second<10)?"0"+this.props.second:this.props.second,
+            hour:(hour<10)?"0"+hour:hour,
+            minute:(minute<10)?"0"+minute:minute,
+            second:(second<10)?"0"+second:second,
             height:0,
         }
-    },
-    componentDidMount:function() {
-        this.onSelect();
     },
     hourHandler:function(value,tran) {
         let scrollTop=parseInt(this.refs.hour.scrollTop/24)*24;
@@ -143,6 +152,10 @@ let Time=React.createClass({
                 this.props.onSelect(this.state.hour+":"+this.state.minute+":"+this.state.second,this.state.hour+":"+this.state.minute+":"+this.state.second,this.props.name,null);
             }
     },
+    getValue:function()
+    {
+        return this.state.hour+":"+this.state.minute+":"+this.state.second,this.state.hour+":"+this.state.minute+":"+this.state.second;
+    },
     showHandler:function() {
         this.setState({
             height:144,
@@ -155,6 +168,7 @@ let Time=React.createClass({
 
     },
     render:function() {
+
       return <div className="wasabi-time-picker-panel-inner" onMouseOut={this.mouseOutHandler}>
           <div className="wasabi-time-picker-panel-input-wrap">
               <input className="wasabi-time-picker-panel-input  "

@@ -31,32 +31,10 @@ var SearchBar=React.createClass({
 
     },
     getInitialState:function() {
-        let showDrop=false;
-        let allWidth=this.props.width?this.props.width:document.body.clientWidth-5;//总宽度
-        let leftWidth=allWidth-125;//左侧input宽度 选项总宽度
-        let columns=0;//每行的列数
-        if(leftWidth<=604) {//一列
-            columns=1;
+        this. allWidth=this.props.width?this.props.width:document.documentElement.clientWidth-15;//总宽度,除去滚动条
 
-        }
-        else if(leftWidth>604&&leftWidth<=904) {//两列
-            columns=2;
-
-        }
-        else if(leftWidth>904&&leftWidth<=1204) {//三列
-            columns=3;
-
-        }
-        else if(leftWidth>1204) {//四列
-            columns=4;
-
-        }
-        if(this.props.model.length>columns){
-            showDrop=true;
-        }
         return{
             model:(this.props.model),
-            showDrop:showDrop,//超过四个查询条件就显示折叠按钮
             dropType:"wasabi-button wasabi-searchbar-down"//折叠按钮样式
         }
     },
@@ -243,8 +221,9 @@ var SearchBar=React.createClass({
 
     },
     setStypeAndWidth:function() {//计算样式，并把返回值
-       let allWidth=this.props.width?this.props.width:document.body.clientWidth-5;//总宽度
-        let leftWidth=allWidth-125;//左侧input宽度 选项总宽度
+
+
+        let leftWidth=this.allWidth-125;//左侧input宽度 选项总宽度
        let columns=0;//每一行的列数
         let columnClass="";//
         let  rows=0;//行数
@@ -266,12 +245,13 @@ var SearchBar=React.createClass({
         }
 
         if(this.state.model.length<columns)
-        {
+        {//如果列数小于计算结果
             switch (this.state.model.length)
             {
                 case 1:
                     leftWidth=300;
                     columnClass="oneline";
+                    columns=1;
                     break;
                 case 2:
                     leftWidth=611;
@@ -282,7 +262,8 @@ var SearchBar=React.createClass({
                     columnClass="threeline";
                     break;
             }
-            allWidth=leftWidth+125;
+            this.allWidth=leftWidth+125;//重新计算总宽度
+            columns=  this.state.model.length;//重新计算列数
         }
         rows=Math.ceil(this.state.model.length/columns);//计算行数
 
@@ -299,7 +280,7 @@ var SearchBar=React.createClass({
            height = height + 40;
         }
         this.state.dropType=="wasabi-button wasabi-searchbar-down"?style.height=44:style.height=height;
-        style.width=allWidth;
+        style.width=this.allWidth;
         return{
             style:style,
             leftWidth:leftWidth,
@@ -347,8 +328,8 @@ var SearchBar=React.createClass({
                 }
             </div>
             <div className="rightbutton" >
-                            <button className={this.state.dropType} style={{float:"left",display:this.state.showDrop?"inline":"none"}} onClick={this.expandHandler}  ></button>
-                            <Button  onClick={this.onSubmit.bind(this,"submit")} theme="green" style={{ float:"right",marginTop:(this.state.showDrop?-22:0),display:this.props.searchHide==true?"none":null}} title={this.props.searchTitle}   >
+                            <button className={this.state.dropType} style={{float:"left",display:(searchbarStype.columns<this.state.model.length)?"inline":"none"}} onClick={this.expandHandler}  ></button>
+                            <Button  onClick={this.onSubmit.bind(this,"submit")} theme="green" style={{ float:"right",marginTop:((searchbarStype.columns<this.state.model.length)?-22:0),display:this.props.searchHide==true?"none":null}} title={this.props.searchTitle}   >
                                 {this.props.searchTitle}
                             </Button>
                 </div>

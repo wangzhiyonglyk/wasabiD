@@ -4,9 +4,12 @@
 let React=require("react");
 let Lang=require("../Lang/language.js");
 require("../../sass/Base/Form/DateTime.scss");
+let Time=require("./Time.jsx");
+let Button=require("../Buttons/Button.jsx");
 let CalendarHeader=require("./CalendarHeader.jsx");
 let CalendarBody=require("./CalendarBody.jsx");
 var shouldComponentUpdate=require("../../Mixins/shouldComponentUpdate.js");
+
 let DateTime = React.createClass({
     mixins:[shouldComponentUpdate],
     PropTypes:{
@@ -14,10 +17,11 @@ let DateTime = React.createClass({
         year: React.PropTypes.number,//年
         month:React.PropTypes.number,//月
         day:React.PropTypes.number,//日
+        time:React.PropTypes.string,//时间
         isRange:React.PropTypes.bool,//是否为范围选择
-        showTime:React.PropTypes.bool,//是否显示时间
         min:React.PropTypes.number,//最小值，用于日期范围选择
         max:React.PropTypes.number,//最大值,用于日期范围选择
+
         onSelect:React.PropTypes.func,//选择后的事件
 
     },
@@ -26,8 +30,8 @@ let DateTime = React.createClass({
             year:null,
             month:null,
             day:null,
+            time:null,
             isRange:false,///默认否
-            showTime:false,
             min:null,//默认为空，不属于日期范围选择
             max:null,//默认为空，不属于日期范围选择
         }
@@ -41,6 +45,7 @@ let DateTime = React.createClass({
             year:this.props.year?this.props.year:year,
             month:this.props.month?this.props.month:month,
             day:this.props.day,
+            time:this.props.time,
             isRange:this.props.isRange,
             min:this.props.min,
             max:this.props.max,
@@ -52,6 +57,7 @@ let DateTime = React.createClass({
                 year: nextProps.year ? nextProps.year : this.state.year,
                 month: nextProps.month ? nextProps.month : this.state.month,
                 day: nextProps.day,
+                time:nextProps.time,
                 isRange: nextProps.isRange,
                 min: nextProps.min,
                 max: nextProps.max,
@@ -61,6 +67,7 @@ let DateTime = React.createClass({
                 year: nextProps.year ? nextProps.year : this.state.year,
                 month: nextProps.month ? nextProps.month : this.state.month,
                 day: nextProps.day,
+                time:nextProps.time,
                 isRange: nextProps.isRange,
             });
         }
@@ -81,18 +88,26 @@ let DateTime = React.createClass({
         }
     },
     dayHandler:function(day) {
+
+        var time=this.refs.time.getValue();
         this.setState({
             day:day,
             min:day,
             max:day,
+            time:time
         })
         if(this.props.onSelect!=null) {
-          let  value=this.state.year+"-"+(this.state.month.toString().length==1?"0"+this.state.month.toString():this.state.month)
-                                   +"-"+(day<10?"0"+day.toString():day);
+
+
+            let  value=this.state.year+"-"+(this.state.month.toString().length==1?"0"+this.state.month.toString():this.state.month)
+                +"-"+(day<10?"0"+day.toString():day)+(time?" "+time:"");
             this.props.onSelect(value,value,this.props.name);
         }
 
     },
+
+
+
     formatDate:function (date,format) {
         /**
          * 对Date的扩展，将 Date 转化为指定格式的String
@@ -145,6 +160,8 @@ let DateTime = React.createClass({
     },
     render:function(){
         return(
+            <div>
+            <div style={{position:"relative",height:32}}><Time ref="time" type="time"  key="end"  ></Time></div>
             <div className="wasabi-datetime"  >
                 <CalendarHeader
                     year = {this.state.year}
@@ -160,6 +177,7 @@ let DateTime = React.createClass({
                     dayHandler={this.dayHandler}
                 />
             </div>
+                </div>
         )
     }
 });

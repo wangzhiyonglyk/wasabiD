@@ -15,30 +15,17 @@ desc:日期选择样式
   display: block;
   background-image: url(../../../img/icons/selecticon.png) ;
   background-repeat: no-repeat;
-  width: 32px;
+  width: 35px;
   height: 32px;
   border-left: 1px solid #d7dde2;
   position: absolute;
+  right: 0px;
   top: 0px;
   background-size: 32px;
   cursor: default;
 }
-.combobox .pickericon.default
-{
 
-  right: -12px;
-}
-
-.combobox .pickericon.large {
-  right: 9px;
-}
-.combobox .pickericon.online {
-  right:56px;
-}
-
-.combobox .dropdate {
-  width:249px;
-  height:248px;
+.combobox .dropcontainter{
   padding:0px;
   margin: 0px;;
   display: none;
@@ -48,83 +35,57 @@ desc:日期选择样式
   top:34px;
   border:1px solid #d7dde2;
   box-shadow: 0px 0px 20px #dddddd;
+  background-color: white;
 }
-.combobox .dropdate .left
-{
-  left:0px;
+.combobox .date {
+  width:249px;
+  height:248px;
+
 }
-.combobox .dropdate .default
-{
-  left:0px;
-}
-.combobox .dropdate .right
-{
-  left:0px;
-}
-.combobox .droptime
-{
-  width: 168px;
-  height: 177px;
-  position: absolute;
-  transition: height 0.5s;
-  top:34px;
+.combobox .date.time {
+  height:280px;
 
 }
 
-.combobox .droprange
+
+.combobox .range
 {
   width:528px;
   height:287px;
-  padding:0px;
-  margin: 0px;;
-  left: -100px;
-  position: absolute;
-  overflow: hidden;
-  z-index:4;
-  top:34px;
-  left: 0px;
-  box-shadow: 0px 0px 20px #dddddd;
-  background: white;
 }
-.combobox .droprange.default
+.combobox .range.default
 {
   left:0px;
 }
-.combobox .droprange.left
+.combobox .range.left
 {
   left: 0px;
 }
-.combobox .droprange.right
+.combobox .range.right
 {
   left: -170px;
 }
-.combobox .droppicker
+.combobox .picker
 {
   width:410px;
   height:527px;
-  padding:0px;
-  margin: 0px;;
-  display: none;
-  position: absolute;
-  z-index:4;
-  top:34px;
-  background: white;
+
 
 }
-.combobox .droppicker.default
+.combobox .picker.default
 {
   left: 0px;
 }
-.combobox .droppicker.left
+.combobox .picker.left
 {
   left:0px;
 }
-.combobox .droppicker.right
+.combobox .picker.right
 {
   left:-170px;
 }
 
-.combobox .dropgridpicker{
+.combobox .gridpicker{
   width:410px;
   height:527px;
   padding:0px;
@@ -139,21 +100,21 @@ desc:日期选择样式
   box-shadow: 0px 0px 20px #dddddd;
   background: white;
 }
-.combobox .dropgridpicker.default
+.combobox .gridpicker.default
 {
   left: 0px;
 }
-.combobox .dropgridpicker.left
+.combobox .gridpicker.left
 {
   left:0px;
 }
-.combobox .dropgridpicker.right
+.combobox .gridpicker.right
 {
   left:-60px;
 }
 
 
-.combobox .droppanelpicker
+.combobox .panelpicker
 {
   width:410px;
   height:527px;
@@ -166,15 +127,15 @@ desc:日期选择样式
   background: white;
 
 }
-.combobox .droppanelpicker.default
+.combobox .panelpicker.default
 {
   left: 0px;
 }
-.combobox .droppanelpicker.left
+.combobox .panelpicker.left
 {
   left:0px;
 }
-.combobox .droppanelpicker.right
+.combobox .panelpicker.right
 {
   left:-170px;
 }

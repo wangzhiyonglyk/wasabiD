@@ -7,14 +7,6 @@ desc:表单输入框样式
 外层div
 */
 
-.wasabi-form .wasabi-form-group ,.wasabi-searchbar .wasabi-form-group{
-min-width: 290px;
-}
-.wasabi-form .wasabi-form-group-label,.wasabi-searchbar .wasabi-form-group
-
-{
-  width: 72px;
-}
  .wasabi-form-group {
   padding-left:0px;
   padding-right:10px;
@@ -29,21 +21,30 @@ min-width: 290px;
   /*
   label
   */
+
   .wasabi-form-group {
     .wasabi-form-group-label {
       padding-right: 4px;
       height: 34px;
-      line-height: 34px;
       float: left;
-      overflow: hidden;
       text-align: right;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      font-size: 12px;
-      font-size: 12px;
-      font-weight: normal!important;
+      white-space: normal;
+      display: table;
+      label{
+        vertical-align:middle;
+        display: table-cell;
+
+    }
     }
   }
+.wasabi-form-group .wasabi-form-group-label.required  label:before {
+  content: "*";
+  color: #f93123;
+  vertical-align: middle;
+  font-size: 14px;
+
+
+}
     /*
      输入框主体
      */
@@ -51,6 +52,7 @@ min-width: 290px;
       .wasabi-form-group-body {
 
         float: left;
+        position: relative;
       }
     }
     /*
@@ -58,16 +60,15 @@ min-width: 290px;
     */
     .wasabi-form-control {
       display: inline;
-      float:left;
-      width:98%;
+      width:100%;
       padding-top:6px;
       padding-bottom: 6px;
       padding-left: 2px;
       padding-right: 18px;
       font-size: 12px;
       font-weight: normal!important;
-      line-height: 20px;
-      height: 20px;
+      line-height: 34px;
+      height: 34px;
       background-color: #fff;
       background-image: none;
       border: 1px solid #d7dde2;
@@ -75,6 +76,7 @@ min-width: 290px;
       -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
       transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
       outline: none;
+      overflow: hidden;
     }
     .wasabi-form-control[disabled], .wasabi-form-control[readonly]{
       background-color: #eee;
@@ -151,7 +153,7 @@ input验证失败
       color: #ffffff;
       border-radius: 2px;
       bottom: 17px;
-      left: 102%;
+      left: 105%;
       overflow: visible;
       z-index: 2;
       text-align: center;
@@ -159,6 +161,7 @@ input验证失败
       padding-left: 10px;
       padding-right: 10px;
       font-size: 14px;
+      top:5px;
 
     }
 .wasabi-help-block:before {
@@ -218,23 +221,36 @@ input验证失败
   .wasabi-form-group.default {
     width: 100%;
   }
+    .wasabi-form-group.default .wasabi-form-group-label {
+      width:24%;
+    }
   .wasabi-form-group.default .wasabi-form-group-body {
-    width:72%;
+    width:76%;
   }
+
+
   .wasabi-form-group.large {
     width:100%;
   }
-  .wasabi-form-group.large .wasabi-form-group-body {
-    width: 72%;
-  }
-  .wasabi-form-group.onlyline {
+    .wasabi-form-group.large .wasabi-form-group-label {
+      width:24%;
+    }
+    .wasabi-form-group.large .wasabi-form-group-body {
+      width:76%;
+    }
+
+    .wasabi-form-group.onlyline {
     width:100%;
   }
-  .wasabi-form-group.onlyline .wasabi-form-group-body {
-    width: 72%;
-  }
+    .wasabi-form-group.onlyline .wasabi-form-group-label {
+      width:24%;
+    }
+    .wasabi-form-group.onlyline .wasabi-form-group-body {
+      width:76%;
+    }
 
-}
+
+  }
 
     /*
     两列
@@ -243,22 +259,34 @@ input验证失败
 
     .wasabi-form.twoline ,.wasabi-searchbar.twoline{
       .wasabi-form-group.default {
-        width: 48%;
+        width: 50%;
+      }
+      .wasabi-form-group.default .wasabi-form-group-label {
+        width:23%;
       }
       .wasabi-form-group.default .wasabi-form-group-body {
-        width: 72%;
+        width: 77%;
       }
+
+
       .wasabi-form-group.large {
         width:100%;
       }
-      .wasabi-form-group.large .wasabi-form-group-body {
-        width: 88%;
+      .wasabi-form-group.large .wasabi-form-group-label {
+        width:11.4%;
       }
+      .wasabi-form-group.large .wasabi-form-group-body {
+        width: 88.6%;
+      }
+
       .wasabi-form-group.onlyline {
         width:100%;
       }
+      .wasabi-form-group.onlyline .wasabi-form-group-label {
+        width:11.4%;
+      }
       .wasabi-form-group.onlyline .wasabi-form-group-body {
-        width: 86%;
+        width: 88.6%;
       }
 
     }
@@ -270,22 +298,31 @@ input验证失败
 
     .wasabi-form.threeline,.wasabi-searchbar.threeline {
       .wasabi-form-group.default {
-        width: 32%;
+        width: 33.333333333%;
+      }
+      .wasabi-form-group.default .wasabi-form-group-label {
+        width:28%;
       }
       .wasabi-form-group.default .wasabi-form-group-body {
         width: 71%;
       }
       .wasabi-form-group.large {
-        width:65%;
+        width: 66.626%;
+      }
+      .wasabi-form-group.large .wasabi-form-group-label {
+        width:13.8%;
       }
       .wasabi-form-group.large .wasabi-form-group-body {
-        width: 87.6%;
+        width: 85.9%;
       }
       .wasabi-form-group.onlyline {
         width:100%;
       }
+      .wasabi-form-group.onlyline .wasabi-form-group-label {
+        width:8%;
+      }
       .wasabi-form-group.onlyline .wasabi-form-group-body {
-        width: 86%;
+        width: 92%;
       }
     }
 
@@ -295,23 +332,34 @@ input验证失败
     */
     .wasabi-form.fourline,.wasabi-searchbar.fourline{
       .wasabi-form-group.default {
-        width: 24%;
+        width: 25%;
+      }
+      .wasabi-form-group.default .wasabi-form-group-label {
+        width:24%;
       }
       .wasabi-form-group.default .wasabi-form-group-body {
-        width: 72%;
+        width: 76%;
       }
+
       .wasabi-form-group.large {
-        width: 49%;
+        width: 50%;
+      }
+      .wasabi-form-group.large .wasabi-form-group-label {
+        width:13.8%;
       }
       .wasabi-form-group.large .wasabi-form-group-body {
-        width: 87%;
+        width: 86.2%;
       }
+
 
       .wasabi-form-group.onlyline {
         width: 100%;
       }
+      .wasabi-form-group.onlyline .wasabi-form-group-label {
+        width:6.8%;
+      }
       .wasabi-form-group.onlyline .wasabi-form-group-body {
-        width: 86%;
+        width: 93.2%;
       }
 
     }

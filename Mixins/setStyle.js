@@ -31,7 +31,7 @@ let SetStyle= {
 
         if (type && type == "input") {
 
-            style.display = this.props.hide == true ? "none" : "block";
+            style.display = this.state.hide == true ? "none" : "block";
         }
         return style;
     }

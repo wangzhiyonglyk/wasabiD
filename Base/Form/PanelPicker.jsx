@@ -6,6 +6,7 @@ var validation=require("../Lang/validation.js");
 let setStyle=require("../../Mixins/setStyle.js");
 var validate=require("../../Mixins/validate.js");
 var shouldComponentUpdate=require("../../Mixins/shouldComponentUpdate.js");
+var Label=require("../Unit/Label.jsx");
 var PanelPicker = React.createClass({
     mixins:[setStyle,validate,shouldComponentUpdate],
     PropTypes:{
@@ -75,6 +76,7 @@ var PanelPicker = React.createClass({
     },
     getInitialState:function() {
         return{
+            hide:this.props.hide,
             value: this.props.value,
             text:this.props.text,
             readonly: this.props.readonly,
@@ -90,16 +92,17 @@ var PanelPicker = React.createClass({
     componentWillReceiveProps:function(nextProps) {
 
         this.setState({
+            hide:nextProps.hide,
             value:nextProps.value,
             text: nextProps.text,
             readonly: nextProps.readonly,
 
             //验证
             required:this.props.required,
-            validateClass:"",//验证的样式
             helpShow:"none",//提示信息是否显示
             helpTip:validation["required"],//提示信息
             invalidTip:"",
+            validateClass:"",//重置验证样式
         })
     },
     showPicker:function() {//显示选择
@@ -124,8 +127,7 @@ var PanelPicker = React.createClass({
 
     },
     render:function (){
-        let controlDropClassName = "droppanelpicker";
-        let iconName = "pickericon";
+
         var size = this.props.onlyline == true ? "onlyline" : this.props.size;//组件大小
         var componentClassName = "wasabi-form-group " + size + " " + (this.props.className ? this.props.className : "");//组件的基本样式
         var style = this.setStyle("input");//设置样式
@@ -134,22 +136,20 @@ var PanelPicker = React.createClass({
             readOnly: this.state.readonly == true ? "readonly" : null,
             style: this.props.style,
             name: this.props.name,
-            placeholder: this.props.placeholder,
+            placeholder:(this.props.placeholder===""||this.props.placeholder==null)?this.state.required?"必填项":"":this.props.placeholder,
             className:"wasabi-form-control  "+(this.props.className!=null?this.props.className:"")
 
         }//文本框的属性
         var children = React.cloneElement(this.props.children,{onSelect:this.onSelect})
         return (
             <div className={componentClassName+this.state.validateClass} style={style}>
-                <label className="wasabi-form-group-label"
-                       style={{display:(this.props.label&&this.props.label!="")?"block":"none"}}>{this.props.label}
-                </label>
+                <Label name={this.props.label} hide={this.state.hide} required={this.state.required}></Label>
                 <div className={ "wasabi-form-group-body"}>
                     <div className="combobox" style={{display:this.props.hide==true?"none":"block"}}
                          onMouseOut={this.mouseOutHandler}>
-                        <i className={iconName+" "+this.props.size} onClick={this.showPicker}></i>
+                        <i className={"pickericon"} onClick={this.showPicker}></i>
                         <input type="text" {...inputProps} value={this.state.text} onChange={this.changeHandler}/>
-                        <div className={controlDropClassName+" "+size+" "+this.props.position}
+                        <div className={ "dropcontainter panelpicker "+this.props.position}
                              style={{display:this.state.show==true?"block":"none"}}>
                             {
                                 children

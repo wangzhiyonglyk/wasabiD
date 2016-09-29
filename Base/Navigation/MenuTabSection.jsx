@@ -18,10 +18,7 @@ var TabSection=React.createClass(
         },
         getInitialState:function()
         {
-            let height=(window.screen.height)-165;
-            if(document.body.clientHeight>0){
-                height=document.body.clientHeight-40;
-            }
+           var  height=document.documentElement.clientHeight-40;
          return{
                 bodyHeight:height
             }

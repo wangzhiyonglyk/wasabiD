@@ -1,14 +1,14 @@
 @import url("../base.scss") ;
 .picker{
   position: absolute;
-  border: 2px solid #c9cbce;
+  border: 1px solid #c9cbce;
   width: 412px;
   background: #ffffff;
   z-index: 3;
   font-size: 0;
   height: 500px;
   overflow:auto;
-  top:0px;
+  top:-1px;
   white-space: normal;
 }
 .picker:before, .picker:after{

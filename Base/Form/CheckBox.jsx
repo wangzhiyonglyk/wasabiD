@@ -11,6 +11,7 @@ let setStyle=require("../../Mixins/setStyle.js");
 var validate=require("../../Mixins/validate.js");
 var showUpdate=require("../../Mixins/showUpdate.js");
 var shouldComponentUpdate=require("../../Mixins/shouldComponentUpdate.js");
+var Label=require("../Unit/Label.jsx");
 let CheckBox=React.createClass({
     mixins:[setStyle,validate,showUpdate,shouldComponentUpdate],
     PropTypes:{
@@ -106,6 +107,7 @@ let CheckBox=React.createClass({
         }
 
         return {
+            hide:this.props.hide,
             min:this.props.min,
             max:this.props.max,
             params:unit.clone(this.props.params),//参数
@@ -139,6 +141,7 @@ let CheckBox=React.createClass({
                 newData.push(obj);
             }
             this.setState({
+                hide:nextProps.hide,
                 data:newData,
                 min:nextProps.min,
                 max:nextProps.max,
@@ -147,6 +150,7 @@ let CheckBox=React.createClass({
                 params:unit.clone( nextProps.params),
                 readonly:nextProps.readonly,
                 required:nextProps.required,
+                validateClass:"",//重置验证样式
             })
         }
         else {
@@ -165,6 +169,7 @@ let CheckBox=React.createClass({
             }
 
             this.setState({
+                hide:nextProps.hide,
                 min:nextProps.min,
                 max:nextProps.max,
                  value:nextProps.value,
@@ -172,6 +177,7 @@ let CheckBox=React.createClass({
                 params:unit.clone( nextProps.params),
                 readonly:nextProps.readonly,
                 required:nextProps.required,
+                validateClass:"",//重置验证样式
             })
 
         }
@@ -327,8 +333,7 @@ let CheckBox=React.createClass({
         return (
 
         <div className={componentClassName+this.state.validateClass} style={style}>
-            <label className="wasabi-form-group-label" style={{display:(this.props.label&&this.props.label!="")?"block":"none"}}>{this.props.label}
-            </label>
+            <Label name={this.props.label} hide={this.state.hide} required={this.state.required}></Label>
             <div className={ "wasabi-form-group-body"}>
                 <ul className="wasabi-checkul">
                     {

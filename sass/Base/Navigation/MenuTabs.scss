@@ -65,7 +65,7 @@ iframe
     position: relative;
     display: block;
     height: 40px;
-    width:120px;
+
     padding-right: 1px;
 }
 
@@ -78,9 +78,8 @@ iframe
     margin-right: 0px;
     text-decoration: none;
     border: none;
-    cursor: pointer;
     padding-left:0px;
-    width:120px;
+    width:150px;
     padding-right: 1px;
     overflow: hidden;
 }
@@ -95,15 +94,15 @@ iframe
 
 .wasabi-nav-tabs > li > a .text{
     color:#86a0a1;
-    font-size: 1.2rem;
     font-size: 12px;
-    width:70px;
-    padding-left: 25px;
-    padding-right: 25px;
+    width:150px;
+    padding-left: 10px;
+    padding-right: 10px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
     text-align: center;
+    border: none;
 }
 
 .wasabi-nav-tabs > li > a:hover .text{

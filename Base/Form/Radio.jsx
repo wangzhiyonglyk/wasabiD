@@ -12,6 +12,7 @@ let setStyle=require("../../Mixins/setStyle.js");
 var validate=require("../../Mixins/validate.js");
 var showUpdate=require("../../Mixins/showUpdate.js");
 var shouldComponentUpdate=require("../../Mixins/shouldComponentUpdate.js");
+var Label=require("../Unit/Label.jsx");
 let Radio=React.createClass({
     mixins:[setStyle,validate,showUpdate,shouldComponentUpdate],
     PropTypes:{
@@ -98,6 +99,7 @@ let Radio=React.createClass({
             }
         }
         return {
+            hide:this.props.hide,
             params:unit.clone( this.props.params),//参数
             data:newData,
             value:this.props.value,
@@ -128,12 +130,14 @@ let Radio=React.createClass({
                 newData.push(obj);
             }
             this.setState({
+                hide:nextProps.hide,
                 data:newData,
                 value:nextProps.value,
                 text: text,
                 params:unit.clone( nextProps.params),
                 readonly:nextProps.readonly,
                 required:nextProps.required,
+                validateClass:"",//重置验证样式
             })
         }
         else {
@@ -152,11 +156,13 @@ let Radio=React.createClass({
             }
 
             this.setState({
+                hide:nextProps.hide,
                 value:nextProps.value,
                 text: text,
                 params:unit.clone( nextProps.params),
                 readonly:nextProps.readonly,
                 required:nextProps.required,
+                validateClass:"",//重置验证样式
             })
 
         }
@@ -287,9 +293,7 @@ let Radio=React.createClass({
         }
         return (
             <div className={componentClassName+this.state.validateClass} style={style}>
-                <label className="wasabi-form-group-label"
-                       style={{display:(this.props.label&&this.props.label!="")?"block":"none"}}>{this.props.label}
-                </label>
+                <Label name={this.props.label} hide={this.state.hide} required={this.state.required}></Label>
                 <div className={ "wasabi-form-group-body"}>
                     <ul className="wasabi-checkul">
                         {
