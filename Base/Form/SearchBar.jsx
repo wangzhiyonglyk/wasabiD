@@ -40,11 +40,11 @@ var SearchBar=React.createClass({
     },
     componentWillReceiveProps:function(nextProps) {
         this.setState({
-        model:(nextProps.model),
-        style:nextProps.style,
-        className:nextProps.className,
+            model:(nextProps.model),
+            style:nextProps.style,
+            className:nextProps.className,
 
-    });
+        });
         //this.forceUpdate();//?强制刷新
     },
     changeHandler:function(value,text,name) {
@@ -99,7 +99,7 @@ var SearchBar=React.createClass({
                 else {
                     for(let index =0;index<nameSplit.length;index++)
                     {
-                            data[nameSplit[index]]=null;
+                        data[nameSplit[index]]=null;
                     }
                 }
             }
@@ -132,7 +132,7 @@ var SearchBar=React.createClass({
                 }  else {
                     for(let index =0;index<nameSplit.length;index++)
                     {
-                            textData[nameSplit[index]]="";
+                        textData[nameSplit[index]]="";
 
                     }
                 }
@@ -148,7 +148,7 @@ var SearchBar=React.createClass({
         return textData;
     },
     onSubmit:function() {
-    //筛选查询开始
+        //筛选查询开始
         var data={};//各个字段对应的值
         var textData={};//各个字段对应的文本值
         let isva=true;
@@ -180,8 +180,8 @@ var SearchBar=React.createClass({
                 else {
                     for(let index =0;index<nameSplit.length;index++)
                     {
-                            data[nameSplit[index]]=null;
-                            textData[nameSplit[index]]="";
+                        data[nameSplit[index]]=null;
+                        textData[nameSplit[index]]="";
                     }
                 }
             }
@@ -202,21 +202,21 @@ var SearchBar=React.createClass({
     },
     expandHandler:function() {
         var expand=false;
-     if(this.state.dropType=="wasabi-button wasabi-searchbar-down") {
-         this.setState({
-             dropType:"wasabi-button wasabi-searchbar-up"
+        if(this.state.dropType=="wasabi-button wasabi-searchbar-down") {
+            this.setState({
+                dropType:"wasabi-button wasabi-searchbar-up"
 
-         });
-         expand=true;
-     }
+            });
+            expand=true;
+        }
         else {
-         this.setState({
-             dropType:"wasabi-button wasabi-searchbar-down"
-         });
-     }
+            this.setState({
+                dropType:"wasabi-button wasabi-searchbar-down"
+            });
+        }
         if(this.props.expandHandler!=null)
         {
-          this.props.expandHandler(expand);
+            this.props.expandHandler(expand);
         }
 
     },
@@ -224,7 +224,7 @@ var SearchBar=React.createClass({
 
 
         let leftWidth=this.allWidth-125;//左侧input宽度 选项总宽度
-       let columns=0;//每一行的列数
+        let columns=0;//每一行的列数
         let columnClass="";//
         let  rows=0;//行数
         if(leftWidth<=610) {//一列
@@ -256,10 +256,12 @@ var SearchBar=React.createClass({
                 case 2:
                     leftWidth=611;
                     columnClass="twoline";
+                    columns=2;
                     break;
                 case 3:
                     leftWidth=910;
                     columnClass="threeline";
+                    columns=3;
                     break;
             }
             this.allWidth=leftWidth+125;//重新计算总宽度
@@ -270,16 +272,13 @@ var SearchBar=React.createClass({
         let  style=null;//样式
         if(this.props.style)
         {
-           style=this.props.style;
+            style=this.props.style;
         }else
         {
-           style={};
+            style={};
         }
-        let height=40*parseInt (this.state.model.length/4)+14;//当前高度
-        if(this.state.model.length>4&&this.state.model.length % 4 > 0) {
-           height = height + 40;
-        }
-        this.state.dropType=="wasabi-button wasabi-searchbar-down"?style.height=44:style.height=height;
+        let height=45*rows;
+        this.state.dropType=="wasabi-button wasabi-searchbar-down"?style.height=54:style.height=height;//判断高度
         style.width=this.allWidth;
         return{
             style:style,
@@ -302,38 +301,38 @@ var SearchBar=React.createClass({
         };
         return (<div {...props}>
                 <div  className="leftform" style={{width:searchbarStype.leftWidth}}  >
-                {
-                    this.state.model.map(  (child,index)=> {
-                        let position=index%searchbarStype.columns;
-                        if(position==0)
-                        {
-                            position="left";
-                        }
-                        else if(position==searchbarStype.columns-1)
-                        {
-                            position="right";
-                        }
-                        else {
-                            position="default";
-                        }
-                   return(   <div className="wasabi-searchbar-item" key={index}
-                                  style={{display:(this.state.dropType=="wasabi-button wasabi-searchbar-down"?((index<searchbarStype.columns)?"inline":"none"):"inline")}}><Input ref={child.name}
-                              key={child.name+index.toString()}
-                              {...child}
-                              position={position}
-                              backFormHandler={this.changeHandler}
-                        ></Input></div>);
+                    {
+                        this.state.model.map(  (child,index)=> {
+                            let position=index%searchbarStype.columns;
+                            if(position==0)
+                            {
+                                position="left";
+                            }
+                            else if(position==searchbarStype.columns-1)
+                            {
+                                position="right";
+                            }
+                            else {
+                                position="default";
+                            }
+                            return(   <div className="wasabi-searchbar-item" key={index}
+                                           style={{display:(this.state.dropType=="wasabi-button wasabi-searchbar-down"?((index<searchbarStype.columns)?"inline":"none"):"inline")}}><Input ref={child.name}
+                                                                                                                                                                                           key={child.name+index.toString()}
+                                {...child}
+                                                                                                                                                                                           position={position}
+                                                                                                                                                                                           backFormHandler={this.changeHandler}
+                            ></Input></div>);
 
-                    })
-                }
-            </div>
-            <div className="rightbutton" >
-                            <button className={this.state.dropType} style={{float:"left",display:(searchbarStype.columns<this.state.model.length)?"inline":"none"}} onClick={this.expandHandler}  ></button>
-                            <Button  onClick={this.onSubmit.bind(this,"submit")} theme="green" style={{ float:"right",marginTop:((searchbarStype.columns<this.state.model.length)?-22:0),display:this.props.searchHide==true?"none":null}} title={this.props.searchTitle}   >
-                                {this.props.searchTitle}
-                            </Button>
+                        })
+                    }
                 </div>
-             </div>
+                <div className="rightbutton" >
+                    <button className={this.state.dropType} style={{float:"left",display:(searchbarStype.columns<this.state.model.length)?"inline":"none"}} onClick={this.expandHandler}  ></button>
+                    <Button  onClick={this.onSubmit.bind(this,"submit")} theme="green" style={{ float:"right",marginTop:((searchbarStype.columns<this.state.model.length)?-22:0),display:this.props.searchHide==true?"none":null}} title={this.props.searchTitle}   >
+                        {this.props.searchTitle}
+                    </Button>
+                </div>
+            </div>
         )
     }
 });
