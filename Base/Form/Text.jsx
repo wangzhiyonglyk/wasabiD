@@ -8,6 +8,7 @@ var validation=require("../Lang/validation.js");
 let setStyle=require("../../Mixins/setStyle.js");
 var validate=require("../../Mixins/validate.js");
 var shouldComponentUpdate=require("../../Mixins/shouldComponentUpdate.js");
+var Label=require("../Unit/Label.jsx");
 var Text=React.createClass({
     mixins:[setStyle,validate,shouldComponentUpdate],
     propTypes: {
@@ -91,6 +92,7 @@ var Text=React.createClass({
     },
     getInitialState:function() {
         return{
+            hide:this.props.hide,
             min:this.props.min,
             max:this.props.max,
             value:this.props.value,
@@ -106,12 +108,14 @@ var Text=React.createClass({
     },
     componentWillReceiveProps:function(nextProps) {
         this.setState({
+            hide:nextProps.hide,
             min:nextProps.min,
             max:nextProps.max,
             value: nextProps.value,
             text: nextProps.text,
             readonly: nextProps.readonly,
             required: nextProps.required,
+            validateClass:"",//重置验证样式
         });
     },
     changeHandler:function(event) {
@@ -210,7 +214,7 @@ var Text=React.createClass({
             readOnly:this.state.readonly==true?"readonly":null,
             style:this.props.style,
             name:this.props.name,
-            placeholder:this.props.placeholder,
+            placeholder:(this.props.placeholder===""||this.props.placeholder==null)?this.state.required?"必填项":"":this.props.placeholder,
             className:"wasabi-form-control  "+(this.props.className!=null?this.props.className:"")
 
         }//文本框的属性
@@ -230,8 +234,7 @@ var Text=React.createClass({
 
 
         return (<div className={componentClassName+this.state.validateClass} style={style}>
-                <label className="wasabi-form-group-label" style={{display:(this.props.label&&this.props.label!="")?"block":"none"}}>{this.props.label}
-                </label>
+                <Label name={this.props.label} hide={this.state.hide} required={this.state.required}></Label>
                 <div className={ "wasabi-form-group-body"}>
                     {control}
                     <small className={"wasabi-help-block "+this.props.position} style={{display:(this.state.helpTip&&this.state.helpTip!="")?this.state.helpShow:"none"}}>{this.state.helpTip}</small>

@@ -4,8 +4,8 @@
 @import url("../base.scss");
 .wasabi-table {
   width: 100%;
-  overflow: auto;;
   position: relative;
+
 }
 .wasabi-table .wasabi-form-group
 {
@@ -35,10 +35,8 @@
 */
 .wasabi-table .table {
   border: 1px solid #e3e4e5;
-
   border-spacing: 0;
   border-collapse: collapse;
-  overflow-y: auto;
   width: 100%
 }
 
@@ -51,6 +49,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  font-weight: normal;
   font-size: 12px;
 }
 
@@ -59,11 +58,10 @@
   padding-bottom: 14px;
   padding-left: 10px;
   padding-right: 5px;
-  overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   font-size: 12px;
-
+ overflow: visible;
 }
 .wasabi-table .table > thead > tr > th.check-column
 {
@@ -158,7 +156,9 @@
 .pagination {
   display: inline-block;
   padding-left: 0;
-  margin: 10px 0;
+  margin: 0px;
+  margin-top: 5px;
+
   border-radius: 4px;
 }
 .pagination > li {
@@ -204,7 +204,7 @@
 .wasabi-table-pagination .pagination-detail {
   padding-left:20px;
   float:left;
-  padding-top: 10px;
+  padding-top: 12px;
 
 }
 

@@ -52,11 +52,16 @@ var DataGrid=React.createClass({
             "java",
             "C#",
             "php"
-        ])//后端语言
+        ]),//后端语言
+        pagePosition:React.PropTypes.oneOf([
+            "top",
+            "bottom",
+            "both"
+        ])//分页栏的位置
     },
     getDefaultProps:function(){
         return{
-            width:document.body.clientWidth,
+            width:document.documentElement.clientWidth,
             height:null,
             selectAble:false,
             detailAble:false,
@@ -83,7 +88,8 @@ var DataGrid=React.createClass({
             onChecked:null,
             footerSource:"data.footer",//页脚数据源
             selectChecked:false,
-            lang:"java"
+            lang:"java",
+            pagePosition:"bottom"//默认分页在底部
 
 
         }
@@ -108,7 +114,7 @@ var DataGrid=React.createClass({
             total:this.props.total,//总记录数
             loading:(this.props.url&&this.props.url!="")?true:false,//显示正在加载图示
             footer:this.props.footer,
-            tdwidth:null,//用于计算宽度
+            width:this.props.width,//用于滚动条的计算
         }
     },
     componentWillReceiveProps:function(nextProps) {
@@ -118,6 +124,7 @@ var DataGrid=React.createClass({
                 //先判断是否有条件变化，没有则不更新
                 this.updateHandler(nextProps.url,this.state.pageSize, this.state.pageIndex, this.state.sortName, this.state.sortOrder, nextProps.params);
             }
+
         }else
         {
             //没有url时，自定义更新事件
@@ -140,6 +147,19 @@ var DataGrid=React.createClass({
         {//如果存在url,
             this.updateHandler(this.state.url,this.state.pageSize,this.state.pageIndex,this.state.sortName,this.state.sortOrder)
         }
+    },
+    componentDidUpdate:function(){
+        if(document.documentElement.clientHeight<document.documentElement.offsetHeight)
+        {//有滚动条
+           if(this.state.width==document.documentElement.clientWidth+10)
+           {//没有设置固定宽度
+               this.setState({
+                   width:document.documentElement.clientWidth
+               })
+           }
+
+        }
+
     },
     renderHeader :function() {
         //渲染表头
@@ -318,10 +338,11 @@ var DataGrid=React.createClass({
                         <span className="pagination-info">显示第{benginIndex}
                             到{endIndex}条，
                             共{total}条</span>
+            <LinkButton iconCls="icon-reload" name="reload" onClick={this.reload}></LinkButton>
         </div>;
         return control;
     },
-    renderPagination:function() {
+    renderPagination:function(type) {
         //显示分页控件
         var paginationCom=null;
         if (this.props.pagination) {
@@ -369,7 +390,7 @@ var DataGrid=React.createClass({
                 }
                 pageComponent.unshift(predisabledli);pageComponent.push(lastdisabledli);
                 paginationCom= <div className="pull-right pagination">
-                    <ul className="pagination">
+                    <ul className="pagination" style={{marginTop:type=="top"?0:5,marginBottom:type=="top"?5:0}}>
                         <li key={"lipre"} className="page-pre"><a href="javascript:void(0)" onClick={this.prePaginationHandler} >‹</a></li>
                         <li key={"lifirst"} className={"page-number "+((this.state.pageIndex*1)==(1)?"active":"")}><a
                             href="javascript:void(0)" onClick={this.paginationHandler.bind(this,(1))}>{( 1)}</a></li>
@@ -393,7 +414,7 @@ var DataGrid=React.createClass({
                 }
                 paginationCom = (
                     <div className="pull-right">
-                        <ul className="pagination">
+                        <ul className="pagination" style={{marginTop:type=="top"?0:5,marginBottom:type=="top"?5:0}}>
                             {
                                 pagearr
                             }
@@ -459,7 +480,7 @@ var DataGrid=React.createClass({
     renderFooter:function() {//渲染页脚
         var tds = [];
         if (this.state.footer instanceof Array) {
-
+            //分页的情况下
             if (this.props.selectAble) {
                 tds.push(
                     <td key="footerselect" className="check-column"></td>
@@ -473,11 +494,12 @@ var DataGrid=React.createClass({
                 })
                 if(footerchild&&footerchild.length>0)
                 {
-                    if(footerchild[0].value)
+                    if(footerchild[0].value!=null&&footerchild[0].value!=undefined)
                     {//如果有值
                         tds.push(<td key={headerindex+header.name}>{footerchild[0].value}</td>)
                     }
                     else {
+                        //表明从本页数据统计
                         switch (footerchild[0].type)
                         {
                             case "sum":
@@ -500,25 +522,30 @@ var DataGrid=React.createClass({
 
             return <tr key="footertr" style={{height:36}}>{tds}</tr>;
         }
-        else {
-            return;
-        }
+
 
     },
-    sumHandler:function(column){//计算某一列的总和
+    sumHandler:function(footerModel){//计算某一列的总和
         var sum=null;
         if(this.state.data instanceof  Array)
         {
-            this.state.data.map((child,index)=>
+            this.state.data.map((rowData,rowIndex)=>
             {
-                if(typeof child[column.name]=="number")
 
-                {
+                var footerModelValue=rowData[footerModel.name];//当前行当前列的值
+                if(footerModel.content==="function")
+                {//有函数则通过计算得到值
+                    footerModelValue=footerModel.content(rowData,rowIndex);//
+                }
+
+                if(typeof (footerModelValue*1)=="number")
+
+                {//如果值可以传为数值
                     if(sum==null)
                     {
                         sum=0;//可以计算则先设置为0
                     }
-                    sum+=child[column.name];
+                    sum+=footerModelValue*1;
                 }
                 else {
 
@@ -529,27 +556,31 @@ var DataGrid=React.createClass({
         }
         if(sum!=null)
         {
-            return <td key={column.name}>{"总计:"+sum}</td>;
+            return <td key={footerModel.name}>{"总计:"+sum}</td>;
         }
         else {
 
-            return <td key={column.name}></td>;
+            return <td key={footerModel.name}></td>;
         }
 
 
     },
-    avgHandler:function(column) {//计算某一列的平均值
+    avgHandler:function(footerModel) {//计算某一列的平均值
         var sum=0; var avg=null;
         if(this.state.data instanceof  Array)
         {
-            this.state.data.map((child,index)=>
-            {
+            this.state.data.map((rowData,rowIndex)=> {
+                var footerModelValue = rowData[footerModel.name];//当前行当前列的值
+                if (footerModel.content === "function") {//有函数则通过计算得到值
+                    footerModelValue = footerModel.content(rowData, rowIndex);//
+                }
 
-                if(typeof child[column.name]=="number")
-                {
-                    sum+=child[column.name];
-                }else
-                {
+                if (typeof (footerModelValue * 1) == "number") {
+                    if (sum == null) {
+                        sum = 0;//可以计算则先设置为0
+                    }
+                    sum += footerModelValue * 1;
+                } else {
 
                 }
 
@@ -560,11 +591,11 @@ var DataGrid=React.createClass({
         }
         if(avg!=null)
         {
-            return <td key={column.name}>{"平均值:"+avg}</td>;
+            return <td key={footerModel.name}>{"平均值:"+avg}</td>;
         }
         else {
 
-            return <td key={column.name}></td>;
+            return <td key={footerModel.name}></td>;
         }
     },
     onSort:function(sortName,sortOrder) {  //排序事件
@@ -655,28 +686,35 @@ var DataGrid=React.createClass({
         {
             footerSource= unit.getSource( data,this.props.footerSource);
         }
-        if(dataSource&& dataSource instanceof  Array &&dataSource.length==0&&totalSource>0&&pageIndex!=1)
+        if(totalSource>0 &&dataSource&& dataSource instanceof  Array&&dataSource.length==0&&totalSource>0&&pageIndex!=1)
         {
             //有总记录，没有当前记录数,不是第一页，继续查询转到上一页
             this.updateHandler(url,pageSize,pageIndex-1,sortName,sortOrder,params);
         }
-        this.setState({
-            url:url,
-            pageSize:pageSize,
-            params:unit.clone(params),//这里一定要复制
-            pageIndex:pageIndex,
-            sortName:sortName,
-            sortOrder:sortOrder,
-            data: (this.props.pagination==true? dataSource.slice(0,this.props.pageSize):dataSource),
-            total:totalSource,
-            footer:footerSource,
-            loading:false,
-           checkedData:this.clearCheck==true?new Map():this.state.checkedData
-        })
-        if(this.clearCheck==true)
-        {
-            this.clearCheck=false;
+        else {
+            //查询成功
+            if(dataSource&& dataSource instanceof  Array)
+            {//是数组,
+                dataSource= (this.props.pagination == true ? dataSource.slice(0, this.props.pageSize) : dataSource);
+            }
+            this.setState({
+                url: url,
+                pageSize: pageSize,
+                params: unit.clone(params),//这里一定要复制
+                pageIndex: pageIndex,
+                sortName: sortName,
+                sortOrder: sortOrder,
+                data: dataSource,
+                total: totalSource,
+                footer: footerSource,
+                loading: false,
+                checkedData: this.clearCheck == true ? new Map() : this.state.checkedData
+            })
+            if (this.clearCheck == true) {
+                this.clearCheck = false;
+            }
         }
+
     },
     loadError:function(errorCode,message) {//查询失败
         Message. alert(message);
@@ -684,10 +722,22 @@ var DataGrid=React.createClass({
             loading:false,
         })
     },
-    reload:function() {//重新刷新数据
-        this.clearCheck=true;//重载时清空选中的
-        this.updateHandler(this.state.url,this.state.pageSize, this.state.pageIndex, this.state.sortName, this.state.sortOrder, this.state.params);
-    },
+    reload:function(params) {//重新刷新数据
+        if(!params||params=="reload")
+        {
+
+            params=this.state.params;
+        }
+        if(this.state.url==null||this.state.url==="")
+        {
+            return ;
+        }
+        else {
+            this.clearCheck=true;//重载时清空选中的
+            this.updateHandler(this.state.url,this.state.pageSize, this.state.pageIndex, this.state.sortName, this.state.sortOrder,params);
+
+        }
+     },
     clearData:function() {//清空数据
         this.setState({
             data:[],
@@ -695,6 +745,7 @@ var DataGrid=React.createClass({
         });
     },
     shouldUpdate:function(url,pageSize,pageIndex,sortName,sortOrder,params) {//判断是否更新
+
         let isupdate=false;
         if(url!=this.state.url)
         {
@@ -721,12 +772,38 @@ var DataGrid=React.createClass({
             isupdate=true;
             return isupdate;
         }
-        if((params&&!this.state.params)||(params&&this.state.params&&Object.keys(params).length!=Object.keys(this.state.params).length))
-        {//新的参数不为空，旧参数为空， 新参数不空，旧参数不为空，但长度不一样
+        if(!params&&!this.state.params)
+        {//都为空
+            isupdate=false;//
+            return isupdate;
+        }
+       else if(params&&!this.state.params&&Object.keys(params).length==0)
+        {//原来没有参数,现在有了参数,但参数个数为0
+            isupdate=false;
+            return isupdate;
+
+        }
+        else if(params&&!this.state.params&&Object.keys(params).length>0)
+        {//原来没有参数,现在有了参数,但是参数个数不为0
+            isupdate=true;
+            return isupdate;
+
+        }
+        else if(!params&&this.state.params)
+        {//清空了参数
+            isupdate=true;
+            return isupdate;
+
+        }
+        else if(params&&this.state.params&&(Object.keys(params).length!=Object.keys(this.state.params).length))
+        {//都有参数,但是参数个数已经不一样了
             isupdate=true;
             return isupdate;
         }
-        for(var par in params)
+        else
+        { //有参数,但参数个数相同,对比
+
+            for(var par in params)
         {
             try {
 
@@ -745,6 +822,10 @@ var DataGrid=React.createClass({
             }
 
         }
+
+        }
+
+
     },
     getKey:function (index) {
         //获取指定行的关键字
@@ -794,7 +875,7 @@ var DataGrid=React.createClass({
         }
         if(this.props.onClick!=null)
         {
-            this.props.onClick(rowIndex,rowData);
+            this.props.onClick(rowIndex,rowData);//注意参数换了位置,因为早期版本就是这样子
         }
 
     },
@@ -929,7 +1010,7 @@ var DataGrid=React.createClass({
                 this.setState({
                     detailIndex: key,
                     detailView: <tr key={key+"detail"}>
-                        <td colSpan={colSpan}><div className="wasabi-detail">{detail}</div></td>
+                        <td colSpan={colSpan}><div className="wasabi-detail" >{detail}</div></td>
                     </tr>,
                 })
             }
@@ -937,15 +1018,21 @@ var DataGrid=React.createClass({
     },
     render:function() {
         var padddingRight;
-        var tableDefinedWidth=this.props.width;//自定义宽度
+        var tableDefinedWidth=this.state.width;//自定义宽度
         var className="table table-no-bordered";
         if(this.props.borderAble===true)
         {
             className="table";
         }
-        return (<div className="wasabi-table"    style={{width:tableDefinedWidth}}>
-
-            <table  className={className}>
+        return (<div className="wasabi-table"    >
+            <div className="wasabi-table-pagination"
+                 style={{width:tableDefinedWidth,display:(this.props.pagePosition=="top"||this.props.pagePosition=="both")?this.props.pagination?"block":"none":"none"}}>
+                {this.renderTotal()}
+                <div style={{width:tableDefinedWidth,display:(this.props.pagination?"block":"none")}}>
+                    {this.renderPagination("top")}
+                </div>
+            </div>
+            <table  className={className} style={{width:tableDefinedWidth}}>
                 <thead>
                 <tr>
                     {this.renderHeader()}
@@ -961,7 +1048,9 @@ var DataGrid=React.createClass({
                 </tbody>
              </table>
 
-            <div className="wasabi-table-pagination"  style={{width:tableDefinedWidth,display:(this.props.pagination?"block":"none")}}>
+
+            <div className="wasabi-table-pagination"
+                 style={{width:tableDefinedWidth,display:(this.props.pagination?"block":(this.props.pagePosition=="bottom"||this.props.pagePosition=="both")?"block":"none")}}>
                 {this.renderTotal()}
             <div style={{width:tableDefinedWidth,display:(this.props.pagination?"block":"none")}}>
                 {this.renderPagination()}

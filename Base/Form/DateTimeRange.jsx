@@ -5,7 +5,7 @@ desc:日期范围选择控件
  */
 let React=require("react");
 let Lang=require("../Lang/language.js");
-let DateTime=require("./DateTime.jsx");
+let DateD=require("./DateD.jsx");
 let Time=require("./Time.jsx");
 let Button=require("../Buttons/Button.jsx");
 var shouldComponentUpdate=require("../../Mixins/shouldComponentUpdate.js");
@@ -14,71 +14,19 @@ let DateTimeRange=React.createClass({
     PropTypes:{
         name:React.PropTypes.string,//名称
         firstDate:React.PropTypes.string,//第一个日期
+        firstTime:React.PropTypes.string,//第一个时间
         secondDate:React.PropTypes.string,//第二个日期
+        secondTime:React.PropTypes.string,//第二个时间
         onSelect:React.PropTypes.func,//确定事件
     },
     getInitialState:function() {
-        //先设置默认值的，再判断用户是否有输入值
-        var regs=/^(\d{4})-(\d{2})-(\d{2})$/;
-        var newDate =  new Date();
-        var first_year=newDate.getFullYear();
-        var first_month=newDate.getMonth()+1;
-        var first_day=null;
-        let first_min=null; let first_max=null;
-        let second_min=null;let second_max=null;
-
-        if(this.props.firstDate&&regs.test(this.props.firstDate))
-        {//输入了值
-            first_year=this.props.firstDate.split("-")[0]*1;
-            first_month=this.props.firstDate.split("-")[1]*1;
-            first_day=this.props.firstDate.split("-")[2]*1;
-        }
-        //设置第二日期的默认值
-        var second_year=first_year;var second_month;var second_day=null;
-        second_month = parseInt(first_month) + 1;
-        if( second_month > 12 ){
-            second_year ++;
-            second_month = 1;
-        }
-        else {
-
-        }
-        if(this.props.secondDate&&regs.test(this.props.secondDate))
-        {//输入了值
-            if(this.props.secondDate.split("-")[0]*1>first_year||this.props.secondDate.split("-")[1]*1>first_month) {//不相等才赋值
-                second_year = this.props.secondDate.split("-")[0] * 1;
-                second_month = this.props.secondDate.split("-")[1] * 1;
-                second_max=  second_day = this.props.secondDate.split("-")[2] * 1;
-                second_min=1;
-                first_min=first_day;
-                first_max=31;
-            }
-            else  if(this.props.secondDate.split("-")[0]*1==first_year||this.props.secondDate.split("-")[1]*1==first_month) {//不相等才赋值
-
-                first_max =this.props.secondDate.split("-")[2] * 1;
-                first_min=first_day;
-            }
-        }
-        else {//第二日期没有值
-            first_min=first_max=first_day;
-        }
-        return{
-            first_year:first_year,
-            first_month:first_month,
-            first_day:first_day,
-            first_time:null,
-            first_min:first_min,
-            first_max:first_max,
-            second_year:second_year,
-            second_month:second_month,
-            second_day:second_day,
-            second_time:null,
-            second_min:second_min,
-            second_max:second_max,
-        }
+      return this.setDefaultState(this.props);
     },
     componentWillReceiveProps:function(nextProps) {
-       this.setDefaultState(nextProps);
+
+      var newstate= this.setDefaultState(nextProps);
+        this.setState(newstate);
+
     },
     setDefaultState(props){
         //先设置默认值的，再判断用户是否有输入值
@@ -129,11 +77,14 @@ let DateTimeRange=React.createClass({
             first_year:first_year,
             first_month:first_month,
             first_day:first_day,
+            first_time:props.firstTime,
             first_min:first_min,
             first_max:first_max,
+
             second_year:second_year,
             second_month:second_month,
             second_day:second_day,
+            second_time:props.secondTime,
             second_min:second_min,
             second_max:second_max,
         }
@@ -289,46 +240,54 @@ let DateTimeRange=React.createClass({
             secondDate = this.state.first_year + "-" + (this.state.first_month.toString().length == 1 ? "0" + this.state.first_month : this.state.first_month) + "-" + (this.state.first_max.toString().length == 1 ? "0" + this.state.first_max : this.state.first_max);
         }
         if (firstDate && secondDate) {
-            if (this.state.first_time && this.state.second_time) {
+
                 if (this.props.onSelect != null) {
-                    var first_time = "";
-                    if (this.state.first_time != null) {
-                        first_time = " " + this.state.first_time;
-                    }
-                    let second_time = "";
-                    if (this.state.second_time != null) {
-                        second_time = " " + this.state.second_time;
-                    }
+                    var first_time = " "+this.refs.begin.getValue();
+                    let second_time = " "+this.refs.end.getValue();
                     this.props.onSelect(firstDate + first_time + "," + secondDate + second_time, firstDate + first_time + "," + secondDate + second_time, this.props.name);
+
                 }
-            }
         }
     },
-    cancelNandler:function() {
+    cancelHandler:function() {
         this.props.onSelect(null,null,this.props.name);
     },
     render:function() {
+        var firstHour=null;var firstMinute=null;var firstSecond=null;
+        var secondHour=null,secondMinute=null,secondSecond=null;
+        if(this.state.first_time)
+        {
+            firstHour=this.state.first_time.split(":")[0]*1;
+            firstMinute=this.state.first_time.split(":")[1]*1;
+            firstSecond=this.state.first_time.split(":")[2]*1;
+        }
+        if(this.state.second_time)
+        {
+            secondHour=this.state.second_time.split(":")[0]*1;
+            secondMinute=this.state.second_time.split(":")[1]*1;
+            secondSecond=this.state.second_time.split(":")[2]*1;
+        }
          return (<div>
              <div className="ok">
-                 <div style={{float:"left"}} >
-                     <Time type="time" key="end"  onSelect={this.secondTimeHandler}></Time>
+                 <div style={{float:"left",marginTop:5}} >
+                     <Time name="begin" type="time" key="begin" ref="begin" hour={firstHour} minute={firstMinute} second={firstSecond}></Time>
                  </div>
-                 <div  style={{float:"left"}}>
-                     <Time type="time" key="begin" onSelect={this.firstTimeHandler}></Time>
+                 <div  style={{float:"left",marginTop:5}}>
+                     <Time name="end" type="time" key="end" ref="end" hour={secondHour} minute={secondMinute} second={secondSecond}></Time>
                      </div>
                  <Button title="确定" name="ok"  theme="green" onClick={this.onSelectHandler}></Button>
-                 <Button title="取消" name="ok"  theme="cancel" onClick={this.cancelNandler}></Button>
+                 <Button title="取消" name="ok"  theme="cancel" onClick={this.cancelHandler}></Button>
              </div>
-            <DateTime   isRange={true}  year={this.state.first_year} month={this.state.first_month} day={this.state.first_day}
+            <DateD   isRange={true}  year={this.state.first_year} month={this.state.first_month} day={this.state.first_day}
                         min={this.state.first_min} max={this.state.first_max}
                         onSelect={this.firstHandler}
                         updateYearAndMonth={this.firstMonthHandler}
-            ></DateTime>
-             <DateTime  isRange={true}   year={this.state.second_year} month={this.state.second_month} day={this.state.second_day}
+            ></DateD>
+             <DateD  isRange={true}   year={this.state.second_year} month={this.state.second_month} day={this.state.second_day}
                         min={this.state.second_min} max={this.state.second_max}
                         onSelect={this.secondHandler }
                         updateYearAndMonth={this.secondMonthHandler}
-             ></DateTime>
+             ></DateD>
 
          </div>)
     },

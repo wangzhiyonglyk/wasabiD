@@ -155,7 +155,7 @@ var Input=React.createClass({
             value:this.props.value,
             text:this.props.text,
             readonly:this.props.readonly,
-
+            hide:this.props.hide,
             data:this.props.data,
             //验证
             required:this.props.required,
@@ -167,6 +167,7 @@ var Input=React.createClass({
     },
     componentWillReceiveProps:function(nextProps) {
         this.setState({
+            hide:nextProps.hide,
             value:nextProps.value,
             text: nextProps.text,
             readonly: nextProps.readonly,
@@ -301,16 +302,7 @@ var Input=React.createClass({
             return  this.renderUnInput(this.props.type);
         }
         return null;
-        //
-        //return (<div className={componentClassName+this.state.validateClass} style={style}>
-        //        <label className="wasabi-form-group-label" style={{display:(this.props.label&&this.props.label!="")?"block":"none"}}>{this.props.label}
-        //        </label>
-        //        <div className={ "wasabi-form-group-body"}>
-        //            {control}
-        //            <small className={"wasabi-help-block "+this.props.position} style={{display:(this.state.helpTip&&this.state.helpTip!="")?this.state.helpShow:"none"}}>{this.state.helpTip}</small>
-        //        </div>
-        //    </div>
-        //)
+
     }
 });
 module .exports=Input;

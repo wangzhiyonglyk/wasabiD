@@ -13,6 +13,7 @@ let setStyle=require("../../Mixins/setStyle.js");
 var validate=require("../../Mixins/validate.js");
 var showUpdate=require("../../Mixins/showUpdate.js");
 var shouldComponentUpdate=require("../../Mixins/shouldComponentUpdate.js");
+var Label=require("../Unit/Label.jsx");
 let GridPicker=React.createClass({
     mixins:[setStyle,validate,showUpdate,shouldComponentUpdate],
     propTypes: {
@@ -110,6 +111,7 @@ let GridPicker=React.createClass({
     },
     getInitialState:function() {
         return {
+            hide:this.props.hide,
             params:this.props.params,//默认筛选条件
             url:null,//默认为空,表示不查询,后期再更新,
             show:false,//
@@ -129,23 +131,27 @@ let GridPicker=React.createClass({
         //只更新不查询,注意了
         if(nextProps.data!=null&&nextProps.data instanceof  Array &&(!nextProps.url||nextProps.url=="")) {
             this.setState({
+                hide:nextProps.hide,
                 data: nextProps.data,
                 value:nextProps.value,
                 text:nextProps.text,
                 readonly: nextProps.readonly,
                 required: nextProps.required,
                 params:nextProps.params,
+                validateClass:"",//重置验证样式
             })
 
         }
         else {
             if (this.showUpdate(nextProps.params)) {//如果不相同则更新
                 this.setState({
+                    hide:nextProps.hide,
                     value:nextProps.value,
                     text: nextProps.text,
                     readonly: nextProps.readonly,
                     required: nextProps.required,
                     params:nextProps.params,
+                    validateClass:"",//重置验证样式
                 })
             }
             else
@@ -160,7 +166,7 @@ let GridPicker=React.createClass({
         var parentE=event.relatedTarget;//相关节点
         while (parentE&&parentE.nodeName!="BODY")
         {
-            if(parentE.className.indexOf("dropgridpicker")>-1)
+            if(parentE.className.indexOf("dropcontainter")>-1)
             {
                 break;
             }
@@ -233,7 +239,7 @@ let GridPicker=React.createClass({
             readOnly:this.state.readonly==true?"readonly":null,
             style:style,
             name:this.props.name,
-            placeholder:this.props.placeholder,
+            placeholder:(this.props.placeholder===""||this.props.placeholder==null)?this.state.required?"必填项":"":this.props.placeholder,
             className:"wasabi-form-control  "+(this.props.className!=null?this.props.className:"")
 
         }//文本框的属性
@@ -243,13 +249,12 @@ let GridPicker=React.createClass({
         props.url=this.state.url;
         props.data=this.state.data;
      return<div className={componentClassName+this.state.validateClass} style={style}>
-            <label className="wasabi-form-group-label" style={{display:(this.props.label&&this.props.label!="")?"block":"none"}}>{this.props.label}
-            </label>
+         <Label name={this.props.label} hide={this.state.hide} required={this.state.required}></Label>
             <div className={ "wasabi-form-group-body"}>
                 <div className="combobox"  style={{display:this.props.hide==true?"none":"block"}}   >
-                    <i className={"pickericon"+" "+this.props.size} onClick={this.showPicker}></i>
+                    <i className={"pickericon"} onClick={this.showPicker}></i>
                     <input type="text" {...inputProps}  value={this.state.text}   onChange={this.changeHandler}     />
-                    <div className={"dropgridpicker"+" "+size+" "+this.props.position} style={{height:this.props.height,display:this.state.show==true?"block":"none"}} onMouseOut={this.mouseOutHandler} >
+                    <div className={"dropcontainter gridpicker"+this.props.position} style={{height:this.props.height,display:this.state.show==true?"block":"none"}} onMouseOut={this.mouseOutHandler} >
                         <div>
                             <SearchBox name={this.props.name} valueField={this.props.valueField} textField={this.props.textField} onSearch={this.onSearch}></SearchBox>
                             <DataGrid {...props} height={398} params={this.state.params}></DataGrid>

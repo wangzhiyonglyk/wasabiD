@@ -8,17 +8,15 @@
   padding-right: 8px;
   display: inline-block;
   background-color: white;
-}
-
-.combobox .dropdate .wasabi-datetime
-{
   padding: 0px;
 }
+
 .wasabi-datetime-header{
   width:248px;
   height:32px;
   text-align: center;
   position: relative;
+  margin-top: 5px;
 
 }
 
@@ -85,8 +83,8 @@
   background-color: #f7f8fa;
   width: 238px;
   height: 30px;
-  padding-left: 5px;
-  padding-right: 5px;
+  margin-left: 5px;
+  margin-right: 5px;
   overflow: hidden;
 
 }
@@ -106,8 +104,8 @@
 .wasabi-datetime-body .dayul{
   width: 238px;
   height:168px;
-  padding-left: 5px;
-  padding-right:5px;
+  margin-left: 5px;
+  margin-right:5px;
   margin-top: 10px;
   overflow: hidden;
 }

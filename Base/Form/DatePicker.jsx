@@ -7,6 +7,7 @@ require("../../sass/Base/Form/ComboBox.scss");
 let React=require("react");
 var unit=require("../../libs/unit.js");
 let Time=require("./Time.jsx");
+let DateD=require("./DateD.jsx");
 let DateTime=require("./DateTime.jsx");
 let DateRange=require("./DateRange.jsx");
 let DateTimeRange=require("./DateTimeRange.jsx");
@@ -15,6 +16,7 @@ var validation=require("../Lang/validation.js");
 let setStyle=require("../../Mixins/setStyle.js");
 var validate=require("../../Mixins/validate.js");
 var shouldComponentUpdate=require("../../Mixins/shouldComponentUpdate.js");
+var Label=require("../Unit/Label.jsx");
 let ComboBox=React.createClass({
     mixins:[setStyle,validate,shouldComponentUpdate],
     PropTypes:{
@@ -86,6 +88,7 @@ let ComboBox=React.createClass({
             text = this.props.value;
         }
         return {
+            hide:this.props.hide,
             value:this.props.value,
             text: text,
             readonly: this.props.readonly,
@@ -106,16 +109,17 @@ let ComboBox=React.createClass({
             }
         }
         this.setState({
+            hide:nextProps.hide,
             value: nextProps.value,
             text:text,
             readonly: nextProps.readonly,
 
             //验证
             required:this.props.required,
-            validateClass:"",//验证的样式
             helpShow:"none",//提示信息是否显示
             helpTip:validation["required"],//提示信息
             invalidTip:"",
+            validateClass:"",//重置验证样式
         })
     },
     mouseOutHandler:function(event) {//鼠标移开时隐藏下拉
@@ -185,7 +189,7 @@ let ComboBox=React.createClass({
     },
     renderDate:function() {
         var dateobj=this.splitDate(this.state.value);
-        return <DateTime ref="combobox"  name={this.props.name} showTime={false} {...dateobj}  onSelect={this.onSelect}></DateTime>
+        return <DateD ref="combobox"  name={this.props.name} showTime={false} {...dateobj}  onSelect={this.onSelect}></DateD>
 
     },
     renderDateTime:function() {
@@ -195,18 +199,35 @@ let ComboBox=React.createClass({
     },
     renderDateTimeRange:function() {
         var firstDate=null;var secondDate=null;
+        var firstTime=null;var secondTime=null;
         if(this.state.value!=null&&this.state.value!="") {//传入一到两个值
             var dateArray=this.state.value.split(",");
             if(dateArray.length>0)
             {
-                firstDate=(dateArray[0]);
+                if(dateArray[0].indexOf(" ")>-1)
+                {//有时间
+                    firstDate=(dateArray[0]).split(" ")[0];
+                    firstTime=(dateArray[0]).split(" ")[1];
+                }
+                else {
+                    firstDate=(dateArray[0]);
+                }
+
+
             }
             if(dateArray.length>=2)
             {
-                secondDate=(dateArray[1]);
+                if(dateArray[1].indexOf(" ")>-1)
+                {//有时间
+                    secondDate=(dateArray[1]).split(" ")[0];
+                    secondTime=(dateArray[1]).split(" ")[1];
+                }
+                else {
+                    secondDate=(dateArray[1]);
+                }
             }
         }
-        return <DateTimeRange ref="combobox" name={this.props.name} firstDate={firstDate} secondDate={secondDate}  onSelect={this.onSelect}></DateTimeRange>
+        return <DateTimeRange ref="combobox" name={this.props.name} firstDate={firstDate} firstTime={firstTime} secondDate={secondDate} secondTime={secondTime} onSelect={this.onSelect}></DateTimeRange>
     },
     renderDateRange:function() {
         var firstDate=null;var secondDate=null;
@@ -226,27 +247,27 @@ let ComboBox=React.createClass({
     render:function() {
         let control = null;
         let controlDropClassName = "";
-        let iconName = "pickericon";
+
         switch (this.props.type) {
 
             case "date":
                 control = this.renderDate();
-                controlDropClassName = "dropdate";
+                controlDropClassName = "date";
 
                 break;
             case "datetime":
                 control = this.renderDateTime();
-                controlDropClassName = "dropdate";
+                controlDropClassName = "date time";
 
                 break;
             case "daterange":
                 control = this.renderDateRange();
-                controlDropClassName = "droprange";
+                controlDropClassName = "range";
 
                 break;
             case "datetimerange":
                 control = this.renderDateTimeRange();
-                controlDropClassName = "droprange";
+                controlDropClassName = "range";
                 break;
         }
         var size = this.props.onlyline == true ? "onlyline" : this.props.size;//组件大小
@@ -257,21 +278,19 @@ let ComboBox=React.createClass({
             readOnly: this.state.readonly == true ? "readonly" : null,
             style: this.props.style,
             name: this.props.name,
-            placeholder: this.props.placeholder,
+            placeholder:(this.props.placeholder===""||this.props.placeholder==null)?this.state.required?"必填项":"":this.props.placeholder,
             className:"wasabi-form-control  "+(this.props.className!=null?this.props.className:"")
 
         }//文本框的属性
         return (
             <div className={componentClassName+this.state.validateClass} style={style}>
-                <label className="wasabi-form-group-label"
-                       style={{display:(this.props.label&&this.props.label!="")?"block":"none"}}>{this.props.label}
-                </label>
+                <Label name={this.props.label} hide={this.state.hide} required={this.state.required}></Label>
                 <div className={ "wasabi-form-group-body"}>
                     <div className="combobox" style={{display:this.props.hide==true?"none":"block"}}
                          onMouseOut={this.mouseOutHandler}>
-                        <i className={iconName+" "+this.props.size} onClick={this.showPicker}></i>
+                        <i className={"pickericon "} onClick={this.showPicker}></i>
                         <input type="text" {...inputProps} value={this.state.text} onChange={this.changeHandler}/>
-                        <div className={controlDropClassName+" "+size+" "+this.props.position}
+                        <div className={"dropcontainter "+controlDropClassName+" "+size+" "+this.props.position}
                              style={{display:this.state.show==true?"block":"none"}}>
                             {
                                 control

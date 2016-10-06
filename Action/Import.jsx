@@ -32,6 +32,7 @@ let  Import=React.createClass({
             filename: "",//选择的文件名集合
             uploadDisabled:true,//是否允许导入
             choseDisabled:false,//是否允许选择文件
+            giveupdisabled:true,//是否允许终止
             uploadurl: this.props.uploadurl,
             failloadurl: this.props.failloadurl,
             showfail:false,
@@ -50,9 +51,19 @@ let  Import=React.createClass({
         this.refs.modal.close();
     },
     open: function () {//打开
+      this.setState({
+            uploadInfo:[],//更新提示
+            choseDisabled: false,//可以再选择
+            uploadDisabled:true,//不可以再导入
+            giveupdisabled:true,//不可以终止
+            filename:"",//清空文件名
+            showfail:false//不显示下载导入失败的文件
+        })
+        this.clearFile();//清空文件选择,方便下一次选择
         this.refs.modal.open();
     },
     onChange: function (event) {//选择文件
+
         if(this.state.choseDisabled)
         {
             return ;
@@ -92,7 +103,7 @@ let  Import=React.createClass({
 
         if(typevalidate)
         {
-            this.file=files[0];
+            this.file=files[0];//保存文件
             this.setState({
                 filename: filename,
                 uploadDisabled:false,//可以导入
@@ -112,17 +123,39 @@ let  Import=React.createClass({
 
     },
     importBegin:function(name,title) {//开始的导入
+        //清空一些数据值,这些数据不需要保存状态值中
+        this.isgiveup=false;//默认标记不可以终止,这里没有采用状态值来标记,防止状态更新出现延迟导致统计数据不准确
         this.total=0;//设置总记录数初始值
         this.failNum=0;//失败数
         this.successNum=0;//成功数
         this.importHandler(null);//开始导入
         this.setState({
             choseDisabled: true,//不可以再选择
-            uploadDisabled:true//不可以再导入
+            uploadDisabled:true,//不可以再导入
+            giveupdisabled:false,//可以终止
         })
 
     },
+    giveup:function(){//终止
+        this.isgiveup=true;
+        let uploadInfo = this.state.uploadInfo;
+        uploadInfo.unshift(<div className="info" key={"success"+(index+2).toString()} >{"用户终止,成功数:"+this.successNum.toString()+",失败数:"+this.failNum.toString()}</div>)
+        this.setState({
+            uploadInfo:uploadInfo,//更新提示
+            choseDisabled: false,//可以再选择
+            uploadDisabled:true,//不可以再导入
+            giveupdisabled:true,//不可以终止
+            filename:"",//清空文件名
+            showfail:false//不显示下载导入失败的文件
+        })
+        this.clearFile();//清空文件选择,方便下一次选择
+
+    },
     importHandler: function (index) {//执行导入事件
+        if(this.isgiveup)
+        {
+            return ;
+        }
         var formData = new FormData(); // 实例化一个表单数据对象
         if(index==null) {
             //导入文件
@@ -148,7 +181,7 @@ let  Import=React.createClass({
         }
         // 实例化一个AJAX对象
         var xhr = new XMLHttpRequest();
-        xhr.upload.addEventListener("progress", this.uploadProgress.bind(this,index), false);
+        xhr.upload.addEventListener("progress", this.uploadProgress.bind(this,index), false);//上传进度
         xhr.addEventListener("load", this.uploadComplete.bind(this,index), false);
         xhr.addEventListener("error", this.uploadFailed, false);
         xhr.addEventListener("abort", this.uploadCanceled, false);
@@ -215,14 +248,15 @@ let  Import=React.createClass({
                    else {
 
                        if(index>=this.total-1) {//代表已经执行完最后一条记录了
-                           uploadInfo.unshift(<div className="info" key={"success"+(index+2).toString()} >{"所有数据执行完成,成功数:"+this.successNum.toString()+"失败数:"+this.failNum.toString()}</div>)
+                           uploadInfo.unshift(<div className="info" key={"successall"} >{"所有数据执行完成,成功数:"+this.successNum.toString()+",失败数:"+this.failNum.toString()}</div>)
                            this.setState({
                                choseDisabled: false,//可以再选择
                                uploadDisabled:true,//不可以再导入
-                               filename:"",
-                               showfail:this.failNum>0?true:false,
+                               giveupdisabled:true,//不可以终止
+                               filename:"",//清空文件名
+                               showfail:this.failNum>0?true:false,//是否显示下载失败信息
                            })
-                           this.clearFile();
+                           this.clearFile();//清空文件选择,方便下一次选择
                        }
                        else
                        {
@@ -232,7 +266,7 @@ let  Import=React.createClass({
                    }
                }
                 else {
-                   this.clearFile();
+                   this.clearFile();//清空文件,方便下次选择
                    if(index==null) {
                        Message.error("文件读取失败,原因:"+result.message);
                        this.setState({
@@ -303,8 +337,7 @@ let  Import=React.createClass({
     uploadCanceled:function uploadCanceled(evt) {
         //保留这个方法
     },
-    clearFile:function()
-    {
+    clearFile:function() {
         try {
             this.refs.import.value="";//清空,以方便可以重新选择相同文件
         }
@@ -347,7 +380,8 @@ let  Import=React.createClass({
                        <div className="import-submit">
                            <a className="import-failload" target="blank" href={this.props.failloadurl} style={{display:this.state.showfail==true?"inline":"none"}}>下载失败信息</a>
                  <Button title="导入" disabled={this.state.uploadDisabled}  onClick={this.importBegin} theme="green"></Button>
-                 <Button title="取消"  onClick={this.close} theme="cancel"></Button>
+                           <Button title="终止" disabled={this.state.giveupdisabled} onClick={this.giveup} theme="cancel"></Button>
+                           <Button title="取消"  onClick={this.close} theme="cancel"></Button>
              </div>
                  <a className="import-downloadmodel" href={this.props.modelurl}>下载模版</a>
 

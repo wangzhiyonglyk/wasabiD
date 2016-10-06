@@ -31,6 +31,7 @@ exports.SwitchButton = require('./Base/Form/SwitchButton.jsx');//开关组件
 
 /*****************日期组件******************/
 exports.Time = require('./Base/Form/Time.jsx');//时间选择组件
+exports.DateD = require('./Base/Form/DateD.jsx');//日期选择组件
 exports.DateTime = require('./Base/Form/DateTime.jsx');//日期时间选择组件
 exports.DateRange = require('./Base/Form/DateRange.jsx');//日期范围选择组件
 exports.DateTimeRange = require('./Base/Form/DateTimeRange.jsx');//日期时间范围选择组件

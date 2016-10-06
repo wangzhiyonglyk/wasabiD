@@ -327,7 +327,7 @@ var Form=React.createClass({
         style.height=this.props.height!=null?this.props.height: allheight;//设置表单的高度
 
 
-        let virtualIndex=0;//表单组件在表单的虚拟下标
+        let virtualIndex=0;//表单组件在表单的虚拟下标,用于计算在表单中的位置
         return (
             <div className={"wasabi-form "+columnClass+" "+this.props.className } style={style}>
                         <div  className={"form-body  "}>
@@ -335,7 +335,7 @@ var Form=React.createClass({
 
                                 this.state.model.map((child,index) =>{
 
-                                  let position=virtualIndex%columns;//计算在静音中的位置
+                                  let position=virtualIndex%columns;//计算在表单中的位置
                                     if(position==0)
                                     {
                                         position="left";

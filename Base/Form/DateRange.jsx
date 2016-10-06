@@ -5,7 +5,7 @@ desc:日期范围选择控件
  */
 let React=require("react");
 let Lang=require("../Lang/language.js");
-let DateTime=require("./DateTime.jsx");
+let DateD=require("./DateD.jsx");
 let Button=require("../Buttons/Button.jsx");
 var shouldComponentUpdate=require("../../Mixins/shouldComponentUpdate.js");
 let DateRange=React.createClass({
@@ -296,16 +296,16 @@ let DateRange=React.createClass({
                  <Button title="确定" name="ok"  theme="green" onClick={this.onSelectHandler}></Button>
                  <Button title="取消" name="ok"  theme="cancel" onClick={this.cancelNandler}></Button>
              </div>
-            <DateTime   isRange={true}  year={this.state.first_year} month={this.state.first_month} day={this.state.first_day}
+            <DateD   isRange={true}  year={this.state.first_year} month={this.state.first_month} day={this.state.first_day}
                         min={this.state.first_min} max={this.state.first_max}
                         onSelect={this.firstHandler}
                         updateYearAndMonth={this.firstMonthHandler}
-            ></DateTime>
-             <DateTime  isRange={true}   year={this.state.second_year} month={this.state.second_month} day={this.state.second_day}
+            ></DateD>
+             <DateD  isRange={true}   year={this.state.second_year} month={this.state.second_month} day={this.state.second_day}
                         min={this.state.second_min} max={this.state.second_max}
                         onSelect={this.secondHandler }
                         updateYearAndMonth={this.secondMonthHandler}
-             ></DateTime>
+             ></DateD>
 
          </div>)
     },
