@@ -392,18 +392,47 @@ baseUtil.showError=function(msg) {
     }
     let error = document.createElement("div");
     error.id="alog-error"+msg;
+    error.title="";
     error.innerHTML = '<div class="wasabi-message error"   >'
         + '<div class="notice">' + msg + '</div>'
         + ' </div>';
+    error.onmousemove=onMouseOver;
+    error.onmouseout=onMosueOut;
     document.body.appendChild(error);
-    setTimeout(()=> {
-            let child = document.getElementById("alog-error"+msg);
-            if (child) {
-                document.body.removeChild(child);
+    timeoutHandler();//开始执行
+    function  onMosueOut()
+    {
+        let child = document.getElementById("alog-error"+msg);
+        child.title="";
+        timeoutHandler();
+    }
+    function  onMouseOver()
+    {
+        let child = document.getElementById("alog-error"+msg);
+        child.title="0";
+        child.style.opacity=1;
+    }
 
+    function  timeoutHandler()
+    {
+        setTimeout(()=>{
+            let child = document.getElementById("alog-error"+msg);
+
+            if (child&&child.title=="") {
+                child.style.opacity=0.5;
+                child.style.transition="opacity,2s";
             }
-        }, 2000
-    );
+        },10);
+        setTimeout(()=> {
+                let child = document.getElementById("alog-error"+msg);
+                if (child&&child.title=="") {
+
+                    document.body.removeChild(child);
+
+                }
+            }, 2000
+        );
+    }
 
 }
 /// 把对象复制,返回

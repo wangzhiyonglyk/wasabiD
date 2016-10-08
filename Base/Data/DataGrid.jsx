@@ -113,8 +113,9 @@ var DataGrid=React.createClass({
             detailIndex:null,//显示详情的行下标
             total:this.props.total,//总记录数
             loading:(this.props.url&&this.props.url!="")?true:false,//显示正在加载图示
-            footer:this.props.footer,
+            footer:this.props.footer,//页脚
             width:this.props.width,//用于滚动条的计算
+
         }
     },
     componentWillReceiveProps:function(nextProps) {
@@ -479,6 +480,7 @@ var DataGrid=React.createClass({
     },
     renderFooter:function() {//渲染页脚
         var tds = [];
+        this.footerActualData=[];//,页脚的实际统计数据，用于返回
         if (this.state.footer instanceof Array) {
             //分页的情况下
             if (this.props.selectAble) {
@@ -496,6 +498,8 @@ var DataGrid=React.createClass({
                 {
                     if(footerchild[0].value!=null&&footerchild[0].value!=undefined)
                     {//如果有值
+                        var obj={};obj[header.name]=footerchild[0].value;
+                        footerActualData.push(obj);
                         tds.push(<td key={headerindex+header.name}>{footerchild[0].value}</td>)
                     }
                     else {
@@ -503,10 +507,26 @@ var DataGrid=React.createClass({
                         switch (footerchild[0].type)
                         {
                             case "sum":
-                                tds.push(this.sumHandler(footerchild[0]));
+                                var obj={};obj[header.name]=this.sumHandler(footerchild[0]);
+                               this. footerActualData.push(obj);
+                                if(obj[header.name]!=null)
+                                {
+                                    tds.push(<td  key={header.name} >{"总计："+obj[header.name]}</td>);
+                                }
+                               else {
+                                    tds.push(<td  key={header.name} ></td>);
+                                }
                                 break;
                             case "avg":
-                                tds.push(this.avgHandler(footerchild[0]));
+                                var obj1={};obj1[header.name]=this.avgHandler(footerchild[0]);
+                               this. footerActualData.push(obj1);
+                                if(obj[header.name]!=null)
+                                {
+                                    tds.push(<td  key={headerindex+header.name} >{"平均值："+obj1[header.name]}</td>);
+                                }
+                                else {
+                                    tds.push(<td  key={headerindex+header.name} ></td>);
+                                }
                                 break ;
                             default:
                                 tds.push(<td  key={headerindex+header.name}></td>);
@@ -533,7 +553,7 @@ var DataGrid=React.createClass({
             {
 
                 var footerModelValue=rowData[footerModel.name];//当前行当前列的值
-                if(footerModel.content==="function")
+                if(typeof footerModel.content==="function")
                 {//有函数则通过计算得到值
                     footerModelValue=footerModel.content(rowData,rowIndex);//
                 }
@@ -554,14 +574,7 @@ var DataGrid=React.createClass({
         }
         else {
         }
-        if(sum!=null)
-        {
-            return <td key={footerModel.name}>{"总计:"+sum}</td>;
-        }
-        else {
-
-            return <td key={footerModel.name}></td>;
-        }
+        return sum;
 
 
     },
@@ -571,7 +584,7 @@ var DataGrid=React.createClass({
         {
             this.state.data.map((rowData,rowIndex)=> {
                 var footerModelValue = rowData[footerModel.name];//当前行当前列的值
-                if (footerModel.content === "function") {//有函数则通过计算得到值
+                if (typeof  footerModel.content === "function") {//有函数则通过计算得到值
                     footerModelValue = footerModel.content(rowData, rowIndex);//
                 }
 
@@ -589,14 +602,7 @@ var DataGrid=React.createClass({
         }
         else {
         }
-        if(avg!=null)
-        {
-            return <td key={footerModel.name}>{"平均值:"+avg}</td>;
-        }
-        else {
-
-            return <td key={footerModel.name}></td>;
-        }
+        return avg;
     },
     onSort:function(sortName,sortOrder) {  //排序事件
         this.updateHandler(this.state.url,this.state.pageSize, 1, sortName, sortOrder);
@@ -886,6 +892,7 @@ var DataGrid=React.createClass({
         }
     },
     getFocusIndex:function() {
+
         return this.state.focusIndex;
     },
     getFocusRowData:function(index) {
@@ -899,6 +906,7 @@ var DataGrid=React.createClass({
         }
         return this.state.data[index];
     },
+
     checkCurrentPageCheckedAll:function() {//判断当前页是否全部选中
         if(this.state.data instanceof Array )
         {
@@ -971,7 +979,7 @@ var DataGrid=React.createClass({
         return data;
     },
     getFooterData:function() {//获取得页脚的统计值
-        return [];
+        return this.footerActualData;
     },
     updateRow:function(rowIndex,rowData) {//更新某一行数据
         if(rowIndex>=0&&rowIndex<this.state.pageSize) {
