@@ -1,6 +1,10 @@
 {
   "name": "wasabiD",
+<<<<<<< HEAD
   "version": "0.5.01",
+=======
+  "version": "0.4.98",
+>>>>>>> 8df361be606d1dba67ec2c5af0684591c4242452
   "description": "wasabi design——心怡科技物流PC前端框架",
   "main": "index.js",
   "keywords": [
