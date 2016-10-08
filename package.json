@@ -1,10 +1,6 @@
 {
   "name": "wasabiD",
-<<<<<<< HEAD
-  "version": "0.5.01",
-=======
-  "version": "0.4.98",
->>>>>>> 8df361be606d1dba67ec2c5af0684591c4242452
+  "version": "0.5.1",
   "description": "wasabi design——心怡科技物流PC前端框架",
   "main": "index.js",
   "keywords": [
@@ -28,27 +24,6 @@
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/wangzhiyonglyk/wasabi/issues"
-  },
-  "gitHead": "6c05b0784110f51ebfc5ed0f182e9ae753135214",
-  "homepage": "https://github.com/wangzhiyonglyk/wasabiD#readme",
-  "_id": "wasabiD@0.5.0",
-  "scripts": {},
-  "_shasum": "273f95643822c7e8fa342f5051f7419c45646a73",
-  "_from": "wasabiD@*",
-  "_npmVersion": "3.3.12",
-  "_nodeVersion": "5.2.0",
-  "_npmUser": {
-    "name": "wangzhiyonglyk",
-    "email": "wangzhiyonglyk@163.com"
-  },
-  "dist": {
-    "shasum": "273f95643822c7e8fa342f5051f7419c45646a73",
-    "tarball": "https://registry.npmjs.org/wasabiD/-/wasabiD-0.5.0.tgz"
-  },
-  "_npmOperationalInternal": {
-    "host": "packages-12-west.internal.npmjs.com",
-    "tmp": "tmp/wasabiD-0.5.0.tgz_1475736339791_0.8927797242067754"
-  },
-  "directories": {},
-  "_resolved": "https://registry.npmjs.org/wasabiD/-/wasabiD-0.5.0.tgz"
+  }
+
 }
