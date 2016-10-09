@@ -624,14 +624,18 @@ var DataGrid=React.createClass({
             var actualParams={};
 
             if(!params&&this.state.params&&typeof this.state.params =="object")
-            {
-                actualParams=unit.clone(this.state.params);
+            {//新的参数为空，旧参数不为空
+                if(this.props.pagination==true) {
+                    actualParams.data =(this.state.params);
+                }
+                else {
+                    actualParams = (this.state.params);
+                }
             }
             else
             {
                 if(this.props.pagination==true) {
                     actualParams.data = params;
-
                 }
                 else
                 {
