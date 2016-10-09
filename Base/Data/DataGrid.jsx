@@ -113,14 +113,9 @@ var DataGrid=React.createClass({
             detailIndex:null,//显示详情的行下标
             total:this.props.total,//总记录数
             loading:(this.props.url&&this.props.url!="")?true:false,//显示正在加载图示
-<<<<<<< HEAD
             footer:this.props.footer,//页脚
             width:this.props.width,//用于滚动条的计算
 
-=======
-            footer:this.props.footer,
-            width:this.props.width,//用于滚动条的计算
->>>>>>> 8df361be606d1dba67ec2c5af0684591c4242452
         }
     },
     componentWillReceiveProps:function(nextProps) {
@@ -157,12 +152,12 @@ var DataGrid=React.createClass({
     componentDidUpdate:function(){
         if(document.documentElement.clientHeight<document.documentElement.offsetHeight)
         {//有滚动条
-           if(this.state.width==document.documentElement.clientWidth+10)
-           {//没有设置固定宽度
-               this.setState({
-                   width:document.documentElement.clientWidth
-               })
-           }
+            if(this.state.width==document.documentElement.clientWidth+10)
+            {//没有设置固定宽度
+                this.setState({
+                    width:document.documentElement.clientWidth
+                })
+            }
 
         }
 
@@ -194,33 +189,33 @@ var DataGrid=React.createClass({
             );
         }
         this.props.headers.map((header, index) => {
-            if(header==null)
-            {//如果是空则不处理
+                if(header==null)
+                {//如果是空则不处理
 
-            }
-            else {
-                let sortOrder = "";
-                var props={};//设置单击事件
-                if (header.sortAble == true) {
-                    sortOrder = " both";
-                    if (this.state.sortName == header.name) {
-                        //是当前排序字段
-                        sortOrder += " " + this.state.sortOrder;
-                        props. onClick=(header.sortAble == true?this.onSort.bind(this,header.name,this.state.sortOrder=="asc"?"desc":"asc"):null);
+                }
+                else {
+                    let sortOrder = "";
+                    var props={};//设置单击事件
+                    if (header.sortAble == true) {
+                        sortOrder = " both";
+                        if (this.state.sortName == header.name) {
+                            //是当前排序字段
+                            sortOrder += " " + this.state.sortOrder;
+                            props. onClick=(header.sortAble == true?this.onSort.bind(this,header.name,this.state.sortOrder=="asc"?"desc":"asc"):null);
+                        }
+                        else {
+                            props. onClick=(header.sortAble == true?this.onSort.bind(this,header.name,"asc"):null);
+                        }
                     }
-                    else {
-                        props. onClick=(header.sortAble == true?this.onSort.bind(this,header.name,"asc"):null);
+                    if (header.hidden == true) {
+                        //隐藏则不显示
+                    } else {
+                        headers.push(
+                            <th key={"header"+index.toString()} {...props}  className={""+sortOrder} style={{textAlign:(header.align?header.align:"left"), width:(header.width==null?"auto":header.width)}}>
+                                {header.label}
+                            </th>)
                     }
                 }
-                if (header.hidden == true) {
-                    //隐藏则不显示
-                } else {
-                    headers.push(
-                        <th key={"header"+index.toString()} {...props}  className={""+sortOrder} style={{textAlign:(header.align?header.align:"left"), width:(header.width==null?"auto":header.width)}}>
-                            {header.label}
-                        </th>)
-                }
-            }
 
             }
         );
@@ -513,18 +508,18 @@ var DataGrid=React.createClass({
                         {
                             case "sum":
                                 var obj={};obj[header.name]=this.sumHandler(footerchild[0]);
-                               this. footerActualData.push(obj);
+                                this. footerActualData.push(obj);
                                 if(obj[header.name]!=null)
                                 {
                                     tds.push(<td  key={header.name} >{"总计："+obj[header.name]}</td>);
                                 }
-                               else {
+                                else {
                                     tds.push(<td  key={header.name} ></td>);
                                 }
                                 break;
                             case "avg":
                                 var obj1={};obj1[header.name]=this.avgHandler(footerchild[0]);
-                               this. footerActualData.push(obj1);
+                                this. footerActualData.push(obj1);
                                 if(obj[header.name]!=null)
                                 {
                                     tds.push(<td  key={headerindex+header.name} >{"平均值："+obj1[header.name]}</td>);
@@ -558,11 +553,7 @@ var DataGrid=React.createClass({
             {
 
                 var footerModelValue=rowData[footerModel.name];//当前行当前列的值
-<<<<<<< HEAD
                 if(typeof footerModel.content==="function")
-=======
-                if(footerModel.content==="function")
->>>>>>> 8df361be606d1dba67ec2c5af0684591c4242452
                 {//有函数则通过计算得到值
                     footerModelValue=footerModel.content(rowData,rowIndex);//
                 }
@@ -583,18 +574,7 @@ var DataGrid=React.createClass({
         }
         else {
         }
-<<<<<<< HEAD
         return sum;
-=======
-        if(sum!=null)
-        {
-            return <td key={footerModel.name}>{"总计:"+sum}</td>;
-        }
-        else {
-
-            return <td key={footerModel.name}></td>;
-        }
->>>>>>> 8df361be606d1dba67ec2c5af0684591c4242452
 
 
     },
@@ -604,11 +584,7 @@ var DataGrid=React.createClass({
         {
             this.state.data.map((rowData,rowIndex)=> {
                 var footerModelValue = rowData[footerModel.name];//当前行当前列的值
-<<<<<<< HEAD
                 if (typeof  footerModel.content === "function") {//有函数则通过计算得到值
-=======
-                if (footerModel.content === "function") {//有函数则通过计算得到值
->>>>>>> 8df361be606d1dba67ec2c5af0684591c4242452
                     footerModelValue = footerModel.content(rowData, rowIndex);//
                 }
 
@@ -626,18 +602,7 @@ var DataGrid=React.createClass({
         }
         else {
         }
-<<<<<<< HEAD
         return avg;
-=======
-        if(avg!=null)
-        {
-            return <td key={footerModel.name}>{"平均值:"+avg}</td>;
-        }
-        else {
-
-            return <td key={footerModel.name}></td>;
-        }
->>>>>>> 8df361be606d1dba67ec2c5af0684591c4242452
     },
     onSort:function(sortName,sortOrder) {  //排序事件
         this.updateHandler(this.state.url,this.state.pageSize, 1, sortName, sortOrder);
@@ -660,7 +625,7 @@ var DataGrid=React.createClass({
 
             if(!params&&this.state.params&&typeof this.state.params =="object")
             {
-                  actualParams=unit.clone(this.state.params);
+                actualParams=unit.clone(this.state.params);
             }
             else
             {
@@ -686,7 +651,7 @@ var DataGrid=React.createClass({
             }
             var fetchmodel=new FetchModel(url,this.loadSuccess.bind(this,url,pageSize,pageIndex,sortName,sortOrder,params),actualParams,this.loadError);
             fetchmodel.lang=this.props.lang;
-              console.log("datagrid-",fetchmodel);
+            console.log("datagrid-",fetchmodel);
             unit.fetch.post(fetchmodel);
         }
         else {
@@ -778,7 +743,7 @@ var DataGrid=React.createClass({
             this.updateHandler(this.state.url,this.state.pageSize, this.state.pageIndex, this.state.sortName, this.state.sortOrder,params);
 
         }
-     },
+    },
     clearData:function() {//清空数据
         this.setState({
             data:[],
@@ -818,7 +783,7 @@ var DataGrid=React.createClass({
             isupdate=false;//
             return isupdate;
         }
-       else if(params&&!this.state.params&&Object.keys(params).length==0)
+        else if(params&&!this.state.params&&Object.keys(params).length==0)
         {//原来没有参数,现在有了参数,但参数个数为0
             isupdate=false;
             return isupdate;
@@ -826,8 +791,6 @@ var DataGrid=React.createClass({
         }
         else if(params&&!this.state.params&&Object.keys(params).length>0)
         {//原来没有参数,现在有了参数,但是参数个数不为0
-<<<<<<< HEAD
-=======
             isupdate=true;
             return isupdate;
 
@@ -840,47 +803,31 @@ var DataGrid=React.createClass({
         }
         else if(params&&this.state.params&&(Object.keys(params).length!=Object.keys(this.state.params).length))
         {//都有参数,但是参数个数已经不一样了
->>>>>>> 8df361be606d1dba67ec2c5af0684591c4242452
-            isupdate=true;
-            return isupdate;
-
-        }
-<<<<<<< HEAD
-        else if(!params&&this.state.params)
-        {//清空了参数
-            isupdate=true;
-            return isupdate;
-
-        }
-        else if(params&&this.state.params&&(Object.keys(params).length!=Object.keys(this.state.params).length))
-        {//都有参数,但是参数个数已经不一样了
             isupdate=true;
             return isupdate;
         }
-=======
->>>>>>> 8df361be606d1dba67ec2c5af0684591c4242452
         else
         { //有参数,但参数个数相同,对比
 
             for(var par in params)
-        {
-            try {
+            {
+                try {
 
 
-                if (params[par] == this.state.params[par]) {
-                    continue;
-                }
-                else {
+                    if (params[par] == this.state.params[par]) {
+                        continue;
+                    }
+                    else {
+                        isupdate = true;
+                        return isupdate;
+                    }
+                }catch (e)
+                {
                     isupdate = true;
                     return isupdate;
                 }
-            }catch (e)
-            {
-                isupdate = true;
-                return isupdate;
-            }
 
-        }
+            }
 
         }
 
@@ -913,7 +860,7 @@ var DataGrid=React.createClass({
             for (let value of checkedData.values()) {
                 data.push(value);
             }
-              this.props.onChecked(data);
+            this.props.onChecked(data);
         }
     },
     onMouseDown:function(index) {
@@ -959,7 +906,6 @@ var DataGrid=React.createClass({
         }
         return this.state.data[index];
     },
-
     checkCurrentPageCheckedAll:function() {//判断当前页是否全部选中
         if(this.state.data instanceof Array )
         {
@@ -1107,16 +1053,16 @@ var DataGrid=React.createClass({
                     this.renderFooter()
                 }
                 </tbody>
-             </table>
+            </table>
 
 
             <div className="wasabi-table-pagination"
                  style={{width:tableDefinedWidth,display:(this.props.pagination?"block":(this.props.pagePosition=="bottom"||this.props.pagePosition=="both")?"block":"none")}}>
                 {this.renderTotal()}
-            <div style={{width:tableDefinedWidth,display:(this.props.pagination?"block":"none")}}>
-                {this.renderPagination()}
-            </div>
+                <div style={{width:tableDefinedWidth,display:(this.props.pagination?"block":"none")}}>
+                    {this.renderPagination()}
                 </div>
+            </div>
             <div className="table-loading" style={{display:this.state.loading==true?"block":"none"}}></div>
             <div className="load-icon"  style={{display:this.state.loading==true?"block":"none"}}></div>
         </div>);
