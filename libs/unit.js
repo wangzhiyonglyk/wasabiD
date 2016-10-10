@@ -291,7 +291,8 @@ baseUtil.fetch = {
                             if (fetchmodel.error) {
                                 fetchmodel.error(data.errCode, data.message);
                             } else {
-                                baseUtil.showError(baseUtil.Error.HandlerError + "错误代码:" + data.errCode + "，错误原因：" + data.message);
+                                console.log("fetch-error",data.errCode,data.message);
+                                baseUtil.showError(baseUtil.Error.HandlerError +",错误原因：" + data.message);
                             }
 
                         }
@@ -345,7 +346,8 @@ baseUtil.fetch = {
                             {
                                 fetchmodel.error(data.errCode,data.message);
                             }else {
-                                baseUtil.showError(baseUtil.Error.HandlerError + "错误代码:" + data.errCode + "，错误原因：" + data.message);
+                                console.log("fetch-error",data.errCode,data.message);
+                                baseUtil.showError(baseUtil.Error.HandlerError + ",错误原因：" + data.message);
                             }
                         }
                     });

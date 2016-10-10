@@ -71,13 +71,13 @@ var Input=React.createClass({
             "right"
         ]),//组件在表单一行中的位置
 
-        //其他属性
+        //其他属性 text
         min:React.PropTypes.number,//最小值,最小长度,最少选项
         max:React.PropTypes.number,//最大值,最大长度,最多选项
         onClick:React.PropTypes.func,//单击事件
         onChange:React.PropTypes.func,//值改变事件
 
-        //其他属性
+        //其他属性 combobox
         multiple:React.PropTypes.bool,//是否允许多选
         valueField: React.PropTypes.string,//数据字段值名称
         textField:React.PropTypes.string,//数据字段文本名称
@@ -88,7 +88,7 @@ var Input=React.createClass({
         extraData:React.PropTypes.array,//额外的数据,对url有效
         onSelect: React.PropTypes.func,//选中后的事件，回传，value,与text,data
 
-        //其他属性
+        //其他属性 picker
         secondUrl:React.PropTypes.string,//第二层节点的后台地址,
         secondParams:React.PropTypes.object,//第二层节点的后台参数
         secondParamsKey:React.PropTypes.string,//第二层节点的后台参数中传递一级节点value值的参数名称

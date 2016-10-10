@@ -16,6 +16,7 @@ var validate=require("../../Mixins/validate.js");
 var showUpdate=require("../../Mixins/showUpdate.js");
 var shouldComponentUpdate=require("../../Mixins/shouldComponentUpdate.js");
 var Label=require("../Unit/Label.jsx");
+var Message=require("../unit/Message.jsx");
 let  Picker =  React.createClass({
     mixins:[setStyle,validate,showUpdate,shouldComponentUpdate],
      propTypes: {
@@ -150,7 +151,7 @@ let  Picker =  React.createClass({
         else {
             if(this.showUpdate(nextProps.params))
             {//如果不相同则更新
-                var fetchmodel=new FetchModel(this.props.url,this.loadProvinceSuccess,nextProps.params);
+                var fetchmodel=new FetchModel(this.props.url,this.loadProvinceSuccess,nextProps.params,this.loadError);
                 console.log("picker",fetchmodel);
                 unit.fetch.post(fetchmodel);
             }
@@ -179,7 +180,7 @@ let  Picker =  React.createClass({
     },
     componentDidMount:function(){
         if(this.props.url!=null) {
-            var fetchmodel=new FetchModel(this.props.url,this.loadProvinceSuccess,this.state.params);
+            var fetchmodel=new FetchModel(this.props.url,this.loadProvinceSuccess,this.state.params,this.loadError);
             console.log("picker",fetchmodel);
             unit.fetch.post(fetchmodel);
         }
@@ -220,6 +221,10 @@ let  Picker =  React.createClass({
         this.setState({
             data:provinceData
         })
+    },
+    loadError:function(errorCode,message) {//查询失败
+        console.log("picker-error",errorCode,message);
+        Message. error(message);
     },
     changeHandler:function(event) {
     },
@@ -302,7 +307,7 @@ let  Picker =  React.createClass({
                     }
 
                 }
-                var fetchmodel=new FetchModel(url,this.loadCitySuccess.bind(this,currentProvinceIndex),params);
+                var fetchmodel=new FetchModel(url,this.loadCitySuccess.bind(this,currentProvinceIndex),params,this.loadError);
                 console.log("picker-second",fetchmodel);
                 unit.fetch.post(fetchmodel);
             }
@@ -430,7 +435,7 @@ let  Picker =  React.createClass({
                         params[this.state.thirdParamsKey]=currentCityValue;
                     }
                 }
-                var fetchmodel=new FetchModel(url,this.loadDistinctSuccess.bind(this,currentCityIndex),params);
+                var fetchmodel=new FetchModel(url,this.loadDistinctSuccess.bind(this,currentCityIndex),params,this.loadError);
                 console.log("picker-third",fetchmodel);
                 unit.fetch.post(fetchmodel);
             }

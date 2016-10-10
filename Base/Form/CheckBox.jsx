@@ -12,6 +12,7 @@ var validate=require("../../Mixins/validate.js");
 var showUpdate=require("../../Mixins/showUpdate.js");
 var shouldComponentUpdate=require("../../Mixins/shouldComponentUpdate.js");
 var Label=require("../Unit/Label.jsx");
+var Message=require("../Unit/Message.jsx");
 let CheckBox=React.createClass({
     mixins:[setStyle,validate,showUpdate,shouldComponentUpdate],
     PropTypes:{
@@ -87,6 +88,7 @@ let CheckBox=React.createClass({
             data:null,
             extraData:null,
             onSelect:null,
+
         };
     },
     getInitialState:function() {
@@ -186,23 +188,28 @@ let CheckBox=React.createClass({
         this.loadData(this.props.url,this.state.params);//查询数据
     },
     loadData:function(url,params) {
+
         if(url!=null&&url!="")
         {
             if(params==null)
             {
-                var fetchmodel=new FetchModel(url,this.loadSuccess);
+                var fetchmodel=new FetchModel(url,this.loadSuccess,null,this.loadError);
 
                 unit.fetch.get(fetchmodel);
             }
             else
 
             {
-                var fetchmodel=new FetchModel(url,this.loadSuccess,params);
+                var fetchmodel=new FetchModel(url,this.loadSuccess,params,this.loadError);
 
                 unit.fetch.post(fetchmodel);
             }
             console.log("checkbox",fetchmodel);
         }
+    },
+    loadError:function(errorCode,message) {//查询失败
+        console.log("checkbox-error",errorCode,message);
+        Message. error(message);
     },
     loadSuccess:function(data) {//数据加载成功
         var realData=data;

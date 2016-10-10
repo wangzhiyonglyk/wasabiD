@@ -725,6 +725,7 @@ var DataGrid=React.createClass({
 
     },
     loadError:function(errorCode,message) {//查询失败
+        console.log("datagrid-error",errorCode,message);
         Message. error(message);
         this.setState({
             loading:false,

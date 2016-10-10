@@ -7,13 +7,13 @@ require("../../sass/Base/Form/Select.scss");
 let React=require("react");
 let unit=require("../../libs/unit.js");
 var FetchModel=require("../../model/FetchModel.js");
-var Message=require("../unit/Message.jsx");
 var validation=require("../Lang/validation.js");
 let setStyle=require("../../Mixins/setStyle.js");
 var validate=require("../../Mixins/validate.js");
 var showUpdate=require("../../Mixins/showUpdate.js");
 var shouldComponentUpdate=require("../../Mixins/shouldComponentUpdate.js");
 var Label=require("../Unit/Label.jsx");
+var Message=require("../unit/Message.jsx");
 let Select=React.createClass({
     mixins:[setStyle,validate,showUpdate,shouldComponentUpdate],
     PropTypes:{
@@ -289,6 +289,7 @@ let Select=React.createClass({
             })
     },
     loadError:function(errorCode,message) {//查询失败
+        console.log("select-error",errorCode,message);
         Message. error(message);
     },
     showItem:function() {//显示下拉选项

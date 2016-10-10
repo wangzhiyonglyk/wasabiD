@@ -13,6 +13,7 @@ var validate=require("../../Mixins/validate.js");
 var showUpdate=require("../../Mixins/showUpdate.js");
 var shouldComponentUpdate=require("../../Mixins/shouldComponentUpdate.js");
 var Label=require("../Unit/Label.jsx");
+var Message=require("../unit/Message.jsx");
 let Radio=React.createClass({
     mixins:[setStyle,validate,showUpdate,shouldComponentUpdate],
     PropTypes:{
@@ -176,13 +177,13 @@ let Radio=React.createClass({
         {
             if(params==null)
             {
-                var fetchmodel=new FetchModel(url,this.loadSuccess)
+                var fetchmodel=new FetchModel(url,this.loadSuccess,null,this.loadError)
                 unit.fetch.get(fetchmodel);
             }
             else
 
             {
-                var fetchmodel=new FetchModel(url,this.loadSuccess,params);
+                var fetchmodel=new FetchModel(url,this.loadSuccess,params,this.loadError);
                 unit.fetch.post(fetchmodel);
             }
             console.log("radio",fetchmodel);
@@ -233,6 +234,10 @@ let Radio=React.createClass({
             value:this.state.value,
             text:text,
         })
+    },
+    loadError:function(errorCode,message) {//查询失败
+        console.log("radio-error",errorCode,message);
+        Message. error(message);
     },
     changeHandler:function(event) {//一害绑定，但不处理
 
