@@ -279,22 +279,28 @@ baseUtil.fetch = {
             }
         ).then(function(res){
             if(res.ok){
-                res.json().then(function(data){
-                    if(data.success){
-                        fetchmodel.success&&fetchmodel.success(data);
-                    }
-                    else {
+                try {
 
-                        if(fetchmodel.error)
-                        {
-                            fetchmodel.error(data.errCode,data.message);
-                        }else {
-                            baseUtil.showError(baseUtil.Error.HandlerError +"错误代码:"+data.errCode+"，错误原因："+ data.message);
+
+                    res.json().then(function (data) {
+                        if (data.success) {
+                            fetchmodel.success && fetchmodel.success(data);
+                        }
+                        else {
+
+                            if (fetchmodel.error) {
+                                fetchmodel.error(data.errCode, data.message);
+                            } else {
+                                baseUtil.showError(baseUtil.Error.HandlerError + "错误代码:" + data.errCode + "，错误原因：" + data.message);
+                            }
+
                         }
 
-                    }
-
-                });
+                    });
+                }catch (e)
+                {
+                    baseUtil.showError(e.message);
+                }
             }
             else {
                 if(fetchmodel.error)
@@ -328,19 +334,26 @@ baseUtil.fetch = {
             }
         ).then(function(res){
             if(res.ok){
-                res.json().then(function(data){
-                    if(data.success){
-                        fetchmodel.success&&fetchmodel.success(data);
-                    }
-                    else {
-                        if(fetchmodel.error)
-                        {
-                            fetchmodel.error(data.errCode,data.message);
-                        }else {
-                            baseUtil.showError(baseUtil.Error.HandlerError + "错误代码:" + data.errCode + "，错误原因：" + data.message);
+                try
+                {
+                    res.json().then(function(data){
+                        if(data.success){
+                            fetchmodel.success&&fetchmodel.success(data);
                         }
-                    }
-                });
+                        else {
+                            if(fetchmodel.error)
+                            {
+                                fetchmodel.error(data.errCode,data.message);
+                            }else {
+                                baseUtil.showError(baseUtil.Error.HandlerError + "错误代码:" + data.errCode + "，错误原因：" + data.message);
+                            }
+                        }
+                    });
+                }
+             catch (e)
+             {
+                 baseUtil.showError(e.message);
+             }
             }
             else {
                 if(fetchmodel.error)
