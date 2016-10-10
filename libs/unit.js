@@ -391,7 +391,7 @@ baseUtil.showError=function(msg) {
 
     }
     let error = document.createElement("div");
-    error.id="alog-error"+msg;
+    error.id="alog-error";
     error.title="";
     error.innerHTML = '<div class="wasabi-message error"   >'
         + '<div class="notice">' + msg + '</div>'
@@ -402,13 +402,13 @@ baseUtil.showError=function(msg) {
     timeoutHandler();//开始执行
     function  onMosueOut()
     {
-        let child = document.getElementById("alog-error"+msg);
+        let child = document.getElementById("alog-error");
         child.title="";
         timeoutHandler();
     }
     function  onMouseOver()
     {
-        let child = document.getElementById("alog-error"+msg);
+        let child = document.getElementById("alog-error");
         child.title="0";
         child.style.opacity=1;
     }
@@ -416,7 +416,7 @@ baseUtil.showError=function(msg) {
     function  timeoutHandler()
     {
         setTimeout(()=>{
-            let child = document.getElementById("alog-error"+msg);
+            let child = document.getElementById("alog-error");
 
             if (child&&child.title=="") {
                 child.style.opacity=0.5;
@@ -424,7 +424,7 @@ baseUtil.showError=function(msg) {
             }
         },10);
         setTimeout(()=> {
-                let child = document.getElementById("alog-error"+msg);
+                let child = document.getElementById("alog-error");
                 if (child&&child.title=="") {
 
                     document.body.removeChild(child);

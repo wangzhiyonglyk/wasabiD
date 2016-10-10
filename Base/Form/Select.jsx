@@ -7,6 +7,7 @@ require("../../sass/Base/Form/Select.scss");
 let React=require("react");
 let unit=require("../../libs/unit.js");
 var FetchModel=require("../../model/FetchModel.js");
+var Message=require("../unit/Message.jsx");
 var validation=require("../Lang/validation.js");
 let setStyle=require("../../Mixins/setStyle.js");
 var validate=require("../../Mixins/validate.js");
@@ -229,13 +230,13 @@ let Select=React.createClass({
         {
             if(params==null)
             {
-                var fetchmodel=new FetchModel(url,this.loadSuccess);
+                var fetchmodel=new FetchModel(url,this.loadSuccess,null,this.loadError);
                 unit.fetch.get(fetchmodel);
             }
             else
 
             {
-                var fetchmodel=new FetchModel(url,this.loadSuccess,params);
+                var fetchmodel=new FetchModel(url,this.loadSuccess,params,this.loadError);
                 unit.fetch.post(fetchmodel);
             }
         console.log("select",fetchmodel);
@@ -286,6 +287,9 @@ let Select=React.createClass({
                 value:this.state.value,
                 text:text,
             })
+    },
+    loadError:function(errorCode,message) {//查询失败
+        Message. error(message);
     },
     showItem:function() {//显示下拉选项
         if (this.state.readonly) {

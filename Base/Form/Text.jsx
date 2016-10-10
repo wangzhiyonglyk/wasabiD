@@ -121,15 +121,26 @@ var Text=React.createClass({
     changeHandler:function(event) {
         if (this.validateInput==true) {
             var istrue=true;
-            if((this.props.type=="integer"||this.props.type=="number")&&event.target.value=="-") {
-                //输入负号时不验证
-                this.setState({
-                    value: event.target.value,
-                    text:event.target.value,
-                });
-                return ;
+            if((this.props.type=="integer"||this.props.type=="number")) {
+                //数字,或者正数时
+                if( event.target.value=="-"||(event.target.value.length>0&&this.state.value.toString().indexOf(".")<=0&&event.target.value.toString().lastIndexOf(".")==event.target.value.length-1))
+                {
+                    //输入负号,或者最后输入小数点时并原来没有小数点时.不回传给父组件也不验证
+                    this.setState({
+                        value: event.target.value,
+                        text:event.target.value,
+                    });
+                    return;
+                }
+                else
+                {
+                    istrue = this.validate(event.target.value);
+                }
+
+
+
             }
-            else {
+            else {//
                 istrue = this.validate(event.target.value);
             }
 
@@ -187,6 +198,10 @@ var Text=React.createClass({
             this.props.onFocus();
         }
     },
+    blurHandler:function()
+    {
+        this.validate(this.state.value);
+    },
     clickHandler:function(event) {//单击事件
         if(this.props.onClick!=null) {
             var model = {};
@@ -223,12 +238,16 @@ var Text=React.createClass({
         {
              control = <input  ref="input" type={inputType}   {...inputProps} onClick={this.clickHandler}
                                   onChange={this.changeHandler} onKeyDown={this.keyDownHandler}
-                                  onKeyUp={this.keyUpHandler} onFocus={this.focusHandler} value={this.state.value}></input>;
+                                  onKeyUp={this.keyUpHandler} onFocus={this.focusHandler}
+                               onBlur={this.blurHandler}
+                               value={this.state.value}></input>;
         }
         else {
             control = <textarea ref="input"  {...inputProps} onClick={this.clickHandler}
                                 onChange={this.changeHandler} onKeyDown={this.keyDownHandler}
-                                onKeyUp={this.keyUpHandler} onFocus={this.focusHandler} value={this.state.value}></textarea>;
+                                onKeyUp={this.keyUpHandler} onFocus={this.focusHandler}
+                                onBlur={this.blurHandler}
+                                value={this.state.value}></textarea>;
         }
 
 

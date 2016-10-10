@@ -660,9 +660,7 @@ var DataGrid=React.createClass({
         }
         else {
             if (this.props.updateHandler != null) {
-                this.setState({
-                    loading:true,
-                });
+
                 this.props.updateHandler(pageSize, pageIndex, sortName, sortOrder);
             }
         }
@@ -727,7 +725,7 @@ var DataGrid=React.createClass({
 
     },
     loadError:function(errorCode,message) {//查询失败
-        Message. alert(message);
+        Message. error(message);
         this.setState({
             loading:false,
         })
@@ -740,7 +738,11 @@ var DataGrid=React.createClass({
         }
         if(this.state.url==null||this.state.url==="")
         {
-            return ;
+            if(this.props.updateHandler)
+            {
+                this.props.updateHandler(this.state.pageSize, this.state.pageIndex, this.state.sortName, this.state.sortOrder);
+            }
+
         }
         else {
             this.clearCheck=true;//重载时清空选中的
