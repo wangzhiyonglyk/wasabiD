@@ -203,26 +203,26 @@ let Select=React.createClass({
       }
     },
     mouseOutHandler:function(event) {//鼠标移开时隐藏下拉
-        var parentE=event.relatedTarget;//相关节点
-        while (parentE&&parentE.nodeName!="BODY")
-        {
-            if(parentE.className.indexOf("nice-select")>-1)
-            {
-                break;
-            }
-            parentE=parentE.parentElement;
-        }
-
-        if(parentE==undefined||parentE==null||parentE.nodeName=="BODY")
-        {
-            setTimeout(()=>
-            {
-                this.setState({
-                    ulShow:false,
-                });
-            },200);
-
-        }
+        //var parentE=event.relatedTarget;//相关节点
+        //while (parentE&&parentE.nodeName!="BODY")
+        //{
+        //    if(parentE.className.indexOf("nice-select")>-1)
+        //    {
+        //        break;
+        //    }
+        //    parentE=parentE.parentElement;
+        //}
+        //
+        //if(parentE==undefined||parentE==null||parentE.nodeName=="BODY")
+        //{
+        //    setTimeout(()=>
+        //    {
+        //        this.setState({
+        //            ulShow:false,
+        //        });
+        //    },200);
+        //
+        //}
 
     },
     loadData:function(url,params) {
