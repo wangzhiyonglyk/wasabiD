@@ -300,7 +300,7 @@ let Select=React.createClass({
             this.props.onClick();
         }
         this.setState({
-            ulShow: true
+            ulShow: !this.state.ulShow
         })
     },
     changeHandler:function(event) {
