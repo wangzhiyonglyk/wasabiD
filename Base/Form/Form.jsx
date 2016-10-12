@@ -290,7 +290,6 @@ var Form=React.createClass({
         let rows=0;//行数
         let columns=0;//每一行的列数
         let  allwidth=this.props.width?this.props.width:document.body.clientWidth;//总宽度
-        let allheight=0;//表单总高度
         let columnClass="";//列样式
         if(allwidth<=610) {//一列
             columns=1;
@@ -314,17 +313,17 @@ var Form=React.createClass({
             columnClass="oneline";
         }
         rows=Math.ceil(this.state.model.length/columns);//计算行数
-        allheight=rows*44;
+
         let formSubmitVisible=true;
         if(this.state.disabled||(this.props.submitHide&&this.props.closeHide))
         {
             formSubmitVisible=false;
         }
         else {
-            allheight+=50;//加上按钮的高度
+
         }
         style.width=allwidth;//设置表单的宽度
-        style.height=this.props.height!=null?this.props.height: allheight;//设置表单的高度
+        style.height=this.props.height;//设置表单的高度
 
 
         let virtualIndex=0;//表单组件在表单的虚拟下标,用于计算在表单中的位置
@@ -382,6 +381,11 @@ var Form=React.createClass({
                                 })
                             }
 
+                <div className="clear">
+                    {
+                        //解决子级用css float浮动 而父级div没高度不能自适应高度
+                    }
+                </div>
                         </div>
                         <div className="form-submit" style={{display:(formSubmitVisible==true?"block":"none")}}>
                     <Button theme="green" onClick={this.submitHandler} title={this.props.submitTitle}  hide={this.state.disabled==true?true:this.props.submitHide==true?true:false}  >

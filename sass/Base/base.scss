@@ -22,6 +22,10 @@ ul{
     display: inline;
     float:left;
 }
+/*
+用于清除浮动时父容器的高度问题
+*/
+.clear{ clear:both}
 
 /*
 自定义滚动条样式

@@ -18,7 +18,7 @@ let Radio=React.createClass({
     mixins:[setStyle,validate,showUpdate,shouldComponentUpdate],
     PropTypes:{
         name:React.PropTypes.string.isRequired,//字段名
-        label:React.PropTypes.string,//字段文字说明属性
+        label:React.PropTypes.oneOfType([React.PropTypes.string,React.PropTypes.element,React.PropTypes.node]),//字段文字说明属性
         width:React.PropTypes.number,//宽度
         height:React.PropTypes.number,//高度
         value:React.PropTypes.oneOfType([React.PropTypes.number,React.PropTypes.string]),//默认值,
@@ -288,7 +288,7 @@ let Radio=React.createClass({
                                    onChange={this.changeHandler}>
                             </input>
                         </i></div>
-                        <div className="radiotext">{textFeild}
+                        <div className="radiotext" onClick={this.onSelect.bind(this,child.value,child.text,child)}>{textFeild}
                             <div
                                 style={{display:((this.state.value==child.value)?" inline-block":"none")}}>{hideComponent}</div>
                         </div>

@@ -17,7 +17,7 @@ let CheckBox=React.createClass({
     mixins:[setStyle,validate,showUpdate,shouldComponentUpdate],
     PropTypes:{
         name:React.PropTypes.string.isRequired,//字段名
-        label:React.PropTypes.string,//字段文字说明属性
+        label:React.PropTypes.oneOfType([React.PropTypes.string,React.PropTypes.object,React.PropTypes.element,React.PropTypes.node]),//字段文字说明属性
         width:React.PropTypes.number,//宽度
         height:React.PropTypes.number,//高度
         value:React.PropTypes.oneOfType([React.PropTypes.number,React.PropTypes.string]),//默认值,
@@ -262,7 +262,8 @@ let CheckBox=React.createClass({
             event.preventDefault();
         }
     },
-    onSelect:function(value,text,data) {//选中事件
+    onSelect:function(value,text,data,e) {//选中事件
+e.preventDefault();//因为有用户借助label属性生成新的checkbox,所以要阻止默认事件
         if(this.state.readonly) {
             return ;
         }
@@ -327,12 +328,12 @@ let CheckBox=React.createClass({
                     checked:(checked==true?"checked":null),//是否为选中状态
                     readOnly:this.state.readonly==true?"readonly":null,
                 }
-             return    <li key={i} >
+             return    <li key={i} onClick={this.onSelect.bind(this,child.value,child.text,child)}  >
                 <input type="checkbox"  id={"checkbox"+this.props.name+child.value}  value={child.value}
-                                   onClick={this.onSelect.bind(this,child.value,child.text,child)}
+
                                    onChange={this.changeHandler} className="checkbox"  {...props}></input>
-                    <label className="checkbox-label" htmlFor={"checkbox"+this.props.name+child.value} {...props}></label>
-                 <div  className="checktext">{child.text}</div>
+                    <label className="checkbox-label"  {...props}></label>
+                 <div  className="checktext" >{child.text}</div>
                     </li >
             });
 

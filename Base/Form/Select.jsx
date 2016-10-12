@@ -19,7 +19,7 @@ let Select=React.createClass({
     PropTypes:{
 
         name:React.PropTypes.string.isRequired,//字段名
-        label:React.PropTypes.string,//字段文字说明属性
+        label:React.PropTypes.oneOfType([React.PropTypes.string,React.PropTypes.element,React.PropTypes.node]),//字段文字说明属性
         width:React.PropTypes.number,//宽度
         height:React.PropTypes.number,//高度
         value:React.PropTypes.oneOfType([React.PropTypes.number,React.PropTypes.string]),//默认值,

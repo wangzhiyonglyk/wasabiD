@@ -9,7 +9,7 @@ let React=require("react");
 let Label=React.createClass({
     propTypes: {
 
-    name:React.PropTypes.string,//名称
+    name:React.PropTypes.oneOfType([React.PropTypes.string,React.PropTypes.object,React.PropTypes.element,React.PropTypes.node]),//名称
     hide:React.PropTypes.bool,//是否隐藏
         required:React.PropTypes.bool,//是否必填项
     },
