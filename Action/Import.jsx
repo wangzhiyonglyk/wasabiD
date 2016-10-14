@@ -268,7 +268,7 @@ let  Import=React.createClass({
 
                             if(this.props.importSuccess)
                             {
-                                this.props.importSuccess();
+                                this.props.importSuccess(result);
                             }
 
                         }
