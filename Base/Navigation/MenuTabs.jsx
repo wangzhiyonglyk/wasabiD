@@ -12,6 +12,7 @@ class MenuTabs extends  React.Component {
         super(props);
         this.menuHandler = this.menuHandler.bind(this);
         this.homeHandler = this.homeHandler.bind(this);
+        this.userHandler=  this.userHandler.bind(this);
         this.tabClickHandler = this.tabClickHandler.bind(this);
         this.tabCloseHandler = this.tabCloseHandler.bind(this);
     }
@@ -20,6 +21,7 @@ class MenuTabs extends  React.Component {
         tabs: React.PropTypes.array,//标签页数据
         homeUrl: React.PropTypes.string,//主页的链接地址
         menuHandler: React.PropTypes.func.isRequired,//菜单按钮的单击事件
+        userHandler: React.PropTypes.func.isRequired,//用户个人中心按钮的单击事件
         tabNumChangeHandler: React.PropTypes.func.isRequired,//标签页数据发生改变事件
     }
     static defaultProps = {
@@ -29,14 +31,14 @@ class MenuTabs extends  React.Component {
     state = {
         tabs: this.props.tabs,
         activeIndex: -1,//为了区别主页而设置的,-1代表主页
-        menuVisible: false
+        menuVisible: false,
     }
 
     componentWillReceiveProps(nextProps) {
         this.setState({
             tabs: nextProps.tabs,
             activeIndex: (nextProps.tabs)?nextProps.tabs.length-1:-1,
-            menuVisible: nextProps.menuVisible
+            menuVisible: nextProps.menuVisible,
         })
     }
 
@@ -45,6 +47,9 @@ class MenuTabs extends  React.Component {
             menuVisible: !this.state.menuVisible
         })
         this.props.menuHandler(!this.state.menuVisible);//回调父组件
+    }
+    userHandler(){
+        this.props.userHandler();//回调父组件
     }
 
     homeHandler(){//主页的单击事件
@@ -61,6 +66,9 @@ class MenuTabs extends  React.Component {
         })
 
     }
+
+
+
     tabClickHandler(index) {
         //页签单击事件
         var newTabs = this.state.tabs;
@@ -163,7 +171,9 @@ class MenuTabs extends  React.Component {
                 <ul className=" wasabi-nav-tabs">
                     <li className={"tabmenu "+(this.state.menuVisible?"close":"")} onClick={this.menuHandler}></li>
                     <li className={"tabhome "+((this.state.activeIndex===-1)?"active":"")} title="首页" onClick={this.homeHandler}><div className="split"></div></li>
-                    {tabobj}</ul>
+                    {tabobj}
+                    <li style={{float:"right"}} className="tabuser" title="用户" onClick={this.userHandler}></li>
+                </ul>
                 { sectionobj}
             </div>);
 
