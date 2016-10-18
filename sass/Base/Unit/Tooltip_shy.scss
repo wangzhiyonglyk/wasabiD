@@ -1,0 +1,65 @@
+/**
+ * Created by 42591 on 2016/10/17.
+ */
+.shy_tipsWarp{
+  position: relative;
+  display: inline-block;
+}
+.shy_tipsText{
+  z-index: 998;
+}
+.shy_tipsTips{
+  z-index: 999;
+  display: none;
+  padding: .5em;
+
+  -webkit-border-radius:5px;
+  -moz-border-radius:5px;
+  border-radius:5px;
+  position: absolute;
+}
+.shy_tipsTips::before {
+  z-index: inherit;
+  content: "";
+  position: absolute;
+  padding: .35em;
+  background: inherit;
+  border: inherit;
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+.shy_tipsText:hover~.shy_tipsTips{
+  display: block;
+}
+/*position*/
+.bottom .shy_tipsTips{
+  margin-top:0.5em;
+}
+.bottom .shy_tipsTips::before{
+  top: -.4em;
+  left: 1em;
+  border-right: 0;
+  border-bottom: 0;
+}
+.top .shy_tipsTips{
+  top: calc(-2ex - 1.8em);
+}
+.top .shy_tipsTips::before{
+  bottom: -.4em;
+  left: 1em;
+  border-left: 0;
+  border-top: 0;
+}
+/*theme*/
+.light .shy_tipsTips{
+  background-color: rgb(224, 236, 255);
+  border: 1px solid rgb(71, 145, 255);
+}
+.dark .shy_tipsTips {
+  background-color: #323232;
+  border: 1px solid #323232;
+  color: #fff;
+}
