@@ -435,7 +435,7 @@ baseUtil.showError=function(msg) {
 
             if (child&&child.title=="") {
                 child.style.opacity=0.5;
-                child.style.transition="opacity,2s";
+                child.style.transition="opacity 2s";
             }
         },10);
         setTimeout(()=> {

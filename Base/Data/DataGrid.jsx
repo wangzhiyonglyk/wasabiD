@@ -121,9 +121,9 @@ var DataGrid=React.createClass({
     componentWillReceiveProps:function(nextProps) {
         if(nextProps.url&&nextProps.url!="") {
             //如果存在url
-            if (this.shouldUpdate(nextProps.url,this.state.pageSize, this.state.pageIndex, this.state.sortName, this.state.sortOrder, nextProps.params)) {
-                //先判断是否有条件变化，没有则不更新
-                this.updateHandler(nextProps.url,this.state.pageSize, this.state.pageIndex, this.state.sortName, this.state.sortOrder, nextProps.params);
+            if (this.paramEaqual(  nextProps.params)) {
+                //先判断是否有条件变化，没有则不更新,从第一页开始查询
+                this.updateHandler(nextProps.url,this.state.pageSize, 1, this.state.sortName, this.state.sortOrder, nextProps.params);
             }
 
         }else
@@ -447,7 +447,7 @@ var DataGrid=React.createClass({
         }
         else
         {
-            this.updateHandler(this.state.url,this.state.pageSize,pageIndex,this.state.sortName,this.state.sortOrder);
+            this.updateHandler(this.state.url,this.state.pageSize,pageIndex,this.state.sortName,this.state.sortOrder,null);
         }
         //跳转到指定页
 
@@ -624,7 +624,7 @@ var DataGrid=React.createClass({
             var actualParams={};
 
             if(!params&&this.state.params&&typeof this.state.params =="object")
-            {//新的参数为空，旧参数不为空
+            {//新的参数为null或者undefined，旧参数不为空
                 if(this.props.pagination==true) {
                     actualParams.data =(this.state.params);
                 }
@@ -716,11 +716,9 @@ var DataGrid=React.createClass({
                 total: totalSource,
                 footer: footerSource,
                 loading: false,
-                checkedData: this.clearCheck == true ? new Map() : this.state.checkedData
+
             })
-            if (this.clearCheck == true) {
-                this.clearCheck = false;
-            }
+
         }
 
     },
@@ -733,9 +731,23 @@ var DataGrid=React.createClass({
     },
     reload:function(params) {//重新刷新数据
         if(!params||params=="reload")
-        {
+        {//说明是刷新(reload字符,是因为从刷新按钮过来的
 
             params=this.state.params;
+        }
+        else
+        {//
+           if( this.paramEaqual(params))
+           {//参数发生改变,从第一页查起
+               this.updateHandler(this.state.url,this.state.pageSize, 1, this.state.sortName, this.state.sortOrder,params);
+
+           }
+            else
+           {//从当前页查起
+               this.updateHandler(this.state.url,this.state.pageSize, this.state.pageIndex, this.state.sortName, this.state.sortOrder,params);
+
+           }
+
         }
         if(this.state.url==null||this.state.url==="")
         {
@@ -746,8 +758,7 @@ var DataGrid=React.createClass({
 
         }
         else {
-            this.clearCheck=true;//重载时清空选中的
-            this.updateHandler(this.state.url,this.state.pageSize, this.state.pageIndex, this.state.sortName, this.state.sortOrder,params);
+
 
         }
     },
@@ -757,34 +768,8 @@ var DataGrid=React.createClass({
             params:[],
         });
     },
-    shouldUpdate:function(url,pageSize,pageIndex,sortName,sortOrder,params) {//判断是否更新
-
+    paramEaqual:function( params) {//判断前后参数是否相同
         let isupdate=false;
-        if(url!=this.state.url)
-        {
-            isupdate=true;
-            return isupdate;
-        }
-        if(pageSize!=this.state.pageSize)
-        {
-            isupdate=true;
-            return isupdate;
-        }
-        if(pageIndex!=this.state.pageIndex)
-        {
-            isupdate=true;
-            return isupdate;
-        }
-        if(sortName!=this.state.sortName)
-        {
-            isupdate=true;
-            return isupdate;
-        }
-        if(sortOrder!=this.state.sortOrder)
-        {
-            isupdate=true;
-            return isupdate;
-        }
         if(!params&&!this.state.params)
         {//都为空
             isupdate=false;//
