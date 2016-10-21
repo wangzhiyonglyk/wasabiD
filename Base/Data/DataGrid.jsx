@@ -739,8 +739,27 @@ var DataGrid=React.createClass({
 
             params=this.state.params;
         }
-        else
-        {//
+        if(this.state.url==null||this.state.url==="")
+        {
+
+
+            if(this.props.updateHandler)
+            {
+                if( this.paramEaqual(params))
+                {//参数发生改变,从第一页查起
+                    this.props.updateHandler(this.state.url,this.state.pageSize, 1, this.state.sortName, this.state.sortOrder,params);
+
+                }
+                else
+                {//从当前页查起
+                    this.props.updateHandler(this.state.url,this.state.pageSize, this.state.pageIndex, this.state.sortName, this.state.sortOrder,params);
+
+                }
+            }
+
+        }
+        else {
+
             if( this.paramEaqual(params))
             {//参数发生改变,从第一页查起
                 this.updateHandler(this.state.url,this.state.pageSize, 1, this.state.sortName, this.state.sortOrder,params);
@@ -751,18 +770,6 @@ var DataGrid=React.createClass({
                 this.updateHandler(this.state.url,this.state.pageSize, this.state.pageIndex, this.state.sortName, this.state.sortOrder,params);
 
             }
-
-        }
-        if(this.state.url==null||this.state.url==="")
-        {
-            if(this.props.updateHandler)
-            {
-                this.props.updateHandler(this.state.pageSize, this.state.pageIndex, this.state.sortName, this.state.sortOrder);
-            }
-
-        }
-        else {
-
 
         }
     },
