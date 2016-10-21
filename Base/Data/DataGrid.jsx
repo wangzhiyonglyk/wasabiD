@@ -60,7 +60,8 @@ var DataGrid=React.createClass({
             "top",
             "bottom",
             "both"
-        ])//分页栏的位置
+        ]),//分页栏的位置
+        clearChecked:React.PropTypes.bool,//刷新数据后是否清除选择
     },
     getDefaultProps:function(){
         return{
@@ -92,7 +93,8 @@ var DataGrid=React.createClass({
             footerSource:"data.footer",//页脚数据源
             selectChecked:false,
             lang:"java",
-            pagePosition:"bottom"//默认分页在底部
+            pagePosition:"bottom",//默认分页在底部
+            clearChecked:false,
 
 
         }
@@ -124,7 +126,7 @@ var DataGrid=React.createClass({
     componentWillReceiveProps:function(nextProps) {
         if(nextProps.url&&nextProps.url!="") {
             //如果存在url
-            if (this.paramEaqual(  nextProps.params)) {
+            if (this.paramNotEaqual(  nextProps.params)) {
                 //先判断是否有条件变化，没有则不更新,从第一页开始查询
                 this.updateHandler(nextProps.url,this.state.pageSize, 1, this.state.sortName, this.state.sortOrder, nextProps.params);
             }
@@ -720,6 +722,7 @@ var DataGrid=React.createClass({
                 total: totalSource,
                 footer: footerSource,
                 loading: false,
+                checkedData:this.props.clearChecked==true?new Map():this.state.checkedData,
 
             })
 
@@ -740,27 +743,18 @@ var DataGrid=React.createClass({
             params=this.state.params;
         }
         if(this.state.url==null||this.state.url==="")
-        {
+        {//没有传url
 
 
             if(this.props.updateHandler)
             {
-                if( this.paramEaqual(params))
-                {//参数发生改变,从第一页查起
-                    this.props.updateHandler(this.state.url,this.state.pageSize, 1, this.state.sortName, this.state.sortOrder,params);
-
-                }
-                else
-                {//从当前页查起
-                    this.props.updateHandler(this.state.url,this.state.pageSize, this.state.pageIndex, this.state.sortName, this.state.sortOrder,params);
-
-                }
+                this.props.updateHandler(this.state.pageSize,this.state.pageIndex,this.state.sortName,this.state.sortOrder);
             }
 
         }
-        else {
+        else {//传了url
 
-            if( this.paramEaqual(params))
+            if( this.paramNotEaqual(params))
             {//参数发生改变,从第一页查起
                 this.updateHandler(this.state.url,this.state.pageSize, 1, this.state.sortName, this.state.sortOrder,params);
 
@@ -779,7 +773,7 @@ var DataGrid=React.createClass({
             params:[],
         });
     },
-    paramEaqual:function( params) {//判断前后参数是否相同
+    paramNotEaqual:function(params) {//判断前后参数是否相同
         let isupdate=false;
         if(!params&&!this.state.params)
         {//都为空
