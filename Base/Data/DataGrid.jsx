@@ -18,7 +18,10 @@ var shouldComponentUpdate=require("../../Mixins/shouldComponentUpdate.js");
 var DataGrid=React.createClass({
     mixins:[shouldComponentUpdate],
     propTypes: {
-        width:React.PropTypes.number,//宽度
+        width:React.PropTypes.oneOf([
+            React.PropTypes.number,
+            React.PropTypes.string,
+        ]) ,//宽度
         height:React.PropTypes.number,//高度
         selectAble:React.PropTypes.bool,// 是否显示选择，默认值 false
         detailAble:React.PropTypes.bool,//是否显示详情,默认值 false
@@ -61,7 +64,7 @@ var DataGrid=React.createClass({
     },
     getDefaultProps:function(){
         return{
-            width:document.documentElement.clientWidth,
+            width:"100%",
             height:null,
             selectAble:false,
             detailAble:false,
@@ -737,16 +740,16 @@ var DataGrid=React.createClass({
         }
         else
         {//
-           if( this.paramEaqual(params))
-           {//参数发生改变,从第一页查起
-               this.updateHandler(this.state.url,this.state.pageSize, 1, this.state.sortName, this.state.sortOrder,params);
+            if( this.paramEaqual(params))
+            {//参数发生改变,从第一页查起
+                this.updateHandler(this.state.url,this.state.pageSize, 1, this.state.sortName, this.state.sortOrder,params);
 
-           }
+            }
             else
-           {//从当前页查起
-               this.updateHandler(this.state.url,this.state.pageSize, this.state.pageIndex, this.state.sortName, this.state.sortOrder,params);
+            {//从当前页查起
+                this.updateHandler(this.state.url,this.state.pageSize, this.state.pageIndex, this.state.sortName, this.state.sortOrder,params);
 
-           }
+            }
 
         }
         if(this.state.url==null||this.state.url==="")

@@ -151,20 +151,13 @@ var Text=React.createClass({
             });
 
             if (this.props.onChange != null) {
-                if(istrue)
-                {
-
-                    this.props.onChange(event.target.value);//自定义的改变事件
-
-
-                }
+                this.props.onChange(event.target.value);//自定义的改变事件
 
             }
             //回传给表单组件
             if (this.props.backFormHandler != null) {
-                if(istrue) {
                     this.props.backFormHandler(event.target.value, event.target.value, this.props.name);
-                }
+
             }
 
         }

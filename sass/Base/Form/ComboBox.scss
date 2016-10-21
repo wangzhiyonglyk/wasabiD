@@ -24,6 +24,20 @@ desc:日期选择样式
   background-size: 32px;
   cursor: default;
 }
+.combobox .picker-clear{
+  content: "";
+  display: block;
+  background-image: url(../../../img/icons/clear.png) ;
+  background-repeat: no-repeat;
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  right: 40px;
+  top: 9px;
+  background-size: 16px;
+  cursor: pointer;
+  border-radius: 16px;
+}
 
 .combobox .dropcontainter{
   padding:0px;

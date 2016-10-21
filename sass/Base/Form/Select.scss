@@ -30,7 +30,20 @@ desc:下拉框样式
 
 }
 
-
+.nice-select .picker-clear{
+  content: "";
+  display: block;
+  background-image: url(../../../img/icons/clear.png) ;
+  background-repeat: no-repeat;
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  right: 40px;
+  top: 9px;
+  background-size: 16px;
+  cursor: pointer;
+  border-radius: 16px;
+}
 .nice-select ul {
   width: 100%;
   display: none;

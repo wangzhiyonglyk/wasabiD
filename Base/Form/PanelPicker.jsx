@@ -117,12 +117,32 @@ var PanelPicker = React.createClass({
             })
         }
     },
+    clearHandler:function()
+    {//清除数据
+        if(this.props.onSelect!=null)
+        {
+            this.props.onSelect("","",this.props.name,null);
+        }
+        else
+        {
+            this.setState({
+                value:null,
+                text:null,
+            })
+        }
+    },
     onSelect:function(value,txt) {
         this.setState({
-            show: false
+            show: false,
+            value:value,
+            text:txt,
         })
         this.validate(value);
-        this.props.onSelect(value,txt,this.props.name,null);
+        if(this.props.onSelect!=null)
+        {
+            this.props.onSelect(value,txt,this.props.name,null);
+        }
+
 
 
     },
@@ -147,6 +167,7 @@ var PanelPicker = React.createClass({
                 <div className={ "wasabi-form-group-body"}>
                     <div className="combobox" style={{display:this.props.hide==true?"none":"block"}}
                          onMouseOut={this.mouseOutHandler}>
+                        <i className={"picker-clear"} onClick={this.clearHandler} style={{display:(this.state.value==""||!this.state.value)?"none":"inline"}}></i>
                         <i className={"pickericon"} onClick={this.showPicker}></i>
                         <input type="text" {...inputProps} value={this.state.text} onChange={this.changeHandler}/>
                         <div className={ "dropcontainter panelpicker "+this.props.position}

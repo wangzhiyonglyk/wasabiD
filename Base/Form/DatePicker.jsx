@@ -185,6 +185,20 @@ let ComboBox=React.createClass({
             this.props.onSelect(value,text,this.props.name,null);
         }
     },
+    clearHandler:function()
+    {//清除数据
+        if(this.props.onSelect!=null)
+        {
+            this.props.onSelect("","",this.props.name,null);
+        }
+        else
+        {
+            this.setState({
+                value:null,
+                text:null,
+            })
+        }
+    },
     changeHandler:function(event) {
     },
     renderDate:function() {
@@ -288,6 +302,7 @@ let ComboBox=React.createClass({
                 <div className={ "wasabi-form-group-body"}>
                     <div className="combobox" style={{display:this.props.hide==true?"none":"block"}}
                          onMouseOut={this.mouseOutHandler}>
+                        <i className={"picker-clear"} onClick={this.clearHandler} style={{display:(this.state.value==""||!this.state.value)?"none":"inline"}}></i>
                         <i className={"pickericon "} onClick={this.showPicker}></i>
                         <input type="text" {...inputProps} value={this.state.text} onChange={this.changeHandler}/>
                         <div className={"dropcontainter "+controlDropClassName+" "+size+" "+this.props.position}

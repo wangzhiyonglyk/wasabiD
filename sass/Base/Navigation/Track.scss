@@ -35,6 +35,7 @@
   padding-bottom: 10px;
   list-style-type: none;
   width:500px;
+  margin-left: 45px;
 
 }
 .wasabi-track li:before
@@ -46,7 +47,7 @@
   background-color: #dcdcdc;
   border-radius: 100%;
   position: absolute;
-  top: 2px;
+  top: 5px;
   left: 0px;
 }
 .wasabi-track li:after{
@@ -56,7 +57,7 @@
   height: 100%;
   background-color: #dcdcdc;
   position: absolute;
-  top: 2px;
+  top: 5px;
   left: 3px;
 }
 .wasabi-track li:last-child:after
@@ -78,13 +79,13 @@
   float:left;
 
   width:120px;
-
+   margin-right:20px;
 
 
 }
 .wasabi-track li .track-info
 {
   float: right;
-  width:360px;
+  width:340px;
   text-align: left;
 }

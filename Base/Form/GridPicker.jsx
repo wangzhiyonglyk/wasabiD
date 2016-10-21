@@ -230,6 +230,20 @@ let GridPicker=React.createClass({
             show: !this.state.show
         });
     },
+    clearHandler:function()
+    {//清除数据
+        if(this.props.onSelect!=null)
+        {
+            this.props.onSelect("","",this.props.name,null);
+        }
+        else
+        {
+            this.setState({
+                value:null,
+                text:null,
+            })
+        }
+    },
     render:function() {
         var size=this.props.onlyline==true?"onlyline":this.props.size;//组件大小
         var componentClassName=  "wasabi-form-group "+size+" "+(this.props.className?this.props.className:"");//组件的基本样式
@@ -252,6 +266,7 @@ let GridPicker=React.createClass({
          <Label name={this.props.label} hide={this.state.hide} required={this.state.required}></Label>
             <div className={ "wasabi-form-group-body"}>
                 <div className="combobox"  style={{display:this.props.hide==true?"none":"block"}}   >
+                    <i className={"picker-clear"} onClick={this.clearHandler} style={{display:(this.state.value==""||!this.state.value)?"none":"inline"}}></i>
                     <i className={"pickericon"} onClick={this.showPicker}></i>
                     <input type="text" {...inputProps}  value={this.state.text}   onChange={this.changeHandler}     />
                     <div className={"dropcontainter gridpicker"+this.props.position} style={{height:this.props.height,display:this.state.show==true?"block":"none"}} onMouseOut={this.mouseOutHandler} >
