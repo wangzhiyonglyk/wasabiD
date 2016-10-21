@@ -634,6 +634,7 @@ var DataGrid=React.createClass({
                 else {
                     actualParams = (this.state.params);
                 }
+                params=this.state.params;//保存以便下一次更新
             }
             else
             {
