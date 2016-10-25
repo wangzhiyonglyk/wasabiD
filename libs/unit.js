@@ -445,7 +445,7 @@ baseUtil.showError=function(msg) {
                     document.body.removeChild(child);
 
                 }
-            }, 2000
+            }, 4000
         );
     }
 

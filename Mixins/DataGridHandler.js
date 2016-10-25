@@ -5,6 +5,7 @@
 var React=require("react");
 var unit=require("../libs/unit.js");
 var FetchModel=require("../model/FetchModel.js");
+var Message=require("../Base/unit/Message.jsx");
 let DataGridHandler={
     //列表常用处理函数
     paginationHandler:function(pageIndex) {//分页处理函数
@@ -164,9 +165,9 @@ let DataGridHandler={
 
     },
     loadSuccess:function(url,pageSize,pageIndex,sortName,sortOrder,params,data) {//数据加载成功
-        var dataSource;
-        var totalSource;
-        var footerSource;
+        var dataSource;//最终数据
+        var totalSource;//最终总共记录
+        var footerSource;//最终统计数据
         if(this.props.backSource&&this.props.backSource!="") {
             if(this.props.pagination==false&&this.props.backSource=="data.data")
             {
@@ -187,10 +188,15 @@ let DataGridHandler={
         else {
             totalSource=data.total;
         }
+
         if(this.props.footerSource&&this.props.footerSource!="")
         {
             footerSource= unit.getSource( data,this.props.footerSource);
         }
+        console.log("datagrid-fetch结果",{
+            "原数据":data,
+            "处理后的数据":dataSource
+        });
         if(totalSource>0 &&dataSource&& dataSource instanceof  Array&&dataSource.length==0&&totalSource>0&&pageIndex!=1)
         {
             //有总记录，没有当前记录数,不是第一页，继续查询转到上一页
@@ -478,7 +484,7 @@ let DataGridHandler={
         else {
             if (this.props.detailHandler != null) {
                 var detail = this.props.detailHandler(rowData);
-                var colSpan = this.props.headers.length;
+                var colSpan = this.state.headers.length;
 
 
                 if (this.props.selectAble == true) {

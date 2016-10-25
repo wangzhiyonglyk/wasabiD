@@ -31,7 +31,8 @@ var SearchBar=React.createClass({
 
     },
     getInitialState:function() {
-        this. allWidth=this.props.width?this.props.width:document.documentElement.clientWidth-15;//总宽度,除去滚动条
+        var screenWidth=window.screen.availWidth<document.documentElement.clientWidth?window.screen.availWidth:document.documentElement.clientWidth;
+        this.allWidth=this.props.width?this.props.width:screenWidth-10;//总宽度,除去滚动条
 
         return{
             model:(this.props.model),

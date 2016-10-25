@@ -63,7 +63,9 @@ var DataGrid=React.createClass({
             "bottom",
             "both"
         ]),//分页栏的位置
-        clearChecked:React.PropTypes.bool,//刷新数据后是否清除选择
+        clearChecked:React.PropTypes.bool,//刷新数据后是否清除选择,
+        pasteUrl:React.PropTypes.string,//粘贴后的url
+        pasteParamsHandler:React.PropTypes.func,//对粘贴后的数据进行处理,形成参数并且返回
     },
     getDefaultProps:function(){
         return{
@@ -91,12 +93,15 @@ var DataGrid=React.createClass({
             footer:null,//页脚
             onClick:null,
             onDoubleClick:null,
+            onPaste:null,
             onChecked:null,
             footerSource:"data.footer",//页脚数据源
             selectChecked:false,
             lang:"java",
             pagePosition:"bottom",//默认分页在底部
             clearChecked:false,
+            pasteUrl:null,
+            pasteParamsHandler:null,
 
 
         }
@@ -121,8 +126,8 @@ var DataGrid=React.createClass({
             total:this.props.total,//总记录数
             loading:(this.props.url&&this.props.url!="")?true:false,//显示正在加载图示
             footer:this.props.footer,//页脚
-            width:this.props.width,//用于滚动条的计算
-
+            width:this.props.width,//,
+            headers:this.props.headers,//可以通过鼠标右键隐藏
         }
     },
     componentWillReceiveProps:function(nextProps) {
@@ -170,7 +175,7 @@ var DataGrid=React.createClass({
 
     },
     renderHeader :function() {//渲染表头
-        if(this.props.headers instanceof  Array)
+        if(this.state.headers instanceof  Array)
         {
 
         }
@@ -194,7 +199,7 @@ var DataGrid=React.createClass({
 
             );
         }
-        this.props.headers.map((header, index) => {
+        this.state.headers.map((header, index) => {
                 if(header==null)
                 {//如果是空则不处理
 
@@ -231,7 +236,7 @@ var DataGrid=React.createClass({
     },
     renderBody:function() {//渲染表体
         var trobj=[];
-        if(this.state.data instanceof Array&&this.props.headers instanceof  Array)
+        if(this.state.data instanceof Array&&this.state.headers instanceof  Array)
         {
 
         }
@@ -258,7 +263,7 @@ var DataGrid=React.createClass({
 
             }
 
-            this.props.headers.map((header, columnIndex) => {
+            this.state.headers.map((header, columnIndex) => {
                 if (header==null||header.hidden) {
                     return;
                 }
@@ -443,7 +448,7 @@ var DataGrid=React.createClass({
                     <td key="footerselect" className="check-column"></td>
                 );
             }
-            this.props.headers.map((header,headerindex)=>
+            this.state.headers.map((header,headerindex)=>
             {
                 var footerchild=this.state.footer.filter(function(d)
                 {
@@ -508,7 +513,7 @@ var DataGrid=React.createClass({
         {
             className="table";
         }
-        return (<div className="wasabi-table"    >
+        return (<div className="wasabi-table"  onPaste={this.onPaste}  >
             <div className="wasabi-table-pagination"
                  style={{width:tableDefinedWidth,display:(this.props.pagePosition=="top"||this.props.pagePosition=="both")?this.props.pagination?"block":"none":"none"}}>
                 {this.renderTotal()}
