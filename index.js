@@ -60,6 +60,7 @@ exports.Modal = require('./Base/Layout/Modal.jsx');//模态层组件
  exports.Message = require('./Base/Unit/Message.jsx');//消息组件
  exports.ToolTip = require('./Base/Unit/ToolTip.jsx');//提示信息组件
  exports.Tooltip_shy = require('./Base/Unit/Tooltip_shy.jsx');//提示信息组件-shy
+ exports.ProgressCricle = require('./Base/Unit/ProgressCricle.jsx');//环形进度条组件-shy
 
 /*****************导航组件******************/
 exports.MenuTabs = require('./Base/Navigation/MenuTabs.jsx');//菜单tab组件
