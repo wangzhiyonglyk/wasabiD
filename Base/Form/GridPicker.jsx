@@ -1,7 +1,7 @@
 /*
-create by wangzy
-date:2016-07-04
-desc:列表下拉选择
+ create by wangzy
+ date:2016-07-04
+ desc:列表下拉选择
  */
 let React=require("react");
 
@@ -129,7 +129,7 @@ let GridPicker=React.createClass({
     },
     componentWillReceiveProps:function(nextProps) {
         //只更新不查询,注意了
-        if(nextProps.data!=null&&nextProps.data instanceof  Array &&(!nextProps.url||nextProps.url=="")) {
+        if(nextProps.data!=null&&nextProps.data instanceof  Array &&(!nextProps.url||nextProps.url=="")) {//没有传url
             this.setState({
                 hide:nextProps.hide,
                 data: nextProps.data,
@@ -143,22 +143,15 @@ let GridPicker=React.createClass({
 
         }
         else {
-            if (this.showUpdate(nextProps.params)) {//如果不相同则更新
-                this.setState({
-                    hide:nextProps.hide,
-                    value:nextProps.value,
-                    text: nextProps.text,
-                    readonly: nextProps.readonly,
-                    required: nextProps.required,
-                    params:nextProps.params,
-                    validateClass:"",//重置验证样式
-                })
-            }
-            else
-            {
-
-            }
-
+            this.setState({
+                hide:nextProps.hide,
+                value:nextProps.value,
+                text: nextProps.text,
+                readonly: nextProps.readonly,
+                required: nextProps.required,
+                params:nextProps.params,
+                validateClass:"",//重置验证样式
+            })
         }
 
     },
@@ -204,15 +197,15 @@ let GridPicker=React.createClass({
         {
             newparams={};
         }
-           for(var v in params)
-           {
-               newparams[v]=params[v];
-           }
+        for(var v in params)
+        {
+            newparams[v]=params[v];
+        }
 
-            this.setState({
-                params: newparams,
-                url:this.props.url,//查询的时候再赋值
-            });
+        this.setState({
+            params: newparams,
+            url:this.props.url,//查询的时候再赋值
+        });
     },
     onSelect:function(rowIndex,rowData) {
         if(this.props.onSelect!=null)
@@ -232,6 +225,7 @@ let GridPicker=React.createClass({
     },
     clearHandler:function()
     {//清除数据
+        console.log("test");
         if(this.props.onSelect!=null)
         {
             this.props.onSelect("","",this.props.name,null);
@@ -262,8 +256,8 @@ let GridPicker=React.createClass({
         props.width=410;
         props.url=this.state.url;
         props.data=this.state.data;
-     return<div className={componentClassName+this.state.validateClass} style={style}>
-         <Label name={this.props.label} hide={this.state.hide} required={this.state.required}></Label>
+        return<div className={componentClassName+this.state.validateClass} style={style}>
+            <Label name={this.props.label} hide={this.state.hide} required={this.state.required}></Label>
             <div className={ "wasabi-form-group-body"}>
                 <div className="combobox"  style={{display:this.props.hide==true?"none":"block"}}   >
                     <i className={"picker-clear"} onClick={this.clearHandler} style={{display:(this.state.value==""||!this.state.value)?"none":"inline"}}></i>

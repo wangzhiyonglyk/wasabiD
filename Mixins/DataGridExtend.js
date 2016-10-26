@@ -64,7 +64,6 @@ let DataGridExtend={
                                 }
                             }
                         if(data.length>0) {
-                        console.log(data);
                             if(this.props.pasteUrl!=null&&this.props.pasteUrl!="")
                             {
                                 let actualParams=null;
@@ -92,7 +91,5 @@ let DataGridExtend={
 
 
     }
-
-
 }
 module .exports=DataGridExtend;
