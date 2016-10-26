@@ -23,7 +23,7 @@ var Modal=React.createClass({
        return{
            width:730,//宽度
            height:650,//高度
-           resize:false,
+           resize:true,//是否可以改变大小
            modal:true,//默认没有遮罩层
            showOK:false,//是否显示确定按钮
            showCancel:false,//是否显示取消按钮

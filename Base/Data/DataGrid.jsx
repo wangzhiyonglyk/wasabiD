@@ -291,7 +291,7 @@ var DataGrid=React.createClass({
                 }
                 else
                 {
-                    tds.push( <td onClick={this.onClick.bind(this,rowData,rowIndex)} onDoubleClick={this.onDoubleClick.bind(this,rowData,rowIndex)}  key={"col"+rowIndex.toString()+"-"+columnIndex.toString()} style={{textAlign:(header.align?header.align:"left")}} >{content}</td>);
+                    tds.push( <td style={{whiteSpace:(this.state.width!="100%"&&this.state.width<=1000)?"normal":"nowrap"}} onClick={this.onClick.bind(this,rowData,rowIndex)} onDoubleClick={this.onDoubleClick.bind(this,rowData,rowIndex)}  key={"col"+rowIndex.toString()+"-"+columnIndex.toString()} style={{textAlign:(header.align?header.align:"left")}} >{content}</td>);
                 }
 
             });

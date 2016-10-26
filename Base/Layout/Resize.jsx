@@ -42,6 +42,7 @@ var Resize=React.createClass({
     componentDidMount:function() {//设置鼠标事件
         if(this.props.resize){
             //允许改变大小
+
             document.onmousemove=this.mouseMoveHandler;
             document.onmouseup=this.mouseUpHandler;
             document.onmousedown=this.mouseDownHandler;
