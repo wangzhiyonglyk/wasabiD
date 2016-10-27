@@ -383,10 +383,6 @@ let Select=React.createClass({
         }
     },
     render:function() {
-        if(this.props.name=="receiverForeignprovince")
-        {
-            console.log("receiverForeignprovince",this.state);
-        }
         var size=this.props.onlyline==true?"onlyline":this.props.size;//组件大小
         var componentClassName=  "wasabi-form-group "+size+" "+(this.props.className?this.props.className:"");//组件的基本样式
         var style =this.setStyle("input");//设置样式
