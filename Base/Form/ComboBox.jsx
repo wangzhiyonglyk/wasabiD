@@ -153,6 +153,7 @@ let ComboBox=React.createClass({
             data:nextProps.data,
             params:nextProps.params,
             url:nextProps.url,
+            hide:nextProps.hide,
 
 
         })
