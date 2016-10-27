@@ -123,9 +123,9 @@ var Text=React.createClass({
             var istrue=true;
             if((this.props.type=="integer"||this.props.type=="number")) {
                 //数字,或者正数时
-                if( event.target.value=="-"||(event.target.value.length>0&&this.state.value.toString().indexOf(".")<=0&&event.target.value.toString().lastIndexOf(".")==event.target.value.length-1))
+                if(event.target.value=="-"||((!this.state.value||this.state.value.toString().indexOf(".")<0)&&event.target.value.length>0&&event.target.value.toString().lastIndexOf(".")==event.target.value.length-1))
                 {
-                    //输入负号,或者最后输入小数点时并原来没有小数点时.不回传给父组件也不验证
+                    //第一次输入负号,或者输入小数点时原来没有小数点或为空时）时.不回传给父组件也不验证
                     this.setState({
                         value: event.target.value,
                         text:event.target.value,
@@ -191,8 +191,7 @@ var Text=React.createClass({
             this.props.onFocus();
         }
     },
-    blurHandler:function()
-    {
+    blurHandler:function() {
         this.validate(this.state.value);
     },
     clickHandler:function(event) {//单击事件

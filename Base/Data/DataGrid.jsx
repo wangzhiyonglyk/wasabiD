@@ -235,6 +235,7 @@ var DataGrid=React.createClass({
         return headers;
     },
     renderBody:function() {//渲染表体
+
         var trobj=[];
         if(this.state.data instanceof Array&&this.state.headers instanceof  Array)
         {
@@ -269,9 +270,9 @@ var DataGrid=React.createClass({
                 }
 
                 let content = header.content;
-                if (typeof content === 'string') {
+                if (typeof content === 'string') {//指定的列
                     content =this. substitute(content, rowData);
-                } else if (typeof content === 'function') {
+                } else if (typeof content === 'function') {//函数
                     try {
                         content = content(rowData,rowIndex);
                     }
@@ -280,18 +281,35 @@ var DataGrid=React.createClass({
                         content="";
                     }
 
-                } else {
+                } else {//为空时
                     content = rowData[header.name];
                 }
+               let whiteSpace="nowrap";//默认不换行,对超过30个字的,设置为换行模式
+               if(content&&typeof  content !=="string"&&content!=="number") {
+
+                    if(content.key&&content.key.toString().length>30) {
+                        whiteSpace = "normal";
+                    }else if(content instanceof  Array&&content.length>0&&content[0].key&&content[0].key.toString().length>30)
+                    { whiteSpace = "normal";
+
+                    }
+               }
+                else if(content &&typeof  content.toString()=="string"&&content.toString().length>30)
+               {
+                   whiteSpace="normal";
+               }
+
                 if (columnIndex==0&&this.props.detailAble) {
                     //在第一列显示详情
-                    tds.push( <td  onClick={this.detailHandler.bind(this,rowIndex,rowData)}  key={"col"+rowIndex.toString()+"-"+columnIndex.toString()} style={{textAlign:(header.align?header.align:"left")}}>{content}
+                    tds.push( <td  onClick={this.detailHandler.bind(this,rowIndex,rowData)}  key={"col"+rowIndex.toString()+"-"+columnIndex.toString()} style={{textAlign:(header.align?header.align:"left"),whiteSpace:whiteSpace}}>{content}
                         <div style={{display:"inline",float:"left",paddingLeft:2}}> <LinkButton iconCls="icon-detail" tip="查看详情" onClick={this.detailHandler.bind(this,rowIndex,rowData)}></LinkButton></div>
                     </td>);
                 }
                 else
                 {
-                    tds.push( <td style={{whiteSpace:(this.state.width!="100%"&&this.state.width<=1000)?"normal":"nowrap"}} onClick={this.onClick.bind(this,rowData,rowIndex)} onDoubleClick={this.onDoubleClick.bind(this,rowData,rowIndex)}  key={"col"+rowIndex.toString()+"-"+columnIndex.toString()} style={{textAlign:(header.align?header.align:"left")}} >{content}</td>);
+
+                    tds.push( <td  onClick={this.onClick.bind(this,rowData,rowIndex)} onDoubleClick={this.onDoubleClick.bind(this,rowData,rowIndex)}  key={"col"+rowIndex.toString()+"-"+columnIndex.toString()}
+                                   style={{textAlign:(header.align?header.align:"left" ),whiteSpace:whiteSpace}} >{content}</td>);
                 }
 
             });

@@ -147,11 +147,13 @@ input验证失败
     .wasabi-help-block
     {
       position: absolute;
-      width: auto;
+      width: 120px;
+      max-width: 150px;
       height: 20px;
       background: #f93123;
       color: #ffffff;
       border-radius: 2px;
+      white-space: nowrap;
       bottom: 17px;
       left: 105%;
       overflow: visible;
@@ -161,7 +163,7 @@ input验证失败
       padding-left: 10px;
       padding-right: 10px;
       font-size: 14px;
-      top:5px;
+      top: 5px;
 
     }
 .wasabi-help-block:before {
