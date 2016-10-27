@@ -23,8 +23,8 @@ let ComboBox=React.createClass({
                 "datetime",//时间选择
                 "daterange",//日期范围选择
                 "datetimerange",//日期时间范围选择
-               "picker",//级联选择组件
-               "gridpicker",//列表选择
+                "picker",//级联选择组件
+                "gridpicker",//列表选择
                 "panelpicker"//面板选择
             ],//类型
         name:React.PropTypes.string.isRequired,//字段名
@@ -129,6 +129,7 @@ let ComboBox=React.createClass({
         return {
             value:this.props.value,
             text: text,
+            hide:this.props.hide,
             readonly:this.props.readonly,
             required:this.props.required,
             data:this.props.data,
@@ -140,10 +141,10 @@ let ComboBox=React.createClass({
     componentWillReceiveProps:function(nextProps) {
         var text=nextProps.text;
         if(this.props.type.indexOf("date")>-1||this.props.type.indexOf("time")>-1) {//如果时间与日期相关组件，text就是value
-          if((!text||text=="")&&nextProps.value&&nextProps.value!="")
-          {
-              text=nextProps.value;
-          }
+            if((!text||text=="")&&nextProps.value&&nextProps.value!="")
+            {
+                text=nextProps.value;
+            }
         }
         this.setState({
             value: nextProps.value,
@@ -191,7 +192,7 @@ let ComboBox=React.createClass({
         return this.state.data;
     },
     validate:function() {
-       return this.refs.combobox.validate();
+        return this.refs.combobox.validate();
     },
     renderSelect:function(){//普通下拉框
 
@@ -204,7 +205,7 @@ let ComboBox=React.createClass({
         props.params=this.state.params;
         props.url=this.state.url;
         props.data=this.state.data;
-            return <Select ref="combobox" {...props}  onSelect={this.onSelect}></Select>
+        return <Select ref="combobox" {...props}  onSelect={this.onSelect}></Select>
     },
     renderPicker:function(){//下拉面板
         var props={...this.props};
@@ -257,9 +258,10 @@ let ComboBox=React.createClass({
         props.data=this.state.data;
         props.readonly=this.state.readonly;
 
-      return <PanelPicker ref="combobox" {...props} onSelect={this.onSelect}></PanelPicker>;
+        return <PanelPicker ref="combobox" {...props} onSelect={this.onSelect}></PanelPicker>;
     },
     render:function() {
+
         let control = null;
         switch (this.props.type) {
             case "select":

@@ -64,41 +64,41 @@ let Select=React.createClass({
 
     },
     getDefaultProps:function() {
-            return{
-                name:"",
-                label:null,
-                width:null,
-                height:null,
-                value:"",
-                text:"",
-                placeholder:"",
-                readonly:false,
-                required:false,
-                onlyline:false,
-                hide:false,
-                regexp:null,
-                invalidTip:null,
-                style:null,
-                className:null,
-                size:"default",
-                position:"default",
-                //其他属性
-                min:null,
-                max:null,
-                onClick:null,
-                //其他属性
-                multiple:false,
-                valueField:"value",
-                textField:"text",
-                url:null,
-                params:null,
-                backSource:"data",
-                data:null,
-                extraData:null,
-                onSelect:null,
+        return{
+            name:"",
+            label:null,
+            width:null,
+            height:null,
+            value:"",
+            text:"",
+            placeholder:"",
+            readonly:false,
+            required:false,
+            onlyline:false,
+            hide:false,
+            regexp:null,
+            invalidTip:null,
+            style:null,
+            className:null,
+            size:"default",
+            position:"default",
+            //其他属性
+            min:null,
+            max:null,
+            onClick:null,
+            //其他属性
+            multiple:false,
+            valueField:"value",
+            textField:"text",
+            url:null,
+            params:null,
+            backSource:"data",
+            data:null,
+            extraData:null,
+            onSelect:null,
 
-            };
-        },
+        };
+    },
     getInitialState:function() {
         var newData=[];var text=this.props.text;
         if(this.props.data&&this.props.data instanceof  Array)
@@ -116,36 +116,36 @@ let Select=React.createClass({
             }
         }
 
-            return {
-                hide:this.props.hide,
-                params:unit.clone(this.props.params),//参数
-                data:newData,
-                value:this.props.value,
-                text:text,
-                ulShow:false,//是否显示下拉选项
-                multiple:this.props.multiple,
-                min:this.props.min,
-                max:this.props.max,
-                readonly:this.props.readonly,
+        return {
+            hide:this.props.hide,
+            params:unit.clone(this.props.params),//参数
+            data:newData,
+            value:this.props.value,
+            text:text,
+            ulShow:false,//是否显示下拉选项
+            multiple:this.props.multiple,
+            min:this.props.min,
+            max:this.props.max,
+            readonly:this.props.readonly,
 
-                //验证
-                required:this.props.required,
-                validateClass:"",//验证的样式
-                helpShow:"none",//提示信息是否显示
-                helpTip:validation["required"],//提示信息
-                invalidTip:"",
-                filterValue:"",//筛选框的值
-            }
-        },
+            //验证
+            required:this.props.required,
+            validateClass:"",//验证的样式
+            helpShow:"none",//提示信息是否显示
+            helpTip:validation["required"],//提示信息
+            invalidTip:"",
+            filterValue:"",//筛选框的值
+        }
+    },
     componentWillReceiveProps:function(nextProps) {
         /*
-        this.isChange :代表自身发生了改变,防止父组件没有绑定value,text,而导致无法选择
+         this.isChange :代表自身发生了改变,防止父组件没有绑定value,text,而导致无法选择
          */
         var text = nextProps.text;
         var newData = null;
         if(nextProps.data!=null&&nextProps.data instanceof  Array &&(!nextProps.url||nextProps.url=="")) {
             newData=[];
-              //因为这里统一将数据进行了改造,所以这里要重新处理一下
+            //因为这里统一将数据进行了改造,所以这里要重新处理一下
             for (let i = 0; i < nextProps.data.length; i++) {
                 let obj = nextProps.data[i];
                 obj.text = nextProps.data[i][this.props.textField];
@@ -177,6 +177,7 @@ let Select=React.createClass({
 
             }
             this.setState({
+
                 value:this.isChange?this.state.value: nextProps.value,
                 text: this.isChange?this.state.text:text,
                 multiple: nextProps.multiple,
@@ -185,22 +186,23 @@ let Select=React.createClass({
                 params:unit.clone( nextProps.params),
                 readonly: nextProps.readonly,
                 required: nextProps.required,
+                hide:nextProps.hide,
                 validateClass:"",//重置验证样式
             })
         }
         this.isChange=false;//重置
     },
     componentWillMount:function() {//如果指定url,先查询数据再绑定
-     this.loadData(this.props.url,this.state.params);//查询数据
+        this.loadData(this.props.url,this.state.params);//查询数据
     },
     componentDidUpdate:function() {
-      if(this.isChange==true)
-      {
-          if( this.props.onSelect!=null)
-          {
-              this.props.onSelect(this.state.value,this.state.text,this.props.name,this.rowData);
-          }
-      }
+        if(this.isChange==true)
+        {
+            if( this.props.onSelect!=null)
+            {
+                this.props.onSelect(this.state.value,this.state.text,this.props.name,this.rowData);
+            }
+        }
     },
     mouseOutHandler:function(event) {//鼠标移开时隐藏下拉
         //var parentE=event.relatedTarget;//相关节点
@@ -239,7 +241,7 @@ let Select=React.createClass({
                 var fetchmodel=new FetchModel(url,this.loadSuccess,params,this.loadError);
                 unit.fetch.post(fetchmodel);
             }
-        console.log("select",fetchmodel);
+            console.log("select",fetchmodel);
         }
     },
     loadSuccess:function(data) {//数据加载成功
@@ -249,44 +251,44 @@ let Select=React.createClass({
         else {
             realData=unit.getSource(data,this.props.backSource);
         }
-            var newData=[];var text=this.state.text;
-            for(let i=0;i<realData.length;i++)
+        var newData=[];var text=this.state.text;
+        for(let i=0;i<realData.length;i++)
+        {
+            let obj=realData[i];//将所有字段添加进来
+            obj.text=realData[i][this.props.textField];
+            obj.value=realData[i][this.props.valueField];
+            if(obj.value==this.state.value)
             {
-                let obj=realData[i];//将所有字段添加进来
-                obj.text=realData[i][this.props.textField];
-                obj.value=realData[i][this.props.valueField];
+                text=obj.text;//根据value赋值
+            }
+            newData.push(obj);
+        }
+        if(this.props.extraData==null||this.props.extraData.length==0)
+        {
+            //没有额外的数据
+        }
+        else
+        {
+            //有额外的数据
+            for(let i=0;i<this.props.extraData.length;i++)
+            {
+                let obj={};
+                obj.text=this.props.extraData[i][this.props.textField];
+                obj.value=this.props.extraData[i][this.props.valueField];
                 if(obj.value==this.state.value)
                 {
                     text=obj.text;//根据value赋值
                 }
-                newData.push(obj);
+                newData.unshift(obj);
             }
-           if(this.props.extraData==null||this.props.extraData.length==0)
-           {
-               //没有额外的数据
-           }
-          else
-           {
-               //有额外的数据
-               for(let i=0;i<this.props.extraData.length;i++)
-               {
-                   let obj={};
-                   obj.text=this.props.extraData[i][this.props.textField];
-                   obj.value=this.props.extraData[i][this.props.valueField];
-                   if(obj.value==this.state.value)
-                   {
-                       text=obj.text;//根据value赋值
-                   }
-                   newData.unshift(obj);
-               }
-           }
-            window.localStorage.setItem(this.props.name+'data' ,JSON.stringify(newData));//用于后期获取所有数据
+        }
+        window.localStorage.setItem(this.props.name+'data' ,JSON.stringify(newData));//用于后期获取所有数据
 
-            this.setState({
-                data:newData,
-                value:this.state.value,
-                text:text,
-            })
+        this.setState({
+            data:newData,
+            value:this.state.value,
+            text:text,
+        })
     },
     loadError:function(errorCode,message) {//查询失败
         console.log("select-error",errorCode,message);
@@ -306,7 +308,7 @@ let Select=React.createClass({
     changeHandler:function(event) {
     },
     onSelect:function(value,text,rowData) {//选中事件
-          this.isChange=true;//代表自身发生了改变,防止父组件没有绑定value,text,而导致无法选择的结果
+        this.isChange=true;//代表自身发生了改变,防止父组件没有绑定value,text,而导致无法选择的结果
         this.rowData=rowData;
         if(value==undefined)
         {
@@ -381,6 +383,10 @@ let Select=React.createClass({
         }
     },
     render:function() {
+        if(this.props.name=="receiverForeignprovince")
+        {
+            console.log("receiverForeignprovince",this.state);
+        }
         var size=this.props.onlyline==true?"onlyline":this.props.size;//组件大小
         var componentClassName=  "wasabi-form-group "+size+" "+(this.props.className?this.props.className:"");//组件的基本样式
         var style =this.setStyle("input");//设置样式
@@ -398,7 +404,7 @@ let Select=React.createClass({
             control = <ul style={{display:this.state.ulShow==true?"block":"none"}} >
                 <li key="searchli"  className="searchli" style={{display:this.state.data.length>8?"block":"none"}}><div   className="search" style={{width:this.props.width}}>
                     <input type="text" placeholder={this.props.placeholder}
-                            value={this.state.filterValue} onChange={this.filterChangeHandler } />
+                           value={this.state.filterValue} onChange={this.filterChangeHandler } />
                     <div className="icon" ></div>
                 </div></li>
                 {
@@ -421,25 +427,25 @@ let Select=React.createClass({
         }
 
         return (
-        <div className={componentClassName+this.state.validateClass} style={style} >
-            <Label name={this.props.label} hide={this.state.hide} required={this.state.required}></Label>
-            <div className={ "wasabi-form-group-body"}>
-                <div className={"nice-select "} style={style}  onMouseOut={this.mouseOutHandler}   >
-                    <i className={"picker-clear"} onClick={this.clearHandler} style={{display:(this.state.value==""||!this.state.value)?"none":"inline"}}></i>
-                    <i className={"icon "} onClick={this.showItem}></i>
-                    <input type="text" {...inputProps} value={this.state.text}    onChange={this.changeHandler}  />
+            <div className={componentClassName+this.state.validateClass} style={style} >
+                <Label name={this.props.label} hide={this.state.hide} required={this.state.required}></Label>
+                <div className={ "wasabi-form-group-body"}>
+                    <div className={"nice-select "} style={style}  onMouseOut={this.mouseOutHandler}   >
+                        <i className={"picker-clear"} onClick={this.clearHandler} style={{display:(this.state.value==""||!this.state.value)?"none":"inline"}}></i>
+                        <i className={"icon "} onClick={this.showItem}></i>
+                        <input type="text" {...inputProps} value={this.state.text}    onChange={this.changeHandler}  />
 
-                    {
-                        control
-                    }
+                        {
+                            control
+                        }
+                    </div>
+                    <small className={"wasabi-help-block "+this.props.position} style={{display:(this.state.helpTip&&this.state.helpTip!="")?this.state.helpShow:"none"}}>{this.state.helpTip}</small>
                 </div>
-                <small className={"wasabi-help-block "+this.props.position} style={{display:(this.state.helpTip&&this.state.helpTip!="")?this.state.helpShow:"none"}}>{this.state.helpTip}</small>
             </div>
-        </div>
 
         );
 
-}
+    }
 
 });
 module.exports=Select;
