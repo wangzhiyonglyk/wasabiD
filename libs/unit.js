@@ -408,6 +408,8 @@ baseUtil.showError=function(msg) {
     let error = document.createElement("div");
     error.id="alog-error";
     error.title="";
+    error.style.position="absolute";
+    error.style.zIndex=99999;
     error.innerHTML = '<div class="wasabi-message error"   >'
         + '<div class="notice">' + msg + '</div>'
         + ' </div>';
