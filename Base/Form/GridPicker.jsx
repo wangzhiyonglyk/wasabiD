@@ -260,7 +260,7 @@ let GridPicker=React.createClass({
             <Label name={this.props.label} hide={this.state.hide} required={this.state.required}></Label>
             <div className={ "wasabi-form-group-body"}>
                 <div className="combobox"  style={{display:this.props.hide==true?"none":"block"}}   >
-                    <i className={"picker-clear"} onClick={this.clearHandler} style={{display:(this.state.value==""||!this.state.value)?"none":"inline"}}></i>
+                    <i className={"picker-clear"} onClick={this.clearHandler} style={{display:this.state.disabled?"none":(this.state.value==""||!this.state.value)?"none":"inline"}}></i>
                     <i className={"pickericon"} onClick={this.showPicker}></i>
                     <input type="text" {...inputProps}  value={this.state.text}   onChange={this.changeHandler}     />
                     <div className={"dropcontainter gridpicker"+this.props.position} style={{height:this.props.height,display:this.state.show==true?"block":"none"}} onMouseOut={this.mouseOutHandler} >

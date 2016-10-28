@@ -428,7 +428,7 @@ let Select=React.createClass({
                 <Label name={this.props.label} hide={this.state.hide} required={this.state.required}></Label>
                 <div className={ "wasabi-form-group-body"}>
                     <div className={"nice-select "} style={style}  onMouseOut={this.mouseOutHandler}   >
-                        <i className={"picker-clear"} onClick={this.clearHandler} style={{display:(this.state.value==""||!this.state.value)?"none":"inline"}}></i>
+                        <i className={"picker-clear"} onClick={this.clearHandler} style={{display:this.state.disabled?"none":(this.state.value==""||!this.state.value)?"none":"inline"}}></i>
                         <i className={"icon "} onClick={this.showItem}></i>
                         <input type="text" {...inputProps} value={this.state.text}    onChange={this.changeHandler}  />
 

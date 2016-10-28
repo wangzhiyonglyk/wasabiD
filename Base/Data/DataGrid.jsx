@@ -151,6 +151,7 @@ var DataGrid=React.createClass({
                     sortName:this.props.sortName,
                     sortOrder:nextProps.sortOrder,
                     loading:false,
+                    headers:nextProps.headers,//表头可能会更新
                 })
             }
         }

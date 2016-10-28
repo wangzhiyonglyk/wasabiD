@@ -4,8 +4,8 @@
  *
  */
 
- var paramFormat=require("./paramFormat.js");
-    
+var paramFormat=require("./paramFormat.js");
+
 var baseUtil = {};
 
 /// 获取地址栏参数的值
@@ -352,10 +352,10 @@ baseUtil.fetch = {
                         }
                     });
                 }
-             catch (e)
-             {
-                 baseUtil.showError(e.message);
-             }
+                catch (e)
+                {
+                    baseUtil.showError(e.message);
+                }
             }
             else {
                 if(fetchmodel.error)
@@ -376,24 +376,24 @@ baseUtil.fetch = {
     },
     setParams:function(lang,params)
     {
-       if(lang=="C#") {
-           //let cparams = "";
-           //if (params != undefined && params != null && params !== "") {
-           //    for (let v in params) {
-           //        if (cparams == "") {
-           //            cparams += v.toString() + "=" + params[v].toString();
-           //        }
-           //        else {
-           //            cparams += "&" + v.toString() + "=" + params[v].toString();
-           //        }
-           //    }
-           //}
-           //return cparams;
-          return paramFormat.xhrFormat(params);
-       }
+        if(lang=="C#") {
+            //let cparams = "";
+            //if (params != undefined && params != null && params !== "") {
+            //    for (let v in params) {
+            //        if (cparams == "") {
+            //            cparams += v.toString() + "=" + params[v].toString();
+            //        }
+            //        else {
+            //            cparams += "&" + v.toString() + "=" + params[v].toString();
+            //        }
+            //    }
+            //}
+            //return cparams;
+            return paramFormat.xhrFormat(params);
+        }
         else {
-        return params ? JSON.stringify(params) : ""
-       }
+            return params ? JSON.stringify(params) : ""
+        }
         return "";
     }
 }
@@ -433,20 +433,20 @@ baseUtil.showError=function(msg) {
         setTimeout(()=>{
             let child = document.getElementById("alog-error");
 
-            if (child&&child.title=="") {
-                child.style.opacity=0.5;
-                child.style.transition="opacity 2s";
-            }
-        },10);
+        if (child&&child.title=="") {
+            child.style.opacity=0.5;
+            child.style.transition="opacity 2s";
+        }
+    },10);
         setTimeout(()=> {
-                let child = document.getElementById("alog-error");
-                if (child&&child.title=="") {
+            let child = document.getElementById("alog-error");
+        if (child&&child.title=="") {
 
-                    document.body.removeChild(child);
+            document.body.removeChild(child);
 
-                }
-            }, 4000
-        );
+        }
+    }, 4000
+    );
     }
 
 }

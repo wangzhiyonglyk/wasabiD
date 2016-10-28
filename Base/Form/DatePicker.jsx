@@ -302,7 +302,7 @@ let ComboBox=React.createClass({
                 <div className={ "wasabi-form-group-body"}>
                     <div className="combobox" style={{display:this.props.hide==true?"none":"block"}}
                          onMouseOut={this.mouseOutHandler}>
-                        <i className={"picker-clear"} onClick={this.clearHandler} style={{display:(this.state.value==""||!this.state.value)?"none":"inline"}}></i>
+                        <i className={"picker-clear"} onClick={this.clearHandler} style={{display:this.state.disabled?"none":(this.state.value==""||!this.state.value)?"none":"inline"}}></i>
                         <i className={"pickericon "} onClick={this.showPicker}></i>
                         <input type="text" {...inputProps} value={this.state.text} onChange={this.changeHandler}/>
                         <div className={"dropcontainter "+controlDropClassName+" "+size+" "+this.props.position}
