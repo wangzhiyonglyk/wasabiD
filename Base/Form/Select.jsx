@@ -17,7 +17,6 @@ var Message=require("../unit/Message.jsx");
 let Select=React.createClass({
     mixins:[setStyle,validate,showUpdate,shouldComponentUpdate],
     PropTypes:{
-
         name:React.PropTypes.string.isRequired,//字段名
         label:React.PropTypes.oneOfType([React.PropTypes.string,React.PropTypes.element,React.PropTypes.node]),//字段文字说明属性
         width:React.PropTypes.number,//宽度
@@ -141,9 +140,10 @@ let Select=React.createClass({
         /*
          this.isChange :代表自身发生了改变,防止父组件没有绑定value,text,而导致无法选择
          */
-        var text = nextProps.text;
+        var value=this.isChange?this.state.value: nextProps.value;
+        var text = nextProps.text;//得到默认文本值
         var newData = null;
-        if(nextProps.data!=null&&nextProps.data instanceof  Array &&(!nextProps.url||nextProps.url=="")) {
+        if(nextProps.data!=null&&nextProps.data instanceof  Array &&(!nextProps.url||nextProps.url=="")) {//没有url,传的是死数据
             newData=[];
             //因为这里统一将数据进行了改造,所以这里要重新处理一下
             for (let i = 0; i < nextProps.data.length; i++) {
@@ -155,41 +155,42 @@ let Select=React.createClass({
                 }
                 newData.push(obj);
             }
-            this.setState({
-                hide:nextProps.hide,
-                value:this.isChange?this.state.value: nextProps.value,
-                text: this.isChange?this.state.text:text,
-                data: newData,
-                params:unit.clone( nextProps.params),
-                multiple: nextProps.multiple,
-                min: nextProps.min,
-                max: nextProps.max,
-                readonly: nextProps.readonly,
-                required: nextProps.required,
-                validateClass:"",//重置验证样式
-            })
+
         }
-        else {
+        else {//url形式
+            newData = this.state.data;//先得到以前的数据
             if (this.showUpdate(nextProps.params)) {//如果不相同则更新
-                this.loadData(this.props.url, nextProps.params);
+                this.loadData(this.props.url, nextProps.params);//异步更新
             }
             else {
 
             }
-            this.setState({
-
-                value:this.isChange?this.state.value: nextProps.value,
-                text: this.isChange?this.state.text:text,
-                multiple: nextProps.multiple,
-                min: nextProps.min,
-                max: nextProps.max,
-                params:unit.clone( nextProps.params),
-                readonly: nextProps.readonly,
-                required: nextProps.required,
-                hide:nextProps.hide,
-                validateClass:"",//重置验证样式
-            })
         }
+
+        //处理没有传text
+        if(value&&value!==""&&(!text||text==="")) {//value有值,text没有值,遍历data
+
+            for(var index=0;index<newData.length;index++)
+            {
+                if(newData[index].value===value)
+                {
+                    text=newData[index].text;
+                }
+            }
+        }
+        this.setState({
+            hide:nextProps.hide,
+            value:value,
+            text: this.isChange?this.state.text:text,
+            data: newData,
+            params:unit.clone( nextProps.params),
+            multiple: nextProps.multiple,
+            min: nextProps.min,
+            max: nextProps.max,
+            readonly: nextProps.readonly,
+            required: nextProps.required,
+            validateClass:"",//重置验证样式
+        })
         this.isChange=false;//重置
     },
     componentWillMount:function() {//如果指定url,先查询数据再绑定
@@ -368,8 +369,7 @@ let Select=React.createClass({
         })
 
     },
-    clearHandler:function()
-    {//清除数据
+    clearHandler:function() {//清除数据
         if(this.props.onSelect!=null)
         {
             this.props.onSelect("","",this.props.name,null);

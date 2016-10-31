@@ -168,8 +168,8 @@ var Text=React.createClass({
         this.validateInput=true;
         if(this.props.type=="integer"||this.props.type=="number")
         {
-            if((event.keyCode>=65&&event.keyCode<=90))
-            {
+            if(((event.ctrlKey==false&&event.metaKey==false)&&event.keyCode>=65&&event.keyCode<=90))
+            {//防止ctrl,command键
                 this.validateInput=false;
             }
         }

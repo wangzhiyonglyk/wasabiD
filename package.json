@@ -1,6 +1,6 @@
 {
   "name": "wasabiD",
-  "version": "0.5.55",
+  "version": "0.5.56",
   "description": "wasabi design——心怡科技物流PC前端框架",
   "main": "index.js",
   "keywords": [
@@ -24,6 +24,8 @@
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/wangzhiyonglyk/wasabi/issues"
+  },
+  "devDependencies": {
+    "react": "^15.3.2"
   }
-
 }
