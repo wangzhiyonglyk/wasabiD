@@ -41,9 +41,6 @@ class  FormModel {
         this.hotData=null;//热门选择数据
         this.headers=null;//gridpicker下拉表格中的表格头部
         this.size="default";//表单大小
-        this.filterAble=false;//是否归于筛选栏
-        this.gridAble=false;//是否归于列表中显示
-        this.headerModel=null;//对列表HeaderModel
     }
 
 

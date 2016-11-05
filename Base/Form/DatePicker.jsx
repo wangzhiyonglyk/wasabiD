@@ -304,7 +304,7 @@ let ComboBox=React.createClass({
                          onMouseOut={this.mouseOutHandler}>
                         <i className={"picker-clear"} onClick={this.clearHandler} style={{display:this.state.readonly?"none":(this.state.value==""||!this.state.value)?"none":"inline"}}></i>
                         <i className={"pickericon "} onClick={this.showPicker}></i>
-                        <input type="text" {...inputProps} value={this.state.text} onChange={this.changeHandler}/>
+                        <input type="text" {...inputProps} value={this.state.text} onClick={this.showPicker} onChange={this.changeHandler}/>
                         <div className={"dropcontainter "+controlDropClassName+" "+size+" "+this.props.position}
                              style={{display:this.state.show==true?"block":"none"}}>
                             {

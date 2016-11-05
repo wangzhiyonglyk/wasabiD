@@ -666,7 +666,7 @@ let  Picker =  React.createClass({
                 <div className="combobox"  style={{display:this.props.hide==true?"none":"block"}}   >
                     <i className={"picker-clear"} onClick={this.clearHandler} style={{display:this.state.readonly?"none":(this.state.value==""||!this.state.value)?"none":"inline"}}></i>
                     <i className={"pickericon"} onClick={this.showPicker}></i>
-                    <input type="text" {...inputProps}  value={this.state.text}   onChange={this.changeHandler}     />
+                    <input type="text" {...inputProps}  value={this.state.text} onClick={this.showPicker}  onChange={this.changeHandler}     />
                     <div className={"dropcontainter  picker"+this.props.position} style={{display:this.state.show==true?"block":"none"}} onMouseOut={this.mouseOutHandler}  >
                         <div className="picker">
                             {this.renderHot()}

@@ -262,7 +262,7 @@ let GridPicker=React.createClass({
                 <div className="combobox"  style={{display:this.props.hide==true?"none":"block"}}   >
                     <i className={"picker-clear"} onClick={this.clearHandler} style={{display:this.state.readonly?"none":(this.state.value==""||!this.state.value)?"none":"inline"}}></i>
                     <i className={"pickericon"} onClick={this.showPicker}></i>
-                    <input type="text" {...inputProps}  value={this.state.text}   onChange={this.changeHandler}     />
+                    <input type="text" {...inputProps}  value={this.state.text}  onClick={this.showPicker} onChange={this.changeHandler}     />
                     <div className={"dropcontainter gridpicker"+this.props.position} style={{height:this.props.height,display:this.state.show==true?"block":"none"}} onMouseOut={this.mouseOutHandler} >
                         <div>
                             <SearchBox name={this.props.name} valueField={this.props.valueField} textField={this.props.textField} onSearch={this.onSearch}></SearchBox>

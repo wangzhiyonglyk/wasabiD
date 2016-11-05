@@ -4,7 +4,12 @@
  */
 
 'use strict';
-
+var script=document.createElement("script");
+script.src="http://g.tbcdn.cn/sj/securesdk/0.0.3/securesdk_v2.js";
+script.id="J_secure_sdk_v2";
+script.setAttribute("id", "J_secure_sdk_v2");
+script.setAttribute("data-appkey", "23421795");
+document.body.appendChild(script);
 require("whatwg-fetch");
 /*****************按钮组件******************/
 exports.Button = require('./Base/Buttons/Button.jsx');//普通按钮

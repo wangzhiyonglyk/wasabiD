@@ -12,6 +12,7 @@ var unit=require("../../libs/unit.js");
 var FetchModel=require("../../model/FetchModel.js");
 var LinkButton=require("../Buttons/LinkButton.jsx");
 var CheckBox=require("../Form/CheckBox.jsx");
+var Radio=require("../Form/Radio.jsx");
 var Message=require("../unit/Message.jsx");
 var shouldComponentUpdate=require("../../Mixins/shouldComponentUpdate.js");
 var DataGridHandler=require("../../Mixins/DataGridHandler.js");
@@ -26,6 +27,7 @@ var DataGrid=React.createClass({
         ]) ,//宽度
         height:React.PropTypes.number,//高度
         selectAble:React.PropTypes.bool,// 是否显示选择，默认值 false
+        singleSelect:React.PropTypes.bool,//是否为单选,默认值为 false
         detailAble:React.PropTypes.bool,//是否显示详情,默认值 false
         borderAble:React.PropTypes.bool,//是否显示表格边框，默认值 false
         foncusAble:React.PropTypes.bool,//是否显示焦点行，默认值 false
@@ -72,6 +74,7 @@ var DataGrid=React.createClass({
             width:"100%",
             height:null,
             selectAble:false,
+            singleSelect:false,
             detailAble:false,
             foncusAble:false,
             borderAble:false,
@@ -133,7 +136,8 @@ var DataGrid=React.createClass({
     componentWillReceiveProps:function(nextProps) {
         if(nextProps.url&&nextProps.url!="") {
             //如果存在url
-            if (this.paramNotEaqual(  nextProps.params)) {
+            if (this.isReloadType!=true&&this.paramNotEaqual(  nextProps.params)) {
+                //如果是通过状态值来刷新的
                 //先判断是否有条件变化，没有则不更新,从第一页开始查询
                 this.updateHandler(nextProps.url,this.state.pageSize, 1, this.state.sortName, this.state.sortOrder, nextProps.params);
             }
@@ -192,13 +196,22 @@ var DataGrid=React.createClass({
                 onSelect:this.checkedAllHandler,
                 name:"all",
             }
+if(this.props.singleSelect==true){
+    headers.push(
+        <th  key="headercheckbox" className="check-column">
 
-            headers.push(
-                <th  key="headercheckbox" className="check-column">
-                    <CheckBox {...props} ></CheckBox>
-                </th>
+        </th>
 
-            );
+    );
+}
+            else {
+    headers.push(
+        <th key="headercheckbox" className="check-column">
+            <CheckBox {...props} ></CheckBox>
+        </th>
+    );
+}
+
         }
         this.state.headers.map((header, index) => {
                 if(header==null)
@@ -258,10 +271,23 @@ var DataGrid=React.createClass({
                     onSelect:this.onChecked.bind(this,rowIndex),
                     name:key,
                 }
-                tds.push(
-                    <td  key ={"bodycheckbox"+rowIndex.toString()}  className="check-column">
-                        <CheckBox {...props} ></CheckBox> </td>
-                );
+
+                if(this.props.singleSelect==true)
+                {
+                    tds.push(
+                        <td  key ={"bodycheckbox"+rowIndex.toString()}  className="check-column">
+                            <Radio {...props} ></Radio> </td>
+                    );
+
+                }
+                else
+                {
+                    tds.push(
+                        <td  key ={"bodycheckbox"+rowIndex.toString()}  className="check-column">
+                            <CheckBox {...props} ></CheckBox> </td>
+                    );
+
+                }
 
             }
 
@@ -285,8 +311,8 @@ var DataGrid=React.createClass({
                 } else {//为空时
                     content = rowData[header.name];
                 }
-               let whiteSpace="nowrap";//默认不换行,对超过30个字的,设置为换行模式
-               if(content&&typeof  content !=="string"&&content!=="number") {
+                let whiteSpace="nowrap";//默认不换行,对超过30个字的,设置为换行模式
+                if(content&&typeof  content !=="string"&&content!=="number") {
 
                     if(content.key&&content.key.toString().length>30) {
                         whiteSpace = "normal";
@@ -294,11 +320,11 @@ var DataGrid=React.createClass({
                     { whiteSpace = "normal";
 
                     }
-               }
+                }
                 else if(content &&typeof  content.toString()=="string"&&content.toString().length>30)
-               {
-                   whiteSpace="normal";
-               }
+                {
+                    whiteSpace="normal";
+                }
 
                 if (columnIndex==0&&this.props.detailAble) {
                     //在第一列显示详情

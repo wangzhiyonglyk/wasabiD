@@ -51,7 +51,7 @@ var Text=React.createClass({
             "right"
         ]),//组件在表单一行中的位置
 
-       //其他属性
+        //其他属性
         rows:React.PropTypes.number,//行数
         min:React.PropTypes.number,//最小值,最小长度,
         max:React.PropTypes.number,//最大值,最大长度
@@ -117,6 +117,15 @@ var Text=React.createClass({
             required: nextProps.required,
             validateClass:"",//重置验证样式
         });
+
+    },
+    componentDidMount:function()
+    {
+        this.validateInput=true;//设置初始化值
+    },
+    componentDidUpdate:function()
+    {
+        this.validateInput=true;//设置初始化值
     },
     changeHandler:function(event) {
         if (this.validateInput==true) {
@@ -156,7 +165,7 @@ var Text=React.createClass({
             }
             //回传给表单组件
             if (this.props.backFormHandler != null) {
-                    this.props.backFormHandler(event.target.value, event.target.value, this.props.name);
+                this.props.backFormHandler(event.target.value, event.target.value, this.props.name);
 
             }
 
@@ -172,6 +181,7 @@ var Text=React.createClass({
             {//防止ctrl,command键
                 this.validateInput=false;
             }
+
         }
         if(this.props.onKeyDown!=null)
         {
@@ -225,14 +235,14 @@ var Text=React.createClass({
             className:"wasabi-form-control  "+(this.props.className!=null?this.props.className:"")
 
         }//文本框的属性
-       var control=null;
+        var control=null;
         if(this.props.type!="textarea")
         {
-             control = <input  ref="input" type={inputType}   {...inputProps} onClick={this.clickHandler}
-                                  onChange={this.changeHandler} onKeyDown={this.keyDownHandler}
-                                  onKeyUp={this.keyUpHandler} onFocus={this.focusHandler}
-                               onBlur={this.blurHandler}
-                               value={this.state.value}></input>;
+            control = <input  ref="input" type={inputType}   {...inputProps} onClick={this.clickHandler}
+                              onChange={this.changeHandler} onKeyDown={this.keyDownHandler}
+                              onKeyUp={this.keyUpHandler} onFocus={this.focusHandler}
+                              onBlur={this.blurHandler}
+                              value={this.state.value}></input>;
         }
         else {
             control = <textarea ref="input"  {...inputProps} onClick={this.clickHandler}

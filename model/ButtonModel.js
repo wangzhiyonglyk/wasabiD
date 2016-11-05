@@ -22,7 +22,6 @@ class ButtonModel
         this.className=null;
         this.style=null;
         this.draggable=false;
-        this.delay=null;
 
     }
 }

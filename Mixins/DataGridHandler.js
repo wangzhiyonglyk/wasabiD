@@ -49,24 +49,24 @@ let DataGridHandler={
             {
 
                 var footerModelValue=rowData[footerModel.name];//当前行当前列的值
-                if(typeof footerModel.content==="function")
-                {//有函数则通过计算得到值
-                    footerModelValue=footerModel.content(rowData,rowIndex);//
-                }
+            if(typeof footerModel.content==="function")
+            {//有函数则通过计算得到值
+                footerModelValue=footerModel.content(rowData,rowIndex);//
+            }
 
-                if(typeof (footerModelValue*1)=="number")
+            if(typeof (footerModelValue*1)=="number")
 
-                {//如果值可以传为数值
-                    if(sum==null)
-                    {
-                        sum=0;//可以计算则先设置为0
-                    }
-                    sum+=footerModelValue*1;
+            {//如果值可以传为数值
+                if(sum==null)
+                {
+                    sum=0;//可以计算则先设置为0
                 }
-                else {
+                sum+=footerModelValue*1;
+            }
+            else {
 
-                }
-            });
+            }
+        });
         }
         else {
         }
@@ -80,20 +80,20 @@ let DataGridHandler={
         {
             this.state.data.map((rowData,rowIndex)=> {
                 var footerModelValue = rowData[footerModel.name];//当前行当前列的值
-                if (typeof  footerModel.content === "function") {//有函数则通过计算得到值
-                    footerModelValue = footerModel.content(rowData, rowIndex);//
+            if (typeof  footerModel.content === "function") {//有函数则通过计算得到值
+                footerModelValue = footerModel.content(rowData, rowIndex);//
+            }
+
+            if (typeof (footerModelValue * 1) == "number") {
+                if (sum == null) {
+                    sum = 0;//可以计算则先设置为0
                 }
+                sum += footerModelValue * 1;
+            } else {
 
-                if (typeof (footerModelValue * 1) == "number") {
-                    if (sum == null) {
-                        sum = 0;//可以计算则先设置为0
-                    }
-                    sum += footerModelValue * 1;
-                } else {
+            }
 
-                }
-
-            });
+        });
             avg=(sum/this.state.data.length).toFixed(2);
         }
         else {
@@ -237,7 +237,12 @@ let DataGridHandler={
         if(!params||params=="reload")
         {//说明是刷新(reload字符,是因为从刷新按钮过来的
 
+
             params=this.state.params;
+        }
+        else {//说明是重新查询
+            this.isReloadType=true;//标记一下,说明用户使用的是ref方式查询数据
+
         }
         if(this.state.url==null||this.state.url==="")
         {//没有传url
@@ -339,6 +344,10 @@ let DataGridHandler={
     },
     onChecked:function(index,value) {//选中事件
         let checkedData=(this.state.checkedData);//已经选中的行
+        if(this.props.singleSelect==true)
+        {
+            checkedData=[];//单选先清空之前的选择
+        }
         let key=this.getKey(index);//获取关键字
         if(value&&value!=""){
             checkedData.set(key,this.state.data[index]);
@@ -346,6 +355,7 @@ let DataGridHandler={
         {
             checkedData.delete(key,this.state.data[index]);
         }
+
         this.setState({
             checkedData:checkedData
         })
@@ -492,11 +502,11 @@ let DataGridHandler={
                 }
 
                 this.setState({
-                    detailIndex: key,
-                    detailView: <tr key={key+"detail"}>
-                        <td colSpan={colSpan}><div className="wasabi-detail" >{detail}</div></td>
+                        detailIndex: key,
+                        detailView: <tr key={key+"detail"}>
+                    <td colSpan={colSpan}><div className="wasabi-detail" >{detail}</div></td>
                     </tr>,
-                })
+            })
             }
         }
     },

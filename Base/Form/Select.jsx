@@ -430,7 +430,7 @@ let Select=React.createClass({
                     <div className={"nice-select "} style={style}  onMouseOut={this.mouseOutHandler}   >
                         <i className={"picker-clear"} onClick={this.clearHandler} style={{display:this.state.readonly?"none":(this.state.value==""||!this.state.value)?"none":"inline"}}></i>
                         <i className={"icon "} onClick={this.showItem}></i>
-                        <input type="text" {...inputProps} value={this.state.text}    onChange={this.changeHandler}  />
+                        <input type="text" {...inputProps} value={this.state.text}  onClick={this.showItem}  onChange={this.changeHandler}  />
 
                         {
                             control
