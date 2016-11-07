@@ -196,21 +196,21 @@ var DataGrid=React.createClass({
                 onSelect:this.checkedAllHandler,
                 name:"all",
             }
-if(this.props.singleSelect==true){
-    headers.push(
-        <th  key="headercheckbox" className="check-column">
+            if(this.props.singleSelect==true){
+                headers.push(
+                    <th  key="headercheckbox" className="check-column">
 
-        </th>
+                    </th>
 
-    );
-}
+                );
+            }
             else {
-    headers.push(
-        <th key="headercheckbox" className="check-column">
-            <CheckBox {...props} ></CheckBox>
-        </th>
-    );
-}
+                headers.push(
+                    <th key="headercheckbox" className="check-column">
+                        <CheckBox {...props} ></CheckBox>
+                    </th>
+                );
+            }
 
         }
         this.state.headers.map((header, index) => {
@@ -329,7 +329,7 @@ if(this.props.singleSelect==true){
                 if (columnIndex==0&&this.props.detailAble) {
                     //在第一列显示详情
                     tds.push( <td  onClick={this.detailHandler.bind(this,rowIndex,rowData)}  key={"col"+rowIndex.toString()+"-"+columnIndex.toString()} style={{textAlign:(header.align?header.align:"left"),whiteSpace:whiteSpace}}>{content}
-                        <div style={{display:"inline",float:"left",paddingLeft:2}}> <LinkButton iconCls="icon-detail" tip="查看详情" onClick={this.detailHandler.bind(this,rowIndex,rowData)}></LinkButton></div>
+                        <div style={{display:"inline",float:"left",paddingLeft:2}}> <LinkButton iconCls="icon-detail" tip="查看详情" ></LinkButton></div>
                     </td>);
                 }
                 else

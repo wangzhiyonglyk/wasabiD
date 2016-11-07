@@ -494,19 +494,26 @@ let DataGridHandler={
         else {
             if (this.props.detailHandler != null) {
                 var detail = this.props.detailHandler(rowData);
-                var colSpan = this.state.headers.length;
+                if(!detail) {
+                    this.setState({
+                        detailIndex: null,//方便下次操作
+                        detailView: null,
+                    })
+                }
+                else {
+                    var colSpan = this.state.headers.length;
+                    if (this.props.selectAble == true) {
+                        colSpan++;
+                    }
 
-
-                if (this.props.selectAble == true) {
-                    colSpan++;
+                    this.setState({
+                            detailIndex: key,
+                            detailView: <tr key={key+"detail"}>
+                        <td colSpan={colSpan}><div className="wasabi-detail" >{detail}</div></td>
+                        </tr>,
+                })
                 }
 
-                this.setState({
-                        detailIndex: key,
-                        detailView: <tr key={key+"detail"}>
-                    <td colSpan={colSpan}><div className="wasabi-detail" >{detail}</div></td>
-                    </tr>,
-            })
             }
         }
     },
