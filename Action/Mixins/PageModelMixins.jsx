@@ -150,7 +150,7 @@ let PageModelMixins= {
     },
     submitButton:function(disabled) {//提交按钮对象
         let btn =new ButtonModel("btnSubmit","提交");
-        btn.theme="green";
+        btn.theme=this.props.submitTheme;
         btn.disabled=disabled;
         btn.delay=disabled?null:3000;//防止重复提交
         return btn;
@@ -163,33 +163,42 @@ let PageModelMixins= {
     initModelSuccess:function(result) {//获取数据模型成功
        if(result.data!=null&&result.data instanceof Array)
        {
-           let model=[];let filterModel=[];let headers=[];
-           for(let index=0;index.result.data.length;index++)
-           {
-                var modelRel=new FormModel(result.data[index].name,result.data[index].label);
-                modelRel={...result.data[index]};//解构
-               if(modelRel.filterAble==true)
-               {//此字段可用于筛选
-                filterModel.push(modelRel);//加入筛选模型中
-               }
-               if(modelRel.gridAble==true)
-               {//此字段可用于列表
-                   var headerModel=new  HeaderModel(modelRel.name,model.label);//得到默认表头
-                    if(modelRel.headerModel)
-                    {//用户定义了其他设置
-                        headerModel={...modelRel.headerModel};//解构
+           if(this.props.initModel)
+           {//用户进行一步处理数据模型,有返回值
+                let returnValue=this.props.initModel(result.data);
+               if(returnValue) {//有返回值
 
-                    }
+                   result.data=returnValue;
+               }
+
+           }
+           let model=[];//表单的数据模型
+           let filterModel=[];//筛选栏的数据模型
+           let headers=[];//列表头的数据模型
+           for(let index=0;index<result.data.length;index++) {
+               var modelOject = new FormModel(result.data[index].name, result.data[index].label);
+               modelOject = {...result.data[index]};//解构
+               if (modelOject.filterAble == true) {//此字段可用于筛选
+                   //除去验证属性
+                   var filterModel=unit.clone(modelOject);
+                   filterModel.required=false;
+                   filterModel.regexp=null;
+                   filterModel.min=null;
+                   filterModel.max=null;
+                   filterModel.push(filterModel);//加入筛选模型中
+               }
+               if (modelOject.gridAble == true) {//此字段可用于列表
+                   var headerModel = new HeaderModel(modelOject.name, model.label);//得到默认表头
+                   if (modelOject.headerModel) {//用户定义了其他设置
+                       headerModel = {...modelOject.headerModel};//解构
+
+                   }
                    headers.push(headerModel)//加入列表表头模型
                }
-               model.push(modelRel);
+               model.push(modelOject);
 
            }
-           if(this.props.initModel!=null)
-           {//用户进行一步处理数据模型,有返回值
-               model=this.props.initModel(model);
 
-           }
            this.setState({
                model:model,
                filterModel:filterModel,

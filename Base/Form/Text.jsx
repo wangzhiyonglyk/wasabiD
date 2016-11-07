@@ -229,10 +229,11 @@ var Text=React.createClass({
         let inputProps=
         {
             readOnly:this.state.readonly==true?"readonly":null,
-            style:this.props.style,
+            style:style,
             name:this.props.name,
             placeholder:(this.props.placeholder===""||this.props.placeholder==null)?this.state.required?"必填项":"":this.props.placeholder,
-            className:"wasabi-form-control  "+(this.props.className!=null?this.props.className:"")
+            className:"wasabi-form-control  "+(this.props.className!=null?this.props.className:""),
+            rows:this.props.rows
 
         }//文本框的属性
         var control=null;

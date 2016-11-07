@@ -21,6 +21,28 @@ var Form=React.createClass({
         closeHide:React.PropTypes.bool,//关闭按钮是否隐藏
         submitHandler:React.PropTypes.func,//提交成功后的回调事件
         closeHandler:React.PropTypes.func,//关闭事件的回调事件
+        submitTheme:React.PropTypes.oneOf([//提交按钮默认主题
+            "primary",
+            "default",
+            "success",
+            "info",
+            "warning",
+            "danger",
+            "green",
+            "cancel"
+        ]),
+        closeTheme:React.PropTypes.oneOf([//关闭按钮默认主题
+            "primary",
+            "default",
+            "success",
+            "info",
+            "warning",
+            "danger",
+            "green",
+            "cancel"
+        ]),
+
+
 
 
     },
@@ -37,6 +59,8 @@ var Form=React.createClass({
           closeHide:false,//关闭按钮是否隐藏
           submitHandler: null,//提交成功后的回调事件
           closeHandler:null,//关闭事件的回调事件
+          submitTheme:"green",//提交按钮默认主题
+          closeTheme:"cancel"//关闭按钮默认主题
 
       }
 
@@ -180,7 +204,7 @@ var Form=React.createClass({
         for(let v in this.refs)
         {
             if(isva) {
-                //验证成功，则继续验证
+                //验证成功，则继续验证,这样就可以显示所有验证样式
                 isva = this.refs[v].validate();
             }else
             {//不成功则继续验证但不再回执

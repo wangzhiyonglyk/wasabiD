@@ -290,7 +290,7 @@ let ComboBox=React.createClass({
         let inputProps =
         {
             readOnly: this.state.readonly == true ? "readonly" : null,
-            style: this.props.style,
+            style: style,
             name: this.props.name,
             placeholder:(this.props.placeholder===""||this.props.placeholder==null)?this.state.required?"必填项":"":this.props.placeholder,
             className:"wasabi-form-control  "+(this.props.className!=null?this.props.className:"")

@@ -29,6 +29,7 @@ let Page=React.createClass({
             queryUrl: React.PropTypes.string,//不分页查询url
             pageUrl:React.PropTypes.string,//分页查询url
             initModel:React.PropTypes.func,//对数据模型再进一步处理,有返回值
+            submitTheme:React.PropTypes.string,//提交按钮主题
         },
         getDefaultProps: function () {
             return {
@@ -46,6 +47,7 @@ let Page=React.createClass({
                 queryUrl:null,
                 pageUrl:null,
                 initModel:null,
+                submitTheme:"green",
             }
         },
         getInitialState: function () {
@@ -57,28 +59,27 @@ let Page=React.createClass({
                 updateUrl: this.updateUrl(),//生成更新url
                 queryUrl: this.queryUrl(),//生成不分页url
                 pageUrl: this.pageUrl(),//分页的url
-                filterModel: null,//筛选数据模型
-                model: null,//表单模型,
+                filterModel: [],//筛选数据模型
+                model: [],//表单模型,
                 disabled: false,//表单是否只读
-                btttons: null,//操作按钮模型
-                headers: null,//列表表头
+                btttons: [],//操作按钮模型
+                headers: [],//列表表头
                 submitButton:this.submitButton(false),//提交按钮对象
                 params: this.props.params,//列表筛选条件
 
             }
         },
-        componentDidMount:function()
-        {
+        componentDidMount:function() {
             this.initModel();//初始化数据模型
         },
         render: function () {
             <div>
                 <div
-                    style={{display:(this.state.searchModel==null||(this.state.searchModel instanceof Array&&this.state.searchModel.length==0))?"none":"bloack"}}>
+                    style={{display:(this.state.filterModel==null||(this.state.filterModel instanceof Array&&this.state.filterModel.length==0))?"none":"block"}}>
                     <SearchBar ref="searchbar" model={this.state.filterModel}
                                filterHandler={this.filterHandler}></SearchBar></div>
                 <div
-                    style={{display:(this.state.buttons==null ||(this.state.btttons instanceof Array&&this.state.btttons.length==0))?"none":"bloack"}}>
+                    style={{display:(this.state.buttons==null ||(this.state.btttons instanceof Array&&this.state.btttons.length==0))?"none":"block"}}>
                     <Toolbar ref="toolbar" buttons={this.state.buttons} buttonClick={this.btnHandler}></Toolbar>
                 </div>
                 <DataGrid ref="datagrid" url={this.state.pageUrl} params={this.state.params}
@@ -92,3 +93,4 @@ let Page=React.createClass({
         }
     }
 )
+module .exports=Page;

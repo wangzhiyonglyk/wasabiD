@@ -11,23 +11,26 @@ let SetStyle= {
             style = {};
         }
 
-            if (this.props.width != null) {
-                style.width = this.props.width;//设置了宽度属性为最先级别
+        if (this.props.width != null) {
+            style.width = this.props.width;//设置了宽度属性为最先级别
+            if (type && type == "input") {//因为表单组件设置了一个最小宽度，所以一定除去这个属性
+                style.minWidth = this.props.width;//一定要设置这个否则跟原有的样式产生冲突
+            }
+
+        }
+        else {
+            if (style.width) {//用户设置宽度,
                 if (type && type == "input") {//因为表单组件设置了一个最小宽度，所以一定除去这个属性
-                    style.minWidth = this.props.width;//一定要设置这个否则跟原有的样式产生冲突
-                }
+                    style.minWidth = style.width;//一定要设置这个否则跟原有的样式产生冲突
 
-            }
-            else {
-                if (style.width) {//用户设置宽度,
-                    if (type && type == "input") {//因为表单组件设置了一个最小宽度，所以一定除去这个属性
-                        style.minWidth = style.width;//一定要设置这个否则跟原有的样式产生冲突
-
-                    }
                 }
             }
+        }
 
-
+        if(this.props.height)
+        {
+            style.height=this.props.height;
+        }
 
         if (type && type == "input") {
 
