@@ -17,9 +17,10 @@ var Message=require("../unit/Message.jsx");
 var shouldComponentUpdate=require("../../Mixins/shouldComponentUpdate.js");
 var DataGridHandler=require("../../Mixins/DataGridHandler.js");
 var DataGridExtend=require("../../Mixins/DataGridExtend.js");
+var pasteExtend=require("../../Mixins/pasteExtend.js");
 
 var DataGrid=React.createClass({
-    mixins:[shouldComponentUpdate,DataGridHandler,DataGridExtend],
+    mixins:[shouldComponentUpdate,DataGridHandler,DataGridExtend,pasteExtend],
     propTypes: {
         width:React.PropTypes.oneOfType([
             React.PropTypes.number,

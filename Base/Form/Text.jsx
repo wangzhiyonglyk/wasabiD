@@ -9,8 +9,9 @@ let setStyle=require("../../Mixins/setStyle.js");
 var validate=require("../../Mixins/validate.js");
 var shouldComponentUpdate=require("../../Mixins/shouldComponentUpdate.js");
 var Label=require("../Unit/Label.jsx");
+var pasteExtend=require("../../Mixins/pasteExtend.js");
 var Text=React.createClass({
-    mixins:[setStyle,validate,shouldComponentUpdate],
+    mixins:[setStyle,validate,shouldComponentUpdate,pasteExtend],
     propTypes: {
         type:React.PropTypes.oneOf([
             "text",//普通输入框
@@ -128,6 +129,10 @@ var Text=React.createClass({
         this.validateInput=true;//设置初始化值
     },
     changeHandler:function(event) {
+        if(event.target.value.indexOf("\n")>-1)
+        {
+            return ;
+        }
         if (this.validateInput==true) {
             var istrue=true;
             if((this.props.type=="integer"||this.props.type=="number")) {
@@ -218,6 +223,45 @@ var Text=React.createClass({
             this.props.onClick(this.props.name,this.state.value,model);
         }
     },
+    onPaste:function(event)
+    {
+
+        this.pasteHandler(event,this.pasteSuccess);
+    },
+    pasteSuccess:function(data)
+    {
+        var str="";
+        for(var row=0;row<data.length;row++)
+        {
+            for(var col=0;col<data[row].length;col++)
+            {
+                if(str=="") {
+                    str = data[row][col];
+
+                }
+                else {
+                    str += "," + data[row][col];
+                }
+            }
+
+        }
+
+        this.setState({
+            value: str,
+            text:str,
+        });
+
+        if (this.props.onChange != null) {
+            this.props.onChange(str);//自定义的改变事件
+
+        }
+        //回传给表单组件
+        if (this.props.backFormHandler != null) {
+            this.props.backFormHandler(str, str, this.props.name);
+
+        }
+
+    },
     render:function() {
         var inputType="text";
         if(this.props.type=="password") {
@@ -255,7 +299,7 @@ var Text=React.createClass({
 
 
 
-        return (<div className={componentClassName+this.state.validateClass} style={style}>
+        return (<div className={componentClassName+this.state.validateClass} style={style} onPaste={this.onPaste}>
                 <Label name={this.props.label} hide={this.state.hide} required={this.state.required}></Label>
                 <div className={ "wasabi-form-group-body"}>
                     {control}
