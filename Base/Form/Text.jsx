@@ -130,8 +130,8 @@ var Text=React.createClass({
     },
     changeHandler:function(event) {
         if(event.target.value.indexOf("\n")>-1)
-        {
-            return ;
+        {//todo 暂时去掉
+            //  return ;
         }
         if (this.validateInput==true) {
             var istrue=true;
@@ -225,8 +225,8 @@ var Text=React.createClass({
     },
     onPaste:function(event)
     {
-
-        this.pasteHandler(event,this.pasteSuccess);
+//todo 暂时去掉
+        // this.pasteHandler(event,this.pasteSuccess);
     },
     pasteSuccess:function(data)
     {
@@ -294,7 +294,7 @@ var Text=React.createClass({
                                 onChange={this.changeHandler} onKeyDown={this.keyDownHandler}
                                 onKeyUp={this.keyUpHandler} onFocus={this.focusHandler}
                                 onBlur={this.blurHandler}
-                                value={this.state.value}></textarea>;
+                                value={this.state.value}>{this.state.value}</textarea>;
         }
 
 
