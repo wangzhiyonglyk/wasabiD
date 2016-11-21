@@ -25,6 +25,21 @@ desc:日期选择样式
   background-size: 32px;
   cursor: default;
 }
+/*下拉添加图标*/
+.combobox .pickeradd{
+  content: "";
+  display: block;
+  background-image: url(../../../img/icons/m-add.png) ;
+  background-repeat: no-repeat;
+  width: 35px;
+  height: 32px;
+  border-left: 1px solid #d7dde2;
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  background-size: 32px;
+  cursor: default;
+}
 /*清空图标*/
 .combobox .picker-clear{
   content: "";

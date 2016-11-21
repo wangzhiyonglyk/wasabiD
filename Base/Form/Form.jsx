@@ -276,7 +276,6 @@ var Form=React.createClass({
             model:newModel
         })
     },
-
     submitHandler:function() {
         //提交 数据
         var data={};//各个字段对应的值
@@ -376,30 +375,23 @@ var Form=React.createClass({
         if(this.state.model.length<columns) {//如果数据小于列数
             columns = this.state.model.length;
         }
-      switch (columns) {
-          case 1:
-              columnClass = "oneline";
-              break;
-          case 2:
-              columnClass = "twoline";
-              break;
-          case 3:
-              columnClass = "threeline";
-              break;
-          case 4:
-              columnClass = "fourline";
-              break;
-
-      }
-
-        let formSubmitVisible=true;//按钮行是否可见
-        if(this.state.disabled||(this.props.submitHide&&this.props.closeHide))
-        {
-            formSubmitVisible=false;
-        }
-        else {
+        switch (columns) {
+            case 1:
+                columnClass = "oneline";
+                break;
+            case 2:
+                columnClass = "twoline";
+                break;
+            case 3:
+                columnClass = "threeline";
+                break;
+            case 4:
+                columnClass = "fourline";
+                break;
 
         }
+
+
         style.width=allwidth;//设置表单的宽度
         style.height=this.props.height;//设置表单的高度
 
@@ -417,8 +409,15 @@ var Form=React.createClass({
         else {
             return ;
         }
-         let result=  this.setColumns();
+        let result=  this.setColumns();//得计算列的结果
+        let formSubmitVisible=true;//按钮行是否可见
+        if(this.state.disabled||(this.props.submitHide&&this.props.closeHide))
+        {
+            formSubmitVisible=false;
+        }
+        else {
 
+        }
         let virtualIndex=0;//表单组件在表单的虚拟下标,用于计算在表单中的位置
         return (
             <div className={"wasabi-form "+result.columnClass+" "+this.props.className } style={result.style}>
