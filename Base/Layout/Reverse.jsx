@@ -70,6 +70,11 @@ var Reverse=React.createClass({
         }
         this.reverseHandler();
     },
+    getState:function()
+    {//用获取状态用于父组件
+
+        return this.state.isReverse;
+    },
     reverseHandler:function() {//用于父组件调用
         if (this.state.isReverse) {
 

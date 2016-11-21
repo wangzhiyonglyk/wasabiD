@@ -33,8 +33,8 @@ let DataGridExtend={
         }
     },
     onPaste:function(event) {
-            //调用公共用的粘贴处理函数
-     this.pasteHandler(event,this.pasteSuccess);
+        //调用公共用的粘贴处理函数
+        this.pasteHandler(event,this.pasteSuccess);
     },
     pasteSuccess:function(data)
     {

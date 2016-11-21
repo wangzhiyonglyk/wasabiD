@@ -290,11 +290,17 @@ var Text=React.createClass({
                               value={this.state.value}></input>;
         }
         else {
+            //textarea 不支持null值
+            let value=this.state.value;
+            if(!value)
+            {
+                value="";
+            }
             control = <textarea ref="input"  {...inputProps} onClick={this.clickHandler}
                                 onChange={this.changeHandler} onKeyDown={this.keyDownHandler}
                                 onKeyUp={this.keyUpHandler} onFocus={this.focusHandler}
                                 onBlur={this.blurHandler}
-                                value={this.state.value}>{this.state.value}</textarea>;
+                                value={value}></textarea>;
         }
 
 

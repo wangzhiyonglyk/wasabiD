@@ -17,11 +17,11 @@ let setStyle=require("../../Mixins/setStyle.js");
 var validate=require("../../Mixins/validate.js");
 var shouldComponentUpdate=require("../../Mixins/shouldComponentUpdate.js");
 var Label=require("../Unit/Label.jsx");
-let ComboBox=React.createClass({
+let DatePicker=React.createClass({
     mixins:[setStyle,validate,shouldComponentUpdate],
     PropTypes:{
         type:React.PropTypes.oneOf[
-                "date",//日期选择
+            "date",//日期选择
                 "datetime",//时间选择
                 "daterange",//日期范围选择
                 "datetimerange"//日期时间范围选择
@@ -161,6 +161,22 @@ let ComboBox=React.createClass({
         }
 
     },
+    splitDateTime:function(datetime) {//TODO暂时不验证
+        var splitdate=datetime.split(" ")[0];
+        if(splitdate&&splitdate!="")
+        {
+            var  returnvalue={
+                year:splitdate.split("-")[0],
+                month:splitdate.split("-")[1],
+                day:splitdate.split("-")[2],
+                time:datetime.split(" ")[1]
+            }
+            return returnvalue;
+        }
+        else {
+            null;
+        }
+    },
     showPicker:function() {//显示选择
         if(this.state.readonly)
         {
@@ -174,6 +190,11 @@ let ComboBox=React.createClass({
         }
     },
     onSelect:function(value,text) {//选中事件
+        if(this.props.name=="test")
+        {
+            console.log(value,text);
+        }
+
         this.setState({
             show:false,
             value:value,
@@ -207,7 +228,7 @@ let ComboBox=React.createClass({
 
     },
     renderDateTime:function() {
-        var dateobj=this.splitDate(this.state.value);
+        var dateobj=this.splitDateTime(this.state.value);
         return <DateTime ref="combobox" {...dateobj} name={this.props.name} showTime={true} onSelect={this.onSelect}></DateTime>
 
     },
@@ -322,4 +343,4 @@ let ComboBox=React.createClass({
     }
 
 });
-module.exports=ComboBox;
+module.exports=DatePicker;

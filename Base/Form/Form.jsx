@@ -47,22 +47,22 @@ var Form=React.createClass({
 
     },
     getDefaultProps:function() {
-      return {
-          model: [],//表单数据模型
-          width:document.body.clientWidth,//默认宽度
-          height:null,//高度
-          className:"" ,//自定义样式
-          disabled:false,//是否只读
-          submitTitle:"提交",//提交按钮标题
-          closeTitle:"关闭",//关闭按钮标题
-          submitHide:false,//提交按钮是否隐藏
-          closeHide:false,//关闭按钮是否隐藏
-          submitHandler: null,//提交成功后的回调事件
-          closeHandler:null,//关闭事件的回调事件
-          submitTheme:"green",//提交按钮默认主题
-          closeTheme:"cancel"//关闭按钮默认主题
+        return {
+            model: [],//表单数据模型
+            width:document.body.clientWidth,//默认宽度
+            height:null,//高度
+            className:"" ,//自定义样式
+            disabled:false,//是否只读
+            submitTitle:"提交",//提交按钮标题
+            closeTitle:"关闭",//关闭按钮标题
+            submitHide:false,//提交按钮是否隐藏
+            closeHide:false,//关闭按钮是否隐藏
+            submitHandler: null,//提交成功后的回调事件
+            closeHandler:null,//关闭事件的回调事件
+            submitTheme:"green",//提交按钮默认主题
+            closeTheme:"cancel"//关闭按钮默认主题
 
-      }
+        }
 
     },
     getInitialState:function() {
@@ -81,7 +81,7 @@ var Form=React.createClass({
     },
     changeHandler:function(value,text,name,data) {
         //子组件值发生改变时
-      var newModel=this.state.model;
+        var newModel=this.state.model;
         var pickerRowModel=this.state.pickerRowModel;
         for(var i=0;i<newModel.length;i++)
         {
@@ -117,7 +117,7 @@ var Form=React.createClass({
 
             if(this.refs[v].props.name.indexOf(",")>-1)
             {//含有多个字段
-                 var nameSplit=this.refs[v].props.name.split(",");
+                var nameSplit=this.refs[v].props.name.split(",");
                 if(this.refs[v].state.value&&this.refs[v].state.value!="")
                 {
                     var valueSplit=this.refs[v].state.value.split(",");
@@ -133,7 +133,7 @@ var Form=React.createClass({
                 {
                     for(let index =0;index<nameSplit.length;index++)
                     {
-                            data[nameSplit[index]]=null;
+                        data[nameSplit[index]]=null;
                     }
                 }
             }
@@ -176,7 +176,7 @@ var Form=React.createClass({
                 {
                     for(let index =0;index<nameSplit.length;index++)
                     {
-                            textData[nameSplit[index]]="";
+                        textData[nameSplit[index]]="";
                     }
                 }
             }
@@ -191,11 +191,11 @@ var Form=React.createClass({
         return textData;
     },
     getRowDataByName:function(name) {
-             return this.state.pickerRowModel.get(name);
+        return this.state.pickerRowModel.get(name);
     },
     getModel:function() {
         //获取当前表单数据model
-       var newmodel=(this.state.model);//
+        var newmodel=(this.state.model);//
         return newmodel;
     },
     validate:function() {
@@ -215,20 +215,20 @@ var Form=React.createClass({
         return isva;
     },
     getComponentData:function(name) {//只读属性，获取对应的字段的数据源
-      return  JSON.parse(window.localStorage.getItem(name+"data"))
+        return  JSON.parse(window.localStorage.getItem(name+"data"))
     },
     clearData:function() {//清空数据
-      var newModel=this.state.model;
+        var newModel=this.state.model;
         for(let i=0;i<newModel.length;i++)
         {
-          if( newModel[i].readonly)
-          {
+            if( newModel[i].readonly)
+            {
 
-          }
+            }
             else {
-              newModel[i].value=null;
-              newModel[i].text=null;
-          }
+                newModel[i].value=null;
+                newModel[i].text=null;
+            }
 
         }
         this.setState({
@@ -237,61 +237,61 @@ var Form=React.createClass({
     },
     submitHandler:function() {
         //提交 数据
-            var data={};//各个字段对应的值
-            var textData={};//各个字段对应的文本值
-            let isva=true;
-         for(let v in this.refs) {
-             if(this.refs[v].props.type=="button")
-             {
-                 continue;//如果按钮则跳过
-             }
-                if(isva) {
-                    //验证成功，则继续验证
-                    isva = this.refs[v].validate();
-                }else
-                {//不成功则继续验证但不再回执
-                    this.refs[v].validate();
-                }
-                if(this.refs[v].props.name.indexOf(",")>-1) {//含有多个字段
-                    var nameSplit=this.refs[v].props.name.split(",");
-                    if(this.refs[v].state.value&&this.refs[v].state.value!="")
-                    {
-                        var valueSplit=this.refs[v].state.value.split(",");
-                        var textSplit=this.refs[v].state.text.split(",");//文本值
-                        for(let index =0;index<valueSplit.length;index++)//有可能分离的值比字段少
-                        {
-                            if(index<valueSplit.length)
-                            {
-                                data[nameSplit[index]]=valueSplit[index];
-                                textData[nameSplit[index]]=textSplit[index];
-                            }
-                        }
-
-                    }
-                    else {
-                        for(let index =0;index<nameSplit.length;index++)
-                        {
-                            data[nameSplit[index]]=null;
-                                textData[nameSplit[index]]="";
-                        }
-                    }
-                }
-                else
+        var data={};//各个字段对应的值
+        var textData={};//各个字段对应的文本值
+        let isva=true;
+        for(let v in this.refs) {
+            if(this.refs[v].props.type=="button")
+            {
+                continue;//如果按钮则跳过
+            }
+            if(isva) {
+                //验证成功，则继续验证
+                isva = this.refs[v].validate();
+            }else
+            {//不成功则继续验证但不再回执
+                this.refs[v].validate();
+            }
+            if(this.refs[v].props.name.indexOf(",")>-1) {//含有多个字段
+                var nameSplit=this.refs[v].props.name.split(",");
+                if(this.refs[v].state.value&&this.refs[v].state.value!="")
                 {
-                    data[this.refs[v].props.name] = this.refs[v].state.value;
-                    textData[this.refs[v].props.name] = this.refs[v].state.text;
+                    var valueSplit=this.refs[v].state.value.split(",");
+                    var textSplit=this.refs[v].state.text.split(",");//文本值
+                    for(let index =0;index<valueSplit.length;index++)//有可能分离的值比字段少
+                    {
+                        if(index<valueSplit.length)
+                        {
+                            data[nameSplit[index]]=valueSplit[index];
+                            textData[nameSplit[index]]=textSplit[index];
+                        }
+                    }
 
                 }
+                else {
+                    for(let index =0;index<nameSplit.length;index++)
+                    {
+                        data[nameSplit[index]]=null;
+                        textData[nameSplit[index]]="";
+                    }
+                }
+            }
+            else
+            {
+                data[this.refs[v].props.name] = this.refs[v].state.value;
+                textData[this.refs[v].props.name] = this.refs[v].state.text;
 
             }
 
-     if(isva) {
+        }
 
-         if (this.props.submitHandler != null) {
-             this.props.submitHandler(data, textData);
-         }
+        if(isva) {
 
-     }
+            if (this.props.submitHandler != null) {
+                this.props.submitHandler(data, textData);
+            }
+
+        }
     },
     closeHandler:function() {//关闭事件
         if(this.props.closeHandler!=null)
@@ -353,71 +353,71 @@ var Form=React.createClass({
         let virtualIndex=0;//表单组件在表单的虚拟下标,用于计算在表单中的位置
         return (
             <div className={"wasabi-form "+columnClass+" "+this.props.className } style={style}>
-                        <div  className={"form-body  "}>
+                <div  className={"form-body  "}>
+                    {
+
+                        this.state.model.map((child,index) =>{
+
+                            let position=virtualIndex%columns;//计算在表单中的位置
+                            if(position==0)
+                            {
+                                position="left";
+                            }
+                            else if(position==columns-1)
+                            {
+                                position="right";
+                            }
+                            else {
+                                position="default";
+                            }
+                            var size=child.onlyline==true?"onlyline":child.size;//组件大小
+                            if(size=="default")
+                            {
+                                virtualIndex++;
+                            }
+                            else if(size=="large")
                             {
 
-                                this.state.model.map((child,index) =>{
+                                if(columns==1)
+                                {
+                                    virtualIndex++;//每行只有一列
+                                }
+                                else {
+                                    virtualIndex+=2;
+                                }
 
-                                  let position=virtualIndex%columns;//计算在表单中的位置
-                                    if(position==0)
-                                    {
-                                        position="left";
-                                    }
-                                    else if(position==columns-1)
-                                    {
-                                        position="right";
-                                    }
-                                    else {
-                                        position="default";
-                                    }
-                                    var size=child.onlyline==true?"onlyline":child.size;//组件大小
-                                    if(size=="default")
-                                    {
-                                        virtualIndex++;
-                                    }
-                                    else if(size=="large")
-                                    {
-
-                                        if(columns==1)
-                                        {
-                                            virtualIndex++;//每行只有一列
-                                        }
-                                        else {
-                                            virtualIndex+=2;
-                                        }
-
-                                    }
-                                    else if(size=="onlyline")
-                                    {
-                                        virtualIndex+=columns;
-                                    }
-
-
-                                return(
-                                    <Input ref={child.name}
-                                        key={child.name+index.toString()}
-                                        {...child}
-                                        position={position}
-                                         readonly={this.state.disabled==true?true:child.readonly}
-                                           backFormHandler={this.changeHandler}
-                                    ></Input>
-                                );
-                                })
+                            }
+                            else if(size=="onlyline")
+                            {
+                                virtualIndex+=columns;
                             }
 
-                <div className="clear">
-                    {
-                        //解决子级用css float浮动 而父级div没高度不能自适应高度
+
+                            return(
+                                <Input ref={child.name}
+                                       key={child.name+index.toString()}
+                                    {...child}
+                                       position={position}
+                                       readonly={this.state.disabled==true?true:child.readonly}
+                                       backFormHandler={this.changeHandler}
+                                ></Input>
+                            );
+                        })
                     }
+
+                    <div className="clear">
+                        {
+                            //解决子级用css float浮动 而父级div没高度不能自适应高度
+                        }
+                    </div>
                 </div>
-                        </div>
-                        <div className="form-submit" style={{display:(formSubmitVisible==true?"block":"none")}}>
+                <div className="form-submit" style={{display:(formSubmitVisible==true?"block":"none")}}>
                     <Button theme="green" onClick={this.submitHandler} title={this.props.submitTitle}  hide={this.state.disabled==true?true:this.props.submitHide==true?true:false}  >
                     </Button>
                     <Button  theme="cancel" onClick={this.closeHandler}  title={this.props.closeTitle}  hide={this.state.disabled==true?true:this.props.closeHide==true?true:false}   >
                     </Button>
                 </div>
-                </div>
+            </div>
         )
     }
 });

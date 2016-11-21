@@ -289,7 +289,7 @@ baseUtil.fetch = {
                         else {
 
                             if (fetchmodel.error) {
-                                fetchmodel.error(data.errCode, data.message);
+                                fetchmodel.error(data.errCode, data.message,data);
                             } else {
                                 console.log("fetch-error",data.errCode,data.message);
                                 baseUtil.showError(baseUtil.Error.HandlerError +",错误原因：" + data.message);
@@ -344,7 +344,7 @@ baseUtil.fetch = {
                         else {
                             if(fetchmodel.error)
                             {
-                                fetchmodel.error(data.errCode,data.message);
+                                fetchmodel.error(data.errCode,data.message,data);
                             }else {
                                 console.log("fetch-error",data.errCode,data.message);
                                 baseUtil.showError(baseUtil.Error.HandlerError + ",错误原因：" + data.message);

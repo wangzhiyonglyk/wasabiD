@@ -279,7 +279,6 @@ var Input=React.createClass({
     render:function() {
         var size=this.props.onlyline==true?"onlyline":this.props.size;//组件大小
         var componentClassName=  "wasabi-form-group "+size+" "+(this.props.className?this.props.className:"");//组件的基本样式
-
         if(this.props.type=="button")
         {
 
