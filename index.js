@@ -42,6 +42,7 @@ exports.DateRange = require('./Base/Form/DateRange.jsx');//日期范围选择组
 exports.DateTimeRange = require('./Base/Form/DateTimeRange.jsx');//日期时间范围选择组件
 
 /*****************下拉组件******************/
+exports.MutiText = require('./Base/Form/MutiText.jsx');//多行添加组件
 exports.Select = require('./Base/Form/Select.jsx');//普通下拉选择组件
 exports.Picker = require('./Base/Form/Picker.jsx');//级联选择组件
 exports.GridPicker = require('./Base/Form/GridPicker.jsx');//下拉列表选择组件
