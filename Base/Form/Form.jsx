@@ -145,6 +145,48 @@ var Form=React.createClass({
         return data;
 
     },
+    setData:function(data) {//设置值
+        if(!data)
+        {
+            return ;
+        }
+        var newModel=this.state.model;
+        for(let i=0;i<newModel.length;i++)
+        {
+            if(data[newModel[i].name])
+            {
+                if(typeof  data[newModel[i].name]==="object")
+                {//键值对
+                    try
+                    {
+                        if(data[newModel[i].name].value)
+                        {
+                            newModel[i].value=  data[newModel[i].name].value;
+                        }
+                        if(data[newModel[i].name].text)
+                        {
+                            newModel[i].text=  data[newModel[i].name].text;
+                        }
+                    }
+                    catch (e)
+                    {
+                        throw new Error(e.message);
+                        return;
+                    }
+
+                }
+                else
+                {//文本型
+                    newModel[i].value=  data[newModel[i].name];
+                    newModel[i].text=  data[newModel[i].name];
+                }
+
+            }
+        }
+        this.setState({
+            model:newModel
+        })
+    },
     getTextData:function() {
         var textData={};//各个字段对应的文本值
         let isva=true;
@@ -234,43 +276,7 @@ var Form=React.createClass({
             model:newModel
         })
     },
-    setData:function(data) {//设置值
-        if(!data)
-        {
-            return ;
-        }
-        var newModel=this.state.model;
-        for(let i=0;i<newModel.length;i++)
-        {
-             if(data[newModel[i].name])
-            {
-                if(typeof  data[newModel[i].name]==="object")
-                {//键值对
-                    try
-                    {
-                        if(data[newModel[i].name].value)
-                        {
-                          newModel[i].value=  data[newModel[i].name].value;
-                        }
-                        if(data[newModel[i].name].text)
-                        {
-                            newModel[i].text=  data[newModel[i].name].text;
-                        }
-                    }
 
-                }
-                else
-                {//文本型
-                    newModel[i].value=  data[newModel[i].name];
-                    newModel[i].text=  data[newModel[i].name];
-                }
-
-            }
-        }
-        this.setState({
-            model:newModel
-        })
-    },
     submitHandler:function() {
         //提交 数据
         var data={};//各个字段对应的值
