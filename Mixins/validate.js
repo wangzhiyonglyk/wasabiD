@@ -72,6 +72,12 @@ let Validate={
                                 helpTip = "长度不能小于" + this.state.min;
                             }
                             break;
+                        case "password":
+                            if (value.toString().length < this.state.min) {
+                                isvalidate = false;
+                                helpTip = "长度不能小于" + this.state.min;
+                            }
+                            break;
                         case "number":
 
                             if (value < this.state.min) {
@@ -105,6 +111,12 @@ let Validate={
                 if (this.state.max!=null&&this.state.max!=undefined) {
                     switch (this.props.type) {
                         case "text":
+                            if (value.toString().length > this.state.max) {
+                                isvalidate = false;
+                                helpTip = "长度不能大于" + this.state.max;
+                            }
+                            break;
+                        case "password":
                             if (value.toString().length > this.state.max) {
                                 isvalidate = false;
                                 helpTip = "长度不能大于" + this.state.max;
