@@ -41,10 +41,7 @@ var Form=React.createClass({
             "green",
             "cancel"
         ]),
-
-
-
-
+        columns:React.PropTypes.number,//自定义列数
     },
     getDefaultProps:function() {
         return {
@@ -60,8 +57,8 @@ var Form=React.createClass({
             submitHandler: null,//提交成功后的回调事件
             closeHandler:null,//关闭事件的回调事件
             submitTheme:"green",//提交按钮默认主题
-            closeTheme:"cancel"//关闭按钮默认主题
-
+            closeTheme:"cancel",//关闭按钮默认主题
+            columns:null,//自定义列数
         }
 
     },
@@ -69,14 +66,16 @@ var Form=React.createClass({
         return{
             model:(this.props.model),//一定复制
             pickerRowModel:new Map(),//下拉框中选中的完整数据
-            disabled:this.props.disabled
+            disabled:this.props.disabled,//是否只读
+            columns:this.props.columns//自定义列数
 
         }
     },
     componentWillReceiveProps:function(nextProps) {
         this.setState({
             model:( nextProps.model),
-            disabled:nextProps.disabled
+            disabled:nextProps.disabled,
+            columns:nextProps.columns,
         })
     },
     changeHandler:function(value,text,name,data) {
@@ -235,6 +234,43 @@ var Form=React.createClass({
             model:newModel
         })
     },
+    setData:function(data) {//设置值
+        if(!data)
+        {
+            return ;
+        }
+        var newModel=this.state.model;
+        for(let i=0;i<newModel.length;i++)
+        {
+             if(data[newModel[i].name])
+            {
+                if(typeof  data[newModel[i].name]==="object")
+                {//键值对
+                    try
+                    {
+                        if(data[newModel[i].name].value)
+                        {
+                          newModel[i].value=  data[newModel[i].name].value;
+                        }
+                        if(data[newModel[i].name].text)
+                        {
+                            newModel[i].text=  data[newModel[i].name].text;
+                        }
+                    }
+
+                }
+                else
+                {//文本型
+                    newModel[i].value=  data[newModel[i].name];
+                    newModel[i].text=  data[newModel[i].name];
+                }
+
+            }
+        }
+        this.setState({
+            model:newModel
+        })
+    },
     submitHandler:function() {
         //提交 数据
         var data={};//各个字段对应的值
@@ -299,46 +335,58 @@ var Form=React.createClass({
             this.props.closeHandler();
         }
     },
-    render:function() {
-        if(this.state.model  instanceof  Array ) {
-
-        }
-        else {
-            return ;
-        }
-        var style={};
+    setColumns:function () {//计算列数及样式
+        var style={};//表单栏样式
         if(this.props.style)
         {
             style=this.props.style;
         }
-        let rows=0;//行数
+
         let columns=0;//每一行的列数
         let  allwidth=this.props.width?this.props.width:document.body.clientWidth;//总宽度
         let columnClass="";//列样式
-        if(allwidth<=610) {//一列
-            columns=1;
-            columnClass="oneline";
+        if(this.state.columns)
+        {//如果自定义了,则以自定义为标准
+            columns=this.state.columns;
         }
-        else if(allwidth>=611&&allwidth<=909) {//两列
-            columns=2;
-            columnClass="twoline";
-        }
-        else if(allwidth>=910&&allwidth<=1229) {//三列
-            columns=3;
-            columnClass="threeline";
-        }
-        else if(allwidth>=1230) {//四列
-            columns=4;
-            columnClass="fourline";
-        }
-        if(this.state.model.length==1)
-        {
-            columns=1;
-            columnClass="oneline";
-        }
-        rows=Math.ceil(this.state.model.length/columns);//计算行数
+        else {//否则自动计算
+            if (allwidth <= 610) {//一列
+                columns = 1;
 
-        let formSubmitVisible=true;
+            }
+            else if (allwidth >= 611 && allwidth <= 909) {//两列
+                columns = 2;
+
+            }
+            else if (allwidth >= 910 && allwidth <= 1229) {//三列
+                columns = 3;
+
+            }
+            else if (allwidth >= 1230) {//四列
+                columns = 4;
+
+            }
+        }
+        if(this.state.model.length<columns) {//如果数据小于列数
+            columns = this.state.model.length;
+        }
+      switch (columns) {
+          case 1:
+              columnClass = "oneline";
+              break;
+          case 2:
+              columnClass = "twoline";
+              break;
+          case 3:
+              columnClass = "threeline";
+              break;
+          case 4:
+              columnClass = "fourline";
+              break;
+
+      }
+
+        let formSubmitVisible=true;//按钮行是否可见
         if(this.state.disabled||(this.props.submitHide&&this.props.closeHide))
         {
             formSubmitVisible=false;
@@ -349,21 +397,36 @@ var Form=React.createClass({
         style.width=allwidth;//设置表单的宽度
         style.height=this.props.height;//设置表单的高度
 
+        let result={
+            style:style,
+            columns:columns,
+            columnClass:columnClass
+        }
+        return result;
+    },
+    render:function() {
+        if(this.state.model  instanceof  Array ) {
+
+        }
+        else {
+            return ;
+        }
+         let result=  this.setColumns();
 
         let virtualIndex=0;//表单组件在表单的虚拟下标,用于计算在表单中的位置
         return (
-            <div className={"wasabi-form "+columnClass+" "+this.props.className } style={style}>
+            <div className={"wasabi-form "+result.columnClass+" "+this.props.className } style={result.style}>
                 <div  className={"form-body  "}>
                     {
 
                         this.state.model.map((child,index) =>{
 
-                            let position=virtualIndex%columns;//计算在表单中的位置
+                            let position=virtualIndex%result.columns;//计算在表单中的位置
                             if(position==0)
                             {
                                 position="left";
                             }
-                            else if(position==columns-1)
+                            else if(position==result.columns-1)
                             {
                                 position="right";
                             }
@@ -378,7 +441,7 @@ var Form=React.createClass({
                             else if(size=="large")
                             {
 
-                                if(columns==1)
+                                if(result.columns==1)
                                 {
                                     virtualIndex++;//每行只有一列
                                 }
@@ -389,7 +452,7 @@ var Form=React.createClass({
                             }
                             else if(size=="onlyline")
                             {
-                                virtualIndex+=columns;
+                                virtualIndex+=result.columns;
                             }
 
 
