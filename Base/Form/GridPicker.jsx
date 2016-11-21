@@ -258,12 +258,12 @@ let GridPicker=React.createClass({
         props.data=this.state.data;
         return<div className={componentClassName+this.state.validateClass} style={style}>
             <Label name={this.props.label} hide={this.state.hide} required={this.state.required}></Label>
-            <div className={ "wasabi-form-group-body"}>
+            <div className={ "wasabi-form-group-body"} style={{width:!this.props.label?"100%":null}}>
                 <div className="combobox"  style={{display:this.props.hide==true?"none":"block"}}   >
                     <i className={"picker-clear"} onClick={this.clearHandler} style={{display:this.state.readonly?"none":(this.state.value==""||!this.state.value)?"none":"inline"}}></i>
                     <i className={"pickericon"} onClick={this.showPicker}></i>
                     <input type="text" {...inputProps}  value={this.state.text}  onClick={this.showPicker} onChange={this.changeHandler}     />
-                    <div className={"dropcontainter gridpicker"+this.props.position} style={{height:this.props.height,display:this.state.show==true?"block":"none"}} onMouseOut={this.mouseOutHandler} >
+                    <div className={"dropcontainter gridpicker "+this.props.position} style={{height:this.props.height,display:this.state.show==true?"block":"none"}} onMouseOut={this.mouseOutHandler} >
                         <div>
                             <SearchBox name={this.props.name} valueField={this.props.valueField} textField={this.props.textField} onSearch={this.onSearch}></SearchBox>
                             <DataGrid {...props} height={398} params={this.state.params}></DataGrid>

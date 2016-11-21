@@ -329,8 +329,8 @@ var DataGrid=React.createClass({
 
                 if (columnIndex==0&&this.props.detailAble) {
                     //在第一列显示详情
-                    tds.push( <td  onClick={this.detailHandler.bind(this,rowIndex,rowData)}  key={"col"+rowIndex.toString()+"-"+columnIndex.toString()} style={{textAlign:(header.align?header.align:"left"),whiteSpace:whiteSpace}}>{content}
-                        <div style={{display:"inline",float:"left",paddingLeft:2}}> <LinkButton iconCls="icon-detail" tip="查看详情" ></LinkButton></div>
+                    tds.push( <td  onClick={this.detailHandler.bind(this,rowIndex,rowData)}  key={"col"+rowIndex.toString()+"-"+columnIndex.toString()} style={{textAlign:(header.align?header.align:"left"),whiteSpace:whiteSpace}}>
+                        <div style={{display:"inline",float:"left",paddingLeft:2}}> <LinkButton iconCls="icon-detail" tip="查看详情" ></LinkButton></div>  {content}
                     </td>);
                 }
                 else

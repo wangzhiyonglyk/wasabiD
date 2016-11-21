@@ -131,7 +131,7 @@ var Text=React.createClass({
     changeHandler:function(event) {
         if(event.target.value.indexOf("\n")>-1)
         {//todo 暂时去掉
-            //  return ;
+          //  return ;
         }
         if (this.validateInput==true) {
             var istrue=true;
@@ -168,7 +168,7 @@ var Text=React.createClass({
                 this.props.onChange(event.target.value);//自定义的改变事件
 
             }
-            //回传给表单组件
+            //回传给表单组件,下拉组件使用onSelect回传给表单组件
             if (this.props.backFormHandler != null) {
                 this.props.backFormHandler(event.target.value, event.target.value, this.props.name);
 
@@ -226,7 +226,7 @@ var Text=React.createClass({
     onPaste:function(event)
     {
 //todo 暂时去掉
-        // this.pasteHandler(event,this.pasteSuccess);
+       // this.pasteHandler(event,this.pasteSuccess);
     },
     pasteSuccess:function(data)
     {
@@ -307,7 +307,7 @@ var Text=React.createClass({
 
         return (<div className={componentClassName+this.state.validateClass} style={style} onPaste={this.onPaste}>
                 <Label name={this.props.label} hide={this.state.hide} required={this.state.required}></Label>
-                <div className={ "wasabi-form-group-body"}>
+                <div className={ "wasabi-form-group-body"} style={{width:!this.props.label?"100%":null}}>
                     {control}
                     <small className={"wasabi-help-block "+this.props.position} style={{display:(this.state.helpTip&&this.state.helpTip!="")?this.state.helpShow:"none"}}>{this.state.helpTip}</small>
                 </div>

@@ -287,14 +287,14 @@ let DateRange=React.createClass({
         }
 
     },
-    cancelNandler:function() {
+    cancelHandler:function() {
         this.props.onSelect(null,null,this.props.name);
     },
     render:function() {
          return (<div>
              <div className="ok">
                  <Button title="确定" name="ok"  theme="green" onClick={this.onSelectHandler}></Button>
-                 <Button title="取消" name="ok"  theme="cancel" onClick={this.cancelNandler}></Button>
+                 <Button title="取消" name="ok"  theme="cancel" onClick={this.cancelHandler}></Button>
              </div>
             <DateD   isRange={true}  year={this.state.first_year} month={this.state.first_month} day={this.state.first_day}
                         min={this.state.first_min} max={this.state.first_max}

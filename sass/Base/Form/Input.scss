@@ -7,7 +7,7 @@ desc:表单输入框样式
 外层div
 */
 
- .wasabi-form-group {
+.wasabi-form-group {
   padding-left:0px;
   padding-right:10px;
   padding-bottom: 10px;
@@ -18,25 +18,25 @@ desc:表单输入框样式
   white-space: nowrap;
 }
 
-  /*
-  label
-  */
+/*
+label
+*/
 
-  .wasabi-form-group {
-    .wasabi-form-group-label {
-      padding-right: 4px;
-      height: 34px;
-      float: left;
-      text-align: right;
-      white-space: normal;
-      display: table;
-      label{
-        vertical-align:middle;
-        display: table-cell;
+.wasabi-form-group {
+  .wasabi-form-group-label {
+    padding-right: 4px;
+    height: 34px;
+    float: left;
+    text-align: right;
+    white-space: normal;
+    display: table;
+    label{
+      vertical-align:middle;
+      display: table-cell;
 
-    }
     }
   }
+}
 .wasabi-form-group .wasabi-form-group-label.required  label:before {
   content: "*";
   color: #f93123;
@@ -45,58 +45,71 @@ desc:表单输入框样式
 
 
 }
-    /*
-     输入框主体
-     */
-    .wasabi-form-group {
-      .wasabi-form-group-body {
+/*
+ 输入框主体
+ */
+.wasabi-form-group {
+  .wasabi-form-group-body {
 
-        float: left;
-        position: relative;
-      }
-    }
-    /*
-    普通input
-    */
-    .wasabi-form-control {
-      display: inline;
-      width:100%;
-      padding-top:6px;
-      padding-bottom: 6px;
-      padding-left: 3px;
-      padding-right: 3px;
-      font-size: 12px;
-      font-weight: normal!important;
-      line-height: 34px;
-      height: 34px;
-      background-color: #fff;
-      background-image: none;
-      border: 1px solid #d7dde2;
-      box-shadow: none!important;
-      -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-      transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-      outline: none;
-      overflow: hidden;
-    }
-    .wasabi-form-control[disabled], .wasabi-form-control[readonly]{
-      background-color: #eee;
-      opacity: 1;
-      cursor: not-allowed;
-    }
-    .wasabi-form-control:focus {
-      border-color: #0ec2bc;
-      outline: 0;
-      box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(14, 194, 188, .6);
-    }
+    float: left;
+    position: relative;
+  }
+}
+/*
+普通input
+*/
+.wasabi-form-control {
+  display: inline;
+  width:100%;
+  padding-top:6px;
+  padding-bottom: 6px;
+  padding-left: 3px;
+  padding-right: 3px;
+  font-size: 12px;
+  font-weight: normal!important;
+  line-height: 34px;
+  height: 34px;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #d7dde2;
+  box-shadow: none!important;
+  -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+  transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+  outline: none;
+  overflow: hidden;
+}
+.wasabi-form-control[disabled], .wasabi-form-control[readonly]{
+  background-color: #eee;
+  opacity: 1;
+  cursor: not-allowed;
+}
+.wasabi-form-control:focus {
+  border-color: #0ec2bc;
+  outline: 0;
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(14, 194, 188, .6);
+}
 
-    /*
-    input验证失败
-    */
-    .wasabi-has-error .wasabi-form-control{
-      border-color: #f93123;
-      box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+.combobox
+{
+  .wasabi-form-control
+  {
+    padding-right: 36px;
+  }
+}
+.nice-select{
+  .wasabi-form-control
+  {
+    padding-right: 36px;
+  }
+}
+/*
+input验证失败
+*/
+.wasabi-has-error .wasabi-form-control{
+  border-color: #f93123;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
 
-    }
+}
 /*
 input验证失败
 */
@@ -111,13 +124,13 @@ input验证失败
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
 
 }
-    /*
-    input验证通过,暂时没用
-    */
-    .wasabi-has-success .wasabi-form-control {
-      border-color: #3c763d;
-      box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
-    }
+/*
+input验证通过,暂时没用
+*/
+.wasabi-has-success .wasabi-form-control {
+  border-color: #3c763d;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+}
 
 .wasabi-has-success input[type="checkbox"]{
   border-color: #3c763d;
@@ -132,40 +145,40 @@ input验证失败
 }
 
 
-    /*
-    只读
-    */
-    .wasabi-form-control input[readonly], .wasabi-form-control textarea[readonly] {
-      background-color: #eee;
-      color: #f0f2f3;
-      border-color: transparent;
-      cursor: not-allowed;
-    }
-    /*
-     错误提示信息
-    */
-    .wasabi-help-block
-    {
-      position: absolute;
-      width: 120px;
-      max-width: 150px;
-      height: 20px;
-      background: #f93123;
-      color: #ffffff;
-      border-radius: 2px;
-      white-space: nowrap;
-      bottom: 17px;
-      left: 105%;
-      overflow: visible;
-      z-index: 2;
-      text-align: center;
-      line-height: 20px;
-      padding-left: 10px;
-      padding-right: 10px;
-      font-size: 14px;
-      top: 5px;
+/*
+只读
+*/
+.wasabi-form-control input[readonly], .wasabi-form-control textarea[readonly] {
+  background-color: #eee;
+  color: #f0f2f3;
+  border-color: transparent;
+  cursor: not-allowed;
+}
+/*
+ 错误提示信息
+*/
+.wasabi-help-block
+{
+  position: absolute;
+  width: 120px;
+  max-width: 150px;
+  height: 20px;
+  background: #f93123;
+  color: #ffffff;
+  border-radius: 2px;
+  white-space: nowrap;
+  bottom: 17px;
+  left: 105%;
+  overflow: visible;
+  z-index: 2;
+  text-align: center;
+  line-height: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
+  font-size: 14px;
+  top: 5px;
 
-    }
+}
 .wasabi-help-block:before {
   content: "1111111";
   color: transparent;
@@ -178,9 +191,9 @@ input验证失败
   left: -10px;
 
 }
-    /*
-    靠近右侧的
-    */
+/*
+靠近右侧的
+*/
 .wasabi-help-block.right {
   position: absolute;
   width: auto;
@@ -206,7 +219,7 @@ input验证失败
   width: 0px;
   height: 0px;
   position: absolute;
- top:19px;
+  top:19px;
   left: 0px;
 
 }
@@ -214,18 +227,18 @@ input验证失败
 /*
 提交表单,注意此处不方便媒体查询，因为弹出层，与滑动面板都有嵌套
 */
-    /*
-    一列
-    (min-width: 300px ) and (max-width:610px)
-    */
+/*
+一列
+(min-width: 300px ) and (max-width:610px)
+*/
 
-  .wasabi-form.oneline,.wasabi-searchbar.oneline {
+.wasabi-form.oneline,.wasabi-searchbar.oneline {
   .wasabi-form-group.default {
     width: 100%;
   }
-    .wasabi-form-group.default .wasabi-form-group-label {
-      width:24%;
-    }
+  .wasabi-form-group.default .wasabi-form-group-label {
+    width:24%;
+  }
   .wasabi-form-group.default .wasabi-form-group-body {
     width:76%;
   }
@@ -234,137 +247,137 @@ input验证失败
   .wasabi-form-group.large {
     width:100%;
   }
-    .wasabi-form-group.large .wasabi-form-group-label {
-      width:24%;
-    }
-    .wasabi-form-group.large .wasabi-form-group-body {
-      width:76%;
-    }
+  .wasabi-form-group.large .wasabi-form-group-label {
+    width:24%;
+  }
+  .wasabi-form-group.large .wasabi-form-group-body {
+    width:76%;
+  }
 
-    .wasabi-form-group.onlyline {
+  .wasabi-form-group.onlyline {
     width:100%;
   }
-    .wasabi-form-group.onlyline .wasabi-form-group-label {
-      width:24%;
-    }
-    .wasabi-form-group.onlyline .wasabi-form-group-body {
-      width:76%;
-    }
-
-
+  .wasabi-form-group.onlyline .wasabi-form-group-label {
+    width:24%;
+  }
+  .wasabi-form-group.onlyline .wasabi-form-group-body {
+    width:76%;
   }
 
-    /*
-    两列
-    (min-width: 611px) and (max-width:909px)
-    */
 
-    .wasabi-form.twoline ,.wasabi-searchbar.twoline{
-      .wasabi-form-group.default {
-        width: 50%;
-      }
-      .wasabi-form-group.default .wasabi-form-group-label {
-        width:23%;
-      }
-      .wasabi-form-group.default .wasabi-form-group-body {
-        width: 77%;
-      }
+}
 
+/*
+两列
+(min-width: 611px) and (max-width:909px)
+*/
 
-      .wasabi-form-group.large {
-        width:100%;
-      }
-      .wasabi-form-group.large .wasabi-form-group-label {
-        width:11.4%;
-      }
-      .wasabi-form-group.large .wasabi-form-group-body {
-        width: 88.6%;
-      }
-
-      .wasabi-form-group.onlyline {
-        width:100%;
-      }
-      .wasabi-form-group.onlyline .wasabi-form-group-label {
-        width:11.4%;
-      }
-      .wasabi-form-group.onlyline .wasabi-form-group-body {
-        width: 88.6%;
-      }
-
-    }
-
-    /*
-    三列
-    (min-width: 910px) and  (max-width:1229px)
-    */
-
-    .wasabi-form.threeline,.wasabi-searchbar.threeline {
-      .wasabi-form-group.default {
-        width: 33.333333333%;
-      }
-      .wasabi-form-group.default .wasabi-form-group-label {
-        width:28%;
-      }
-      .wasabi-form-group.default .wasabi-form-group-body {
-        width: 71%;
-      }
-      .wasabi-form-group.large {
-        width: 66.626%;
-      }
-      .wasabi-form-group.large .wasabi-form-group-label {
-        width:13.8%;
-      }
-      .wasabi-form-group.large .wasabi-form-group-body {
-        width: 85.9%;
-      }
-      .wasabi-form-group.onlyline {
-        width:100%;
-      }
-      .wasabi-form-group.onlyline .wasabi-form-group-label {
-        width:8%;
-      }
-      .wasabi-form-group.onlyline .wasabi-form-group-body {
-        width: 92%;
-      }
-    }
-
-    /*
-    四列
-    (min-width: 1230px)
-    */
-    .wasabi-form.fourline,.wasabi-searchbar.fourline{
-      .wasabi-form-group.default {
-        width: 25%;
-      }
-      .wasabi-form-group.default .wasabi-form-group-label {
-        width:24%;
-      }
-      .wasabi-form-group.default .wasabi-form-group-body {
-        width: 76%;
-      }
-
-      .wasabi-form-group.large {
-        width: 50%;
-      }
-      .wasabi-form-group.large .wasabi-form-group-label {
-        width:13.8%;
-      }
-      .wasabi-form-group.large .wasabi-form-group-body {
-        width: 86.2%;
-      }
+.wasabi-form.twoline ,.wasabi-searchbar.twoline{
+  .wasabi-form-group.default {
+    width: 50%;
+  }
+  .wasabi-form-group.default .wasabi-form-group-label {
+    width:23%;
+  }
+  .wasabi-form-group.default .wasabi-form-group-body {
+    width: 77%;
+  }
 
 
-      .wasabi-form-group.onlyline {
-        width: 100%;
-      }
-      .wasabi-form-group.onlyline .wasabi-form-group-label {
-        width:6%;
-      }
-      .wasabi-form-group.onlyline .wasabi-form-group-body {
-        width: 94%;
-      }
+  .wasabi-form-group.large {
+    width:100%;
+  }
+  .wasabi-form-group.large .wasabi-form-group-label {
+    width:11.4%;
+  }
+  .wasabi-form-group.large .wasabi-form-group-body {
+    width: 88.6%;
+  }
 
-    }
+  .wasabi-form-group.onlyline {
+    width:100%;
+  }
+  .wasabi-form-group.onlyline .wasabi-form-group-label {
+    width:11.4%;
+  }
+  .wasabi-form-group.onlyline .wasabi-form-group-body {
+    width: 88.6%;
+  }
+
+}
+
+/*
+三列
+(min-width: 910px) and  (max-width:1229px)
+*/
+
+.wasabi-form.threeline,.wasabi-searchbar.threeline {
+  .wasabi-form-group.default {
+    width: 33.333333333%;
+  }
+  .wasabi-form-group.default .wasabi-form-group-label {
+    width:28%;
+  }
+  .wasabi-form-group.default .wasabi-form-group-body {
+    width: 71%;
+  }
+  .wasabi-form-group.large {
+    width: 66.626%;
+  }
+  .wasabi-form-group.large .wasabi-form-group-label {
+    width:13.8%;
+  }
+  .wasabi-form-group.large .wasabi-form-group-body {
+    width: 85.9%;
+  }
+  .wasabi-form-group.onlyline {
+    width:100%;
+  }
+  .wasabi-form-group.onlyline .wasabi-form-group-label {
+    width:8%;
+  }
+  .wasabi-form-group.onlyline .wasabi-form-group-body {
+    width: 92%;
+  }
+}
+
+/*
+四列
+(min-width: 1230px)
+*/
+.wasabi-form.fourline,.wasabi-searchbar.fourline{
+  .wasabi-form-group.default {
+    width: 25%;
+  }
+  .wasabi-form-group.default .wasabi-form-group-label {
+    width:24%;
+  }
+  .wasabi-form-group.default .wasabi-form-group-body {
+    width: 76%;
+  }
+
+  .wasabi-form-group.large {
+    width: 50%;
+  }
+  .wasabi-form-group.large .wasabi-form-group-label {
+    width:13.8%;
+  }
+  .wasabi-form-group.large .wasabi-form-group-body {
+    width: 86.2%;
+  }
+
+
+  .wasabi-form-group.onlyline {
+    width: 100%;
+  }
+  .wasabi-form-group.onlyline .wasabi-form-group-label {
+    width:6%;
+  }
+  .wasabi-form-group.onlyline .wasabi-form-group-body {
+    width: 94%;
+  }
+
+}
 
 
 

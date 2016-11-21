@@ -43,7 +43,8 @@ var Input=React.createClass({
             "picker",//级联选择组件
             "gridpicker",//列表选择
             "panelpicker",//面板选择
-            "button"//普通按钮
+            "button",//普通按钮
+            "muti"//多行文本
         ]),//输入框的类型
         name:React.PropTypes.string.isRequired,//字段名
         label:React.PropTypes.oneOfType([React.PropTypes.string,React.PropTypes.element,React.PropTypes.node]),//字段文字说明属性
@@ -268,10 +269,11 @@ var Input=React.createClass({
             control=<SwitchButton ref="input"  {...props} onSelect={this.onSelect}></SwitchButton>
         }
 
-        else if(type=="select"||type=="datetime"||type=="time"||type=="date" ||type=="daterange"||type=="datetimerange"||type=="picker"||type=="gridpicker"||type=="panelpicker")
+        else if(type=="muti"||type=="select"||type=="datetime"||type=="time"||type=="date" ||type=="daterange"||type=="datetimerange"||type=="picker"||type=="gridpicker"||type=="panelpicker")
         {//下拉组件
             control=<ComboBox ref="input" {...props }  onSelect={this.onSelect}></ComboBox>
         }
+
 
 
         return control;
@@ -284,21 +286,25 @@ var Input=React.createClass({
 
            return <div className={componentClassName}>    <label className="wasabi-form-group-label" /><Button {...this.props} title={this.props.label} onClick={this.buttonClick}></Button></div>
         }
-        if(this.props.type=="text"||this.props.type=="email"
-            ||this.props.type=="url"||this.props.type=="number"
-            ||this.props.type=="integer"||this.props.type=="alpha"
-            ||this.props.type=="alphanum"||this.props.type=="mobile"
-            ||this.props.type=="idcard"
-            ||this.props.type=="password"
-            ||this.props.type=="textarea") {//这几种类型统一为text
+        else
+        {
+            if(this.props.type=="text"||this.props.type=="email"
+                ||this.props.type=="url"||this.props.type=="number"
+                ||this.props.type=="integer"||this.props.type=="alpha"
+                ||this.props.type=="alphanum"||this.props.type=="mobile"
+                ||this.props.type=="idcard"
+                ||this.props.type=="password"
+                ||this.props.type=="textarea") {//这几种类型统一为text
 
-            return this.renderText();
+                return this.renderText();
+            }
+
+            else {//输入文本输入框类型
+
+                return  this.renderUnInput(this.props.type);
+            }
         }
 
-        else {//输入文本输入框类型
-
-            return  this.renderUnInput(this.props.type);
-        }
         return null;
 
     }

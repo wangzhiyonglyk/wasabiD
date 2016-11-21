@@ -10,6 +10,7 @@ let Time=require("./Time.jsx");
 let DatePicker=require("./DatePicker.jsx");
 let Picker=require("./Picker.jsx");
 let Select=require("./Select.jsx");
+let MutiText=require("./MutiText.jsx");
 let GridPicker=require("./GridPicker.jsx");
 let PanelPicker=require("./PanelPicker.jsx");
 var shouldComponentUpdate=require("../../Mixins/shouldComponentUpdate.js");
@@ -25,7 +26,8 @@ let ComboBox=React.createClass({
                 "datetimerange",//日期时间范围选择
                 "picker",//级联选择组件
                 "gridpicker",//列表选择
-                "panelpicker"//面板选择
+                "panelpicker",//面板选择
+                "muti"//多行添加
             ],//类型
         name:React.PropTypes.string.isRequired,//字段名
         label:React.PropTypes.oneOfType([React.PropTypes.string,React.PropTypes.element,React.PropTypes.node]),//字段文字说明属性
@@ -194,6 +196,19 @@ let ComboBox=React.createClass({
     validate:function() {
         return this.refs.combobox.validate();
     },
+    renderMuti:function(){//普通下拉框
+
+        var props={...this.props};
+        props.value=this.state.value;
+        props.text=this.state.text;
+        props.hide=this.state.hide;
+        props.data=this.state.data;
+        props.readonly=this.state.readonly;
+        props.params=this.state.params;
+        props.url=this.state.url;
+        props.data=this.state.data;
+        return <MutiText ref="combobox" {...props}  onSelect={this.onSelect}></MutiText>
+    },
     renderSelect:function(){//普通下拉框
 
         var props={...this.props};
@@ -264,6 +279,9 @@ let ComboBox=React.createClass({
 
         let control = null;
         switch (this.props.type) {
+            case "muti":
+                control = this.renderMuti();
+                break;
             case "select":
                 control = this.renderSelect();
                 break;

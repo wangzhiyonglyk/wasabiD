@@ -164,7 +164,7 @@ var PanelPicker = React.createClass({
         return (
             <div className={componentClassName+this.state.validateClass} style={style}>
                 <Label name={this.props.label} hide={this.state.hide} required={this.state.required}></Label>
-                <div className={ "wasabi-form-group-body"}>
+                <div className={ "wasabi-form-group-body"} style={{width:!this.props.label?"100%":null}}>
                     <div className="combobox" style={{display:this.props.hide==true?"none":"block"}}
                          onMouseOut={this.mouseOutHandler}>
                         <i className={"picker-clear"} onClick={this.clearHandler} style={{display:(this.state.readonly?"none":this.state.value==""||!this.state.value)?"none":"inline"}}></i>

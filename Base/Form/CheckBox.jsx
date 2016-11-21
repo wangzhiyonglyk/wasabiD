@@ -342,7 +342,7 @@ e.preventDefault();//因为有用户借助label属性生成新的checkbox,所以
 
         <div className={componentClassName+this.state.validateClass} style={style}>
             <Label name={this.props.label} hide={this.state.hide} required={this.state.required}></Label>
-            <div className={ "wasabi-form-group-body"}>
+            <div className={ "wasabi-form-group-body"} style={{width:!this.props.label?"100%":null}}>
                 <ul className="wasabi-checkul">
                     {
                         control

@@ -198,7 +198,7 @@ let Select=React.createClass({
     },
     componentDidUpdate:function() {
         if(this.isChange==true)
-        {
+        {//说明已经改变了,回传给父组件
             if( this.props.onSelect!=null)
             {
                 this.props.onSelect(this.state.value,this.state.text,this.props.name,this.rowData);
@@ -309,8 +309,8 @@ let Select=React.createClass({
     changeHandler:function(event) {
     },
     onSelect:function(value,text,rowData) {//选中事件
-        this.isChange=true;//代表自身发生了改变,防止父组件没有绑定value,text,而导致无法选择的结果
-        this.rowData=rowData;
+        this.isChange=true;//代表自身发生了改变,防止父组件没有绑定value,text的状态值,而导致无法选择的结果
+        this.rowData=rowData;//临时保存起来
         if(value==undefined)
         {
             console.error("绑定的valueField没有")
@@ -345,7 +345,7 @@ let Select=React.createClass({
                 text:text,
             });
         }
-        this.validate(value);
+        this.validate(value);//
 
     },
     getComponentData:function() {//只读属性，获取当前下拉的数据源
@@ -426,7 +426,7 @@ let Select=React.createClass({
         return (
             <div className={componentClassName+this.state.validateClass} style={style} >
                 <Label name={this.props.label} hide={this.state.hide} required={this.state.required}></Label>
-                <div className={ "wasabi-form-group-body"}>
+                <div className={ "wasabi-form-group-body"} >
                     <div className={"nice-select "} style={style}  onMouseOut={this.mouseOutHandler}   >
                         <i className={"picker-clear"} onClick={this.clearHandler} style={{display:this.state.readonly?"none":(this.state.value==""||!this.state.value)?"none":"inline"}}></i>
                         <i className={"icon "} onClick={this.showItem}></i>

@@ -112,12 +112,13 @@ let  Picker =  React.createClass({
             value:this.props.value,
             text:this.props.text,
             readonly:this.props.readonly,
-            params:unit.clone( this.props.params),
 
+            //其他属性
+            params:unit.clone( this.props.params),
             provinceActiveIndex:null,//一级激活节点下标
             cityActiveIndex:null,//二级激活节点下标
             distinctActiveIndex:null,//三级激活节点下标
-            show:false,//
+            show:false,//是否显示
             //其他属性
             secondParams:this.props.secondParams,
             secondParamsKey:this.props.secondParamsKey,
@@ -236,6 +237,19 @@ let  Picker =  React.createClass({
         else {
             this.setState({
                 show: !this.state.show
+            })
+        }
+    },
+    clearHandler:function() {//清除数据
+        if(this.props.onSelect!=null)
+        {
+            this.props.onSelect("","",this.props.name,null);
+        }
+        else
+        {
+            this.setState({
+                value:null,
+                text:null,
             })
         }
     },
@@ -629,20 +643,6 @@ let  Picker =  React.createClass({
         }
 
     },
-    clearHandler:function()
-    {//清除数据
-        if(this.props.onSelect!=null)
-        {
-            this.props.onSelect("","",this.props.name,null);
-        }
-        else
-        {
-            this.setState({
-                value:null,
-                text:null,
-            })
-        }
-    },
     render:function() {
         var size=this.props.onlyline==true?"onlyline":this.props.size;//组件大小
         var componentClassName=  "wasabi-form-group "+size+" "+(this.props.className?this.props.className:"");//组件的基本样式
@@ -662,12 +662,12 @@ let  Picker =  React.createClass({
         return (
         <div className={componentClassName+this.state.validateClass} style={style}>
             <Label name={this.props.label} hide={this.state.hide} required={this.state.required}></Label>
-            <div className={ "wasabi-form-group-body"}>
+            <div className={ "wasabi-form-group-body"} style={{width:!this.props.label?"100%":null}}>
                 <div className="combobox"  style={{display:this.props.hide==true?"none":"block"}}   >
                     <i className={"picker-clear"} onClick={this.clearHandler} style={{display:this.state.readonly?"none":(this.state.value==""||!this.state.value)?"none":"inline"}}></i>
                     <i className={"pickericon"} onClick={this.showPicker}></i>
                     <input type="text" {...inputProps}  value={this.state.text} onClick={this.showPicker}  onChange={this.changeHandler}     />
-                    <div className={"dropcontainter  picker"+this.props.position} style={{display:this.state.show==true?"block":"none"}} onMouseOut={this.mouseOutHandler}  >
+                    <div className={"dropcontainter  picker "+this.props.position} style={{display:this.state.show==true?"block":"none"}} onMouseOut={this.mouseOutHandler}  >
                         <div className="picker">
                             {this.renderHot()}
                             <ul className="wrap" >
