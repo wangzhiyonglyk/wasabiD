@@ -88,7 +88,7 @@ var MutiText=React.createClass({
             helpShow:"none",//提示信息是否显示
             helpTip:validation["required"],//提示信息
             invalidTip:"",
-            areaValue:this.props.value,//多行文本框的值
+            areaValue:this.props.value?this.props.value.replace(/,/g, "\n"):null,//多行文本框的值
 
         }
     },
@@ -98,7 +98,7 @@ var MutiText=React.createClass({
             min:nextProps.min,
             max:nextProps.max,
             value: nextProps.value,
-            areaValue:nextProps.value,
+            areaValue:nextProps.value?nextProps.value.replace(/,/g, "\n"):null,
             text: nextProps.text,
             readonly: nextProps.readonly,
             required: nextProps.required,
@@ -139,19 +139,19 @@ var MutiText=React.createClass({
     cancelHandler:function() {//取消选择
         this.setState({
             show: false,
-            areaValue:this.state.value,//还原之前的值
+            areaValue:this.state.value?this.state.value.replace(/,/g, "\n"):null,//还原之前的值
 
         })
     },
     onSelectHandler:function() {//确定事件
         this.setState({
             ulShow:false,
-            value:this.state.areaValue,
-            text:this.state.areaValue,
+            value:this.state.areaValue?this.state.areaValue.replace(/\n/g, ","):null,
+            text:this.state.areaValue?this.state.areaValue.replace(/\n/g, ","):null,
         });
         if( this.props.onSelect!=null)
         {
-            this.props.onSelect(this.state.areaValue,this.state.areaValue,this.props.name);
+            this.props.onSelect(this.state.areaValue?this.state.areaValue.replace(/\n/g, ","):null,this.state.areaValue?this.state.areaValue.replace(/\n/g, ","):null,this.props.name);
         }
     },
     render:function() {
