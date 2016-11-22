@@ -108,18 +108,17 @@ let DataGridHandler={
     //数据处理波函数
     updateHandler:function(url,pageSize,pageIndex,sortName,sortOrder,params){//更新事件
 
-        if(url==undefined)
+        if(!url)
         {
             url=this.state.url;
         }
-        if(url&&url!=="") {
-
+        if(url) {
             this.setState({
                 loading:true,
+                url:url,//更新,有可能从reload那里直接改变了url
             })
 
             var actualParams={};
-
             if(!params&&this.state.params&&typeof this.state.params =="object")
             {//新的参数为null或者undefined，旧参数不为空
                 if(this.props.pagination==true) {
@@ -233,7 +232,11 @@ let DataGridHandler={
             loading:false,
         })
     },
-    reload:function(params) {//重新刷新数据
+    reload:function(params,url) {//重新刷新数据,
+        //存在用户第一次没有传url,第二次才传url
+        if(!url) {//如果为空,则使用旧的
+            url=this.state.url;//得到旧的url
+        }
         if(!params||params=="reload")
         {//说明是刷新(reload字符,是因为从刷新按钮过来的
 
@@ -244,12 +247,11 @@ let DataGridHandler={
             this.isReloadType=true;//标记一下,说明用户使用的是ref方式查询数据
 
         }
-        if(this.state.url==null||this.state.url==="")
+        if(!url)
         {//没有传url
 
-
             if(this.props.updateHandler)
-            {
+            {//用户自定义了更新事件
                 this.props.updateHandler(this.state.pageSize,this.state.pageIndex,this.state.sortName,this.state.sortOrder);
             }
 
@@ -258,12 +260,12 @@ let DataGridHandler={
 
             if( this.paramNotEaqual(params))
             {//参数发生改变,从第一页查起
-                this.updateHandler(this.state.url,this.state.pageSize, 1, this.state.sortName, this.state.sortOrder,params);
+                this.updateHandler(url,this.state.pageSize, 1, this.state.sortName, this.state.sortOrder,params);
 
             }
             else
             {//从当前页查起
-                this.updateHandler(this.state.url,this.state.pageSize, this.state.pageIndex, this.state.sortName, this.state.sortOrder,params);
+                this.updateHandler(url,this.state.pageSize, this.state.pageIndex, this.state.sortName, this.state.sortOrder,params);
 
             }
 
