@@ -17,7 +17,7 @@ let PageModelMixins= {
             url = this.props.modelUrl;
 
         } else {
-            var url = this.props.corsUrl + this.props.controller + "/GetModel";
+            var url = this.props.corsUrl+"/" + this.props.controller + "/GetModel";
         }
         if (this.props.tocket) {
             if (this.props.tocket.indexOf("?") > -1) {//已经带有问号
@@ -36,7 +36,7 @@ let PageModelMixins= {
             url = this.props.getUrl;
 
         } else {
-            var url = this.props.corsUrl + this.props.controller + "/Get";
+            var url = this.props.corsUrl +"/" + this.props.controller + "/Get";
         }
         if (this.props.tocket) {
             if (this.props.tocket.indexOf("?") > -1) {//已经带有问号
@@ -55,7 +55,7 @@ let PageModelMixins= {
             url = this.props.addUrl;
 
         } else {
-            var url = this.props.corsUrl + this.props.controller + "/Add";
+            var url = this.props.corsUrl +"/" + this.props.controller + "/Add";
         }
         if (this.props.tocket) {
             if (this.props.tocket.indexOf("?") > -1) {//已经带有问号
@@ -75,7 +75,7 @@ let PageModelMixins= {
             url = this.props.deleteUrl;
 
         } else {
-            var url = this.props.corsUrl + this.props.controller + "/Delete";
+            var url = this.props.corsUrl +"/" + this.props.controller + "/Delete";
         }
         if (this.props.tocket) {
             if (this.props.tocket.indexOf("?") > -1) {//已经带有问号
@@ -95,7 +95,7 @@ let PageModelMixins= {
             url = this.props.updateUrl;
 
         } else {
-            var url = this.props.corsUrl + this.props.controller + "/Update";
+            var url = this.props.corsUrl +"/" + this.props.controller + "/Update";
         }
         if (this.props.tocket) {
             if (this.props.tocket.indexOf("?") > -1) {//已经带有问号
@@ -115,7 +115,7 @@ let PageModelMixins= {
             url = this.props.queryUrl;
 
         } else {
-            var url = this.props.corsUrl + this.props.controller + "/Query";
+            var url = this.props.corsUrl +"/" + this.props.controller + "/Query";
         }
         if (this.props.tocket) {
             if (this.props.tocket.indexOf("?") > -1) {//已经带有问号
@@ -134,7 +134,7 @@ let PageModelMixins= {
             url = this.props.pageUrl;
 
         } else {
-            var url = this.props.corsUrl + this.props.controller + "/Page";
+            var url = this.props.corsUrl +"/" + this.props.controller + "/Page";
         }
         if (this.props.tocket) {
             if (this.props.tocket.indexOf("?") > -1) {//已经带有问号
@@ -161,34 +161,42 @@ let PageModelMixins= {
         unit.fetch.get(fetchModel);
     },
     initModelSuccess:function(result) {//获取数据模型成功
+        if(result.data==undefined)
+        {
+            result.data=result.rows;//后台有可能不是使用data
+        }
+
        if(result.data!=null&&result.data instanceof Array)
        {
-           if(this.props.initModel)
+           if(this.props.overrideModel)
            {//用户进行一步处理数据模型,有返回值
-                let returnValue=this.props.initModel(result.data);
+                let returnValue=this.props.overrideModel(result.data);
                if(returnValue) {//有返回值
 
                    result.data=returnValue;
                }
+               else
+               {//没有返回值,还是使用原来的
+               }
 
            }
            let model=[];//表单的数据模型
-           let filterModel=[];//筛选栏的数据模型
+           let filters=[];//筛选栏的数据模型
            let headers=[];//列表头的数据模型
            for(let index=0;index<result.data.length;index++) {
                var modelOject = new FormModel(result.data[index].name, result.data[index].label);
                modelOject = {...result.data[index]};//解构
                if (modelOject.filterAble == true) {//此字段可用于筛选
-                   //除去验证属性
+                   //因为要除去验证属性,所以要重新定义
                    var filterModel=unit.clone(modelOject);
                    filterModel.required=false;
                    filterModel.regexp=null;
                    filterModel.min=null;
                    filterModel.max=null;
-                   filterModel.push(filterModel);//加入筛选模型中
+                   filters.push(filterModel);//加入筛选模型中
                }
                if (modelOject.gridAble == true) {//此字段可用于列表
-                   var headerModel = new HeaderModel(modelOject.name, model.label);//得到默认表头
+                   var headerModel = new HeaderModel(modelOject.name, modelOject.label);//得到默认表头
                    if (modelOject.headerModel) {//用户定义了其他设置
                        headerModel = {...modelOject.headerModel};//解构
 
@@ -201,7 +209,7 @@ let PageModelMixins= {
 
            this.setState({
                model:model,
-               filterModel:filterModel,
+               filterModel:filters,
                headers:headers,
 
            })

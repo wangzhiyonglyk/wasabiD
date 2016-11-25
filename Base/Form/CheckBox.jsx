@@ -18,6 +18,7 @@ let CheckBox=React.createClass({
     PropTypes:{
         name:React.PropTypes.string.isRequired,//字段名
         label:React.PropTypes.oneOfType([React.PropTypes.string,React.PropTypes.object,React.PropTypes.element,React.PropTypes.node]),//字段文字说明属性
+        title:React.PropTypes.string,//提示信息
         width:React.PropTypes.number,//宽度
         height:React.PropTypes.number,//高度
         value:React.PropTypes.oneOfType([React.PropTypes.number,React.PropTypes.string]),//默认值,
@@ -33,7 +34,9 @@ let CheckBox=React.createClass({
         className:React.PropTypes.string,//自定义class
         size:React.PropTypes.oneOf([
             "default",
-            "large",
+            "large",//兼容性值,与two相同
+            "two",
+            "three",
             "onlyline"
         ]),//组件表单的大小
         position:React.PropTypes.oneOf([
@@ -61,6 +64,7 @@ let CheckBox=React.createClass({
         return{
             name:"",
             label:null,
+            title:null,
             width:null,
             height:null,
             value:"",

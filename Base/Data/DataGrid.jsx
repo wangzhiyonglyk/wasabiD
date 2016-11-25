@@ -135,30 +135,64 @@ var DataGrid=React.createClass({
         }
     },
     componentWillReceiveProps:function(nextProps) {
-        if(nextProps.url&&nextProps.url!="") {
-            //如果存在url
+        /*
+         url与params而url可能是通过reload方法传进来的,并没有作为状态值绑定
+         headers可能是后期才传了,见Page组件可知
+         所以此处需要详细判断
+         */
+        if(nextProps.url) {
+            //说明父组件将url作为状态值来绑定的
+            /*
+            注意了***************（见reload方法）
+            isReloadType的作用:
+            为真:说明是通过reload方法来执行更新的,组件本身的params与父组件的params已经不同步了,不能更新
+             为假:说明是父组件仅仅使用了状态值作为通信方式,先判断是否有params变化，没有则不查询,有从第一页开始查询
+             *********
+             */
             if (this.isReloadType!=true&&this.paramNotEaqual(  nextProps.params)) {
-                //如果是通过状态值来刷新的
-                //先判断是否有条件变化，没有则不更新,从第一页开始查询
-                this.updateHandler(nextProps.url,this.state.pageSize, 1, this.state.sortName, this.state.sortOrder, nextProps.params);
+                //仅仅通过状态值更新,参数有变,更新
+                this.updateHandler(nextProps.url,this.state.pageSize, 1, this.state.sortName, this.state.sortOrder, nextProps.params,nextProps.headers);
+            }
+            else {//父组件状态值没有发生变化,或者使用reload方法更新的
+
+                if(nextProps.headers)
+                { //存在着这种情况,后期才传headers,所以要更新一下
+                    this.setState({
+                        headers: nextProps.headers,
+                    })
+                }
+
             }
 
-        }else
-        {
-            //没有url时，自定义更新事件
-            if(nextProps.data!=null&&nextProps.data!=undefined&&nextProps.data instanceof Array)
-            {
-                this.setState({
-                    data:(this.props.pagination==true? nextProps.data.slice(0,nextProps.pageSize):nextProps.data),
-                    total:nextProps.total,
-                    pageIndex:nextProps.pageIndex,
-                    pageSize:nextProps.pageSize,
-                    sortName:this.props.sortName,
-                    sortOrder:nextProps.sortOrder,
-                    loading:false,
-                    headers:nextProps.headers,//表头可能会更新
-                })
+        }
+        else
+        { //说明父组件将url没有作为状态值来绑定的
+            if(this.state.url)
+            {//组件本身的url不为空说明通过reload方法绑定了url,父组件本身没有绑定url,所以不能查询
+
+                if(nextProps.headers)
+                { //存在着这种情况,后期才传headers,所以要更新一下
+                    this.setState({
+                        headers: nextProps.headers,
+                    })
+                }
             }
+            else {
+                //没有url时，自定义更新事件
+                if (nextProps.data != null && nextProps.data != undefined && nextProps.data instanceof Array) {
+                    this.setState({
+                        data: (this.props.pagination == true ? nextProps.data.slice(0, nextProps.pageSize) : nextProps.data),
+                        total: nextProps.total,
+                        pageIndex: nextProps.pageIndex,
+                        pageSize: nextProps.pageSize,
+                        sortName: this.props.sortName,
+                        sortOrder: nextProps.sortOrder,
+                        loading: false,
+                        headers: nextProps.headers,//表头可能会更新
+                    })
+                }
+            }
+
         }
     },
     componentDidMount:function(){
@@ -371,33 +405,41 @@ var DataGrid=React.createClass({
         });
     },
     renderTotal:function() {//渲染总记录数，当前记录的下标
-        var benginIndex=0; var endIndex=0;//数据开始序号与结束序
-        var total=this.state.total;
-        var control;
-        if(this.state.data instanceof Array ) {
-            if(this.state.data.length>0)
-            {
-                if(this.props.pagination)
+        if(this.state.headers&&this.state.headers.length>0)
+        {
+            var benginIndex=0; var endIndex=0;//数据开始序号与结束序
+            var total=this.state.total;
+            var control;
+            if(this.state.data instanceof Array ) {
+                if(this.state.data.length>0)
                 {
-                    benginIndex=this.state.pageSize*(this.state.pageIndex-1)+1;
-                    endIndex=this.state.pageSize*(this.state.pageIndex-1)+this.state.data.length;
-                }
-                else
-                {
-                    endIndex=this.state.data.length;
-                    total=this.state.data.length;
+                    if(this.props.pagination)
+                    {
+                        benginIndex=this.state.pageSize*(this.state.pageIndex-1)+1;
+                        endIndex=this.state.pageSize*(this.state.pageIndex-1)+this.state.data.length;
+                    }
+                    else
+                    {
+                        endIndex=this.state.data.length;
+                        total=this.state.data.length;
+                    }
+
                 }
 
             }
-
-        }
-        control=  <div key="pagination-detail" className="pagination-detail">
+            control=  <div key="pagination-detail" className="pagination-detail">
                         <span className="pagination-info">显示第{benginIndex}
                             到{endIndex}条，
                             共{total}条</span>
-            <LinkButton iconCls="icon-reload" name="reload" onClick={this.reload}></LinkButton>
-        </div>;
-        return control;
+                <LinkButton iconCls="icon-reload" name="reload" onClick={this.reload}></LinkButton>
+            </div>;
+            return control;
+        }
+        else
+        {
+            return null;
+        }
+
     },
     renderPagination:function(type) {//显示分页控件
         var paginationCom=null;
@@ -552,7 +594,6 @@ var DataGrid=React.createClass({
 
     },
     render:function() {
-        var padddingRight;
         var tableDefinedWidth=this.state.width;//自定义宽度
         var className="table table-no-bordered";
         if(this.props.borderAble===true)

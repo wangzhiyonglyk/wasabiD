@@ -15,6 +15,7 @@ var MutiText=React.createClass({
     propTypes: {
         name:React.PropTypes.string.isRequired,//字段名
         label:React.PropTypes.oneOfType([React.PropTypes.string,React.PropTypes.element,React.PropTypes.node]),//字段文字说明属性
+        title:React.PropTypes.string,//提示信息
         width:React.PropTypes.number,//宽度
         height:React.PropTypes.number,//高度
         value:React.PropTypes.oneOfType([React.PropTypes.number,React.PropTypes.string]),//默认值,
@@ -30,7 +31,9 @@ var MutiText=React.createClass({
         className:React.PropTypes.string,//自定义class
         size:React.PropTypes.oneOf([
             "default",
-            "large",
+            "large",//兼容性值,与two相同
+            "two",
+            "three",
             "onlyline"
         ]),//组件表单的大小
         position:React.PropTypes.oneOf([
@@ -52,6 +55,7 @@ var MutiText=React.createClass({
             type:"text",
             name:"",
             label:null,
+            title:null,
             width:null,
             height:null,
             value:"",
@@ -113,6 +117,19 @@ var MutiText=React.createClass({
         this.setState({
             areaValue:event.target.value,
         })
+    },
+    onlineChangeHandler:function(event)
+    {
+        this.setState({
+            value:event.target.value,
+            text:event.target.value,
+            areaValue:event.target.value,
+            show:false
+        })
+        if( this.props.onSelect!=null)
+        {
+            this.props.onSelect(event.target.value,event.target.value,this.props.name);
+        }
     },
     showPicker:function() {//显示选择
         if (this.state.readonly) {
@@ -181,8 +198,9 @@ var MutiText=React.createClass({
                     <div className="combobox"  style={{display:this.props.hide==true?"none":"block"}}   >
                         <i className={"picker-clear"} onClick={this.clearHandler} style={{display:this.state.readonly?"none":(this.state.value==""||!this.state.value)?"none":"inline"}}></i>
                         <i className={"pickeradd"} onClick={this.showPicker}></i>
-                        <input type="text"  {...inputProps}  value={this.state.text} onClick={this.showPicker}      />
+                        <input type="text"  {...inputProps}  value={this.state.text} onChange={this.onlineChangeHandler}      />
                         <div className={"dropcontainter  mutiText "+this.props.position} style={{display:this.state.show==true?"block":"none"}}  >
+                            <div style={{height:30,lineHeight:"30px",color:"#aaaaaa",overflow:"hidden"}}>{this.props.title}</div>
                        <textarea value={areaValue} ref="input" onChange={this.changeHandler}
                                  style={{width:"100%",height:100,border:"1px solid #d7dde2",resize:"none"}}></textarea>
                             <div className="ok" >

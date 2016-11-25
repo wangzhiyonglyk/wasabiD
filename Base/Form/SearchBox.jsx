@@ -8,6 +8,7 @@ require("../../sass/Base/Form/SearchBox.scss");
 let SearchBox=React.createClass({
     propTypes: {
         name:React.PropTypes.string,//表单名称，
+        title:React.PropTypes.string,//提示信息
         placeholder:React.PropTypes.string,//输入框提示信息
         valueField:React.PropTypes.string.isRequired,//表单value字段
         textField:React.PropTypes.string.isRequired,//表单text字段
@@ -17,7 +18,7 @@ let SearchBox=React.createClass({
     },
     getDefaultProps:function(){
         return{
-
+           title:null,
             valueField:"value",
             textField:"text",
             params:null,
@@ -40,12 +41,7 @@ let SearchBox=React.createClass({
         }
     },
     beginSearch:function() {//开始查询
-        if(this.state.filterValue=="")
-        {
-            return ;
-        }
         let params = this.state.params;
-
         if (params) {
 
 
@@ -79,7 +75,7 @@ let SearchBox=React.createClass({
         })
     },
     render:function() {
-        return<div   className="wasabi-searchbox" style={{width:this.props.width}}><input type="text" placeholder={this.props.placeholder}  onKeyUp={this.onKeyUp} value={this.state.filterValue} onChange={this.onChange} />
+        return<div   className="wasabi-searchbox" style={{width:this.props.width}}><input type="text" title={this.props.title} placeholder={this.props.placeholder}  onKeyUp={this.onKeyUp} value={this.state.filterValue} onChange={this.onChange} />
                 <div className="icon" onClick={this.beginSearch}></div>
             </div>
     }

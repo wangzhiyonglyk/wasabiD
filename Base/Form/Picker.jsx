@@ -22,6 +22,7 @@ let  Picker =  React.createClass({
      propTypes: {
         name:React.PropTypes.string.isRequired,//字段名
          label:React.PropTypes.oneOfType([React.PropTypes.string,React.PropTypes.element,React.PropTypes.node]),//字段文字说明属性
+         title:React.PropTypes.string,//提示信息
         width:React.PropTypes.number,//宽度
         height:React.PropTypes.number,//高度
          value:React.PropTypes.oneOfType([React.PropTypes.number,React.PropTypes.string]),//默认值,
@@ -35,11 +36,13 @@ let  Picker =  React.createClass({
         invalidTip:React.PropTypes.string,//无效时的提示字符
         style:React.PropTypes.object,//自定义style
         className:React.PropTypes.string,//自定义class
-        size:React.PropTypes.oneOf([
-            "default",
-            "large",
-            "onlyline"
-        ]),//组件表单的大小
+         size:React.PropTypes.oneOf([
+             "default",
+             "large",//兼容性值,与two相同
+             "two",
+             "three",
+             "onlyline"
+         ]),//组件表单的大小
         position:React.PropTypes.oneOf([
             "left",
             "default",
@@ -69,6 +72,7 @@ let  Picker =  React.createClass({
       return {
           name:"",
           label:null,
+          title:null,
           width:null,
           height:null,
           value:"",
@@ -653,7 +657,8 @@ let  Picker =  React.createClass({
             style:style,
             name:this.props.name,
             placeholder:(this.props.placeholder===""||this.props.placeholder==null)?this.state.required?"必填项":"":this.props.placeholder,
-            className:"wasabi-form-control  "+(this.props.className!=null?this.props.className:"")
+            className:"wasabi-form-control  "+(this.props.className!=null?this.props.className:""),
+            title:this.props.title,
 
         }//文本框的属性
         var control=this.renderProvince();

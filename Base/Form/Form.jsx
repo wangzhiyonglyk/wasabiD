@@ -46,7 +46,7 @@ var Form=React.createClass({
     getDefaultProps:function() {
         return {
             model: [],//表单数据模型
-            width:document.body.clientWidth,//默认宽度
+            width:null,//默认宽度
             height:null,//高度
             className:"" ,//自定义样式
             disabled:false,//是否只读
@@ -63,6 +63,15 @@ var Form=React.createClass({
 
     },
     getInitialState:function() {
+        //初始化时就获取可用宽度,如果每次更新获取,会产生晃动
+        if(window.screen.availWidth<document.documentElement.clientWidth)
+        {//屏幕可用宽度小,有滚动条
+            this.availWidth=window.screen.availWidth;
+        }
+        else {
+            //没有滚动条
+            this.availWidth=window.screen.availWidth-10;//防止后期出现滚动条,而产生样式变形,先减去滚动条宽度
+        }
         return{
             model:(this.props.model),//一定复制
             pickerRowModel:new Map(),//下拉框中选中的完整数据
@@ -348,26 +357,28 @@ var Form=React.createClass({
         }
 
         let columns=0;//每一行的列数
-        let  allwidth=this.props.width?this.props.width:document.body.clientWidth;//总宽度
+
+        //表单实际宽度
+        let  actualWidth=this.props.width?this.props.width:this.availWidth;//总宽度
         let columnClass="";//列样式
         if(this.state.columns)
         {//如果自定义了,则以自定义为标准
             columns=this.state.columns;
         }
         else {//否则自动计算
-            if (allwidth <= 610) {//一列
+            if (actualWidth <= 610) {//一列
                 columns = 1;
 
             }
-            else if (allwidth >= 611 && allwidth <= 909) {//两列
+            else if (actualWidth >= 611 && actualWidth <= 909) {//两列
                 columns = 2;
 
             }
-            else if (allwidth >= 910 && allwidth <= 1229) {//三列
+            else if (actualWidth >= 910 && actualWidth <= 1229) {//三列
                 columns = 3;
 
             }
-            else if (allwidth >= 1230) {//四列
+            else if (actualWidth >= 1230) {//四列
                 columns = 4;
 
             }
@@ -392,7 +403,7 @@ var Form=React.createClass({
         }
 
 
-        style.width=allwidth;//设置表单的宽度
+        style.width=actualWidth;//设置表单的宽度
         style.height=this.props.height;//设置表单的高度
 
         let result={
@@ -418,7 +429,7 @@ var Form=React.createClass({
         else {
 
         }
-        let virtualIndex=0;//表单组件在表单的虚拟下标,用于计算在表单中的位置
+        let orderIndex=0;//表单组件在表单的序号,
         return (
             <div className={"wasabi-form "+result.columnClass+" "+this.props.className } style={result.style}>
                 <div  className={"form-body  "}>
@@ -426,7 +437,7 @@ var Form=React.createClass({
 
                         this.state.model.map((child,index) =>{
 
-                            let position=virtualIndex%result.columns;//计算在表单中的位置
+                            let position=orderIndex%result.columns;//求余,计算在表单中列位置
                             if(position==0)
                             {
                                 position="left";
@@ -441,23 +452,35 @@ var Form=React.createClass({
                             var size=child.onlyline==true?"onlyline":child.size;//组件大小
                             if(size=="default")
                             {
-                                virtualIndex++;
+                                orderIndex++;
                             }
-                            else if(size=="large")
+                            else if(size=="large"||size=="two")
                             {
 
                                 if(result.columns==1)
                                 {
-                                    virtualIndex++;//每行只有一列
+                                    orderIndex++;//每行只有一列,算一列
                                 }
                                 else {
-                                    virtualIndex+=2;
+                                    orderIndex+=2;//算两列
+                                }
+
+                            }
+                            else if(size=="three")
+                            {
+
+                                if(result.columns==1||result.columns==2)
+                                {
+                                    orderIndex++;//每行只有一列或者两列,算一列
+                                }
+                                else {
+                                    orderIndex+=3;//算三列
                                 }
 
                             }
                             else if(size=="onlyline")
                             {
-                                virtualIndex+=result.columns;
+                                orderIndex+=result.columns;
                             }
 
 

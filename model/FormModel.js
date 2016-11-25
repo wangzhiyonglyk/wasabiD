@@ -41,6 +41,7 @@ class  FormModel {
         this.hotData=null;//热门选择数据
         this.headers=null;//gridpicker下拉表格中的表格头部
         this.size="default";//表单大小
+        this.postion="default";//表单位置
     }
 
 

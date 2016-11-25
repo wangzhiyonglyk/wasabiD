@@ -26,13 +26,20 @@ var SearchBar=React.createClass({
             filterHandler: null,//提交成功后的回调事件
             className:"",
             expandHandler:null,//展开与折叠事件
-
+            width:null,
         }
 
     },
     getInitialState:function() {
-        var screenWidth=window.screen.availWidth<document.documentElement.clientWidth?window.screen.availWidth:document.documentElement.clientWidth;
-        this.allWidth=this.props.width?this.props.width:screenWidth-10;//总宽度,除去滚动条
+        //初始化时就获取可用宽度,如果每次更新获取,会产生晃动
+        if(window.screen.availWidth<document.documentElement.clientWidth)
+        {//屏幕可用宽度小,有滚动条
+            this.availWidth=window.screen.availWidth;
+        }
+        else {
+            //没有滚动条
+            this.availWidth=window.screen.availWidth-10;//防止后期出现滚动条,而产生样式变形,先减去滚动条宽度
+        }
 
         return{
             model:(this.props.model),
@@ -40,6 +47,9 @@ var SearchBar=React.createClass({
         }
     },
     componentWillReceiveProps:function(nextProps) {
+        //屏幕可用宽度,
+
+
         this.setState({
             model:(nextProps.model),
             style:nextProps.style,
@@ -221,73 +231,76 @@ var SearchBar=React.createClass({
         }
 
     },
-    setStypeAndWidth:function() {//计算样式，并把返回值
-
-
-        let leftWidth=this.allWidth-125;//左侧input宽度 选项总宽度
-        let columns=0;//每一行的列数
-        let columnClass="";//
-        let  rows=0;//行数
-        if(leftWidth<=610) {//一列
-            columns=1;
-            columnClass="oneline";
-        }
-        else if(leftWidth>=611&&leftWidth<=909) {//两列
-            columns=2;
-            columnClass="twoline";
-        }
-        else if(leftWidth>=910&&leftWidth<=1229) {//三列
-            columns=3;
-            columnClass="threeline";
-        }
-        else if(leftWidth>=1230) {//四列
-            columns=4;
-            columnClass="fourline";
-        }
-
-        if(this.state.model.length<columns)
-        {//如果列数小于计算结果
-            switch (this.state.model.length)
-            {
-                case 1:
-                    leftWidth=300;
-                    columnClass="oneline";
-                    columns=1;
-                    break;
-                case 2:
-                    leftWidth=611;
-                    columnClass="twoline";
-                    columns=2;
-                    break;
-                case 3:
-                    leftWidth=910;
-                    columnClass="threeline";
-                    columns=3;
-                    break;
-            }
-            this.allWidth=leftWidth+125;//重新计算总宽度
-            columns=  this.state.model.length;//重新计算列数
-        }
-        rows=Math.ceil(this.state.model.length/columns);//计算行数
-
-        let  style=null;//样式
+    setColumns:function () {//计算列数及样式
+        var style={};//表单栏样式
         if(this.props.style)
         {
             style=this.props.style;
-        }else
-        {
-            style={};
         }
-        let height=45*rows;
-        this.state.dropType=="wasabi-button wasabi-searchbar-down"?style.height=54:style.height=height;//判断高度
-        style.width=this.allWidth;
-        return{
+
+        let columns=0;//每一行的列数
+
+        //表单实际宽度
+        let  actualWidth=this.props.width?this.props.width:this.availWidth;//总宽度
+        let leftWidth=actualWidth-125;//左侧表单宽度
+
+        let columnClass="";//列样式
+        if(this.state.columns)
+        {//如果自定义了,则以自定义为标准
+            columns=this.state.columns;
+        }
+        else {//否则自动计算
+            if (leftWidth <= 610) {//一列
+                columns = 1;
+
+            }
+            else if (leftWidth >= 611 && leftWidth <= 909) {//两列
+                columns = 2;
+
+            }
+            else if (leftWidth >= 910 && leftWidth <= 1229) {//三列
+                columns = 3;
+
+            }
+            else if (leftWidth >= 1230) {//四列
+                columns = 4;
+
+            }
+        }
+        if(this.state.model.length<columns) {//如果数据小于列数
+            columns = this.state.model.length;
+        }
+        switch (columns) {
+            case 1:
+                columnClass = "oneline";
+                break;
+            case 2:
+                columnClass = "twoline";
+                break;
+            case 3:
+                columnClass = "threeline";
+                break;
+            case 4:
+                columnClass = "fourline";
+                break;
+
+        }
+
+
+        style.width=actualWidth;//设置表单的宽度
+
+        this.state.dropType=="wasabi-button wasabi-searchbar-down"?style.height=54:style.height=null;//判断高度
+
+        let result={
             style:style,
-            leftWidth:leftWidth,
             columns:columns,
-            columnClass:columnClass
+            columnClass:columnClass,
+            leftWidth:leftWidth
         }
+
+        return result;
     },
+
     render:function() {
         if(  this.state.model instanceof  Array) {
 
@@ -295,43 +308,91 @@ var SearchBar=React.createClass({
         else {
             return null;
         }
-        var searchbarStype=this.setStypeAndWidth();
+        var result=this.setColumns();//得计算列的结果
         let props={
-            className:"wasabi-searchbar "+searchbarStype. columnClass+" "+this.props.className,
-            style:searchbarStype.style
+            className:"wasabi-searchbar "+result. columnClass+" "+this.props.className,
+            style:result.style
         };
+        let orderIndex=0;//表单组件在表单的序号,
         return (<div {...props}>
-                <div  className="leftform" style={{width:searchbarStype.leftWidth}}  >
+                <div  className="leftform" style={{width:result.leftWidth}}  >
                     {
-                        this.state.model.map(  (child,index)=> {
-                            let position=index%searchbarStype.columns;
+                        this.state.model.map((child,index) =>{
+                            let position=orderIndex%result.columns;//求余,计算在表单中列位置
                             if(position==0)
                             {
                                 position="left";
                             }
-                            else if(position==searchbarStype.columns-1)
+                            else if(position==result.columns-1)
                             {
                                 position="right";
                             }
                             else {
                                 position="default";
                             }
-                            return(   <div className="wasabi-searchbar-item" key={index}
-                                           style={{display:(this.state.dropType=="wasabi-button wasabi-searchbar-down"?((index<searchbarStype.columns)?"inline":"none"):"inline")}}><Input ref={child.name}
-                                                                                                                                                                                           key={child.name+index.toString()}
-                                {...child}
-                                                                                                                                                                                           position={position}
-                                                                                                                                                                                           backFormHandler={this.changeHandler}
-                            ></Input></div>);
+                            var size=child.onlyline==true?"onlyline":child.size;//组件大小
+                            if(size=="default")
+                            {
+                                orderIndex++;
+                            }
+                            else if(size=="large"||size=="two")
+                            {
 
+                                if(result.columns==1)
+                                {
+                                    orderIndex++;//每行只有一列,算一列
+                                }
+                                else {
+                                    orderIndex+=2;//算两列
+                                }
+
+                            }
+                            else if(size=="three")
+                            {
+
+                                if(result.columns==1||result.columns==2)
+                                {
+                                    orderIndex++;//每行只有一列或者两列,算一列
+                                }
+                                else {
+                                    orderIndex+=3;//算三列
+                                }
+
+                            }
+                            else if(size=="onlyline")
+                            {
+                                orderIndex+=result.columns;
+                            }
+                            //因为orderIndex代表的是下一个序号,所以要小于等于来判断是否隐藏
+
+                          return(  <div className="wasabi-searchbar-item" key={(orderIndex)}
+                                 style={{display:(this.state.dropType=="wasabi-button wasabi-searchbar-down"?(((orderIndex)<=result.columns)?"inline":"none"):"inline")}}>
+                                <Input ref={child.name}
+                                       key={child.name+index.toString()}
+                                    {...child}
+                                       position={position}
+                                       readonly={this.state.disabled==true?true:child.readonly}
+                                       backFormHandler={this.changeHandler}
+                                ></Input></div>
+                            );
                         })
                     }
+                    <div className="clear">
+                        {
+                            //解决子级用css float浮动 而父级div没高度不能自适应高度
+                        }
+                    </div>
                 </div>
                 <div className="rightbutton" >
-                    <button className={this.state.dropType} style={{float:"left",display:(searchbarStype.columns<this.state.model.length)?"inline":"none"}} onClick={this.expandHandler}  ></button>
-                    <Button  onClick={this.onSubmit.bind(this,"submit")} theme="green" style={{ float:"right",marginTop:((searchbarStype.columns<this.state.model.length)?-22:0),display:this.props.searchHide==true?"none":null}} title={this.props.searchTitle}   >
+                    <button className={this.state.dropType} style={{float:"left",display:(result.columns<this.state.model.length)?"inline":"none"}} onClick={this.expandHandler}  ></button>
+                    <Button  onClick={this.onSubmit.bind(this,"submit")} theme="green" style={{ float:"right",marginTop:((result.columns<this.state.model.length)?-22:0),display:this.props.searchHide==true?"none":null}} title={this.props.searchTitle}   >
                         {this.props.searchTitle}
                     </Button>
+                </div>
+                <div className="clear">
+                    {
+                        //解决子级用css float浮动 而父级div没高度不能自适应高度
+                    }
                 </div>
             </div>
         )

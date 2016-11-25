@@ -19,6 +19,7 @@ var PanelPicker = React.createClass({
             ],//类型
         name:React.PropTypes.string.isRequired,//字段名
         label:React.PropTypes.oneOfType([React.PropTypes.string,React.PropTypes.element,React.PropTypes.node]),//字段文字说明属性
+        title:React.PropTypes.string,//提示信息
         width:React.PropTypes.number,//宽度
         height:React.PropTypes.number,//高度
         value:React.PropTypes.oneOfType([React.PropTypes.number,React.PropTypes.string]),//默认值,
@@ -34,7 +35,9 @@ var PanelPicker = React.createClass({
         className:React.PropTypes.string,//自定义class
         size:React.PropTypes.oneOf([
             "default",
-            "large",
+            "large",//兼容性值,与two相同
+            "two",
+            "three",
             "onlyline"
         ]),//组件表单的大小
         position:React.PropTypes.oneOf([
@@ -53,6 +56,7 @@ var PanelPicker = React.createClass({
         return{
             name:"",
             label:null,
+            title:null,
             width:null,
             height:null,
             value:"",
@@ -157,7 +161,8 @@ var PanelPicker = React.createClass({
             style: style,
             name: this.props.name,
             placeholder:(this.props.placeholder===""||this.props.placeholder==null)?this.state.required?"必填项":"":this.props.placeholder,
-            className:"wasabi-form-control  "+(this.props.className!=null?this.props.className:"")
+            className:"wasabi-form-control  "+(this.props.className!=null?this.props.className:""),
+            title:this.props.title,
 
         }//文本框的属性
         var children = React.cloneElement(this.props.children,{onSelect:this.onSelect})

@@ -109,6 +109,9 @@ let PageHandlerMixins={
                  break;
          }
      },
+    btnHandler:function(){
+
+    },
     fetchErrorHandler:function(errorCode, errorMssage) {//统一错误处理
         console.log( errorCode,errorMssage);
         Message.error("操作失败，原因"+errorMssage);

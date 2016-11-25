@@ -28,7 +28,7 @@ let Page=React.createClass({
             updateUrl: React.PropTypes.string,//更新地址url
             queryUrl: React.PropTypes.string,//不分页查询url
             pageUrl:React.PropTypes.string,//分页查询url
-            initModel:React.PropTypes.func,//对数据模型再进一步处理,有返回值
+            overrideModel:React.PropTypes.func,//对数据模型再进一步处理,有返回值
             submitTheme:React.PropTypes.string,//提交按钮主题
         },
         getDefaultProps: function () {
@@ -46,7 +46,7 @@ let Page=React.createClass({
                 updateUrl:null,
                 queryUrl:null,
                 pageUrl:null,
-                initModel:null,
+                overrideModel:null,
                 submitTheme:"green",
             }
         },
@@ -73,7 +73,7 @@ let Page=React.createClass({
             this.initModel();//初始化数据模型
         },
         render: function () {
-            <div>
+          return  <div>
                 <div
                     style={{display:(this.state.filterModel==null||(this.state.filterModel instanceof Array&&this.state.filterModel.length==0))?"none":"block"}}>
                     <SearchBar ref="searchbar" model={this.state.filterModel}
@@ -91,6 +91,5 @@ let Page=React.createClass({
             </div>
 
         }
-    }
-)
+    })
 module .exports=Page;

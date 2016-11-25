@@ -30,7 +30,9 @@ let SwitchButton = React.createClass({
         className:React.PropTypes.string,//自定义class
         size:React.PropTypes.oneOf([
             "default",
-            "large",
+            "large",//兼容性值,与two相同
+            "two",
+            "three",
             "onlyline"
         ]),//组件表单的大小
         position:React.PropTypes.oneOf([

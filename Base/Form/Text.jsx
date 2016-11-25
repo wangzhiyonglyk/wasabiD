@@ -9,9 +9,9 @@ let setStyle=require("../../Mixins/setStyle.js");
 var validate=require("../../Mixins/validate.js");
 var shouldComponentUpdate=require("../../Mixins/shouldComponentUpdate.js");
 var Label=require("../Unit/Label.jsx");
-var pasteExtend=require("../../Mixins/pasteExtend.js");
+
 var Text=React.createClass({
-    mixins:[setStyle,validate,shouldComponentUpdate,pasteExtend],
+    mixins:[setStyle,validate,shouldComponentUpdate],
     propTypes: {
         type:React.PropTypes.oneOf([
             "text",//普通输入框
@@ -43,7 +43,9 @@ var Text=React.createClass({
         className:React.PropTypes.string,//自定义class
         size:React.PropTypes.oneOf([
             "default",
-            "large",
+            "large",//兼容性值,与two相同
+            "two",
+            "three",
             "onlyline"
         ]),//组件表单的大小
         position:React.PropTypes.oneOf([
@@ -129,10 +131,7 @@ var Text=React.createClass({
         this.validateInput=true;//设置初始化值
     },
     changeHandler:function(event) {
-        if(event.target.value.indexOf("\n")>-1)
-        {//todo 暂时去掉
-          //  return ;
-        }
+
         if (this.validateInput==true) {
             var istrue=true;
             if((this.props.type=="integer"||this.props.type=="number")) {
@@ -223,45 +222,8 @@ var Text=React.createClass({
             this.props.onClick(this.props.name,this.state.value,model);
         }
     },
-    onPaste:function(event)
-    {
-//todo 暂时去掉
-       // this.pasteHandler(event,this.pasteSuccess);
-    },
-    pasteSuccess:function(data)
-    {
-        var str="";
-        for(var row=0;row<data.length;row++)
-        {
-            for(var col=0;col<data[row].length;col++)
-            {
-                if(str=="") {
-                    str = data[row][col];
 
-                }
-                else {
-                    str += "," + data[row][col];
-                }
-            }
 
-        }
-
-        this.setState({
-            value: str,
-            text:str,
-        });
-
-        if (this.props.onChange != null) {
-            this.props.onChange(str);//自定义的改变事件
-
-        }
-        //回传给表单组件
-        if (this.props.backFormHandler != null) {
-            this.props.backFormHandler(str, str, this.props.name);
-
-        }
-
-    },
     render:function() {
         var inputType="text";
         if(this.props.type=="password") {
@@ -277,7 +239,8 @@ var Text=React.createClass({
             name:this.props.name,
             placeholder:(this.props.placeholder===""||this.props.placeholder==null)?this.state.required?"必填项":"":this.props.placeholder,
             className:"wasabi-form-control  "+(this.props.className!=null?this.props.className:""),
-            rows:this.props.rows
+            rows:this.props.rows,
+            title:this.props.title,
 
         }//文本框的属性
         var control=null;

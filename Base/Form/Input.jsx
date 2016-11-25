@@ -12,6 +12,7 @@ var CheckBox=require("./CheckBox.jsx");
 var SwitchButton=require("./SwitchButton.jsx");
 var ComboBox=require("./ComboBox.jsx");
 var Text=require("./Text.jsx");
+var None=require("./None.jsx");
 var Button=require("../Buttons/Button.jsx");
 let setStyle=require("../../Mixins/setStyle.js");
 var unit=require("../../libs/unit.js");
@@ -20,6 +21,7 @@ var Input=React.createClass({
     mixins:[setStyle,shouldComponentUpdate],
     propTypes: {
         type:React.PropTypes.oneOf([
+            "none",//空的占位符
             "text",//普通输入框
             "password",//密码
             "email",//邮箱
@@ -48,6 +50,7 @@ var Input=React.createClass({
         ]),//输入框的类型
         name:React.PropTypes.string.isRequired,//字段名
         label:React.PropTypes.oneOfType([React.PropTypes.string,React.PropTypes.element,React.PropTypes.node]),//字段文字说明属性
+        title:React.PropTypes.string,//提示信息
         width:React.PropTypes.number,//宽度
         height:React.PropTypes.number,//高度
         value:React.PropTypes.oneOfType([React.PropTypes.number,React.PropTypes.string]),//默认值,
@@ -63,7 +66,9 @@ var Input=React.createClass({
         className:React.PropTypes.string,//自定义class
         size:React.PropTypes.oneOf([
             "default",
-            "large",
+            "large",//兼容性值,与two相同
+            "two",
+            "three",
             "onlyline"
         ]),//组件表单的大小
         position:React.PropTypes.oneOf([
@@ -105,6 +110,7 @@ var Input=React.createClass({
             type:"text",
             name:"",
             label:null,
+            title:null,
             width:null,
             height:null,
             value:"",
@@ -256,7 +262,11 @@ var Input=React.createClass({
         var props={...this.props}////原有的属性
         props.value=this.state.value;//注意绑定
         props.text=this.state.text;//
-        if(type=="radio")
+        if (type=="none")
+        {//空占位组件
+            control=<None ref="input" {...props } ></None>
+        }
+       else  if(type=="radio")
         {//单选按钮组
             control=<Radio ref="input" {...props } onSelect={this.onSelect}></Radio>
         }
