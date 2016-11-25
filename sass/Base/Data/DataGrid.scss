@@ -10,12 +10,13 @@
 .wasabi-table .wasabi-form-group
 {
   padding:0px;
+  min-height:0px;
 }
 .wasabi-table .wasabi-checkul
 {
   margin: 0px;
   padding: 0px;
- height: 12px;
+  height: 12px;
 }
 .wasabi-table .wasabi-checkul li
 {
@@ -61,7 +62,7 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   font-size: 12px;
- overflow: visible;
+  overflow: visible;
 }
 .wasabi-table .table > thead > tr > th.check-column
 {
@@ -246,7 +247,7 @@
   left: 0px;
   width: 100%;
   height: 100%;
-background-color: #000000;
+  background-color: #000000;
   opacity: 0.1;
 
 }
