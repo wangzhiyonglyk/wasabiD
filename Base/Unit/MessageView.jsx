@@ -9,7 +9,7 @@ let MessageView= React.createClass({
             "success",
             "error",
             "confirm",
-            ]),
+        ]),
         msg: React.PropTypes.string.isRequired,//消息
         timeout:React.PropTypes.number,//自动消失时间
         cancelHandler:React.PropTypes.func,//取消事件
@@ -32,8 +32,14 @@ let MessageView= React.createClass({
         }
     },
     componentDidMount:function() {
-        this.onmouse=false;////初始化
-this.timeOutHandler();//设置定时器
+        this.onmouse = false;////初始化
+        if (this.props.type == "confirm") {
+
+        }
+        else {
+            this.timeOutHandler();//设置定时器
+        }
+
     },
     OKHandler:function() {
         this.setState({
@@ -69,7 +75,7 @@ this.timeOutHandler();//设置定时器
     },
     timeOutHandler:function() {
 
-       setTimeout(()=> {
+        setTimeout(()=> {
             if(this.onmouse==false) {
 
 
@@ -100,20 +106,20 @@ this.timeOutHandler();//设置定时器
     },
 
     renderInfo:function(){
-      return   <div onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} className={"wasabi-message "+this.props.type}
-                    style={{display:this.state.visible?"inline-block":"none",opacity:this.state.opacity,transition:("opacity "+(this.props.timeout/1000).toString()+"s")}} >
+        return   <div onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} className={"wasabi-message "+this.props.type}
+                      style={{display:this.state.visible?"inline-block":"none",opacity:this.state.opacity,transition:("opacity "+(this.props.timeout/1000).toString()+"s")}} >
             <div className="notice">{this.props.msg}</div>
         </div>
     },
     renderConfirm:function() {
-     return <div className="wasabi-confirm" style={{display:this.state.visible?"inline-block":"none"}}>
+        return <div className="wasabi-confirm" style={{display:this.state.visible?"inline-block":"none"}}>
             <div className="message">
                 {(this.props.msg==null||this.props.msg=="")?"确定删除这条信息吗?":this.props.msg}
             </div>
             <div className="buttons">
                 <Button theme="green" name="ok" title="确定" onClick={this.OKHandler}></Button>
                 <Button theme="cancel" name="cancel" title="取消"  onClick={this.cancelHandler}></Button>
-          </div>
+            </div>
         </div>
     },
     render: function () {
