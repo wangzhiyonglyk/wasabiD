@@ -7,6 +7,7 @@ var unit=require("../libs/unit.js");
 var FetchModel=require("../model/FetchModel.js");
 var Message=require("../Base/unit/Message.jsx");
 let DataGridHandler={
+
     //列表常用处理函数
     paginationHandler:function(pageIndex) {//分页处理函数
         if(pageIndex==this.state.pageIndex) {//当前页,不处理
@@ -105,19 +106,27 @@ let DataGridHandler={
 
     },
 
-    //数据处理波函数
-    updateHandler:function(url,pageSize,pageIndex,sortName,sortOrder,params){//更新事件
-
+    //更新函数
+    updateHandler:function(url,pageSize,pageIndex,sortName,sortOrder,params,headers){////数据处理函数,更新
+        /*
+         url与params而url可能是通过reload方法传进来的,并没有作为状态值绑定
+         headers可能是后期才传了,见Page组件可知
+         所以此处需要详细判断
+         */
         if(!url)
-        {
+        {//如果为空,先取状态值中...
             url=this.state.url;
+        }
+        if(!headers)
+        {//如果为空,先取状态值中...
+            headers=this.state.headers;
         }
         if(url) {
             this.setState({
                 loading:true,
                 url:url,//更新,有可能从reload那里直接改变了url
+                headers:headers,//更新
             })
-
             var actualParams={};
             if(!params&&this.state.params&&typeof this.state.params =="object")
             {//新的参数为null或者undefined，旧参数不为空
@@ -150,12 +159,18 @@ let DataGridHandler={
             else
             {
             }
+            /*
+            在查询失败后可能要继续调用updateHandler查询前一页数据,所以传url,以便回调,
+            而pageSize,pageIndex,sortName,sortOrder,params这些参数在查询成功后再更新
+            所以回传
+             */
             var fetchmodel=new FetchModel(url,this.loadSuccess.bind(this,url,pageSize,pageIndex,sortName,sortOrder,params),actualParams,this.loadError);
             fetchmodel.lang=this.props.lang;
-            console.log("datagrid-",fetchmodel);
+            console.log("datagrid-开始查询:",fetchmodel);
             unit.fetch.post(fetchmodel);
         }
         else {
+            //没有传url,判断用户是否自定义了更新函数
             if (this.props.updateHandler != null) {
 
                 this.props.updateHandler(pageSize, pageIndex, sortName, sortOrder);
@@ -163,63 +178,94 @@ let DataGridHandler={
         }
 
     },
-    loadSuccess:function(url,pageSize,pageIndex,sortName,sortOrder,params,data) {//数据加载成功
-        var dataSource;//最终数据
-        var totalSource;//最终总共记录
-        var footerSource;//最终统计数据
-        if(this.props.backSource&&this.props.backSource!="") {
-            if(this.props.pagination==false&&this.props.backSource=="data.data")
+    loadSuccess:function(url,pageSize,pageIndex,sortName,sortOrder,params,result) {//数据加载成功
+        var dataResult;//最终数据
+        var totalResult;//最终总共记录
+        var footerResult;//最终统计数据
+        var dataSource=this.props.dataSource;//数据源
+        if(dataSource=="data"&&this.props.backSource!="data")
+        {//dataSource属性为默认,backSource不为默认,说明是旧版本,
+            dataSource=this.props.backSource;
+        }
+        if(dataSource) {//需要重新指定数据源
+            dataResult= unit.getSource( result,dataSource);
+        }
+        else {
+            dataResult=result;
+        }
+        if(this.props.pagination&&this.props.totalSource) {//分页而且需要重新指定总记录数的数据源
+            totalResult = unit.getSource(result, this.props.totalSource);
+        }
+        else if(this.props.pagination)
+        {//分页了,没有指定,使用默认的
+            if(result.total)
             {
-                dataSource= unit.getSource( data,"data");
-            }else {
-                dataSource= unit.getSource( data,this.props.backSource);
-
+                totalResult=result.total;
+            }
+            else
+            {
+                totalResult=null;
+                throw ("datagrid分页了,但返回的数据没有指定total");
             }
 
         }
-        else {
-            dataSource=data;
-        }
-        if(this.props.pagination&&this.props.totalSource&&this.props.totalSource!="") {
-
-            totalSource=unit.getSource( data,this.props.totalSource);
-        }
-        else {
-            totalSource=data.total;
+        else {//不分页
+            totalResult=dataResult.length;
         }
 
-        if(this.props.footerSource&&this.props.footerSource!="")
+        if(this.props.footerSource)//需要重新指定页脚的数据源
         {
-            footerSource= unit.getSource( data,this.props.footerSource);
+            footerResult= unit.getSource( result,this.props.footerSource);
+        }
+        else
+        {
+            if(result.footer)
+            {
+                footerResult=result.footer;//默认的
+            }
+            else
+            {
+                footerResult=null;//空值
+            }
+
+
         }
         console.log("datagrid-fetch结果",{
-            "原数据":data,
-            "处理后的数据":dataSource
+            "原数据":result,
+            "处理后的数据":dataResult
         });
-        if(totalSource>0 &&dataSource&& dataSource instanceof  Array&&dataSource.length==0&&totalSource>0&&pageIndex!=1)
+        if(totalResult>0 &&dataResult&& dataResult instanceof  Array&&dataResult.length==0&&totalResult>0&&pageIndex!=1)
         {
             //有总记录，没有当前记录数,不是第一页，继续查询转到上一页
             this.updateHandler(url,pageSize,pageIndex-1,sortName,sortOrder,params);
         }
         else {
             //查询成功
-            if(dataSource&& dataSource instanceof  Array)
+            if(dataResult&& dataResult instanceof  Array)
             {//是数组,
-                dataSource= (this.props.pagination == true ? dataSource.slice(0, this.props.pageSize) : dataSource);
+                dataResult= (this.props.pagination == true ? dataResult.slice(0, this.props.pageSize) : dataResult);
+            }
+            var checkedData=this.state.checkedData;//之前被选择的数据
+            if(this.props.clearChecked==false) {//不清除之前的选择
+                for (let dataIndex = 0; dataIndex < dataResult; dataIndex++) {
+                    let currentKey = this.getKey(dataIndex, pageIndex);//得到当前的key
+                    if (checkedData.has(currentKey)) {//如果被选择则修改数据源
+                        checkedData.set(currentKey, dataResult[dataIndex]);
+                    }
+                }
             }
             this.setState({
-                url: url,
                 pageSize: pageSize,
-                params: unit.clone(params),//这里一定要复制
+                params: unit.clone(params),//这里一定要复制,参数是引用类型,不复制更新时无法判断参数是否发生改变
                 pageIndex: pageIndex,
                 sortName: sortName,
                 sortOrder: sortOrder,
-                data: dataSource,
-                total: totalSource,
-                footer: footerSource,
+                data: dataResult,
+                total: totalResult,
+                footer: footerResult,
                 loading: false,
-                //checkedData:this.props.clearChecked==true?new Map():this.state.checkedData,
-                checkedData:new Map(),//暂时不记住之前的选择,会产生很多问题
+                checkedData:this.props.clearChecked==true?new Map():checkedData,
+
             })
 
         }
@@ -231,51 +277,6 @@ let DataGridHandler={
         this.setState({
             loading:false,
         })
-    },
-    reload:function(params,url) {//重新刷新数据,
-        //存在用户第一次没有传url,第二次才传url
-        if(!url) {//如果为空,则使用旧的
-            url=this.state.url;//得到旧的url
-        }
-        if(!params||params=="reload")
-        {//说明是刷新(reload字符,是因为从刷新按钮过来的
-
-
-            params=this.state.params;
-        }
-        else {//说明是重新查询
-            this.isReloadType=true;//标记一下,说明用户使用的是ref方式查询数据
-
-        }
-        if(!url)
-        {//没有传url
-
-            if(this.props.updateHandler)
-            {//用户自定义了更新事件
-                this.props.updateHandler(this.state.pageSize,this.state.pageIndex,this.state.sortName,this.state.sortOrder);
-            }
-
-        }
-        else {//传了url
-
-            if( this.paramNotEaqual(params))
-            {//参数发生改变,从第一页查起
-                this.updateHandler(url,this.state.pageSize, 1, this.state.sortName, this.state.sortOrder,params);
-
-            }
-            else
-            {//从当前页查起
-                this.updateHandler(url,this.state.pageSize, this.state.pageIndex, this.state.sortName, this.state.sortOrder,params);
-
-            }
-
-        }
-    },
-    clearData:function() {//清空数据
-        this.setState({
-            data:[],
-            params:[],
-        });
     },
     paramNotEaqual:function(params) {//判断前后参数是否相同
         let isupdate=false;
@@ -335,20 +336,22 @@ let DataGridHandler={
 
     },
 
-    //选中处理函数
-    getKey:function (index) {//获取指定行的关键字
-        let key = this.state.pageIndex.toString() + "-" + index.toString();//默认用序号作为关键字
+    //选择处理函数
+    getKey:function (index,pageIndex) {//获取指定行的关键字
+        if(!pageIndex) {
+            pageIndex = this.state.pageIndex;
+        }
+        let key = pageIndex.toString() + "-" + index.toString();//默认用序号作为关键字
         if (this.state.data[index][this.props.keyField]) {
             key = this.state.data[index][this.props.keyField];//如果能获取关键字段，则用关键字段
         }
-
         return key;
     },
     onChecked:function(index,value) {//选中事件
         let checkedData=(this.state.checkedData);//已经选中的行
         if(this.props.singleSelect==true)
-        {
-            checkedData=[];//单选先清空之前的选择
+        {//单选则清空
+            checkedData=new Map();//单选先清空之前的选择
         }
         let key=this.getKey(index);//获取关键字
         if(value&&value!=""){
@@ -429,7 +432,7 @@ let DataGridHandler={
 
         this.setState({checkedData:checkedData});
         if(this.props.onChecked!=null)
-        {
+        {//执行父组件的onchecked事件
             var data=[];
             for (let value of checkedData.values()) {
                 data.push(value);
@@ -439,13 +442,58 @@ let DataGridHandler={
 
     },
 
+    //只读函数,父组件通过refs调用
+    clearData:function() {//清空数据
+        this.setState({
+            data:[],
+            params:[],
+        });
+    },
+    reload:function(params,url) {//重新查询数据,
 
-    //只读函数,用于父组件获取数据
-    getFocusIndex:function() {
+        //存在用户第一次没有传url,第二次才传url
+        if(!url) {//如果为空,则使用旧的
+            url=this.state.url;//得到旧的url
+        }
+        if(!params||params=="reload")
+        {//说明是刷新(reload字符,是因为从刷新按钮过来的
+
+
+            params=this.state.params;
+        }
+        else {//说明是重新查询
+            this.isReloadType=true;//标记一下,说明用户使用的是ref方式查询数据
+
+        }
+        if(!url)
+        {//没有传url
+
+            if(this.props.updateHandler)
+            {//用户自定义了更新事件
+                this.props.updateHandler(this.state.pageSize,this.state.pageIndex,this.state.sortName,this.state.sortOrder);
+            }
+
+        }
+        else {//传了url
+
+            if( this.paramNotEaqual(params))
+            {//参数发生改变,从第一页查起
+                this.updateHandler(url,this.state.pageSize, 1, this.state.sortName, this.state.sortOrder,params);
+
+            }
+            else
+            {//从当前页查起
+                this.updateHandler(url,this.state.pageSize, this.state.pageIndex, this.state.sortName, this.state.sortOrder,params);
+
+            }
+
+        }
+    },
+    getFocusIndex:function() { //只读函数,用于父组件获取数据
 
         return this.state.focusIndex;
     },
-    getFocusRowData:function(index) {
+    getFocusRowData:function(index) {//获取当前焦点行的数据
         if(index!=null&&index!=undefined)
         {
 
@@ -467,9 +515,7 @@ let DataGridHandler={
     getFooterData:function() {//获取得页脚的统计值
         return this.footerActualData;
     },
-
-    //只读函数,用于父组件不通过状态值来更新组件本身
-    updateRow:function(rowIndex,rowData) {//更新某一行数据
+    updateRow:function(rowIndex,rowData) {// //只读函数,用于父组件不通过状态值来更新组件本身,更新某一行数据
         if(rowIndex>=0&&rowIndex<this.state.pageSize) {
             var newData = this.state.data;
             newData[rowIndex] = rowData;

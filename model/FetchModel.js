@@ -6,14 +6,14 @@
 
 class FetchModel
 {
-    constructor(url,success,params=null,error=null,lang="java",type="GET")
+    constructor(url,success,params=null,error=null,type="GET")
     {
         this.url=url;
         this.params=params;
         this.success=success;
         this.error=error;
-        this.lang=lang;
-        this.type="GET";
+        this.type=type;//类型
+        this.contentType="application/x-www-form-urlencoded";////请求数据格式
     }
 }
 module .exports=FetchModel;

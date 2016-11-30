@@ -18,9 +18,11 @@ var shouldComponentUpdate=require("../../Mixins/shouldComponentUpdate.js");
 var DataGridHandler=require("../../Mixins/DataGridHandler.js");
 var DataGridExtend=require("../../Mixins/DataGridExtend.js");
 var pasteExtend=require("../../Mixins/pasteExtend.js");
+var alogHandler=require("../../Mixins/alogHandler.js");//专门为心怡科技做兼容处理
+
 
 var DataGrid=React.createClass({
-    mixins:[shouldComponentUpdate,DataGridHandler,DataGridExtend,pasteExtend],
+    mixins:[shouldComponentUpdate,DataGridHandler,DataGridExtend,pasteExtend,alogHandler],
     propTypes: {
         width:React.PropTypes.oneOfType([
             React.PropTypes.number,
@@ -42,12 +44,13 @@ var DataGrid=React.createClass({
             "desc",
         ]),//排序方式,默认asc,
         keyField:React.PropTypes.string,//关键字段
-        headers:React.PropTypes.array.isRequired,//表头设置
+        headers:React.PropTypes.array,//表头设置
         total:React.PropTypes.number,// 总条目数，默认为 0
         data:React.PropTypes.array,//当前页数据（json）
 
         url:React.PropTypes.string,//ajax地址
-        backSource:React.PropTypes.string,//ajax的返回的数据源中哪个属性作为数据源,为null时直接后台返回的数据作为数据源
+        backSource:React.PropTypes.string,//ajax的返回的数据源中哪个属性作为数据源,为null时直接后台返回的数据作为数据源(旧版本)
+        dataSource:React.PropTypes.string,//ajax的返回的数据源中哪个属性作为数据源,为null时直接后台返回的数据作为数据源(新版本)
         totalSource:React.PropTypes.string,//ajax的返回的数据源中哪个属性作为总记录数,为null时直接后台返回的数据中的total
         params:React.PropTypes.object,//查询条件
         onClick:React.PropTypes.func,//单击事件
@@ -91,19 +94,20 @@ var DataGrid=React.createClass({
             updateHandler:null,
             detailHandler:null,
             url:null,//
-            backSource:"data.data",//
-            totalSource:"data.total",//
+            backSource:"data",//
+            dataSource:"data",//
+            totalSource:"total",//
             params:null,
             footer:null,//页脚
             onClick:null,
             onDoubleClick:null,
             onPaste:null,
             onChecked:null,
-            footerSource:"data.footer",//页脚数据源
+            footerSource:"footer",//页脚数据源
             selectChecked:false,
             lang:"java",
             pagePosition:"bottom",//默认分页在底部
-            clearChecked:false,
+            clearChecked:true,//是否清空选择的
             pasteUrl:null,
             pasteParamsHandler:null,
 
@@ -111,6 +115,7 @@ var DataGrid=React.createClass({
         }
     },
     getInitialState:function() {
+        this.clientHeight=document.documentElement.clientHeight;//先得到高度,防止后期页面发生晃动
         var data=[];
         if(this.props.data instanceof  Array)
         {
@@ -130,8 +135,10 @@ var DataGrid=React.createClass({
             total:this.props.total,//总记录数
             loading:(this.props.url&&this.props.url!="")?true:false,//显示正在加载图示
             footer:this.props.footer,//页脚
-            width:this.props.width,//,
-            headers:this.props.headers,//可以通过鼠标右键隐藏
+            headers:this.props.headers,//
+            height:null,
+
+
         }
     },
     componentWillReceiveProps:function(nextProps) {
@@ -143,9 +150,9 @@ var DataGrid=React.createClass({
         if(nextProps.url) {
             //说明父组件将url作为状态值来绑定的
             /*
-            注意了***************（见reload方法）
-            isReloadType的作用:
-            为真:说明是通过reload方法来执行更新的,组件本身的params与父组件的params已经不同步了,不能更新
+             注意了***************（见reload方法）
+             isReloadType的作用:
+             为真:说明是通过reload方法来执行更新的,组件本身的params与父组件的params已经不同步了,不能更新
              为假:说明是父组件仅仅使用了状态值作为通信方式,先判断是否有params变化，没有则不查询,有从第一页开始查询
              *********
              */
@@ -196,23 +203,14 @@ var DataGrid=React.createClass({
         }
     },
     componentDidMount:function(){
+        //渲染后再开始加载数据
         if(this.state.url&&this.state.url!="")
         {//如果存在url,
             this.updateHandler(this.state.url,this.state.pageSize,this.state.pageIndex,this.state.sortName,this.state.sortOrder)
         }
     },
-    componentDidUpdate:function(){
-        if(document.documentElement.clientHeight<document.documentElement.offsetHeight)
-        {//有滚动条
-            if(this.state.width==document.documentElement.clientWidth+10)
-            {//没有设置固定宽度
-                this.setState({
-                    width:document.documentElement.clientWidth
-                })
-            }
-
-        }
-
+    componentDidUpdate:function() {
+            this.setWidthAndHeight();//重新计算列表的高度,固定的表头每一列的宽度
     },
     renderHeader :function() {//渲染表头
         if(this.state.headers instanceof  Array)
@@ -233,16 +231,17 @@ var DataGrid=React.createClass({
             }
             if(this.props.singleSelect==true){
                 headers.push(
-                    <th  key="headercheckbox" className="check-column">
-
+                    <th  key="headercheckbox" className="check-column" style={{width:35}}>
+                        <div className="wasabi-table-cell" >
+                        </div>
                     </th>
 
                 );
             }
             else {
                 headers.push(
-                    <th key="headercheckbox" className="check-column">
-                        <CheckBox {...props} ></CheckBox>
+                    <th key="headercheckbox" className="check-column" style={{width:35}}>
+                        <div className="wasabi-table-cell" > <CheckBox {...props} ></CheckBox></div>
                     </th>
                 );
             }
@@ -271,8 +270,9 @@ var DataGrid=React.createClass({
                         //隐藏则不显示
                     } else {
                         headers.push(
-                            <th key={"header"+index.toString()} {...props}  className={""+sortOrder} style={{textAlign:(header.align?header.align:"left"), width:(header.width==null?"auto":header.width)}}>
-                                {header.label}
+                            <th key={"header"+index.toString()} {...props}  className={""+sortOrder} style={{textAlign:(header.align?header.align:"left")}}>
+                                <div className="wasabi-table-cell" style={{width:(header.width?header.width:null),textAlign:(header.align?header.align:"left")}}>
+                                    {header.label}</div>
                             </th>)
                     }
                 }
@@ -284,7 +284,6 @@ var DataGrid=React.createClass({
         return headers;
     },
     renderBody:function() {//渲染表体
-
         var trobj=[];
         if(this.state.data instanceof Array&&this.state.headers instanceof  Array)
         {
@@ -297,33 +296,28 @@ var DataGrid=React.createClass({
 
         this.state.data.map((rowData,rowIndex)=> {
             let tds = [];
-
             if (this.props.selectAble) {
-                let key=  this.getKey(rowIndex);
-                let props={
-                    value:this.state.checkedData.has(key)==true?key:null,
-                    data:[{value:key,text:""}],
-                    onSelect:this.onChecked.bind(this,rowIndex),
-                    name:key,
+                let key = this.getKey(rowIndex);
+                let props = {
+                    value: this.state.checkedData.has(key) == true ? key : null,
+                    data: [{value: key, text: ""}],
+                    onSelect: this.onChecked.bind(this, rowIndex),
+                    name: key,
                 }
 
-                if(this.props.singleSelect==true)
-                {
+                if (this.props.singleSelect == true) {
                     tds.push(
-                        <td  key ={"bodycheckbox"+rowIndex.toString()}  className="check-column">
-                            <Radio {...props} ></Radio> </td>
+                        <td key={"bodycheckbox"+rowIndex.toString()} className="check-column" style={{width:35}}>
+                            <div className="wasabi-table-cell" > <Radio {...props} ></Radio></div></td>
                     );
 
                 }
-                else
-                {
+                else {
                     tds.push(
-                        <td  key ={"bodycheckbox"+rowIndex.toString()}  className="check-column">
-                            <CheckBox {...props} ></CheckBox> </td>
+                        <td key={"bodycheckbox"+rowIndex.toString()} className="check-column" style={{width:35}}>
+                            <div className="wasabi-table-cell"  ><CheckBox {...props} ></CheckBox></div></td>
                     );
-
                 }
-
             }
 
             this.state.headers.map((header, columnIndex) => {
@@ -346,32 +340,38 @@ var DataGrid=React.createClass({
                 } else {//为空时
                     content = rowData[header.name];
                 }
-                let whiteSpace="nowrap";//默认不换行,对超过30个字的,设置为换行模式
-                if(content&&typeof  content !=="string"&&content!=="number") {
-
-                    if(content.key&&content.key.toString().length>30) {
-                        whiteSpace = "normal";
-                    }else if(content instanceof  Array&&content.length>0&&content[0].key&&content[0].key.toString().length>30)
-                    { whiteSpace = "normal";
-
-                    }
-                }
-                else if(content &&typeof  content.toString()=="string"&&content.toString().length>30)
-                {
-                    whiteSpace="normal";
-                }
-
+                //TODO 先保留旧代码
+                //let whiteSpace="nowrap";//默认不换行,对超过30个字的,设置为换行模式
+                //if(content&&typeof  content !=="string"&&content!=="number") {
+                //
+                //    if(content.key&&content.key.toString().length>30) {
+                //        whiteSpace = "normal";
+                //    }else if(content instanceof  Array&&content.length>0&&content[0].key&&content[0].key.toString().length>30)
+                //    { whiteSpace = "normal";
+                //
+                //    }
+                //}
+                //else if(content &&typeof  content.toString()=="string"&&content.toString().length>30)
+                //{
+                //    whiteSpace="normal";
+                //}
+                // style={{textAlign:(header.align?header.align:"left"),whiteSpace:whiteSpace}}
                 if (columnIndex==0&&this.props.detailAble) {
                     //在第一列显示详情
-                    tds.push( <td  onClick={this.detailHandler.bind(this,rowIndex,rowData)}  key={"col"+rowIndex.toString()+"-"+columnIndex.toString()} style={{textAlign:(header.align?header.align:"left"),whiteSpace:whiteSpace}}>
-                        {content}<div style={{display:"inline",float:"left",paddingLeft:2}}><LinkButton iconCls="icon-detail" tip="查看详情" ></LinkButton></div>
+                    tds.push(<td onClick={this.detailHandler.bind(this,rowIndex,rowData)}
+                                 key={"col"+rowIndex.toString()+"-"+columnIndex.toString()}>
+                        <div className="wasabi-table-cell" style={{width:(header.width?header.width:null),textAlign:(header.align?header.align:"left")}}>
+                            {content}
+                            <LinkButton iconCls="icon-detail" tip="查看详情"></LinkButton>
+
+                        </div>
                     </td>);
                 }
-                else
-                {
-
-                    tds.push( <td  onClick={this.onClick.bind(this,rowData,rowIndex)} onDoubleClick={this.onDoubleClick.bind(this,rowData,rowIndex)}  key={"col"+rowIndex.toString()+"-"+columnIndex.toString()}
-                                   style={{textAlign:(header.align?header.align:"left" ),whiteSpace:whiteSpace}} >{content}</td>);
+                else {
+                    tds.push(<td onClick={this.onClick.bind(this,rowData,rowIndex)}
+                                 onDoubleClick={this.onDoubleClick.bind(this,rowData,rowIndex)}
+                                 key={"col"+rowIndex.toString()+"-"+columnIndex.toString()}
+                    >  <div className="wasabi-table-cell"    style={{width:(header.width?header.width:null),textAlign:(header.align?header.align:"left")}}>{content}</div></td>);
                 }
 
             });
@@ -594,41 +594,55 @@ var DataGrid=React.createClass({
 
     },
     render:function() {
-        var tableDefinedWidth=this.state.width;//自定义宽度
-        var className="table table-no-bordered";
+
+        let className="table table-no-bordered";
         if(this.props.borderAble===true)
         {
             className="table";
         }
-        return (<div className="wasabi-table"  onPaste={this.onPaste}  >
+        let headerControl=this.renderHeader();
+        let gridHeight=this.state.height;
+        let tableHeight=gridHeight?( this.props.pagePosition=="both")?gridHeight-70:gridHeight-35:null;
+        return (<div className="wasabi-table" ref="grid"  onPaste={this.onPaste} style={{width:this.props.width,height:gridHeight}}  >
             <div className="wasabi-table-pagination"
-                 style={{width:tableDefinedWidth,display:(this.props.pagePosition=="top"||this.props.pagePosition=="both")?this.props.pagination?"block":"none":"none"}}>
+                 style={{display:(this.props.pagePosition=="top"||this.props.pagePosition=="both")?this.props.pagination?"block":"none":"none"}}>
                 {this.renderTotal()}
-                <div style={{width:tableDefinedWidth,display:(this.props.pagination?"block":(this.state.data instanceof Array &&this.state.data.length>0)?"block":"none")}}>
+                <div style={{display:(this.props.pagination?"block":(this.state.data instanceof Array &&this.state.data.length>0)?"block":"none")}}>
                     {this.renderPagination("top")}
                 </div>
             </div>
-            <table  className={className} style={{width:tableDefinedWidth}}>
-                <thead>
-                <tr>
-                    {this.renderHeader()}
-                </tr>
-                </thead>
-                <tbody>
-                {
-                    this.renderBody()
-                }
-                {
-                    this.renderFooter()
-                }
-                </tbody>
-            </table>
 
-
+            <div className="table-container">
+                <div className="table-fixHeader" ref="tablefixHeader">
+                    <table  className={className} key="headertable"  ref="headertable">
+                        <thead>
+                        <tr>
+                            {headerControl}
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+                <div className="table-body" ref="tablebody" style={{height:tableHeight}} >
+                    <table  className={className} key="bodytable"  ref="bodytable">
+                        <thead >
+                        <tr>
+                            {headerControl}
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {
+                            this.renderBody()
+                        }
+                        {
+                            this.renderFooter()
+                        }
+                        </tbody>
+                    </table>
+                </div></div>
             <div className="wasabi-table-pagination"
-                 style={{width:tableDefinedWidth,display:(this.props.pagination?"block":(this.props.pagePosition=="bottom"||this.props.pagePosition=="both")?"block":"none")}}>
+                 style={{display:(this.props.pagination?"block":(this.props.pagePosition=="bottom"||this.props.pagePosition=="both")?"block":"none")}}>
                 {this.renderTotal()}
-                <div style={{width:tableDefinedWidth,display:(this.props.pagination?"block":(this.state.data instanceof Array &&this.state.data.length>0)?"block":"none")}}>
+                <div style={{display:(this.props.pagination?"block":(this.state.data instanceof Array &&this.state.data.length>0)?"block":"none")}}>
                     {this.renderPagination()}
                 </div>
             </div>

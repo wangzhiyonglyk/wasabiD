@@ -242,7 +242,7 @@ var SearchBar=React.createClass({
 
         //表单实际宽度
         let  actualWidth=this.props.width?this.props.width:this.availWidth;//总宽度
-        let leftWidth=actualWidth-125;//左侧表单宽度
+        let leftWidth=actualWidth-130;//左侧表单宽度
 
         let columnClass="";//列样式
         if(this.state.columns)
@@ -269,6 +269,12 @@ var SearchBar=React.createClass({
         }
         if(this.state.model.length<columns) {//如果数据小于列数
             columns = this.state.model.length;
+            if(columns<=2)
+            {//如果只有两列的话,重新定义宽度
+                actualWidth=800;
+                leftWidth=actualWidth-130;
+
+            }
         }
         switch (columns) {
             case 1:
@@ -285,7 +291,6 @@ var SearchBar=React.createClass({
                 break;
 
         }
-
 
         style.width=actualWidth;//设置表单的宽度
 
@@ -365,15 +370,15 @@ var SearchBar=React.createClass({
                             }
                             //因为orderIndex代表的是下一个序号,所以要小于等于来判断是否隐藏
 
-                          return(  <div className="wasabi-searchbar-item" key={(orderIndex)}
-                                 style={{display:(this.state.dropType=="wasabi-button wasabi-searchbar-down"?(((orderIndex)<=result.columns)?"inline":"none"):"inline")}}>
-                                <Input ref={child.name}
-                                       key={child.name+index.toString()}
-                                    {...child}
-                                       position={position}
-                                       readonly={this.state.disabled==true?true:child.readonly}
-                                       backFormHandler={this.changeHandler}
-                                ></Input></div>
+                            return(  <div className="wasabi-searchbar-item" key={(orderIndex)}
+                                          style={{display:(this.state.dropType=="wasabi-button wasabi-searchbar-down"?(((orderIndex)<=result.columns)?"inline":"none"):"inline")}}>
+                                    <Input ref={child.name}
+                                           key={child.name+index.toString()}
+                                        {...child}
+                                           position={position}
+                                           readonly={this.state.disabled==true?true:child.readonly}
+                                           backFormHandler={this.changeHandler}
+                                    ></Input></div>
                             );
                         })
                     }

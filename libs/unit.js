@@ -32,16 +32,6 @@ baseUtil.GetArgsFromHref = function (sHref, sArgName) {
     return retval;
 }
 
-//判断是否为IE
-baseUtil.isIE = function () { //ie?
-    /// <summary>
-    /// 判断是否为IE
-    /// </summary>
-    if (!!window.ActiveXObject || "ActiveXObject" in window)
-        return true;
-    else
-        return false;
-}
 //判断浏览器类型
 baseUtil. BrowserType=function(){
     var browserType="";
@@ -66,11 +56,11 @@ baseUtil. BrowserType=function(){
         browserType=  IEType();
     }
 
-    console.log(navigator);
+
     return browserType;
 }
 //判断IE类型
-baseUtil.  IEType=function() {
+baseUtil.IEType=function() {
     if(navigator.appName == "Microsoft Internet Explorer" && navigator.userAgent.indexOf("MSIE 6.")>-1){
         return ("IE 6");
     }
@@ -232,13 +222,7 @@ baseUtil.trim = function(str){
     /// <param name="str" type="string">str</param>
     return str.replace(/(^\s*)|(\s*$)/g, "");
 }
-///获取OMS查询中公共参数
-baseUtil.getOMSParams=function() {
-    let ticket = baseUtil.cookies.get('ticket');
-    let secretKey = baseUtil.cookies.get('secretKey');
 
-    return "?ticket="+ticket+"&secretKey="+secretKey;
-}
 /*
  *ie兼容placeholder
  */
@@ -269,7 +253,7 @@ baseUtil.placeHolderIE8 = function(){
 //向后台请求数据
 baseUtil.fetch = {
     /// <summary>
-    /// 把对象复制,返回
+    /// 向后台请求数据
     /// </summary>
     get:function(fetchmodel){
         fetch(
@@ -277,22 +261,21 @@ baseUtil.fetch = {
             {
                 method:"GET"
             }
-        ).then(function(res){
+        ).then((res)=>{
             if(res.ok){
                 try {
-
-
-                    res.json().then(function (data) {
-                        if (data.success) {
-                            fetchmodel.success && fetchmodel.success(data);
+                    res.json().then( (result)=> {
+                       result=this.formatResult(result);//如果是心怡科技旧系统,数据转为标准格式
+                        if (result.success) {
+                            fetchmodel.success && fetchmodel.success(result);
                         }
                         else {
 
                             if (fetchmodel.error) {
-                                fetchmodel.error(data.errCode, data.message,data);
+                                fetchmodel.error(result.errorCode, result.message,result);
                             } else {
-                                console.log("fetch-error",data.errCode,data.message);
-                                baseUtil.showError(baseUtil.Error.HandlerError +",错误原因：" + data.message);
+                                console.log("fetch-error",result.errorCode,result.message);
+                                baseUtil.showError(baseUtil.Error.HandlerError +",错误原因：" + result.message);
                             }
 
                         }
@@ -324,30 +307,32 @@ baseUtil.fetch = {
         });
     },
     post:function(fetchmodel){
+        fetchmodel=this.formatModel(fetchmodel);//如果是心怡科技旧系统,将参数转义
+        console.log(fetchmodel);
         fetch(
             fetchmodel.url,
             {
                 method: "POST",
                 headers: {
-                    "Content-Type": fetchmodel.lang == "C#" ? "application/x-www-form-urlencoded" : "application/json;charset=UTF-8"
+                    "Content-Type": fetchmodel.contentType
                 },
-                body:this.setParams(fetchmodel.lang,fetchmodel.params)
+                body:this.setParams(fetchmodel.params),//参数标准化
             }
-        ).then(function(res){
+        ).then((res)=>{
             if(res.ok){
-                try
-                {
-                    res.json().then(function(data){
-                        if(data.success){
-                            fetchmodel.success&&fetchmodel.success(data);
+                try {
+                    res.json().then((result)=>{
+                        result= this.formatResult(result);//如果是心怡科技旧系统,数据转为标准格式
+                        if(result.success){
+                            fetchmodel.success&&fetchmodel.success(result);
                         }
                         else {
                             if(fetchmodel.error)
                             {
-                                fetchmodel.error(data.errCode,data.message,data);
+                                fetchmodel.error(result.errorCode,result.message,result);
                             }else {
-                                console.log("fetch-error",data.errCode,data.message);
-                                baseUtil.showError(baseUtil.Error.HandlerError + ",错误原因：" + data.message);
+                                console.log("fetch-error",result.errorCode,result.message);
+                                baseUtil.showError(baseUtil.Error.HandlerError + ",错误原因：" + result.message);
                             }
                         }
                     });
@@ -374,29 +359,108 @@ baseUtil.fetch = {
             }
         });
     },
-    setParams:function(lang,params)
-    {
-        if(lang=="C#") {
-            //let cparams = "";
-            //if (params != undefined && params != null && params !== "") {
-            //    for (let v in params) {
-            //        if (cparams == "") {
-            //            cparams += v.toString() + "=" + params[v].toString();
-            //        }
-            //        else {
-            //            cparams += "&" + v.toString() + "=" + params[v].toString();
-            //        }
-            //    }
-            //}
-            //return cparams;
-            return paramFormat.xhrFormat(params);
+    setParams:function(params) {//是否是心怡科技的旧系统,如果是则将参数转字符串
+        let isalog=window.localStorage.getItem("wasabi-alog");
+        if(isalog) {//是
+            return params ? JSON.stringify(params) : ""//转为字符串
+        }
+        else
+        {
+            return paramFormat(params);//标准化
+        }
+       return "";
+    },
+    formatModel:function(fetchModel) {//是否是心怡科技的旧系统,如果是则对contentType进行处理
+        let isalog=window.localStorage.getItem("wasabi-alog");
+        if(isalog) {//是
+
+            fetchModel.contentType = "application/json;charset=UTF-8";
+            return fetchModel;
+        }
+        else
+        {
+            return fetchModel;
+        }
+    },
+    formatResult:function(result) {//是否是心怡科技的旧系统,如果是则将后端数据转为标准格式,否则直接返回
+    let isalog=window.localStorage.getItem("wasabi-alog");
+       var newResult;
+    if(isalog) {//是
+         newResult = {
+            success: false,
+            data:null,//数据,
+            total: 0,//总记录数
+            message: "",
+            errorCode: "",//错误处理,不需要复制,因为fetch中已经处理了.
+            footer: null,
+        };//标准格式
+        if (result.data) {//存在data
+            if(result.success!=null&&result.success!=undefined)
+            {
+                newResult.success=result.success;
+
+            }
+            else {
+                throw "后台返回json数据中必须有success属性";
+            }
+            if(result.errCode) {
+                newResult.errorCode=result.errCode;
+            }
+            if(result.message) {
+                newResult.message=result.message;
+            }
+            if (result.data.data) {//分页
+                newResult.data = result.data.data;
+                if (result.data.total) {//分页
+                    newResult.total = result.data.total;
+                }
+                if (result.data.footer) {//分页
+                    newResult.footer = result.data.footer;
+                }
+            }
+            else {//可能是不分页查询,可能是实体查询
+                newResult.data = result.data;
+
+                if (result.total) {
+                    newResult.total = result.total;
+                }
+                else {
+                    if (newResult.data instanceof Array) {//是数组,不分页查询,否则是实体查询
+                        newResult.total = newResult.data.length;
+                    }
+                    else
+                    {//实体查询,不处理total
+
+                    }
+
+                }
+                if(result.footer)
+                {
+                    newResult.footer = result.footer;
+                }
+            }
+
+        }
+        else {//如果连data都不存在,直接为result;
+            newResult = result;
+        }
+    }
+    else
+    {//不是心怡科技的旧系统,直接返回
+        if(result.success!=null&&result.success!=undefined)
+        {
+
+
         }
         else {
-            return params ? JSON.stringify(params) : ""
+            throw "后台返回json数据中必须有success属性";
         }
-        return "";
+        newResult= result;
     }
+        return newResult;
 }
+}
+
 baseUtil.showError=function(msg) {
     if (!!document.getElementById("alog-error")) {
         //存在
@@ -453,8 +517,7 @@ baseUtil.showError=function(msg) {
 
 }
 /// 把对象复制,返回
-baseUtil.clone=clone;
-function clone (obj) {
+baseUtil.clone=function  (obj) {
     /// <summary>
     /// 把对象复制,返回
     /// </summary>
@@ -477,12 +540,12 @@ function clone (obj) {
                     //o= obj.slice(0)， 注意了这里不能直接使用这个复制，如果数组中的元素为对象，复制是不成功的
                     for(var i=0;i<obj.length;i++)
                     {
-                        o.push(clone(obj[i]));
+                        o.push(baseUtil.clone(obj[i]));
                     }
                 }else{
                     o = {};
                     for(var k in obj){
-                        o[k] = clone(obj[k]);
+                        o[k] = baseUtil.clone(obj[k]);
                     }
                 }
             }
@@ -542,8 +605,6 @@ baseUtil.isEmptyObject=function(obj) {
     return isempty;
 
 }
-
-
 
 //错误信息
 baseUtil.Error={

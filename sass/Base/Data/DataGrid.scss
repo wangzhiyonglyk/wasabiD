@@ -5,8 +5,12 @@
 .wasabi-table {
   width: 100%;
   position: relative;
+  overflow: hidden;
 
 }
+/*
+表格内部一组件的样式
+*/
 .wasabi-table .wasabi-form-group
 {
   padding:0px;
@@ -16,7 +20,7 @@
 {
   margin: 0px;
   padding: 0px;
- height: 12px;
+  height: 12px;
 }
 .wasabi-table .wasabi-checkul li
 {
@@ -29,8 +33,38 @@
   top: 0px;
   left: 0px;
   margin: 0px;
+}*
+
+   /*
+   表格容器
+   */
+ .wasabi-table .table-container {
+   width: 100%;
+  position: relative;
+ overflow: hidden;
+ }
+ /*
+ 表头容器
+ */
+.wasabi-table .table-fixHeader
+{
+  margin-bottom: 0px;
+  width: 100%;
+  position: absolute;
+  z-index: 2;
+  top: 0px;
+  left: 0px;
+
 }
 
+
+/*
+表格容器
+*/
+.wasabi-table .table-body {
+  width: 100%;
+  overflow: auto;
+}
 /*
 表格基本样式
 */
@@ -38,43 +72,29 @@
   border: 1px solid #e3e4e5;
   border-spacing: 0;
   border-collapse: collapse;
-  width: 100%
+  margin-bottom: 2px;
+  width: 100%;
 }
 
-.wasabi-table .table > thead > tr > th {
-  padding-top: 14px;
-  padding-bottom: 14px;
+.wasabi-table .table > thead > tr > th
+{
+  background-color: #eff0f1;
+}
+/*
+序号列,与checkbox 边距10,为了保持与其他组件对齐
+*/
+.wasabi-table .table > thead > tr > th.check-column .wasabi-table-cell {
   padding-left: 10px;
-  padding-right: 5px;
-  background-color: #eff0f1;;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-weight: normal;
-  font-size: 12px;
+  padding-right: 10px;
+  width:34px ;
+
+
 }
 
-.wasabi-table .table > tbody > tr > td {
-  padding-top: 14px;
-  padding-bottom: 14px;
+.wasabi-table .table > tbody > tr > td.check-column .wasabi-table-cell
+{
   padding-left: 10px;
-  padding-right: 5px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-size: 12px;
- overflow: visible;
-}
-.wasabi-table .table > thead > tr > th.check-column
-{
-  padding-left: 20px;
-  padding-right: 20px;
-  width:9px;
-}
-.wasabi-table .table > tbody > tr > td.check-column
-{
-  padding-left: 20px;
-  padding-right: 20px;
-  width:9px;
+  padding-right: 10px;
 }
 
 .wasabi-table .table > thead > tr > th,
@@ -96,15 +116,6 @@
 
 
 /*
-  有边框的时候
- */
-
-.wasabi-table .table > tbody > tr > td:last-child{
-  border-right: 1px solid #e3e4e5;
-}
-
-
-/*
 背景颜色
 */
 
@@ -117,7 +128,19 @@
 .wasabi-table .table > tbody > tr:hover {
   background-color: #dcf9f8;
 }
-
+/*
+单元格样式
+*/
+.wasabi-table .wasabi-table-cell{
+  margin: 0px;
+  white-space: nowrap;
+  word-wrap: normal;
+  overflow: hidden;
+  padding-top: 14px;
+  padding-bottom: 14px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
 
 /*
 排序样式
@@ -153,6 +176,7 @@
 */
 .pull-right {
   float: right!important;
+  height: 35px;
 }
 .pagination {
   display: inline-block;
@@ -201,6 +225,7 @@
 {
   display: block;
   padding-top: 0px;
+  height: 35px;
 }
 .wasabi-table-pagination .pagination-detail {
   padding-left:20px;
@@ -247,7 +272,7 @@
   left: 0px;
   width: 100%;
   height: 100%;
-background-color: #000000;
+  background-color: #000000;
   opacity: 0.1;
 
 }

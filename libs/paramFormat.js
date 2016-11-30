@@ -1,1 +1,109 @@
-var _0xfebb=["\x78\x68\x72\x46\x6F\x72\x6D\x61\x74","\x73\x74\x72\x69\x6E\x67","\x63\x6F\x6E\x73\x74\x72\x75\x63\x74\x6F\x72","\u53C2\u6570\u5FC5\u987B\u662F\u5B57\u7B26\x2C\u7A7A\u503C\x2C\u5BF9\u8C61\x2C\x46\x6F\x72\x6D\x44\x61\x74\x61\x2C\u4E0D\u53EF\u4EE5\u4E3A\u6570\u7EC4","\x61\x72\x72\x61\x79\x46\x6F\x72\x6D\x61\x74","\x3D","\x70\x75\x73\x68","\x6C\x65\x6E\x67\x74\x68","\x26","\x6A\x6F\x69\x6E","\x69\x73\x41\x72\x72\x61\x79","\x6F\x62\x6A\x65\x63\x74","\x63\x61\x6C\x6C","\x74\x6F\x53\x74\x72\x69\x6E\x67","\x70\x72\x6F\x74\x6F\x74\x79\x70\x65","\x5B\x6F\x62\x6A\x65\x63\x74\x20\x41\x72\x72\x61\x79\x5D","\x63\x6F\x6E\x76\x65\x72\x74\x41\x72\x72\x61\x79\x54\x6F\x4F\x62\x6A\x65\x63\x74","\x5B","\x5D\x2E","\x2E","\x63\x6F\x6E\x76\x65\x72\x74\x4F\x62\x6A\x65\x63\x74","\x5D","","\u8BF7\u4F20\u5165\x6A\x73\x6F\x6E\u5BF9\u8C61","\u5FC5\u987B\u662F\u5BF9\u8C61\x2C\u5982\u679C\u662F\u6570\u7EC4\u8BF7\u4F7F\u7528\u5BF9\u8C61\u5305\u88F9\uFF01","\x65\x78\x70\x6F\x72\x74\x73"];var paramFormat={};paramFormat[_0xfebb[0]]= function(_0xc286x2){if(!_0xc286x2){return _0xc286x2}else {if( typeof _0xc286x2=== _0xfebb[1]){return _0xc286x2}else {if(_0xc286x2[_0xfebb[2]]=== FormData){return _0xc286x2}else {if(_0xc286x2 instanceof  Array){throw  new Error(_0xfebb[3]);return null}}}};_0xc286x2= paramFormat[_0xfebb[4]](_0xc286x2);var _0xc286x3=[];for(var _0xc286x4 in _0xc286x2){_0xc286x3[_0xfebb[6]](encodeURIComponent(_0xc286x4)+ _0xfebb[5]+ encodeURIComponent(_0xc286x2[_0xc286x4]))};if(_0xc286x3[_0xfebb[7]]> 0){return _0xc286x3[_0xfebb[9]](_0xfebb[8])}else {return null}};paramFormat[_0xfebb[4]]= function(_0xc286x2){var _0xc286x5={};_0xc286x5[_0xfebb[10]]= Function[_0xfebb[10]]|| function(_0xc286x6){return  typeof _0xc286x6=== _0xfebb[11]&& Object[_0xfebb[14]][_0xfebb[13]][_0xfebb[12]](_0xc286x6)=== _0xfebb[15]};_0xc286x5[_0xfebb[16]]= function(_0xc286x7,_0xc286x8,_0xc286x9){var _0xc286xa=_0xc286x9|| {};function _0xc286xb(_0xc286x4,_0xc286x3){for(var _0xc286xc in _0xc286x3){if(!_0xc286x5[_0xfebb[10]](_0xc286x3[_0xc286xc])&&  typeof _0xc286x3[_0xc286xc]=== _0xfebb[11]){for(var _0xc286xd in _0xc286x3[_0xc286xc]){if(_0xc286x5[_0xfebb[10]](_0xc286x3[_0xc286xc][_0xc286xd])){_0xc286xb(_0xc286x4+ _0xfebb[17]+ _0xc286xc+ _0xfebb[18]+ _0xc286xd,_0xc286x3[_0xc286xc][_0xc286xd])}else {if( typeof _0xc286x3[_0xc286xc][_0xc286xd]=== _0xfebb[11]){_0xc286x5[_0xfebb[20]](_0xc286x4+ _0xfebb[17]+ _0xc286xc+ _0xfebb[18]+ _0xc286xd+ _0xfebb[19],_0xc286x3[_0xc286xc][_0xc286xd],_0xc286xa)}else {_0xc286xa[_0xc286x4+ _0xfebb[17]+ _0xc286xc+ _0xfebb[18]+ _0xc286xd]= _0xc286x3[_0xc286xc][_0xc286xd]}}}}else {_0xc286xa[_0xc286x4+ _0xfebb[17]+ _0xc286xc+ _0xfebb[21]]= _0xc286x3[_0xc286xc]}}}_0xc286xb(_0xc286x7,_0xc286x8);return _0xc286xa};_0xc286x5[_0xfebb[20]]= function(_0xc286xe,_0xc286xf,_0xc286x9){var _0xc286xa=_0xc286x9|| {};function _0xc286xb(_0xc286x4,_0xc286x10){for(var _0xc286xc in _0xc286x10){if(_0xc286x5[_0xfebb[10]](_0xc286x10[_0xc286xc])){_0xc286x5[_0xfebb[16]](_0xc286xc,_0xc286x10[_0xc286xc],_0xc286xa)}else {if( typeof _0xc286x10[_0xc286xc]=== _0xfebb[11]){_0xc286xb(_0xc286x4+ _0xc286xc+ _0xfebb[19],_0xc286x10[_0xc286xc])}else {_0xc286xa[_0xc286x4+ _0xc286xc]= _0xc286x10[_0xc286xc]}}}}_0xc286xb(_0xc286xe,_0xc286xf);return _0xc286xa};var _0xc286x7=_0xfebb[22];if( typeof _0xc286x2!== _0xfebb[11]){throw  new Error(_0xfebb[23])};if(_0xc286x5[_0xfebb[10]](_0xc286x2)&&  !_0xc286x7){throw  new Error(_0xfebb[24])};if(_0xc286x5[_0xfebb[10]](_0xc286x2)){return _0xc286x5[_0xfebb[16]](_0xc286x7,_0xc286x2)};return _0xc286x5[_0xfebb[20]](_0xfebb[22],_0xc286x2)};module[_0xfebb[25]]= paramFormat
+/**
+ * Created by wangzhiyong on 16/10/5.
+ */
+//将参数模型中数组转换为对象
+
+//格式化参数
+var paramFormat=function(data) {
+    //将参数中的数组转为后台可识别的格式
+
+    if(!data)
+    {
+        return data;
+    }
+    else if(typeof data ==="string")
+    {
+        return data;
+    }
+    else if(data.constructor===FormData) {//参数为FormData,直接返回
+        return data;
+
+    }
+    else if(data instanceof  Array)
+    {
+        throw new Error("参数必须是字符,空值,对象,FormData,不可以为数组");
+        return null;
+    }
+
+    data =arrayFormat(data);//将参数模型中数组转换为对象,再格式式参数
+    var arr = [];
+    for (var name in data) {
+        arr.push(encodeURIComponent(name) + "=" + encodeURIComponent(data[name]));
+    }
+    if(arr.length>0) {
+        return arr.join("&");
+    }
+    else {
+        return null;
+    }
+
+    function arrayFormat(data) {
+        var MvcParameterAdaptive = {};
+        //验证是否为数组
+        MvcParameterAdaptive.isArray = Function.isArray || function (o) {
+                return typeof o === "object" &&
+                    Object.prototype.toString.call(o) === "[object Array]";
+            };
+
+        //将数组转换为对象
+        MvcParameterAdaptive.convertArrayToObject = function (/*数组名*/arrName, /*待转换的数组*/array, /*转换后存放的对象，不用输入*/saveOjb) {
+            var obj = saveOjb || {};
+
+            function func(name, arr) {
+                for (var i in arr) {
+                    if (!MvcParameterAdaptive.isArray(arr[i]) && typeof arr[i] === "object") {
+                        for (var j in arr[i]) {
+                            if (MvcParameterAdaptive.isArray(arr[i][j])) {
+                                func(name + "[" + i + "]." + j, arr[i][j]);
+                            } else if (typeof arr[i][j] === "object") {
+                                MvcParameterAdaptive.convertObject(name + "[" + i + "]." + j + ".", arr[i][j], obj);
+                            } else {
+                                obj[name + "[" + i + "]." + j] = arr[i][j];
+                            }
+                        }
+                    } else {
+                        obj[name + "[" + i + "]"] = arr[i];
+                    }
+                }
+            }
+
+            func(arrName, array);
+
+            return obj;
+        };
+
+        //转换对象
+        MvcParameterAdaptive.convertObject = function (/*对象名*/objName, /*待转换的对象*/turnObj, /*转换后存放的对象，不用输入*/saveOjb) {
+            var obj = saveOjb || {};
+
+            function func(name, tobj) {
+                for (var i in tobj) {
+                    if (MvcParameterAdaptive.isArray(tobj[i])) {
+                        MvcParameterAdaptive.convertArrayToObject(i, tobj[i], obj);
+                    } else if (typeof tobj[i] === "object") {
+                        func(name + i + ".", tobj[i]);
+                    } else {
+                        obj[name + i] = tobj[i];
+                    }
+                }
+            }
+
+            func(objName, turnObj);
+            return obj;
+        };
+
+
+        var arrName = "";//参数名
+
+        if (typeof data !== "object") throw new Error("请传入json对象");
+        if (MvcParameterAdaptive.isArray(data) && !arrName) throw new Error("必须是对象,如果是数组请使用对象包裹！");
+
+        if (MvcParameterAdaptive.isArray(data)) {
+            return MvcParameterAdaptive.convertArrayToObject(arrName, data);
+        }
+        return MvcParameterAdaptive.convertObject("", data);
+    }
+}
+
+
+module .exports=paramFormat;

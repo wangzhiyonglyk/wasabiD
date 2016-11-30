@@ -11,9 +11,9 @@ let DataGrid =require("../Base/Data/DataGrid.jsx");
 let SlidePanel =require("../Base/Layout/SlidePanel.jsx");
  let PageHandlerMixins=require("./Mixins/PageHandlerMixins.jsx");
  let PageModelMixins=require("./Mixins/PageModelMixins.jsx");
-
+var alogHandler=require("../Mixins/alogHandler.js");//专门为心怡科技做兼容处理
 let Page=React.createClass({
-        mixins: [PageHandlerMixins, PageModelMixins],
+        mixins: [PageHandlerMixins, PageModelMixins,alogHandler],
         propTypes: {
             title: React.PropTypes.string.isRequired,//页面的标题
             controller: React.PropTypes.string.isRequired,//控制器名称

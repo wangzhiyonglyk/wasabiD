@@ -395,7 +395,7 @@ let  Import=React.createClass({
                 <a className="import-failload" target="blank" href={this.props.failloadurl} style={{display:this.state.showfail==true?"inline":"none"}}>下载失败信息</a>
                 <Button title="导入" disabled={this.state.uploadDisabled}  onClick={this.importBegin} theme="green"></Button>
                 <Button title="终止" disabled={this.state.giveupdisabled} onClick={this.giveup} theme="cancel"></Button>
-                <Button title="取消"  onClick={this.close} theme="cancel"></Button>
+                <Button title="关闭"  onClick={this.close} theme="cancel"></Button>
             </div>
             <a className="import-downloadmodel" href={this.props.modelurl}>下载模版</a>
 
