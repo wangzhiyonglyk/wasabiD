@@ -189,20 +189,5 @@
     display: inline-block;
 }
 
-/*
-正在加载
-*/
-.wasabi-detail .wasabi-table .table-loading {
-    position: absolute;
-    float: left;
-    top: 30px;
-    left: 0px;
-    width: 100%;
-    height: 100%;
-    background-image: url("../../../img/loading.gif");
-    background-size: 16px 16px;
-    background-position: 50% 30%;
-    background-repeat: no-repeat;
-}
 
 

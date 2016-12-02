@@ -1,6 +1,7 @@
 /**
  * Created by wangzhiyong on 2016/11/29.
  * 增加一个对元素的操作api
+ * 获取位置,高度,宽度,可以使用getBoundingClientRect,暂时先保留下面两个方法
  */
 let element= {
     //获取网页元素的相对浏览器的左距离

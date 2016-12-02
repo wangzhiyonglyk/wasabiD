@@ -210,7 +210,7 @@ var DataGrid=React.createClass({
         }
     },
     componentDidUpdate:function() {
-            this.setWidthAndHeight();//重新计算列表的高度,固定的表头每一列的宽度
+        this.setWidthAndHeight();//重新计算列表的高度,固定的表头每一列的宽度
     },
     renderHeader :function() {//渲染表头
         if(this.state.headers instanceof  Array)
@@ -231,7 +231,7 @@ var DataGrid=React.createClass({
             }
             if(this.props.singleSelect==true){
                 headers.push(
-                    <th  key="headercheckbox" className="check-column" style={{width:35}}>
+                    <th  key="headercheckbox" className="check-column" style={{width:35}} >
                         <div className="wasabi-table-cell" >
                         </div>
                     </th>
@@ -240,7 +240,7 @@ var DataGrid=React.createClass({
             }
             else {
                 headers.push(
-                    <th key="headercheckbox" className="check-column" style={{width:35}}>
+                    <th key="headercheckbox" className="check-column" style={{width:35}} >
                         <div className="wasabi-table-cell" > <CheckBox {...props} ></CheckBox></div>
                     </th>
                 );
@@ -270,8 +270,9 @@ var DataGrid=React.createClass({
                         //隐藏则不显示
                     } else {
                         headers.push(
-                            <th key={"header"+index.toString()} {...props}  className={""+sortOrder} style={{textAlign:(header.align?header.align:"left")}}>
-                                <div className="wasabi-table-cell" style={{width:(header.width?header.width:null),textAlign:(header.align?header.align:"left")}}>
+                            <th key={"header"+index.toString()} name={header.name} {...props} className={""+sortOrder} style={{textAlign:(header.align?header.align:"left")}}
+                                onMouseMove={this.headerMouseMoveHandler} onMouseUp={this.headerMouseUpHandler} onMouseDown={this.headerMouseDownHandler}>
+                                <div className="wasabi-table-cell"  name={header.name} style={{width:(header.width?header.width:null),textAlign:(header.align?header.align:"left")}}>
                                     {header.label}</div>
                             </th>)
                     }
@@ -594,7 +595,6 @@ var DataGrid=React.createClass({
 
     },
     render:function() {
-
         let className="table table-no-bordered";
         if(this.props.borderAble===true)
         {
@@ -614,7 +614,8 @@ var DataGrid=React.createClass({
 
             <div className="table-container">
                 <div className="table-fixHeader" ref="tablefixHeader">
-                    <table  className={className} key="headertable"  ref="headertable">
+                    <table  className={className} key="headertable"  ref="headertable"
+                            onMouseMove={this.fixedTableMouseMoveHandler}>
                         <thead>
                         <tr>
                             {headerControl}
@@ -648,6 +649,9 @@ var DataGrid=React.createClass({
             </div>
             <div className="table-loading" style={{display:this.state.loading==true?"block":"none"}}></div>
             <div className="load-icon"  style={{display:this.state.loading==true?"block":"none"}}></div>
+            <div onMouseUp={this.divideMouseUpHandler}  ref="tabledivide" className="wasabi-table-divide"  style={{top:(this.props.pagePosition=="top"||this.props.pagePosition=="both")?35:0}}>
+                <div className="thread"></div>
+            </div>
         </div>);
     }
 });

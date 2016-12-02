@@ -217,7 +217,7 @@ let  Import=React.createClass({
     uploadFailed:function(event) {
         Message.alert("上传文件失败");
     },
-    uploadCanceled:function uploadCanceled(evt) {
+    uploadCanceled:function (evt) {
         //保留这个方法
     },
     render:function() {

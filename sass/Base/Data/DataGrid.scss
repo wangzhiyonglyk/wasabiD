@@ -265,7 +265,7 @@
 /*
 正在加载
 */
-.wasabi-table .table-loading {
+.wasabi-table .wasabi-table-loading {
   position: absolute;
   float: left;
   top: 0px;
@@ -277,8 +277,10 @@
 
 }
 
-.wasabi-table  .load-icon
+
+.wasabi-table  .wasabi-load-icon
 {
+
   position: absolute;
   left: 50%;
   top:20%;
@@ -287,4 +289,21 @@
   background-repeat: no-repeat;
   width:16px;
   height: 16px;
+}
+.wasabi-table .wasabi-table-divide
+{
+  position: absolute;
+  height: 100%;
+  padding-left: 3px;
+  padding-right: 3px;
+  z-index: 2;
+  top:0px;
+  display: none;
+  cursor: ew-resize;
+  .thread
+  {
+    width: 1px;
+    background-color: #dedede;
+    height: 100%;
+  }
 }
