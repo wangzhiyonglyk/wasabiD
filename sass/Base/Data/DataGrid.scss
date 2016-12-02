@@ -294,16 +294,11 @@
 {
   position: absolute;
   height: 100%;
-  padding-left: 3px;
-  padding-right: 3px;
+  width: 1px;
   z-index: 2;
   top:0px;
   display: none;
   cursor: ew-resize;
-  .thread
-  {
-    width: 1px;
-    background-color: #dedede;
-    height: 100%;
-  }
+  background-color: #dedede;
+
 }

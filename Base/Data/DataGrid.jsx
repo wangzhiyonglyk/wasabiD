@@ -615,7 +615,7 @@ var DataGrid=React.createClass({
             <div className="table-container">
                 <div className="table-fixHeader" ref="tablefixHeader">
                     <table  className={className} key="headertable"  ref="headertable"
-                            onMouseMove={this.fixedTableMouseMoveHandler}>
+                            onMouseMove={this.fixedTableMouseMoveHandler} onMouseUp={this.fixedTableMouseUpHandler}>
                         <thead>
                         <tr>
                             {headerControl}
@@ -650,7 +650,7 @@ var DataGrid=React.createClass({
             <div className="table-loading" style={{display:this.state.loading==true?"block":"none"}}></div>
             <div className="load-icon"  style={{display:this.state.loading==true?"block":"none"}}></div>
             <div onMouseUp={this.divideMouseUpHandler}  ref="tabledivide" className="wasabi-table-divide"  style={{top:(this.props.pagePosition=="top"||this.props.pagePosition=="both")?35:0}}>
-                <div className="thread"></div>
+
             </div>
         </div>);
     }

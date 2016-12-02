@@ -105,7 +105,10 @@ let DataGridExtend= {
         }
 
     },
-
+    fixedTableMouseUpHandler:function(event) {//保证鼠标松开后会隐藏
+       this.refs.tabledivide.style.left = "0px";
+        this.refs.tabledivide.style.display = "none";
+    },
 
     headerMouseMoveHandler: function (event) {//表头列,鼠标经过事件,用以判断
         let position = event.target.getBoundingClientRect();
