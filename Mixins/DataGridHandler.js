@@ -256,7 +256,7 @@ let DataGridHandler={
             }
             this.setState({
                 pageSize: pageSize,
-                params: unit.clone(params),//这里一定要复制,参数是引用类型,不复制更新时无法判断参数是否发生改变
+                params: unit.clone(params),//这里一定要复制,只有复制才可以比较两次参数是否发生改变没有,防止父组件状态任何改变而导致不停的查询
                 pageIndex: pageIndex,
                 sortName: sortName,
                 sortOrder: sortOrder,

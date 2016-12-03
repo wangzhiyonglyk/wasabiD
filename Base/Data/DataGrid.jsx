@@ -123,7 +123,7 @@ var DataGrid=React.createClass({
         }
         return {
             url:this.props.url,
-            params:unit.clone( this.props.params),//这里一定要复制
+            params:unit.clone( this.props.params),//这里一定要复制,只有复制才可以比较两次参数是否发生改变没有,防止父组件状态任何改变而导致不停的查询
             pageIndex:this.props.pageIndex,
             pageSize:this.props.pageSize,
             sortName:this.props.sortName,
@@ -135,8 +135,8 @@ var DataGrid=React.createClass({
             total:this.props.total,//总记录数
             loading:(this.props.url&&this.props.url!="")?true:false,//显示正在加载图示
             footer:this.props.footer,//页脚
-            headers:this.props.headers,//
-            height:null,
+            headers:this.props.headers,//表头会可能后期才传送,也会动态改变
+            height:this.props.height,//如果没有设置高度还要从当前页面中计算出来空白高度,以适应布局
 
 
         }
@@ -229,10 +229,11 @@ var DataGrid=React.createClass({
                 onSelect:this.checkedAllHandler,
                 name:"all",
             }
+            //使用label,因为多个列可能绑定一个字段
             if(this.props.singleSelect==true){
                 headers.push(
-                    <th  key="headercheckbox" className="check-column" style={{width:35}} >
-                        <div className="wasabi-table-cell" >
+                    <th  key="headercheckbox" className="check-column" name="check-column" style={{width:35}} >
+                        <div className="wasabi-table-cell" name="check-column" >
                         </div>
                     </th>
 
@@ -240,8 +241,8 @@ var DataGrid=React.createClass({
             }
             else {
                 headers.push(
-                    <th key="headercheckbox" className="check-column" style={{width:35}} >
-                        <div className="wasabi-table-cell" > <CheckBox {...props} ></CheckBox></div>
+                    <th key="headercheckbox" className="check-column" name="check-column" style={{width:35}} >
+                        <div className="wasabi-table-cell" name="check-column"> <CheckBox {...props} ></CheckBox></div>
                     </th>
                 );
             }
@@ -270,9 +271,12 @@ var DataGrid=React.createClass({
                         //隐藏则不显示
                     } else {
                         headers.push(
-                            <th key={"header"+index.toString()} name={header.name} {...props} className={""+sortOrder} style={{textAlign:(header.align?header.align:"left")}}
-                                onMouseMove={this.headerMouseMoveHandler} onMouseUp={this.headerMouseUpHandler} onMouseDown={this.headerMouseDownHandler}>
-                                <div className="wasabi-table-cell"  name={header.name} style={{width:(header.width?header.width:null),textAlign:(header.align?header.align:"left")}}>
+                            <th key={"header"+index.toString()} name={header.label} {...props} className={""+sortOrder} style={{textAlign:(header.align?header.align:"left")}}
+                                onMouseMove={this.headerMouseMoveHandler}
+                                onContextMenu={this.headerContextMenuHandler}
+                                onMouseDown={this.headerMouseDownHandler}>
+
+                                <div className="wasabi-table-cell"  name={header.label} style={{width:(header.width?header.width:null),textAlign:(header.align?header.align:"left")}}>
                                     {header.label}</div>
                             </th>)
                     }
@@ -603,8 +607,11 @@ var DataGrid=React.createClass({
         let headerControl=this.renderHeader();
         let gridHeight=this.state.height;
         let tableHeight=gridHeight?( this.props.pagePosition=="both")?gridHeight-70:gridHeight-35:null;
-        return (<div className="wasabi-table" ref="grid"  onPaste={this.onPaste} style={{width:this.props.width,height:gridHeight}}  >
-            <div className="wasabi-table-pagination"
+        return (<div className="wasabi-table" ref="grid"
+                     onPaste={this.onPaste}
+                     onMouseDown={this.gridMouseDownHandler}
+                     style={{width:this.props.width,height:gridHeight}}  >
+            <div className="wasabi-table-pagination" ref="toppagination"
                  style={{display:(this.props.pagePosition=="top"||this.props.pagePosition=="both")?this.props.pagination?"block":"none":"none"}}>
                 {this.renderTotal()}
                 <div style={{display:(this.props.pagination?"block":(this.state.data instanceof Array &&this.state.data.length>0)?"block":"none")}}>
@@ -623,7 +630,8 @@ var DataGrid=React.createClass({
                         </thead>
                     </table>
                 </div>
-                <div className="table-body" ref="tablebody" style={{height:tableHeight}} >
+                <div className="table-body"  ref="tablebody" style={{height:tableHeight}}
+                     onScroll={this.tableBodyScrollHandler}>
                     <table  className={className} key="bodytable"  ref="bodytable">
                         <thead >
                         <tr>
@@ -640,7 +648,7 @@ var DataGrid=React.createClass({
                         </tbody>
                     </table>
                 </div></div>
-            <div className="wasabi-table-pagination"
+            <div className="wasabi-table-pagination" ref="bottompagination"
                  style={{display:(this.props.pagination?"block":(this.props.pagePosition=="bottom"||this.props.pagePosition=="both")?"block":"none")}}>
                 {this.renderTotal()}
                 <div style={{display:(this.props.pagination?"block":(this.state.data instanceof Array &&this.state.data.length>0)?"block":"none")}}>
@@ -649,8 +657,12 @@ var DataGrid=React.createClass({
             </div>
             <div className="table-loading" style={{display:this.state.loading==true?"block":"none"}}></div>
             <div className="load-icon"  style={{display:this.state.loading==true?"block":"none"}}></div>
-            <div onMouseUp={this.divideMouseUpHandler}  ref="tabledivide" className="wasabi-table-divide"  style={{top:(this.props.pagePosition=="top"||this.props.pagePosition=="both")?35:0}}>
-
+            <div onMouseUp={this.divideMouseUpHandler}  ref="tabledivide" className="wasabi-table-divide"  style={{top:(this.props.pagePosition=="top"||this.props.pagePosition=="both")?35:0}}></div>
+            <div className="header-menu-container" ref="headermenu">
+                <ul className="header-menu">
+                    <li key="first"><a href="javascript:void(0);" className="header-menu-item" onClick={this.menuHideHandler} >隐藏此列</a></li>
+                    {this.state.headerMenu}
+                </ul>
             </div>
         </div>);
     }
