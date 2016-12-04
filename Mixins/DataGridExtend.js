@@ -116,7 +116,24 @@ let DataGridExtend= {
             }
 
         }
+        else
+        {//又是鼠标右键
+            if(event.target.className=="header-menu-item")
+            {//点击中的就是菜单项不处理
 
+            }
+            else
+            {//隐藏
+                this.refs.headermenu.style.display="none";//表头菜单隐藏
+                this.menuHeaderName=null;
+            }
+        }
+
+    },
+
+    gridContextMenuHandler:function(event)
+    {
+        event.preventDefault();//阻止默认事件
     },
 
     //固定表头容器的处理事件
@@ -194,11 +211,19 @@ let DataGridExtend= {
 
     },
     headerContextMenuHandler:function(event) {//显示菜单
-        this.menuHeaderName=event.target.getAttribute("name");//保存当前列名
-        this.refs.headermenu.style.left = (event.clientX -this.refs.grid.getBoundingClientRect().left)+ "px";
-        this.refs.headermenu.style.top = (event.clientY-this.refs.grid.getBoundingClientRect().top) + "px";
-        this.refs.headermenu.style.display = "block";
-        event.preventDefault();//
+        if(this.refs.headermenu.style.display=="block") {//已经出现了,不处理
+
+        }
+        else {//
+            this.menuHeaderName = event.target.getAttribute("name");//保存当前列名
+            this.refs.headermenu.style.left = (event.clientX - this.refs.grid.getBoundingClientRect().left) + "px";
+            this.refs.headermenu.style.top = (event.clientY - this.refs.grid.getBoundingClientRect().top) + "px";
+            this.refs.headermenu.style.display = "block";
+            event.preventDefault();//阻止默认事件
+
+        }
+
+
     },
 
 
@@ -223,7 +248,7 @@ let DataGridExtend= {
             var headerTableHeader = this.refs.headertable.children[0].children[0].children;//当前列表样式
 
             for (let index = 0; index < headers.length; index++) {
-                if (headers[index].name == this.moveHeaderName) {//需要调整的列的宽度
+                if (headers[index].label == this.moveHeaderName) {//需要调整的列的宽度
                     headers[index].width = this.moveHeaderWidth + diffWidth;
                     //值设置为空
                     this.moveHeaderName = null;
@@ -270,11 +295,14 @@ let DataGridExtend= {
     },
 
     //右键菜单处理事件
-    menuHideHandler:function(event) {//隐藏某一列的事件
+    menuHideHandler:function(event) {//没有使用单击事件,用户有可能继续使用鼠标右键,隐藏某一列的事件
+
         let headers = this.state.headers;//列表数据
+        let headerMenu=this.state.headerMenu;
         for (let index = 0; index < headers.length; index++) {
             //使用label,因为多个列可能绑定一个字段
             if (headers[index].label == this.menuHeaderName) {//需要隐藏的列
+                 headerMenu.push(this.menuHeaderName);//放入隐藏列中
                 headers[index].hidden=true;
                 this.refs.headermenu.style.display = "none";
                 this.menuHeaderName=null;//清空
@@ -282,9 +310,31 @@ let DataGridExtend= {
 
         }
         this.setState({
-            headers:headers
+            headers:headers,
+            headerMenu:headerMenu
         })
 
+    },
+    menuHeaderShowHandler:function(itemIndex,label) {//没有使用单击事件,用户有可能继续使用鼠标右键,显示某列
+
+        let headers = this.state.headers;//列表数据
+        let headerMenu=this.state.headerMenu;
+
+
+        for (let index = 0; index < headers.length; index++) {
+            //使用label,因为多个列可能绑定一个字段
+            if (headers[index].label == label) {//需要显示的列
+                headerMenu.splice(itemIndex,1);//从隐藏列中删除
+                headers[index].hidden=false;//显示此列
+                this.refs.headermenu.style.display = "none";
+
+            }
+
+        }
+        this.setState({
+            headers:headers,
+            headerMenu:headerMenu
+        })
     }
 }
 module .exports=DataGridExtend;

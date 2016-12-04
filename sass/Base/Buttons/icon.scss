@@ -4,6 +4,16 @@ date:2016-03-03
 desc:小图标按钮样式
 */
 @import url("../base.scss");
+@font-face {  font-family: 'icomoon';
+    src:  url('../../font/icomoon.eot?hfserp');
+    src:  url('../../font/icomoon.eot?hfserp#iefix') format('embedded-opentype'),
+    url('../../font/icomoon.ttf?hfserp') format('truetype'),
+    url('../../font/icomoon.woff?hfserp') format('woff'),
+    url('../../font/icomoon.svg?hfserp#icomoon') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
 .wasabi-icon {
     width: 16px;
     height: 16px;
@@ -12,9 +22,10 @@ desc:小图标按钮样式
     display: inline-block;
     background-size: 16px 16px;
     vertical-align: bottom;
-
-
+    font-size: 16px;
+    font-style: normal;
 }
+
 .wasabi-onlyicon .wasabi-icon
 {
     top: 0px;
@@ -26,15 +37,151 @@ desc:小图标按钮样式
     margin-top: -12px;
     margin-right: -15px;
 }
-
-
-/*添加*/
-.icon-add {
-    background-image: url('../../../img/icons/add.png');
-    background-repeat: no-repeat;
-    background-position:  center center;;
-
+[class^="icon-"], [class*=" icon-"] {
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: 'icomoon' !important;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
+
+
+/*
+分享菜单
+*/
+
+.icon-about_share:before {
+    content: "\e900";
+}
+/*添加*/
+
+.icon-add:before {
+    content: "\e901";
+}
+/*地址*/
+.icon-address:before {
+    content: "\e902";
+}
+/*返回*/
+.icon-arrow_back:before {
+    content: "\e903";
+}
+/*目录*/
+.icon-catalog:before {
+    content: "\e904";
+}
+/*清除*/
+.icon-clear:before {
+    content: "\e905";
+}
+/*折叠*/
+.icon-down:before {
+    content: "\e906";
+}
+/*编辑*/
+.icon-edit:before {
+    content: "\e907";
+}
+/*邮件*/
+.icon-email:before {
+    content: "\e908";
+}
+/*错误*/
+.icon-error:before {
+    content: "\e909";
+}
+/*帮助*/
+.icon-help:before {
+    content: "\e90a";
+}
+/*主页*/
+.icon-home:before {
+    content: "\e90b";
+}
+/*信息*/
+.icon-info:before {
+    content: "\e90c";
+}
+/*定位*/
+.icon-location:before {
+    content: "\e90d";
+}
+/*消息*/
+.icon-message:before {
+    content: "\e90e";
+}
+/*个人*/
+.icon-mine:before {
+    content: "\e90f";
+}
+/*电话*/
+.icon-phone:before {
+    content: "\e910";
+}
+/*打电话*/
+.icon-phone_out:before {
+    content: "\e911";
+}
+/*拍照*/
+.icon-photo:before {
+    content: "\e912";
+}
+/*地图/地区*/
+.icon-region:before {
+    content: "\e913";
+}
+/*右侧选择*/
+.icon-right_select:before {
+    content: "\e914";
+}
+/*查询*/
+.icon-search:before {
+    content: "\e915";
+}
+/*设置*/
+.icon-setting:before {
+    content: "\e916";
+}
+/*分享*/
+.icon-share:before {
+    content: "\e917";
+}
+/*星星*/
+.icon-star:before {
+    content: "\e918";
+}
+/*空白星星*/
+.icon-star_blank:before {
+    content: "\e919";
+}
+/*一半的星星*/
+.icon-star_half:before {
+    content: "\e91a";
+}
+/*时间*/
+.icon-time:before {
+    content: "\e91b";
+}
+/*取消点赞*/
+.icon-un_wonderful:before {
+    content: "\e91c";
+}
+/*展开*/
+.icon-up:before {
+    content: "\e91d";
+}
+/*点赞*/
+.icon-wonderful:before {
+    content: "\e91e";
+}
+
+
+
 /*  勾选选中  */
 .icon-select{
     background-image: url('../../../img/icons/select.png');
@@ -48,13 +195,7 @@ desc:小图标按钮样式
     background-position:  center center;;
 }
 
-/*修改*/
-.icon-modify
-{
-    background-image: url('../../../img/icons/modify.png') ;
-    background-repeat: no-repeat;
-    background-position:  center center;;
-}
+
 /*删除*/
 .icon-delete
 {
@@ -142,13 +283,7 @@ desc:小图标按钮样式
     background-position:  center center;;
 
 }
-/*异常*/
-.icon-error {
-    background-image: url('../../../img/icons/error.png');
-    background-repeat: no-repeat;
-    background-position:  center center;;
 
-}
 /*交换*/
 .icon-change {
     background-image: url('../../../img/icons/change.png');

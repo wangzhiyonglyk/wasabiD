@@ -137,6 +137,7 @@ var DataGrid=React.createClass({
             footer:this.props.footer,//页脚
             headers:this.props.headers,//表头会可能后期才传送,也会动态改变
             height:this.props.height,//如果没有设置高度还要从当前页面中计算出来空白高度,以适应布局
+            headerMenu:[]//被隐藏的列
 
 
         }
@@ -601,15 +602,25 @@ var DataGrid=React.createClass({
     render:function() {
         let className="table table-no-bordered";
         if(this.props.borderAble===true)
-        {
+        {//无边框
             className="table";
         }
         let headerControl=this.renderHeader();
         let gridHeight=this.state.height;
         let tableHeight=gridHeight?( this.props.pagePosition=="both")?gridHeight-70:gridHeight-35:null;
+        var headerMenuCotrol=[];//右键菜单中隐藏的列
+         if(this.state.headerMenu.length>0)
+         {
+            this.state.headerMenu.map((item,index)=>
+            {
+                headerMenuCotrol.push(
+                    <li key={index}><a href="javascript:void(0);" className="header-menu-item" onMouseDown={this.menuHeaderShowHandler.bind(this,index,item)} >{"显示["+item+"]"}</a></li>)
+            })
+         }
         return (<div className="wasabi-table" ref="grid"
                      onPaste={this.onPaste}
                      onMouseDown={this.gridMouseDownHandler}
+                     onContextMenu={this.gridContextMenuHandler}
                      style={{width:this.props.width,height:gridHeight}}  >
             <div className="wasabi-table-pagination" ref="toppagination"
                  style={{display:(this.props.pagePosition=="top"||this.props.pagePosition=="both")?this.props.pagination?"block":"none":"none"}}>
@@ -660,8 +671,8 @@ var DataGrid=React.createClass({
             <div onMouseUp={this.divideMouseUpHandler}  ref="tabledivide" className="wasabi-table-divide"  style={{top:(this.props.pagePosition=="top"||this.props.pagePosition=="both")?35:0}}></div>
             <div className="header-menu-container" ref="headermenu">
                 <ul className="header-menu">
-                    <li key="first"><a href="javascript:void(0);" className="header-menu-item" onClick={this.menuHideHandler} >隐藏此列</a></li>
-                    {this.state.headerMenu}
+                    <li key="first"><a href="javascript:void(0);" className="header-menu-item" onMouseDown={this.menuHideHandler} >隐藏此列</a></li>
+                    {headerMenuCotrol}
                 </ul>
             </div>
         </div>);
