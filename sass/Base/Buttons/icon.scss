@@ -4,15 +4,6 @@ date:2016-03-03
 desc:小图标按钮样式
 */
 @import url("../base.scss");
-@font-face {  font-family: 'icomoon';
-    src:  url('../../font/icomoon.eot?hfserp');
-    src:  url('../../font/icomoon.eot?hfserp#iefix') format('embedded-opentype'),
-    url('../../font/icomoon.ttf?hfserp') format('truetype'),
-    url('../../font/icomoon.woff?hfserp') format('woff'),
-    url('../../font/icomoon.svg?hfserp#icomoon') format('svg');
-    font-weight: normal;
-    font-style: normal;
-}
 
 .wasabi-icon {
     width: 16px;
@@ -37,6 +28,7 @@ desc:小图标按钮样式
     margin-top: -12px;
     margin-right: -15px;
 }
+
 [class^="icon-"], [class*=" icon-"] {
     /* use !important to prevent issues with browser extensions that change fonts */
     font-family: 'icomoon' !important;
@@ -51,286 +43,289 @@ desc:小图标按钮样式
 }
 
 
-/*
-分享菜单
-*/
 
 .icon-about_share:before {
     content: "\e900";
 }
-/*添加*/
-
 .icon-add:before {
     content: "\e901";
 }
-/*地址*/
 .icon-address:before {
     content: "\e902";
 }
-/*返回*/
-.icon-arrow_back:before {
+.icon-arrow-left:before {
     content: "\e903";
 }
-/*目录*/
-.icon-catalog:before {
+.icon-arrow-right:before {
     content: "\e904";
 }
-/*清除*/
-.icon-clear:before {
+.icon-back:before {
     content: "\e905";
 }
-/*折叠*/
-.icon-down:before {
+.icon-batch_add:before {
     content: "\e906";
 }
-/*编辑*/
-.icon-edit:before {
+.icon-calculate:before {
     content: "\e907";
 }
-/*邮件*/
-.icon-email:before {
+.icon-catalog:before {
     content: "\e908";
 }
-/*错误*/
-.icon-error:before {
+.icon-change:before {
     content: "\e909";
 }
-/*帮助*/
-.icon-help:before {
+.icon-check:before {
     content: "\e90a";
 }
-/*主页*/
-.icon-home:before {
+.icon-chong:before {
     content: "\e90b";
 }
-/*信息*/
-.icon-info:before {
+.icon-clear:before {
     content: "\e90c";
 }
-/*定位*/
-.icon-location:before {
+.icon-close:before {
     content: "\e90d";
 }
-/*消息*/
-.icon-message:before {
+.icon-copy:before {
     content: "\e90e";
 }
-/*个人*/
-.icon-mine:before {
+.icon-css:before {
     content: "\e90f";
 }
-/*电话*/
-.icon-phone:before {
+.icon-cut:before {
     content: "\e910";
 }
-/*打电话*/
-.icon-phone_out:before {
+.icon-date:before {
     content: "\e911";
 }
-/*拍照*/
-.icon-photo:before {
+.icon-department:before {
     content: "\e912";
 }
-/*地图/地区*/
-.icon-region:before {
+.icon-down:before {
     content: "\e913";
 }
-/*右侧选择*/
-.icon-right_select:before {
+.icon-download:before {
     content: "\e914";
 }
-/*查询*/
-.icon-search:before {
+.icon-drop:before {
     content: "\e915";
 }
-/*设置*/
-.icon-setting:before {
+.icon-edit:before {
     content: "\e916";
 }
-/*分享*/
-.icon-share:before {
+.icon-email:before {
     content: "\e917";
 }
-/*星星*/
-.icon-star:before {
+.icon-error:before {
     content: "\e918";
 }
-/*空白星星*/
-.icon-star_blank:before {
+.icon-excel:before {
     content: "\e919";
 }
-/*一半的星星*/
-.icon-star_half:before {
+.icon-export:before {
     content: "\e91a";
 }
-/*时间*/
-.icon-time:before {
+.icon-file:before {
     content: "\e91b";
 }
-/*取消点赞*/
-.icon-un_wonderful:before {
+.icon-folder:before {
     content: "\e91c";
 }
-/*展开*/
-.icon-up:before {
+.icon-help:before {
     content: "\e91d";
 }
-/*点赞*/
-.icon-wonderful:before {
+.icon-home:before {
     content: "\e91e";
 }
-
-
-
-/*  勾选选中  */
-.icon-select{
-    background-image: url('../../../img/icons/select.png');
-    background-repeat: no-repeat;
-    background-position:  center center;
+.icon-hot:before {
+    content: "\e91f";
 }
-/*复制*/
-.icon-copy {
-    background-image: url('../../../img/icons/copy.png') ;
-    background-repeat: no-repeat;
-    background-position:  center center;;
+.icon-html:before {
+    content: "\e920";
 }
-
-
-/*删除*/
-.icon-delete
-{
-    background-image: url('../../../img/icons/delete.png');
-    background-repeat: no-repeat;
-    background-position:  center center;;
+.icon-html5:before {
+    content: "\e921";
 }
-/*查询*/
-.icon-search
-{
-    background-image: url('../../../img/icons/search.png') ;
-    background-repeat: no-repeat;
-    background-position:  center center;;
+.icon-image:before {
+    content: "\e922";
 }
-
-.icon-import
-{
-    background-image: url('../../../img/icons/import.png') ;
-    background-repeat: no-repeat;
-    background-position:  center center;;
-
+.icon-import:before {
+    content: "\e923";
 }
-
-/*下载*/
-.icon-download
- {
-    background-image: url('../../../img/icons/download.png') ;
-    background-repeat: no-repeat;
-    background-position:  center center;;
-
- }
-.icon-export{
-    background-image: url('../../../img/icons/export.png') ;
-    background-repeat: no-repeat;
-    background-position:  center center;;
+.icon-info:before {
+    content: "\e924";
 }
-
-
-/*展开*/
-.icon-expand{
-    background-image: url('../../../img/icons/expand.png') ;
-    background-repeat: no-repeat;
-    background-position:  center center;
+.icon-js:before {
+    content: "\e925";
 }
-/*折叠*/
-.icon-fold{
-    background-image: url('../../../img/icons/fold.png') ;
-    background-repeat: no-repeat;
-    background-position:  center center;
+.icon-left:before {
+    content: "\e926";
 }
-
-/*是*/
-.icon-yes{
-    background-image: url('../../../img/icons/yes.png') ;
-    background-repeat: no-repeat;
-    background-position:  center center;
+.icon-location:before {
+    content: "\e927";
 }
-/*否*/
-.icon-no{
-    background-image: url('../../../img/icons/no.png') ;
-    background-repeat: no-repeat;
-    background-position:  center center;
+.icon-lock:before {
+    content: "\e928";
 }
-
-/*添加*/
-.icon-show {
-    background-image: url('../../../img/icons/show.png');
-    background-repeat: no-repeat;
-    background-position:  center center;;
-
+.icon-message:before {
+    content: "\e929";
 }
-
-
-/*等待*/
-.icon-pending {
-    background-image: url('../../../img/icons/pending.png');
-    background-repeat: no-repeat;
-    background-position:  center center;;
-
+.icon-mian:before {
+    content: "\e92a";
 }
-/*确认*/
-.icon-check {
-    background-image: url('../../../img/icons/check.png');
-    background-repeat: no-repeat;
-    background-position:  center center;;
-
+.icon-mine:before {
+    content: "\e92b";
 }
-
-/*交换*/
-.icon-change {
-    background-image: url('../../../img/icons/change.png');
-    background-repeat: no-repeat;
-    background-position:  center center;;
-
+.icon-obligation:before {
+    content: "\e92c";
 }
-/*退回*/
-.icon-return {
-    background-image: url('../../../img/icons/return.png');
-    background-repeat: no-repeat;
-    background-position:  center center;;
-
+.icon-packet:before {
+    content: "\e92d";
 }
-
-
-/*列表详情图标*/
-.icon-detail{
-    background-image: url('../../../img/icons/expand.png') ;
-    background-repeat: no-repeat;
-    background-position:  center center;
-    width:12px!important;
-    height: 12px!important;
-    background-size: 12px 12px!important;
+.icon-pdf:before {
+    content: "\e92e";
 }
-
-
-
-/*锁定*/
-.icon-lock{
-    background-image: url('../../../img/icons/lock.png') ;
-    background-repeat: no-repeat;
-    background-position:  center center;
-    width: 12px!important;
-    height:12px!important;
-    display: inline-block;
-    background-size: 12px 12px!important;
+.icon-pending:before {
+    content: "\e92f";
 }
-/*刷新*/
-.icon-reload
-{
-    background-image: url('../../../img/icons/reload.png') ;
-    background-repeat: no-repeat;
-    background-position:  center center;
-    width: 12px!important;
-    height:12px!important;
-    display: inline-block;
-    background-size: 12px 12px!important;
-
+.icon-phone_out:before {
+    content: "\e930";
+}
+.icon-phone:before {
+    content: "\e931";
+}
+.icon-photo:before {
+    content: "\e932";
+}
+.icon-ppt:before {
+    content: "\e933";
+}
+.icon-present:before {
+    content: "\e934";
+}
+.icon-rar:before {
+    content: "\e935";
+}
+.icon-refresh:before {
+    content: "\e936";
+}
+.icon-region:before {
+    content: "\e937";
+}
+.icon-remove:before {
+    content: "\e938";
+}
+.icon-report:before {
+    content: "\e939";
+}
+.icon-return:before {
+    content: "\e93a";
+}
+.icon-right:before {
+    content: "\e93b";
+}
+.icon-rmb:before {
+    content: "\e93c";
+}
+.icon-row-add:before {
+    content: "\e93d";
+}
+.icon-scan:before {
+    content: "\e93e";
+}
+.icon-seal_cancel:before {
+    content: "\e93f";
+}
+.icon-seal_checked:before {
+    content: "\e940";
+}
+.icon-seal_close:before {
+    content: "\e941";
+}
+.icon-seal_pass:before {
+    content: "\e942";
+}
+.icon-seal_sign:before {
+    content: "\e943";
+}
+.icon-search:before {
+    content: "\e944";
+}
+.icon-select:before {
+    content: "\e945";
+}
+.icon-setting:before {
+    content: "\e946";
+}
+.icon-share:before {
+    content: "\e947";
+}
+.icon-sound:before {
+    content: "\e948";
+}
+.icon-star_blank:before {
+    content: "\e949";
+}
+.icon-star_half:before {
+    content: "\e94a";
+}
+.icon-star:before {
+    content: "\e94b";
+}
+.icon-tao:before {
+    content: "\e94c";
+}
+.icon-telephone:before {
+    content: "\e94d";
+}
+.icon-time:before {
+    content: "\e94e";
+}
+.icon-tmall:before {
+    content: "\e94f";
+}
+.icon-trash:before {
+    content: "\e950";
+}
+.icon-txt:before {
+    content: "\e951";
+}
+.icon-un_wonderful:before {
+    content: "\e952";
+}
+.icon-unlock:before {
+    content: "\e953";
+}
+.icon-up:before {
+    content: "\e954";
+}
+.icon-user:before {
+    content: "\e955";
+}
+.icon-users:before {
+    content: "\e956";
+}
+.icon-vip:before {
+    content: "\e957";
+}
+.icon-voice:before {
+    content: "\e958";
+}
+.icon-wonderful:before {
+    content: "\e959";
+}
+.icon-word:before {
+    content: "\e95a";
+}
+.icon-yes:before {
+    content: "\e95b";
+}
+.icon-you:before {
+    content: "\e95c";
+}
+.icon-zheng:before {
+    content: "\e95d";
+}
+.icon-zip:before {
+    content: "\e95e";
 }

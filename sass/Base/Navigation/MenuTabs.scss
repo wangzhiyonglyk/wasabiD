@@ -45,40 +45,41 @@ iframe
 .wasabi-nav-tabs .tabhome {
     width: 40px;
     height:40px;
-    background-image:url('../../../img/icons/home.png');
-    background-size: 18px 18px;
-    background-position: center center;
-    background-repeat:no-repeat;
+    font-family: 'icomoon' !important;
+    font-style: normal;
+    color:#86a0a1;
 }
-.wasabi-nav-tabs .tabhome:hover,
-.wasabi-nav-tabs .tabhome.active
+.wasabi-nav-tabs .tabhome:before
 {
-    width: 40px;
-    height:40px;
-    background-image:url('../../../img/icons/homehover.png');
-    background-size: 18px 18px;
-    background-position: center center;
-    background-repeat:no-repeat;
+    content: "\e91e";
+    font-size: 20px;
+    top: 10px;
+    position: absolute;
+    left: 10px;
 }
-
+.wasabi-nav-tabs .tabhome.active:before{
+    color:#ffffff;
+}
 .wasabi-nav-tabs .tabuser {
     width: 40px;
     height:40px;
     float:right;
-    background-image:url('../../../img/icons/user.png');
-    background-size: 18px 18px;
-    background-position: center center;
-    background-repeat:no-repeat;
+    font-family: 'icomoon' !important;
+    color:#86a0a1;
+
+}
+.wasabi-nav-tabs .tabuser:before
+{
+    content: "\e955";
+    font-size: 20px;
+    top: 10px;
+    position: absolute;
+    left: 10px;
 }
 .wasabi-nav-tabs .tabuser:hover,
 .wasabi-nav-tabs .tabuser.active
 {
-    width: 40px;
-    height:40px;
-    background-image:url('../../../img/icons/userhover.png');
-    background-size: 18px 18px;
-    background-position: center center;
-    background-repeat:no-repeat;
+   color: #ffffff;
 }
 
 .wasabi-nav-tabs > li {

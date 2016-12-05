@@ -4,8 +4,6 @@
   width:248px;
   height:247px;
   z-index: 4;
-  padding-left: 8px;
-  padding-right: 8px;
   display: inline-block;
   background-color: white;
   padding: 0px;
@@ -40,12 +38,10 @@
 
 }
 .wasabi-datetime-header .triangle-left:after{
-  content: "111111111";
+  font-family: 'icomoon' !important;
   font-size: 22px;
-  color: transparent;
-  background-image: url("../../../img/icons/left.png");
-  background-repeat: no-repeat;
-  background-size: 22px 22px;
+  content:"\e903";
+
   width: 22px;
   height: 22px;
 }
@@ -59,12 +55,10 @@
   width:22px;
 }
 .wasabi-datetime-header .triangle-right:after{
-  content:"111111111";
+  font-family: 'icomoon' !important;
   font-size: 22px;
   color: transparent;
-  background-image: url("../../../img/icons/right.png");
-  background-repeat: no-repeat;
-  background-size: 22px 22px;
+  content:"\e904";
   width:22px;
   height: 22px;
 }

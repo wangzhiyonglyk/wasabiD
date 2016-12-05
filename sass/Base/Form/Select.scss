@@ -15,34 +15,42 @@ desc:下拉框样式
   margin: 0px;;
 }
 .nice-select .icon {
-  content: "";
+
   display: block;
-  background-image: url(../../../img/icons/selecticon.png);
-  background-repeat: no-repeat;
-  width: 35px;
-  height: 32px;
+  font-family: 'icomoon' !important;
+  font-style: normal;
+  width: 34px;
+  height: 34px;
   border-left: 1px solid #d7dde2;
   position: absolute;
   top: 0px;
  right: 0px;
-  background-size: 32px;
-  cursor: default;
+  cursor: pointer;
 
+}
+.nice-select .icon:before{
+  font-size: 34px;
+  content: "\e915";
+  top: -2px;
+  position: absolute;
+  left: -1px;
+  color: #d7dde2;
 }
 
 .nice-select .picker-clear{
-  content: "";
-  display: block;
-  background-image: url(../../../img/icons/clear.png) ;
-  background-repeat: no-repeat;
+  font-family: 'icomoon' !important;
+  font-style: normal;
   width: 16px;
   height: 16px;
   position: absolute;
   right: 40px;
-  top: 9px;
-  background-size: 16px;
+  top: 8px;
   cursor: pointer;
-  border-radius: 16px;
+}
+.nice-select .picker-clear:before{
+  font-size:16px;
+  content: "\e90c";
+  color: #bbbbbb;
 }
 .nice-select ul {
   width: 100%;
@@ -76,17 +84,15 @@ desc:下拉框样式
 }
 .nice-select ul li.active:after
 {
-  content: '11';
-  color:transparent;
+  font-family: 'icomoon' !important;
+  content:"\e95b";
   position: absolute;
-  top:8px;
+  top:0px;
   right: 20px;
-  width:12px;
-  height:12px;
-  background-image: url('../../../img/icons/yes.png') ;
-  background-repeat: no-repeat;
-  background-position:  center center;
-  background-size: 12px 12px;
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+  color:#2ec9c2;
 }
 
 .nice-select .search
@@ -113,16 +119,15 @@ desc:下拉框样式
 }
 .nice-select .search .icon
 {
-  content: "111111";
-  color: transparent;
-  background-image: url('../../../img/icons/searchbox.png');
-  background-repeat: no-repeat;
-  background-position: center center;
+  font-family: 'icomoon' !important;
   position: absolute;
   right: 5%;
   width: 14px;
   height: 14px;
-  background-size: 14px 14px;
+  font-size: 14px;
   top:10px;
   opacity:0.6;
+}
+.nice-select .search .icon:before{
+  content:"\e944";
 }

@@ -62,14 +62,15 @@ desc:导入功能组件样式
   position: absolute;
   top: 70px;
   left: 45px;
-  color: #1ec9c3;
+  color: #2ec9c2;
 }
 
 .import-downloadmodel:before
 {
-  content:"111";
-  color:transparent;
-  background-image: url('../../img/icons/download.png');
+  font-family: 'icomoon' !important;
+  content:"\e914";
+  color: #2ec9c2;
+
   width: 12px;
   height: 12px;
   background-size: 12px 12px;
@@ -103,7 +104,7 @@ desc:导入功能组件样式
 }
 .import-upload-info .success
 {
-  color:#1ec9c3;
+  color:#2ec9c2;
 }
 .import-upload-info .fail
 {

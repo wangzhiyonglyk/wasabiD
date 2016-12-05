@@ -7,6 +7,7 @@ require("../../sass/Base/Buttons/icon.scss");
 var React =require("react");
 var Tab=require("./MenuTab.jsx");
 var TabSection=require("./MenuTabSection.jsx");
+var LinkButton=require("../Buttons/LinkButton.jsx");
 class MenuTabs extends  React.Component {
     constructor(props) {
         super(props);
@@ -170,9 +171,11 @@ class MenuTabs extends  React.Component {
             <div>
                 <ul className=" wasabi-nav-tabs">
                     <li className={"tabmenu "+(this.state.menuVisible?"close":"")} onClick={this.menuHandler}></li>
-                    <li className={"tabhome "+((this.state.activeIndex===-1)?"active":"")} title="首页" onClick={this.homeHandler}><div className="split"></div></li>
+                    <li className={"tabhome "+((this.state.activeIndex===-1)?"active":"")} title="首页" onClick={this.homeHandler}>
+                        <div className="split"></div></li>
                     {tabobj}
-                    <li style={{float:"right"}} className="tabuser" title="用户" onClick={this.userHandler}></li>
+                    <li style={{float:"right"}} className="tabuser" title="用户" onClick={this.userHandler}>
+                    </li>
                 </ul>
                 { sectionobj}
             </div>);

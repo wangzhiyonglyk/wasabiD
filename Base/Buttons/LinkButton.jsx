@@ -102,37 +102,25 @@ var LinkButton=React.createClass({
             return null;
         }
         var className = "wasabi-linkbutton "+this.props.theme;//按钮样式
-        if(this.props.className)//自定义class
-        {
-            className+=" "+this.props.className;
+        if(this.props.className) {//自定义class
+            className += " " + this.props.className;
         }
-        if(this.props.iconCls==null||this.props.iconCls==undefined||this.props.iconCls=="")
-        {
-            className+=" "+"onlytext";//只有文字
+        if(!this.props.iconCls) {
+            className += " " + "onlytext";//只有文字
         }
-        let style=this.setStyle();//设置样式
+        let style=this.setStyle();//设置按钮样式
         var linkTextStyle=null;//文本样式
-        if(this.props.backgroundColor)
-        {
-            style.backgroundColor=this.props.backgroundColor;
-            style.border="1px solid transparent";
-            linkTextStyle={};linkTextStyle.color="#ffffff";
-
-
-        }
-        if(this.props.iconCls==null||this.props.iconCls==undefined||this.props.iconCls=="")
-        {
-            style.border="none";
+        if(this.props.backgroundColor) {
+            style.backgroundColor = this.props.backgroundColor;
         }
         if(this.props.color) {
             linkTextStyle={};  linkTextStyle.color=this.props.color;
         }
 
         var iconClass = "wasabi-icon";//图标样式
-        var title=this.props.tip;
-        if(title==""||!title)
-        {
-            title=this.props.title;
+        var title=this.props.tip;//提示信息
+        if(title==""||!title) {
+            title = this.props.title;
         }
         if (this.props.title =="") {//纯图标
             return (<a draggable={this.props.draggable} onDragStart={this.dragStartHandler} title={title}
@@ -170,7 +158,7 @@ var LinkButton=React.createClass({
 
                     <a draggable={this.props.draggable} onDragStart={this.dragStartHandler} title={title}
                        href={this.props.href} onClick={this.clickHandler} className={className}
-                       disabled={this.state.disabled} name={this.props.name} name={this.props.name}  style={style}>
+                       disabled={this.state.disabled}  name={this.props.name}  style={style}>
                         <i className={iconClass+" "+this.props.iconCls}
                            style={{display:(this.props.iconCls==null||this.props.iconCls=="")?"none":"inline-block"}}></i>
                         <div className="wasabi-linkbutton-text" style={linkTextStyle}>{this.props.title}</div>
