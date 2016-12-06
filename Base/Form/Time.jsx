@@ -21,11 +21,26 @@ let Time=React.createClass({
       }
     },
     getInitialState:function() {
-return this.setInitValue(this.props);
+    return this.setInitValue(this.props);
     },
     componentWillReceiveProps:function(nextProps) {
+    /*
 
-     this.setState( this.setInitValue(nextProps));
+    */
+      var result= this.setInitValue(nextProps);
+      result.height=this.state.height;//高度仍用旧值，因为选择时回传父组件，还不需要消失
+        this.setState(result);
+        //滚动到指定位置
+        this.refs.hour.scrollTop=result.hour*24;
+        this.refs.minute.scrollTop=result.minute*24;
+        this.refs.second.scrollTop=result.second*24;
+    },
+    componentDidMount:function () {
+         //滚动到指定位置
+        this.refs.hour.scrollTop=this.state.hour*24;
+        this.refs.minute.scrollTop=this.state.minute*24;
+        this.refs.second.scrollTop=this.state.second*24;
+
     },
     setInitValue:function(props)
     {
@@ -37,33 +52,46 @@ return this.setInitValue(this.props);
             hour:(hour<10)?"0"+hour:hour,
             minute:(minute<10)?"0"+minute:minute,
             second:(second<10)?"0"+second:second,
-            height:0,
+            height:0,//
         }
+
     },
     hourHandler:function(value,tran) {
-        let scrollTop=parseInt(this.refs.hour.scrollTop/24)*24;
+
         let lastScrollTop=value*24;
-        this.scrollHandler(this.refs.hour,scrollTop,lastScrollTop,tran);
+        this.scrollHandler(this.refs.hour,this.refs.hour.scrollTop,lastScrollTop,tran);
+        this.refs.hour.style.backgroundColor="red";
         this.setState({
             hour:value
         })
+        if(this.props.onSelect!=null)
+        {
+            this.props.onSelect(value+":"+this.state.minute+":"+this.state.second,value+":"+this.state.minute+":"+this.state.second,this.props.name,null);
+        }
     },
     minuteHandler:function(value,tran) {
-        let scrollTop=parseInt(this.refs.minute.scrollTop/24)*24;
         let lastScrollTop=value*24;
-        this.scrollHandler(this.refs.minute,scrollTop,lastScrollTop,tran);
+        this.scrollHandler(this.refs.minute,this.refs.minute.scrollTop,lastScrollTop,tran);
         this.setState({
             minute:value
         })
+        if(this.props.onSelect!=null)
+        {
+            this.props.onSelect(this.state.hour+":"+value+":"+this.state.second,this.state.hour+":"+value+":"+this.state.second,this.props.name,null);
+        }
 
     },
     secondHandler:function(value,tran) {
-        let scrollTop=parseInt(this.refs.second.scrollTop/24)*24;
+
         let lastScrollTop=value*24;
-        this.scrollHandler(this.refs.second,scrollTop,lastScrollTop,tran);
+        this.scrollHandler(this.refs.second,this.refs.second.scrollTop,lastScrollTop,tran);
         this.setState({
             second:value
         })
+        if(this.props.onSelect!=null)
+        {
+            this.props.onSelect(this.state.hour+":"+this.state.minute+":"+value,this.state.hour+":"+this.state.minute+":"+value,this.props.name,null);
+        }
 
     },
     scrollHandler:function(obj,scrollTop,lastScrollTop,tran) {
@@ -106,7 +134,7 @@ return this.setInitValue(this.props);
         for(let index=0;index<24;index++)
         {
             var currentHour=(index<10)?"0"+index:index;
-            hourControl.push(<li  className="timeitem" onClick={this.hourHandler.bind(this,currentHour,70)} key={"hour"+currentHour}
+            hourControl.push(<li  onClick={this.hourHandler.bind(this,currentHour,70)} key={"hour"+currentHour}
                                  className={(this.state.hour==currentHour)?"wasabi-time-picker-panel-select-option-selected":null}>{currentHour}</li>);
         }
         for(let index=0;index<5;index++)
@@ -120,7 +148,7 @@ return this.setInitValue(this.props);
         for(let index=0;index<60;index++)
         {
             var currentMinute=(index<10)?"0"+index:index;
-                minuteControl.push(<li  className="timeitem" key={"minute"+currentMinute} onClick={this.minuteHandler.bind(this,currentMinute,70)}
+                minuteControl.push(<li   key={"minute"+currentMinute} onClick={this.minuteHandler.bind(this,currentMinute,70)}
                                         className={(this.state.minute==currentMinute)?"wasabi-time-picker-panel-select-option-selected":null}>{currentMinute}</li>);
         }
         for(let index=0;index<5;index++)
@@ -134,7 +162,7 @@ return this.setInitValue(this.props);
         for(let index=0;index<60;index++)
         {
             var currentSecond=(index<10)?"0"+index:index;
-            secondControl.push(<li className="timeitem" key={"second"+currentSecond} onClick={this.secondHandler.bind(this,currentSecond,70)}
+            secondControl.push(<li key={"second"+currentSecond} onClick={this.secondHandler.bind(this,currentSecond,70)}
                                    className={(this.state.second==currentSecond)?"wasabi-time-picker-panel-select-option-selected":null}>{currentSecond}</li>);
         }
         for(let index=0;index<5;index++)
@@ -143,26 +171,17 @@ return this.setInitValue(this.props);
         }
         return secondControl;
     },
-    onSelect:function(event) {
-        this.setState({
-            height:0,
-        })
-            if(this.props.onSelect!=null)
-            {
-                this.props.onSelect(this.state.hour+":"+this.state.minute+":"+this.state.second,this.state.hour+":"+this.state.minute+":"+this.state.second,this.props.name,null);
-            }
-    },
+
     getValue:function()
     {
         return this.state.hour+":"+this.state.minute+":"+this.state.second,this.state.hour+":"+this.state.minute+":"+this.state.second;
     },
     showHandler:function() {
         this.setState({
-            height:144,
+            height:146,
+
         })
-        this.hourHandler(this.state.hour,0);
-        this.minuteHandler(this.state.minute,0);
-        this.secondHandler(this.state.second,0);
+
     },
     changeHandler:function() {
 
@@ -171,18 +190,18 @@ return this.setInitValue(this.props);
 
       return <div className="wasabi-time-picker-panel-inner" onMouseOut={this.mouseOutHandler}>
           <div className="wasabi-time-picker-panel-input-wrap">
-              <input className="wasabi-time-picker-panel-input  "
+              <input className="wasabi-time-picker-panel-input wasabi-form-control "
                      onClick={this.showHandler} onChange={this.changeHandler} value={this.state.hour+":"+this.state.minute+":"+this.state.second} placeholder="请选择时间"></input>
 
           </div>
             <div className="wasabi-time-picker-panel-combobox"  style={{height:this.state.height}}>
-        <div ref="hour" key="hour" className="wasabi-time-picker-panel-select">
-            <ul key="hour">{this.renderHour()}</ul>
+        <div ref="hour" key="hour" className="wasabi-time-picker-panel-select" >
+            <ul key="hour" >{this.renderHour()} </ul>
             </div>
-                <div ref="minute" key="minute" className="wasabi-time-picker-panel-select">
+                <div ref="minute" key="minute" className="wasabi-time-picker-panel-select" >
             <ul key="minute">{this.rendMinute()}</ul>
                     </div>
-                <div ref="second" key="second" className="wasabi-time-picker-panel-select">
+                <div ref="second" key="second" className="wasabi-time-picker-panel-select" >
             <ul key="second">{this.rendSecond()}</ul>
             </div>
 </div></div>

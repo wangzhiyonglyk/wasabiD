@@ -173,7 +173,7 @@ var PanelPicker = React.createClass({
                     <div className="combobox" style={{display:this.props.hide==true?"none":"block"}}
                          onMouseOut={this.mouseOutHandler}>
                         <i className={"picker-clear"} onClick={this.clearHandler} style={{display:(this.state.readonly?"none":this.state.value==""||!this.state.value)?"none":"inline"}}></i>
-                        <i className={"pickericon"} onClick={this.showPicker}></i>
+                        <i className={"pickericon "+(this.state.show?"rotate":"")} onClick={this.showPicker}></i>
                         <input type="text" {...inputProps} value={this.state.text} onClick={this.showPicker} onChange={this.changeHandler}/>
                         <div className={ "dropcontainter panelpicker "+this.props.position}
                              style={{display:this.state.show==true?"block":"none"}}>

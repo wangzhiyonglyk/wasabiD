@@ -250,41 +250,48 @@ var DataGrid=React.createClass({
 
         }
         this.state.headers.map((header, index) => {
-                if(header==null)
-                {//如果是空则不处理
 
+            if (!header&&header.hide == true) {
+                //隐藏则不显示
+                return ;
+            }else {
+                if (this.state.headerMenu.length > 0 && this.state.headerMenu.indexOf(header.label) > -1) {//父组件更新状态值，发现某一行处理被隐藏中，则不显示
+                        return ;
                 }
                 else {
                     let sortOrder = "";
-                    var props={};//设置单击事件
+                    var props = {};//设置单击事件
                     if (header.sortAble == true) {
                         sortOrder = " both";
                         if (this.state.sortName == header.name) {
                             //是当前排序字段
                             sortOrder += " " + this.state.sortOrder;
-                            props. onClick=(header.sortAble == true?this.onSort.bind(this,header.name,this.state.sortOrder=="asc"?"desc":"asc"):null);
+                            props.onClick = (header.sortAble == true ? this.onSort.bind(this, header.name, this.state.sortOrder == "asc" ? "desc" : "asc") : null);
                         }
                         else {
-                            props. onClick=(header.sortAble == true?this.onSort.bind(this,header.name,"asc"):null);
+                            props.onClick = (header.sortAble == true ? this.onSort.bind(this, header.name, "asc") : null);
                         }
                     }
-                    if (header.hidden == true) {
-                        //隐藏则不显示
-                    } else {
-                        headers.push(
-                            <th key={"header"+index.toString()} name={header.label} {...props} className={""+sortOrder} style={{textAlign:(header.align?header.align:"left")}}
-                                onMouseMove={this.headerMouseMoveHandler}
-                                onContextMenu={this.headerContextMenuHandler}
-                                onMouseDown={this.headerMouseDownHandler}>
+                    //使用label作为元素name属性，是因为可能有多个列对应同一个字段
+                    headers.push(
+                        <th key={"header" + index.toString()} name={header.label} {...props}
+                            className={"" + sortOrder}
+                            style={{textAlign: (header.align ? header.align : "left")}}
+                            onMouseMove={this.headerMouseMoveHandler}
+                            onContextMenu={this.headerContextMenuHandler}
+                            onMouseDown={this.headerMouseDownHandler}>
 
-                                <div className="wasabi-table-cell"  name={header.label} style={{width:(header.width?header.width:null),textAlign:(header.align?header.align:"left")}}>
-                                    {header.label}</div>
-                            </th>)
-                    }
+                            <div className="wasabi-table-cell" name={header.label} style={{
+                                width: (header.width ? header.width : null),
+                                textAlign: (header.align ? header.align : "left")
+                            }}>
+                                {header.label}</div>
+                        </th>)
+
+
                 }
-
             }
-        );
+            });
 
 
         return headers;
@@ -327,8 +334,11 @@ var DataGrid=React.createClass({
             }
 
             this.state.headers.map((header, columnIndex) => {
-                if (header==null||header.hidden) {
+                if (!header||header.hide) {
                     return;
+                }
+                if( this.state.headerMenu.length>0&&this.state.headerMenu.indexOf(header.label)>-1) {//父组件更新状态值，发现某一行处理被隐藏中，则不显示
+                    return ;
                 }
 
                 let content = header.content;
@@ -503,7 +513,7 @@ var DataGrid=React.createClass({
                         }
 
                         <li key="lilast" className={"page-number "+((this.state.pageIndex*1)==(pageAll)?"active":"")}><a href="javascript:void(0)"  onClick={this.paginationHandler.bind(this,(pageAll))}>{(pageAll)}</a></li>
-                        <li key="linext"  key={"next"} className="page-next"><a href="javascript:void(0)" onClick={this.nextPaginationHandler} >›</a></li>
+                        <li key="linext"  className="page-next"><a href="javascript:void(0)" onClick={this.nextPaginationHandler} >›</a></li>
                     </ul>
                 </div>;
             }
@@ -544,6 +554,13 @@ var DataGrid=React.createClass({
             }
             this.state.headers.map((header,headerindex)=>
             {
+                if (!header||header.hide) {
+                    return;
+                }
+                if( this.state.headerMenu.length>0&&this.state.headerMenu.indexOf(header.label)>-1) {//父组件更新状态值，发现某一行处理被隐藏中，则不显示
+                    return ;
+                }
+
                 var footerchild=this.state.footer.filter(function(d)
                 {
                     return d.name==header.name;

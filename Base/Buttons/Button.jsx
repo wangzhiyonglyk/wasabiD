@@ -6,7 +6,9 @@
  */
 require("../../sass/Base/Buttons/button.scss");
 var React=require("react");
+var addRipple=require("../../Mixins/addRipple.js");
 let  Button  = React.createClass({
+    mixins:[addRipple],
     propTypes: {
         name: React.PropTypes.string,//按钮名称
         title: React.PropTypes.string,//按钮标题
@@ -30,7 +32,8 @@ let  Button  = React.createClass({
         className: React.PropTypes.string,//按钮自定义样式
         disabled: React.PropTypes.bool,//按钮是否无效
         hide: React.PropTypes.bool,//按钮是否隐藏
-        delay:React.PropTypes.number,//第二次
+        delay:React.PropTypes.number,//第二次点击的间隔时间
+         ripple:React.PropTypes.bool,//点击时是否显示波纹特效
     },
     getDefaultProps: function () {
         return {
@@ -43,6 +46,7 @@ let  Button  = React.createClass({
             disabled: false,
             hide: false,
             delay:0,
+            ripple:true,
         }
     },
     getInitialState: function () {
@@ -99,10 +103,16 @@ let  Button  = React.createClass({
         }
         return true;
     }
-    ,clickHandler: function () {
+    ,clickHandler: function (event) {
+
         if (this.state.disabled == true) {
             return;
         }
+        if(this.props.ripple)
+        {
+            this.rippleHandler(event);//添加波纹特效
+        }
+
         if(this.props.delay>0)
         {//不立即执行父组件方法
             this.title = this.state.title;//保存原来的title
@@ -115,7 +125,7 @@ let  Button  = React.createClass({
         else
         {
             if (this.props.onClick) {
-                this.props.onClick();
+                this.props.onClick(this.props.name,this.props.title);
             }
         }
 

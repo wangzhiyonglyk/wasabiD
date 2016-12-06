@@ -7,8 +7,9 @@ require("../../sass/Base/Buttons/linkbutton.scss");
 require("../../sass/Base/Buttons/icon.scss");
 let setStyle=require("../../Mixins/setStyle.js");
 var React=require("react");
+var addRipple=require("../../Mixins/addRipple.js");
 var LinkButton=React.createClass({
-    mixins:[setStyle],
+    mixins:[setStyle,addRipple],
     propTypes: {
         name:React.PropTypes.string,//名称
         title:React.PropTypes.string,//标题
@@ -16,6 +17,7 @@ var LinkButton=React.createClass({
             "primary",
             "default",
             "green",
+            "none",
         ]),//主题
         width:React.PropTypes.number,//宽度
         height:React.PropTypes.number,//高度
@@ -33,12 +35,13 @@ var LinkButton=React.createClass({
         draggable:React.PropTypes.bool,//是否可拖动
         backgroundColor:React.PropTypes.string,//背景颜色
         color:React.PropTypes.string,//字体颜色
+        ripple:React.PropTypes.bool,//点击时是否显示波纹特效
     },
     getDefaultProps:function() {
         return{
             name:"",//关联值
             title:"",//标题、
-            theme:"default",//主题
+            theme:"none",//主题
             iconAlign:"left",//图标位置
             href:"javascript:void(0)",//连接地址
             iconCls:null,//默认为空
@@ -50,6 +53,7 @@ var LinkButton=React.createClass({
             color:null,
             disabled:false,
             hide:false,
+            ripple:true,
         }
     },
     getInitialState: function () {
@@ -70,10 +74,14 @@ var LinkButton=React.createClass({
             hide:nextProps.hide,
         })
     },
-    clickHandler:function() {
+    clickHandler:function(event) {
         if(this.state.disabled==true)
         {
             return ;
+        }
+        if(this.props.ripple&&this.state.theme!="none")
+        {//允许特效，并且不是空主题
+            this.rippleHandler(event);//添加波纹特效
         }
 
         if(this.props.onClick!=null)
@@ -101,7 +109,7 @@ var LinkButton=React.createClass({
         if(this.state.hide==true){
             return null;
         }
-        var className = "wasabi-linkbutton "+this.props.theme;//按钮样式
+        var className = "wasabi-linkbutton "+this.state.theme;//按钮样式
         if(this.props.className) {//自定义class
             className += " " + this.props.className;
         }
@@ -110,23 +118,28 @@ var LinkButton=React.createClass({
         }
         let style=this.setStyle();//设置按钮样式
         var linkTextStyle=null;//文本样式
+        var iconColor=null;//图标颜色，因为图标基本使用了字体
         if(this.props.backgroundColor) {
             style.backgroundColor = this.props.backgroundColor;
         }
-        if(this.props.color) {
+        if(this.props.color) {//单独设置了颜色
             linkTextStyle={};  linkTextStyle.color=this.props.color;
+            iconColor=this.props.color;
+        }
+        else if(style.color) {//如果样式中设置了颜色，则取这个颜色
+            linkTextStyle.color = style.color;
+            iconColor = tstyle.color;
         }
 
-        var iconClass = "wasabi-icon";//图标样式
         var title=this.props.tip;//提示信息
-        if(title==""||!title) {
+        if(title==""||!title) {//如果没有，则默认为文本
             title = this.props.title;
         }
         if (this.props.title =="") {//纯图标
             return (<a draggable={this.props.draggable} onDragStart={this.dragStartHandler} title={title}
                        href={this.props.href} onClick={this.clickHandler}
                        className={className+" onlyicon"} disabled={this.state.disabled} name={this.props.name}>
-                <i className={iconClass+" "+this.props.iconCls}></i>
+                <i className={"wasabi-icon "+this.props.iconCls} style={{color:iconColor, display:this.props.iconCls==""?"none":"inline-block"}}></i>
             </a>);
         }
         else {
@@ -137,8 +150,8 @@ var LinkButton=React.createClass({
                        href={this.props.href} onClick={this.clickHandler}
                        className={className} disabled={this.state.disabled} name={this.props.name} style={style}>
                         <div className="wasabi-linkbutton-text right" style={linkTextStyle}>{this.props.title}</div>
-                        <i className={iconClass+" "+this.props.iconCls}
-                           style={{display:this.props.iconCls==""?"none":"inline-block"}}></i>
+                        <i className={"wasabi-icon "+this.props.iconCls}
+                           style={{color:iconColor,display:this.props.iconCls==""?"none":"inline-block"}}></i>
                     </a>
                 )
             }
@@ -148,8 +161,8 @@ var LinkButton=React.createClass({
                        href={this.props.href} onClick={this.clickHandler}
                        className={className} disabled={this.state.disabled} name={this.props.name} style={style} >
                         <div className="wasabi-linkbutton-text " style={linkTextStyle}>{this.props.title}</div>
-                        <i className={iconClass+" "+this.props.iconCls+" wasabi-icon-rightTop"}
-                           style={{display:this.props.iconCls==""?"none":"inline-block"}}></i>
+                        <i className={"wasabi-icon "+this.props.iconCls+" wasabi-icon-rightTop"}
+                           style={{color:iconColor,display:this.props.iconCls==""?"none":"inline-block"}}></i>
                     </a>);
 
             }
@@ -159,7 +172,7 @@ var LinkButton=React.createClass({
                     <a draggable={this.props.draggable} onDragStart={this.dragStartHandler} title={title}
                        href={this.props.href} onClick={this.clickHandler} className={className}
                        disabled={this.state.disabled}  name={this.props.name}  style={style}>
-                        <i className={iconClass+" "+this.props.iconCls}
+                        <i className={"wasabi-icon "+this.props.iconCls}
                            style={{display:(this.props.iconCls==null||this.props.iconCls=="")?"none":"inline-block"}}></i>
                         <div className="wasabi-linkbutton-text" style={linkTextStyle}>{this.props.title}</div>
 

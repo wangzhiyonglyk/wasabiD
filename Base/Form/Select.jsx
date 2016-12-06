@@ -121,7 +121,7 @@ let Select=React.createClass({
             data:newData,
             value:this.props.value,
             text:text,
-            ulShow:false,//是否显示下拉选项
+            show:false,//是否显示下拉选项
             multiple:this.props.multiple,
             min:this.props.min,
             max:this.props.max,
@@ -221,7 +221,7 @@ let Select=React.createClass({
         //    setTimeout(()=>
         //    {
         //        this.setState({
-        //            ulShow:false,
+        //            show:false,
         //        });
         //    },200);
         //
@@ -303,7 +303,7 @@ let Select=React.createClass({
             this.props.onClick();
         }
         this.setState({
-            ulShow: !this.state.ulShow
+            show: !this.state.show
         })
     },
     changeHandler:function(event) {
@@ -340,7 +340,7 @@ let Select=React.createClass({
         else
         {
             this.setState({
-                ulShow:false,
+                show:false,
                 value:value,
                 text:text,
             });
@@ -399,10 +399,10 @@ let Select=React.createClass({
         }//文本框的属性
         var control=null;
         if(this.state.data&&this.state.data.length>0) {
-            control = <ul style={{display:this.state.ulShow==true?"block":"none"}} >
+            control = <ul style={{display:this.state.show==true?"block":"none"}} >
                 <li key="searchli"  className="searchli" style={{display:this.state.data.length>8?"block":"none"}}><div   className="search" style={{width:this.props.width}}>
-                    <input type="text" placeholder={this.props.placeholder}
-                           value={this.state.filterValue} onChange={this.filterChangeHandler } />
+                    <input type="text" placeholder={"请输入过滤条件"}
+                           value={this.state.filterValue}  onChange={this.filterChangeHandler } />
                     <div className="icon" ></div>
                 </div></li>
                 {
@@ -430,7 +430,7 @@ let Select=React.createClass({
                 <div className={ "wasabi-form-group-body"} >
                     <div className={"nice-select "} style={style}  onMouseOut={this.mouseOutHandler}   >
                         <i className={"picker-clear"} onClick={this.clearHandler} style={{display:this.state.readonly?"none":(this.state.value==""||!this.state.value)?"none":"inline"}}></i>
-                        <i className={"icon "} onClick={this.showItem}></i>
+                        <i className={"icon "+(this.state.show?"rotate":"")} onClick={this.showItem}></i>
                         <input type="text" {...inputProps} value={this.state.text}  onClick={this.showItem}  onChange={this.changeHandler}  />
 
                         {

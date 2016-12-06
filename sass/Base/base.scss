@@ -3,6 +3,7 @@ date:2016-03-02
 edit by wangzhyong 从bootstrap中继承元素基本样式
 desc:基本样式
 */
+/*自定义字体*/
 @font-face {  font-family: 'icomoon';
     src:  url('../font/icomoon.eot?hfserp');
     src:  url('../font/icomoon.eot?hfserp#iefix') format('embedded-opentype'),
@@ -12,7 +13,26 @@ desc:基本样式
     font-weight: normal;
     font-style: normal;
 }
+/*
+自定义水波纹点按效果
+ */
+@keyframes ripple {
+    to {
+        transform: scale(2);
+        opacity: 0;
+    }
+}
+.ripple {
+    position: absolute;
+    background: rgba(0,0,0,.15);
+    border-radius: 100%;
+    transform: scale(0);
+    pointer-events: none;
+    animation: ripple .45s ease-out;
+    width: 100%;
+    height: 100%;
 
+}
 
 ul{
     list-style: none;
@@ -254,7 +274,7 @@ body {
 调整一下样式风格
 */
 a {
-    color: #1ec9c3;
+    color: #2ec9c2;
     text-decoration: none;
     cursor: default;
 }

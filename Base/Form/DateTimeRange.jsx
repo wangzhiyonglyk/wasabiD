@@ -249,6 +249,17 @@ let DateTimeRange=React.createClass({
                 }
         }
     },
+    beginTimeHandler:function (time) {
+        console.log(time);
+        this.setState({
+            first_time:time,
+        })
+    },
+    endTimeHandler:function (time) {
+        this.setState({
+            second_time:time,
+        })
+    },
     cancelHandler:function() {
         this.props.onSelect(null,null,this.props.name);
     },
@@ -269,14 +280,14 @@ let DateTimeRange=React.createClass({
         }
          return (<div>
              <div className="ok">
-                 <div style={{float:"left",marginTop:5}} >
-                     <Time name="begin" type="time" key="begin" ref="begin" hour={firstHour} minute={firstMinute} second={firstSecond}></Time>
+                 <div style={{float:"left",marginLeft:5,marginTop:5}} >
+                     <Time name="begin" type="time" key="begin" onSelect={this.beginTimeHandler} ref="begin" hour={firstHour} minute={firstMinute} second={firstSecond}></Time>
                  </div>
-                 <div  style={{float:"left",marginTop:5}}>
-                     <Time name="end" type="time" key="end" ref="end" hour={secondHour} minute={secondMinute} second={secondSecond}></Time>
+                 <div  style={{float:"left",marginLeft:68,marginTop:5,height:32}}>
+                     <Time name="end" type="time" key="end" ref="end" onSelect={this.endTimeHandler}  hour={secondHour} minute={secondMinute} second={secondSecond}></Time>
                      </div>
-                 <Button title="确定" name="ok"  theme="green" onClick={this.onSelectHandler}></Button>
-                 <Button title="取消" name="ok"  theme="cancel" onClick={this.cancelHandler}></Button>
+                 <Button title="确定" name="ok" ripple={false} theme="green" onClick={this.onSelectHandler}></Button>
+                 <Button title="取消" name="ok" ripple={false} theme="cancel" onClick={this.cancelHandler}></Button>
              </div>
             <DateD   isRange={true}  year={this.state.first_year} month={this.state.first_month} day={this.state.first_day}
                         min={this.state.first_min} max={this.state.first_max}

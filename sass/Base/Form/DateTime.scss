@@ -2,16 +2,21 @@
 .wasabi-datetime{
   float:left;
   width:248px;
-  height:247px;
+  height:243px;
   z-index: 4;
   display: inline-block;
   background-color: white;
-  padding: 0px;
+  padding-left: 3px;
+  padding-right: 3px;
+}
+.range .wasabi-datetime:first-child
+{
+  padding-left: 6px;
 }
 
 .wasabi-datetime-header{
   width:248px;
-  height:32px;
+  height:30px;
   text-align: center;
   position: relative;
   margin-top: 5px;
@@ -24,14 +29,13 @@
 }
 .wasabi-datetime-header .header-text
 {
-  height: 32px;
-  line-height: 32px;
+  height: 30px;
+  line-height: 30px;
   width: 100%;
   text-align: center;
 }
 .wasabi-datetime-header .triangle-left {
   float:left;
-  font-size: 20px;
   cursor: pointer;
   margin-top: -30px;
   margin-left: 10px;
@@ -39,28 +43,24 @@
 }
 .wasabi-datetime-header .triangle-left:after{
   font-family: 'icomoon' !important;
-  font-size: 22px;
+  font-size: 25px;
   content:"\e903";
 
-  width: 22px;
-  height: 22px;
+
 }
 .wasabi-datetime-header .triangle-right {
 
   float: right;
-  font-size: 22px;
   cursor: pointer;
   margin-top: -30px;
   margin-right: 10px;
-  width:22px;
+
 }
 .wasabi-datetime-header .triangle-right:after{
   font-family: 'icomoon' !important;
-  font-size: 22px;
-  color: transparent;
+  font-size: 25px;
   content:"\e904";
-  width:22px;
-  height: 22px;
+
 }
 
 
@@ -77,8 +77,6 @@
   background-color: #f7f8fa;
   width: 238px;
   height: 30px;
-  margin-left: 5px;
-  margin-right: 5px;
   overflow: hidden;
 
 }
@@ -195,38 +193,30 @@
 .wasabi-time-picker-panel-inner {
   display: inline-block;
   position: relative;
-  outline: none;
-  border: 1px solid #d9d9d9;
   list-style: none;
   font-size: 12px;
   text-align: left;
   background-color: #fff;
   background-clip: padding-box;
   line-height: 1.5;
-  overflow: hidden;
+  overflow: visible;
   z-index:5;
+  width: 100px;
+
 
 }
 /*
-自定义输入框，暂时不用
+时间样式
 */
 .wasabi-time-picker-panel-input-wrap {
   box-sizing: border-box;
   position: relative;
-  padding: 6px;
   height:30px;
-  border-bottom: 1px solid #e9e9e9;
-  width: 165px;
 }
 
 .wasabi-time-picker-panel-input {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  width: 100%;
-  cursor: auto;
-  line-height: 1.5;
-  outline: 0;
+ height: 30px;
+  width: 100px;
 }
 
 .wasabi-time-picker-panel-clear-btn {
@@ -245,8 +235,10 @@
 }
 .wasabi-time-picker-panel-combobox
 {
-  height: 144px;
   overflow: hidden;
+  width: 168px;
+  background: white;
+  height: 0px;
   -webkit-transition:height 0.5s;
   transition: height 0.5s;
 }
@@ -295,6 +287,7 @@
   user-select: none;
   -webkit-transition: background .3s ease;
   transition: background .3s ease;
+  background-color: white;
 }
 .wasabi-time-picker-panel-select li.timeitem:hover {
   background-color: #25d7b9;

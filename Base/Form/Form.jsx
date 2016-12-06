@@ -429,14 +429,13 @@ var Form=React.createClass({
         else {
 
         }
-        let orderIndex=0;//表单组件在表单的序号,
+        let orderIndex=0;//表单组件在表单的序号
         return (
             <div className={"wasabi-form "+result.columnClass+" "+this.props.className } style={result.style}>
                 <div  className={"form-body  "}>
                     {
 
                         this.state.model.map((child,index) =>{
-
                             let position=orderIndex%result.columns;//求余,计算在表单中列位置
                             if(position==0)
                             {
@@ -450,40 +449,38 @@ var Form=React.createClass({
                                 position="default";
                             }
                             var size=child.onlyline==true?"onlyline":child.size;//组件大小
-                            if(size=="default")
-                            {
-                                orderIndex++;
-                            }
-                            else if(size=="large"||size=="two")
-                            {
-
-                                if(result.columns==1)
-                                {
-                                    orderIndex++;//每行只有一列,算一列
-                                }
-                                else {
-                                    orderIndex+=2;//算两列
-                                }
+                            if(child.hide==true)
+                            {//如果隐藏的话，不计算序号
 
                             }
-                            else if(size=="three")
-                            {
-
-                                if(result.columns==1||result.columns==2)
-                                {
-                                    orderIndex++;//每行只有一列或者两列,算一列
+                            else {
+                                if (size == "default") {
+                                    orderIndex++;
                                 }
-                                else {
-                                    orderIndex+=3;//算三列
+                                else if (size == "large" || size == "two") {
+
+                                    if (result.columns == 1) {
+                                        orderIndex++;//每行只有一列,算一列
+                                    }
+                                    else {
+                                        orderIndex += 2;//算两列
+                                    }
+
                                 }
+                                else if (size == "three") {
 
+                                    if (result.columns == 1 || result.columns == 2) {
+                                        orderIndex++;//每行只有一列或者两列,算一列
+                                    }
+                                    else {
+                                        orderIndex += 3;//算三列
+                                    }
+
+                                }
+                                else if (size == "onlyline") {
+                                    orderIndex += result.columns;
+                                }
                             }
-                            else if(size=="onlyline")
-                            {
-                                orderIndex+=result.columns;
-                            }
-
-
                             return(
                                 <Input ref={child.name}
                                        key={child.name+index.toString()}

@@ -2,6 +2,7 @@
 按钮样式
 */
 @import url("../base.scss");
+
 .wasabi-button
 {
   display: inline-block;
@@ -15,6 +16,7 @@
   outline:none;
   cursor:pointer;
   position: relative;
+  overflow: hidden;
 }
 .wasabi-button.size-large{
   height: 34px;
@@ -35,7 +37,7 @@
   background-color: #337ab7;
   border-color: #2e6da4;
 }
-.wasabi-button.primary:hover,.wasabi-button.primary:active{
+.wasabi-button.primary:hover{
   color: #fff;
   background-color: #204d74;
   border-color: #122b40;
@@ -58,7 +60,7 @@
   background-color: #5cb85c;
   border-color: #4cae4c;
 }
-.wasabi-button.success:hover,.wasabi-button.success:active{
+.wasabi-button.success:hover{
   color: #fff;
   background-color: #449d44;
   border-color: #398439;
@@ -69,7 +71,7 @@
   background-color: #5bc0de;
   border-color: #46b8da;
 }
-.wasabi-button.info:hover,.wasabi-button.info:active{
+.wasabi-button.info:hover{
   color: #fff;
   background-color: #31b0d5;
   border-color: #269abc;
@@ -80,7 +82,7 @@
   background-color: #f0ad4e;
   border-color: #eea236;
 }
-.wasabi-button.warning:hover,.wasabi-button.warning:active{
+.wasabi-button.warning:hover{
   color: #fff;
   background-color: #ec971f;
   border-color: #d58512;
@@ -91,7 +93,7 @@
   background-color: #d9534f;
   border-color: #d43f3a;
 }
-.wasabi-button.danger:hover,.wasabi-button.danger:active{
+.wasabi-button.danger:hover{
   color: #fff;
   background-color: #c9302c;
   border-color: #ac2925;
@@ -129,7 +131,7 @@
   background: linear-gradient(#27dcbd,#0ec2bc);
   border:none;
 }
-.wasabi-button.green:active
+.wasabi-button.green:hover
 {
   color:#ffffff;
   background: linear-gradient( #0ec2bc,#27dcbd);

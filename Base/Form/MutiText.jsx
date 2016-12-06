@@ -197,7 +197,7 @@ var MutiText=React.createClass({
                 <div className={ "wasabi-form-group-body"} style={{width:!this.props.label?"100%":null}}>
                     <div className="combobox"  style={{display:this.props.hide==true?"none":"block"}}   >
                         <i className={"picker-clear"} onClick={this.clearHandler} style={{display:this.state.readonly?"none":(this.state.value==""||!this.state.value)?"none":"inline"}}></i>
-                        <i className={"pickeradd"} onClick={this.showPicker}></i>
+                        <i className={"pickeradd" +(this.state.show?"rotate":"")} onClick={this.showPicker}></i>
                         <input type="text"  {...inputProps}  value={this.state.text} onChange={this.onlineChangeHandler}      />
                         <div className={"dropcontainter  mutiText "+this.props.position} style={{display:this.state.show==true?"block":"none"}}  >
                             <div style={{height:30,lineHeight:"30px",color:"#aaaaaa",overflow:"hidden"}}>{this.props.title}</div>

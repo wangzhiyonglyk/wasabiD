@@ -85,9 +85,6 @@ let DataGridExtend= {
              */
             if (!this.state.height) {//如果没有设定高度
                 let blankHeight = this.clientHeight - this.refs.grid.getBoundingClientRect().top - 5;//当前页面的空白高度
-                if (blankHeight < 250) {
-                    blankHeight = 250;//如果空白高度太小了,设置最小高度,防止页面布局太难看
-                }
                 this.setState({
                     height: blankHeight
                 })
@@ -303,8 +300,8 @@ let DataGridExtend= {
             //使用label,因为多个列可能绑定一个字段
             if (headers[index].label == this.menuHeaderName) {//需要隐藏的列
                  headerMenu.push(this.menuHeaderName);//放入隐藏列中
-                headers[index].hidden=true;
-                this.refs.headermenu.style.display = "none";
+                headers[index].hide=true;
+                this.refs.headermenu.style.display = "none";//隐藏菜单
                 this.menuHeaderName=null;//清空
             }
 
@@ -325,7 +322,7 @@ let DataGridExtend= {
             //使用label,因为多个列可能绑定一个字段
             if (headers[index].label == label) {//需要显示的列
                 headerMenu.splice(itemIndex,1);//从隐藏列中删除
-                headers[index].hidden=false;//显示此列
+                headers[index].hide=false;//显示此列
                 this.refs.headermenu.style.display = "none";
 
             }
