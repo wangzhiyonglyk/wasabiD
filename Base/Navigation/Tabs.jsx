@@ -3,9 +3,9 @@
 //标签页组
 require("../../sass/Base/Layout/Tabs.scss");
 var React =require("react");
-var Tabs=React.createClass(
-    {
-
+var addRipple=require("../../Mixins/addRipple.js");
+var Tabs=React.createClass({
+      mixins:[addRipple],
         propTypes:{
             tabs:React.PropTypes.array.isRequired,
             theme: React.PropTypes.oneOf([//主题
@@ -32,7 +32,9 @@ var Tabs=React.createClass(
                 tabs:nextProps.tabs
             })
         },
-        tabClickHandler:function(index) {
+        tabClickHandler:function(index,event) {
+
+            this.rippleHandler(event);
             //页签单击事件
             var newTabs = this.state.tabs;
             for (var i = 0; i < newTabs.length; i++) {
@@ -52,7 +54,7 @@ var Tabs=React.createClass(
                     <div  >
                         {
                             this.state.tabs.map((child,i)=>{
-                                return    <a key={i} href="javascript:void(0);" onClick={this.tabClickHandler.bind(this,i)} className={"wasabi-tab "+this.props.theme+" "+(child.active==true?"active ":"")} >{child.title}</a>
+                                return    <a key={i} href="javascript:void(0);"  onClick={this.tabClickHandler.bind(this,i)} className={"wasabi-tab "+this.props.theme+" "+(child.active==true?"active ":"")} >{child.title}</a>
                             })
                         }
                     </div>

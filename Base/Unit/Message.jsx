@@ -5,26 +5,26 @@ var React=require("react");
 var ReactDOM=require("react-dom");
 var MessageView=require("./MessageView.jsx");
 var Message= {
-    alert(msg,timeout) {
+    info(msg,timeout) {
         if(!timeout)
         {
             timeout=2000;
         }
-        if (!!document.getElementById("alog-alert")) {
+        if (!!document.getElementById("alog-info")) {
             //存在
-            let child=document.getElementById("alog-alert");
+            let child=document.getElementById("alog-info");
             document.body.removeChild(child);
-            let alert = document.createElement("div");
-            alert.id="alog-alert";
-            document.body.appendChild(alert);
-            ReactDOM.render(<MessageView  type="alert" timeout={timeout} msg={msg}/>, document.getElementById("alog-alert"));
+            let info = document.createElement("div");
+            info.id="alog-info";
+            document.body.appendChild(info);
+            ReactDOM.render(<MessageView  type="info" timeout={timeout} msg={msg}/>, document.getElementById("alog-info"));
 
         }
         else {
-            let alert = document.createElement("div");
-            alert.id="alog-alert";
-            document.body.appendChild(alert);
-            ReactDOM.render(<MessageView  type="alert" timeout={timeout} msg={msg} />, document.getElementById("alog-alert"));
+            let info = document.createElement("div");
+            info.id="alog-info";
+            document.body.appendChild(info);
+            ReactDOM.render(<MessageView  type="info" timeout={timeout} msg={msg} />, document.getElementById("alog-info"));
         }
 
     },
@@ -73,6 +73,23 @@ var Message= {
             ReactDOM.render(<MessageView  type="error" timeout={timeout} msg={msg} />, document.getElementById("alog-error"));
         }
 
+    },
+    alert(msg){
+        if (!!document.getElementById("alog-alert")) {
+            //存在
+            let child=document.getElementById("alog-alert");
+            document.body.removeChild(child);
+            let alert = document.createElement("div");
+            alert.id="alog-alert";
+            document.body.appendChild(alert);
+            ReactDOM.render(<MessageView type="alert" msg={msg}  />, document.getElementById("alog-alert"));
+        }
+        else {
+            let alert = document.createElement("div");
+            alert.id="alog-alert";
+            document.body.appendChild(alert);
+            ReactDOM.render(<MessageView  type="alert" msg={msg}  />, document.getElementById("alog-alert"));
+        }
     },
     confirm(msg,success,cancel) {
         if (!!document.getElementById("alog-confirm")) {

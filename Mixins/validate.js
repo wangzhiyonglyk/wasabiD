@@ -24,134 +24,140 @@ let Validate={
             //非只读
 
             if (value!=null&&value!=undefined && value !== "") {//注意一定要加双等号，用户输入了值，验证有效性
-                if (this.props.regexp && this.props.regexp !== "") {  //有正则表达式
+                if(value.indexOf("<script>")>-1||value.indexOf("--")>-1) {//判断有效性，TODO 后期改为正则
+                        isvalidate=false;
+                        helpTip="输入非法";
+                    }
+                else if (this.props.regexp && this.props.regexp !== "") {  //有正则表达式
 
                     isvalidate = this.props.regexp.test(value);
-                    if (!isvalidate) {
+                    if (!isvalidate) {//无效
 
                         if (!this.props.invalidTip && this.props.invalidTip !== "") {//用户自定义错误提示信息
                             helpTip = this.props.invalidTip;
                         }
-                        else {
+                        else {//用默认提示
                             helpTip = validation["invalidTip"];
                         }
                     }
-                    else {
+                    else {//有效
                     }
                 }
-                else {
-                    //没有正则表达式，则验证默认正则
+                else {//没有正则表达式，则验证默认正则
 
-                    if (regexp[this.props.type]) {
+                        if (regexp[this.props.type]) {
 
-                        if(typeof regexp[this.props.type] =="function")
-                        {
-                            isvalidate=regexp[this.props.type](value);
+                            if (typeof regexp[this.props.type] == "function") {
+                                isvalidate = regexp[this.props.type](value);
+                            }
+                            else {
+                                isvalidate = regexp[this.props.type].test(value);
+                            }
+
+
+                            if (!isvalidate) {
+                                helpTip = validation[this.props.type];
+                            }
                         }
-                        else
-                        {
-                            isvalidate = regexp[this.props.type].test(value);
-                        }
+                        else {
 
-
-                        if (!isvalidate) {
-                            helpTip = validation[this.props.type];
                         }
                     }
-                    else {
 
-                    }
-                }
+                    if(!isvalidate)
+                    {//无效再验证
+                        //判断大小，长度等
+                        if (this.state.min!=null&&this.state.min!=undefined) {
+                            switch (this.props.type) {
+                                case "text":
+                                    if (value.toString().length < this.state.min) {
+                                        isvalidate = false;
+                                        helpTip = "长度不能小于" + this.state.min;
+                                    }
+                                    break;
+                                case "password":
+                                    if (value.toString().length < this.state.min) {
+                                        isvalidate = false;
+                                        helpTip = "长度不能小于" + this.state.min;
+                                    }
+                                    break;
+                                case "number":
 
-                //判断大小，长度等
-                if (this.state.min!=null&&this.state.min!=undefined) {
-                    switch (this.props.type) {
-                        case "text":
-                            if (value.toString().length < this.state.min) {
-                                isvalidate = false;
-                                helpTip = "长度不能小于" + this.state.min;
+                                    if (value < this.state.min) {
+                                        isvalidate = false;
+                                        helpTip = "不能小于" + this.state.min;
+                                    }
+                                    break;
+                                case "integer":
+                                    if (value < this.state.min) {
+                                        isvalidate = false;
+                                        helpTip = "不能小于" + this.state.min;
+                                    }
+                                case "checkbox":
+                                    var valueArr=value.toString().split(",");
+                                    if(valueArr.length<this.state.min)
+                                    {
+                                        isvalidate=false;
+                                        helpTip="最少选择"+this.state.min.toString()+"项";
+                                    }
+                                    break;
+                                case "select":
+                                    var valueArr=value.toString().split(",");
+                                    if(valueArr.length<this.state.min)
+                                    {
+                                        isvalidate=false;
+                                        helpTip="最少选择"+this.state.min.toString()+"项";
+                                    }
+                                    break;
                             }
-                            break;
-                        case "password":
-                            if (value.toString().length < this.state.min) {
-                                isvalidate = false;
-                                helpTip = "长度不能小于" + this.state.min;
+                        }
+                        if (this.state.max!=null&&this.state.max!=undefined) {
+                            switch (this.props.type) {
+                                case "text":
+                                    if (value.toString().length > this.state.max) {
+                                        isvalidate = false;
+                                        helpTip = "长度不能大于" + this.state.max;
+                                    }
+                                    break;
+                                case "password":
+                                    if (value.toString().length > this.state.max) {
+                                        isvalidate = false;
+                                        helpTip = "长度不能大于" + this.state.max;
+                                    }
+                                    break;
+                                case "number":
+                                    if (value > this.state.max) {
+                                        isvalidate = false;
+                                        helpTip = "不能大于" + this.state.max;
+                                    }
+                                    break;
+                                case "integer":
+                                    if (value > this.state.max) {
+                                        isvalidate = false;
+                                        helpTip = "不能大于" + this.state.max;
+                                    }
+                                    break;
+                                case "checkbox":
+                                    var valueArr=value.toString().split(",");
+                                    if(valueArr.length>this.state.max)
+                                    {
+                                        isvalidate=false;
+                                        helpTip="最多选择"+this.state.max.toString()+"项";
+                                    }
+                                    break;
+                                case "select":
+                                    var valueArr=value.toString().split(",");
+                                    if(valueArr.length>this.state.max)
+                                    {
+                                        isvalidate=false;
+                                        helpTip="最多选择"+this.state.max.toString()+"项";
+                                    }
+                                    break;
                             }
-                            break;
-                        case "number":
+                        }
+                    }
 
-                            if (value < this.state.min) {
-                                isvalidate = false;
-                                helpTip = "不能小于" + this.state.min;
-                            }
-                            break;
-                        case "integer":
-                            if (value < this.state.min) {
-                                isvalidate = false;
-                                helpTip = "不能小于" + this.state.min;
-                            }
-                            case "checkbox":
-                                var valueArr=value.toString().split(",");
-                                if(valueArr.length<this.state.min)
-                                {
-                                    isvalidate=false;
-                                    helpTip="最少选择"+this.state.min.toString()+"项";
-                                }
-                            break;
-                        case "select":
-                            var valueArr=value.toString().split(",");
-                            if(valueArr.length<this.state.min)
-                            {
-                                isvalidate=false;
-                                helpTip="最少选择"+this.state.min.toString()+"项";
-                            }
-                            break;
-                    }
-                }
-                if (this.state.max!=null&&this.state.max!=undefined) {
-                    switch (this.props.type) {
-                        case "text":
-                            if (value.toString().length > this.state.max) {
-                                isvalidate = false;
-                                helpTip = "长度不能大于" + this.state.max;
-                            }
-                            break;
-                        case "password":
-                            if (value.toString().length > this.state.max) {
-                                isvalidate = false;
-                                helpTip = "长度不能大于" + this.state.max;
-                            }
-                            break;
-                        case "number":
-                            if (value > this.state.max) {
-                                isvalidate = false;
-                                helpTip = "不能大于" + this.state.max;
-                            }
-                            break;
-                        case "integer":
-                            if (value > this.state.max) {
-                                isvalidate = false;
-                                helpTip = "不能大于" + this.state.max;
-                            }
-                            break;
-                        case "checkbox":
-                            var valueArr=value.toString().split(",");
-                            if(valueArr.length>this.state.max)
-                            {
-                                isvalidate=false;
-                                helpTip="最多选择"+this.state.max.toString()+"项";
-                            }
-                            break;
-                        case "select":
-                            var valueArr=value.toString().split(",");
-                            if(valueArr.length>this.state.max)
-                            {
-                                isvalidate=false;
-                                helpTip="最多选择"+this.state.max.toString()+"项";
-                            }
-                            break;
-                    }
-                }
+
             }
             else {//输入没有输入
                 if (required) {

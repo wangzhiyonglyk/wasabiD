@@ -45,6 +45,7 @@ let Time=React.createClass({
     setInitValue:function(props)
     {
         var date=new Date();
+
         var hour=props.hour?props.hour:date.getHours();
         var minute=props.hour?props.minute:date.getMinutes();
         var second=props.hour?props.second:date.getSeconds();

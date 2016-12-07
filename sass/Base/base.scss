@@ -1,76 +1,11 @@
 /*create by wangzy
 date:2016-03-02
-edit by wangzhyong 从bootstrap中继承元素基本样式
+edit by wangzhyong 扩展一些基本属性
 desc:基本样式
 */
-/*自定义字体*/
-@font-face {  font-family: 'icomoon';
-    src:  url('../font/icomoon.eot?hfserp');
-    src:  url('../font/icomoon.eot?hfserp#iefix') format('embedded-opentype'),
-    url('../font/icomoon.ttf?hfserp') format('truetype'),
-    url('../font/icomoon.woff?hfserp') format('woff'),
-    url('../font/icomoon.svg?hfserp#icomoon') format('svg');
-    font-weight: normal;
-    font-style: normal;
-}
-/*
-自定义水波纹点按效果
- */
-@keyframes ripple {
-    to {
-        transform: scale(2);
-        opacity: 0;
-    }
-}
-.ripple {
-    position: absolute;
-    background: rgba(0,0,0,.15);
-    border-radius: 100%;
-    transform: scale(0);
-    pointer-events: none;
-    animation: ripple .45s ease-out;
-    width: 100%;
-    height: 100%;
 
-}
+@import url("./animation.scss");
 
-ul{
-    list-style: none;
-    margin: 0px;
-    padding: 0px;
-}
-
-/*
-自定义文本显示方式
-*/
-.ellipsis
-{
-
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    display: inline;
-    float:left;
-}
-/*
-用于清除浮动时父容器的高度问题
-*/
-.clear{ clear:both}
-
-/*
-自定义滚动条样式
-*/
-::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
-}
-::-webkit-scrollbar-track-piece {
-    background-color: #ffffff;
-}
-::-webkit-scrollbar-thumb {
-    background-color: #D1D1D1;
-    border-radius: 5px;
-}
 
 /*
 以为微软雅黑为主体

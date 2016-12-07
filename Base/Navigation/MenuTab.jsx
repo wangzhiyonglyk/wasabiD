@@ -2,7 +2,9 @@
 //date:2016-04-05后开始独立改造
 //标签页
 var React =require("react");
+var addRipple=require("../../Mixins/addRipple.js");
 var MenuTab=React.createClass({
+    mixins:[addRipple],
         propTypes:
         {
             index:React.PropTypes.number.isRequired,//在父组件中的序号，用于关闭
@@ -22,6 +24,7 @@ var MenuTab=React.createClass({
             }
         },
         clickHandler:function(event) {
+            this.rippleHandler(event);
             if(event.target.nodeName=="A"||event.target.className=="text"||event.target.className=="icon")
             {
                 this.props.clickHandler(this.props.index);

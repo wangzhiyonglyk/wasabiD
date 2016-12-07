@@ -135,15 +135,16 @@ iframe
 }
 
 .wasabi-nav-tabs > li .icon{
-    float: left;
-    width: 12px;
-    height: 12px;
-    background-size: 12px 12px;
-    top: 13px;
-    left:10px;
+    top: 12px;
+    left: 10px;
     position: absolute;
+    font-size: 16px;
+    color: #86a0a1;
 
 
+}
+.wasabi-nav-tabs > li.active .icon {
+    color: white;
 }
 .wasabi-nav-tabs > li .closeicon{
 

@@ -8,6 +8,7 @@ var React =require("react");
 var Tab=require("./MenuTab.jsx");
 var TabSection=require("./MenuTabSection.jsx");
 var LinkButton=require("../Buttons/LinkButton.jsx");
+
 class MenuTabs extends  React.Component {
     constructor(props) {
         super(props);
@@ -71,6 +72,7 @@ class MenuTabs extends  React.Component {
 
 
     tabClickHandler(index) {
+
         //页签单击事件
         var newTabs = this.state.tabs;
         //当前激动的tab下标保存

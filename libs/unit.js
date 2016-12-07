@@ -473,7 +473,7 @@ baseUtil.showError=function(msg) {
     error.id="alog-error";
     error.title="";
     error.style.position="absolute";
-    error.style.zIndex=99999;
+    error.style.zIndex=9;
     error.innerHTML = '<div class="wasabi-message error"   >'
         + '<div class="notice">' + msg + '</div>'
         + ' </div>';
@@ -500,10 +500,10 @@ baseUtil.showError=function(msg) {
             let child = document.getElementById("alog-error");
 
         if (child&&child.title=="") {
-            child.style.opacity=0.5;
+            child.style.opacity=0.7;
             child.style.transition="opacity 2s";
         }
-    },10);
+    },1000);
         setTimeout(()=> {
             let child = document.getElementById("alog-error");
         if (child&&child.title=="") {

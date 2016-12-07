@@ -61,22 +61,20 @@ desc:导入功能组件样式
 {
   position: absolute;
   top: 70px;
-  left: 45px;
+  left: 55px;
   color: #2ec9c2;
 }
 
 .import-downloadmodel:before
 {
   font-family: 'icomoon' !important;
-  content:"\e914";
+  content: "\e914";
   color: #2ec9c2;
-
-  width: 12px;
-  height: 12px;
   background-size: 12px 12px;
   position: absolute;
-  left: -12px;
-  top: 0px;
+  left: -19px;
+  font-size: 20px;
+  top: -5px;
 }
 
 .import-submit

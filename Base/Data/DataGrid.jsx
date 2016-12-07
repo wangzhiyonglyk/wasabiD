@@ -308,9 +308,10 @@ var DataGrid=React.createClass({
         }
 
         this.state.data.map((rowData,rowIndex)=> {
-            let tds = [];
+            let tds = [];//当前的列集合
+            let key=this.getKey(rowIndex);//获取这一行的关键值
+            //设置这一行的选择列
             if (this.props.selectAble) {
-                let key = this.getKey(rowIndex);
                 let props = {
                     value: this.state.checkedData.has(key) == true ? key : null,
                     data: [{value: key, text: ""}],
@@ -333,6 +334,7 @@ var DataGrid=React.createClass({
                 }
             }
 
+            //生成数据列
             this.state.headers.map((header, columnIndex) => {
                 if (!header||header.hide) {
                     return;
@@ -374,11 +376,16 @@ var DataGrid=React.createClass({
                 // style={{textAlign:(header.align?header.align:"left"),whiteSpace:whiteSpace}}
                 if (columnIndex==0&&this.props.detailAble) {
                     //在第一列显示详情
+                    var iconCls="icon-down";//详情列的图标
+                    if(this.state.detailIndex==key)
+                    {
+                        iconCls="icon-up";//详情列-展开
+                    }
                     tds.push(<td onClick={this.detailHandler.bind(this,rowIndex,rowData)}
                                  key={"col"+rowIndex.toString()+"-"+columnIndex.toString()}>
                         <div className="wasabi-table-cell" style={{width:(header.width?header.width:null),textAlign:(header.align?header.align:"left")}}>
                             {content}
-                            <LinkButton iconCls="icon-detail" tip="查看详情"></LinkButton>
+                            <LinkButton iconCls={iconCls} color="#666666" tip="查看详情"></LinkButton>
 
                         </div>
                     </td>);
@@ -401,7 +408,7 @@ var DataGrid=React.createClass({
                 trClassName="selected";
             }
             trobj.push(<tr  className={trClassName} key={"row"+rowIndex.toString()}    onMouseDown={this.onMouseDown.bind(this,rowIndex)}>{tds}</tr>);
-            var key=this.getKey(rowIndex);
+
             if(this.state.detailIndex==key)
             {
 

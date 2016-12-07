@@ -75,9 +75,13 @@ let DataGridExtend= {
             //列表的原始表头的列
             var bodyTableHeader = this.refs.bodytable.children[0].children[0].children;
 
+            var allwidth=0;
             for (let index = 0; index < bodyTableHeader.length; index++) {//遍历，如果原始表头的列的宽度与固定表头对应列不一样,就设置
-                if (bodyTableHeader[index].getBoundingClientRect().width != headerTableHeader[index].getBoundingClientRect().width) {
-                    headerTableHeader[index].children[0].style.width = bodyTableHeader[index].getBoundingClientRect().width + "px";
+                //设置cell的宽度
+                if (headerTableHeader[index].children[0].getBoundingClientRect().width != bodyTableHeader[index].children[0].getBoundingClientRect().width) {
+                    headerTableHeader[index].children[0].style.width = bodyTableHeader[index].children[0].getBoundingClientRect().width + "px";
+                    bodyTableHeader[index].children[0].style.width = bodyTableHeader[index].children[0].getBoundingClientRect().width + "px";
+
                 }
             }
             /*
@@ -269,7 +273,7 @@ let DataGridExtend= {
                     }
 
                 }
-                else {//非要调整的列
+                else {//不要调整的列
                     if (headers[index].width) {//已经自定义过宽度了
 
                     }

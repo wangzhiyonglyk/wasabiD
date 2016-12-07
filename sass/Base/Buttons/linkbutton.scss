@@ -24,6 +24,10 @@ desc:小图标按钮样式
     background-color: transparent;
 
 }
+.wasabi-linkbutton.none:hover
+{
+background-color: rgba(0,0,0,0.05);
+}
 .wasabi-linkbutton.default {
     border: 1px solid #bbb;
     background-color: #FAFAFA;

@@ -197,15 +197,15 @@ var MutiText=React.createClass({
                 <div className={ "wasabi-form-group-body"} style={{width:!this.props.label?"100%":null}}>
                     <div className="combobox"  style={{display:this.props.hide==true?"none":"block"}}   >
                         <i className={"picker-clear"} onClick={this.clearHandler} style={{display:this.state.readonly?"none":(this.state.value==""||!this.state.value)?"none":"inline"}}></i>
-                        <i className={"pickeradd" +(this.state.show?"rotate":"")} onClick={this.showPicker}></i>
+                        <i className={"pickeradd " +(this.state.show?"rotate":"")} onClick={this.showPicker}></i>
                         <input type="text"  {...inputProps}  value={this.state.text} onChange={this.onlineChangeHandler}      />
                         <div className={"dropcontainter  mutiText "+this.props.position} style={{display:this.state.show==true?"block":"none"}}  >
                             <div style={{height:30,lineHeight:"30px",color:"#aaaaaa",overflow:"hidden"}}>{this.props.title}</div>
                        <textarea value={areaValue} ref="input" onChange={this.changeHandler}
                                  style={{width:"100%",height:100,border:"1px solid #d7dde2",resize:"none"}}></textarea>
                             <div className="ok" >
-                                <Button title="确定" name="ok"  theme="green" onClick={this.onSelectHandler}></Button>
-                                <Button title="取消" name="ok"  theme="cancel" onClick={this.cancelHandler}></Button>
+                                <Button title="确定" name="ok"  ripple={false} theme="green" onClick={this.onSelectHandler}></Button>
+                                <Button title="取消" name="ok"  ripple={false}  theme="cancel" onClick={this.cancelHandler}></Button>
                             </div>
                         </div>
                     </div>

@@ -74,12 +74,38 @@
   border-collapse: collapse;
   margin-bottom: 2px;
   width: 100%;
+
 }
 
 .wasabi-table .table > thead > tr > th
 {
   background-color: #eff0f1;
+
 }
+.wasabi-table .table > thead > tr > th,
+.wasabi-table .table > tbody > tr > td {
+  border-right: 1px solid #e3e4e5;
+  border-bottom: 1px solid #e3e4e5;
+  padding: 0px;
+}
+.wasabi-table .table > thead > tr > th:last-child
+{
+  border-right: 0px;
+}
+.wasabi-table .table >  tbody > tr > td:last-child
+{
+  border-right: 0px;
+}
+
+/*
+没有边框的时候
+*/
+
+.wasabi-table .table.table-no-bordered > tbody > tr > td {
+  border-right: 1px solid transparent;
+}
+
+
 /*
 序号列,与checkbox 边距10,为了保持与其他组件对齐
 */
@@ -88,31 +114,15 @@
   padding-right: 10px;
   width:34px ;
 
-
 }
 
 .wasabi-table .table > tbody > tr > td.check-column .wasabi-table-cell
 {
   padding-left: 10px;
   padding-right: 10px;
+  width:34px ;
 }
 
-.wasabi-table .table > thead > tr > th,
-.wasabi-table .table > tbody > tr > td {
-  border-right: 1px solid #e3e4e5;
-  border-bottom: 1px solid #e3e4e5;
-}
-.wasabi-table .table > thead > tr > th:last-child
-{
-  border-right: 0px solid #e3e4e5;
-}
-/*
-没有边框的时候
-*/
-
-.wasabi-table .table.table-no-bordered  > tbody > tr > td {
-  border: none;
-}
 
 
 /*
@@ -132,10 +142,6 @@
 单元格样式
 */
 .wasabi-table .wasabi-table-cell{
-  margin: 0px;
-  white-space: nowrap;
-  word-wrap: normal;
-  overflow: hidden;
   padding-top: 14px;
   padding-bottom: 14px;
   padding-left: 5px;

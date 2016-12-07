@@ -13,10 +13,11 @@
   padding-left: 60px;
   padding-right: 20px;
   position: fixed;
-  top: 100px;
-  left: 45%;
-  z-index: 9999999;
+  top: 0px;
+  left: 35%;
+  z-index: 9;
   white-space: pre-wrap;
+  -webkit-transition: opacity 2s;
   transition:opacity 2s;
 }
 .wasabi-message.success
@@ -25,9 +26,11 @@
 }
 .wasabi-message.error
 {
+  -webkit-animation: shake 0.5s;
+          animation: shake 0.5s;
   background-color: #f93123;
 }
-.wasabi-message.alert
+.wasabi-message.info
 {
   background-color: #f58030;
 }
@@ -37,7 +40,6 @@
 {
   font-size: 18px;
   color: #ffffff;
-  font-family: 微软雅黑;
   font-weight: normal;
   position: relative;
   bottom: 1px;
@@ -65,7 +67,7 @@
 {
   background-image: url("../../../img/icons/message_error.png");
 }
-.wasabi-message.alert .notice:before
+.wasabi-message.info .notice:before
 {
   background-image: url("../../../img/icons/message_info.png");
 }
@@ -75,10 +77,10 @@
   height: 140px;
   box-shadow: 0px 0px 40px #d8d8d8;
   background-color: #ffffff;
-  position: absolute;
-  top: 30%;
-  left: 30%;
-  z-index: 9999999;
+  position: fixed;
+  top: 0px;
+  left: 35%;
+  z-index: 9;
 
 }
 .wasabi-confirm .message {
@@ -92,7 +94,6 @@
   font-size: 18px;
   color: #666666;
   text-align: center;
-  font-family: 微软雅黑;
   font-weight: normal;
 }
 .wasabi-confirm .message:before

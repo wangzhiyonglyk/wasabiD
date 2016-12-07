@@ -6,6 +6,7 @@ let MessageView= React.createClass({
     propTypes: {
         type:React.PropTypes.oneOf([
             "alert",
+            "info",
             "success",
             "error",
             "confirm",
@@ -33,7 +34,7 @@ let MessageView= React.createClass({
     },
     componentDidMount:function() {
         this.onmouse = false;////初始化
-        if (this.props.type == "confirm") {
+        if (this.props.type == "confirm"||this.props.type=="alert") {
 
         }
         else {
@@ -64,6 +65,11 @@ let MessageView= React.createClass({
 
         //先清空所有定时器
         this.onmouse=true;//标记属性在上面
+        for(var  index=0;index<this.timeoutArray.length;index++)
+        {
+            clearTimeout(this.timeoutArray[index]);//清除定时器
+        }
+
         this.setState({
             opacity:1,
         })
@@ -71,37 +77,30 @@ let MessageView= React.createClass({
     onMouseOut:function()
     {
         this.onmouse=false;//标记属性在上面
+
         this.timeOutHandler();//设置定时器
     },
     timeOutHandler:function() {
 
-        setTimeout(()=> {
-            if(this.onmouse==false) {
+       this.timeoutArray=[];
+       this.timeoutArray.push( setTimeout(()=> {
+           if(this.onmouse==false) {
+               this.setState({
+                   opacity: 0.7,
+               })
+           }
+       }, 1000));
+      this.timeoutArray.push(
+          setTimeout(()=> {
+              if(this.onmouse==false) {
+                  this.setState({
 
+                      visible: false,
+                  })
+              }
+          }, this.props.timeout *2)
 
-                this.setState({
-                    opacity: 0.5
-                })
-                setTimeout(()=> {
-                    if(this.onmouse==false) {
-                        this.setState({
-                            opacity: 0,
-                            visible: false,
-                        })
-                    }
-                }, this.props.timeout);
-                setTimeout(()=> {
-                    if(this.onmouse==false) {
-                        this.setState({
-
-                            visible: false,
-                        })
-                    }
-                }, this.props.timeout * 2);
-
-            }
-        }, 10);
-
+        );
 
     },
 
@@ -109,6 +108,17 @@ let MessageView= React.createClass({
         return   <div onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} className={"wasabi-message "+this.props.type}
                       style={{display:this.state.visible?"inline-block":"none",opacity:this.state.opacity,transition:("opacity "+(this.props.timeout/1000).toString()+"s")}} >
             <div className="notice">{this.props.msg}</div>
+        </div>
+    },
+
+    renderAlert:function () {
+        return <div className="wasabi-confirm" style={{display:this.state.visible?"inline-block":"none"}}>
+            <div className="message">
+                {(this.props.msg==null||this.props.msg=="")?"友情提示?":this.props.msg}
+            </div>
+            <div className="buttons">
+                <Button theme="green" name="ok" title="确定" onClick={this.cancelHandler}></Button>
+            </div>
         </div>
     },
     renderConfirm:function() {
@@ -125,12 +135,14 @@ let MessageView= React.createClass({
     render: function () {
         switch (this.props.type)
         {
-            case "alert":
+            case "info":
                 return this.renderInfo();
             case "success":
                 return this.renderInfo();
             case "error":
                 return this.renderInfo();
+            case "alert":
+                return this.renderAlert();
             case "confirm":
                 return this.renderConfirm() ;
         }
