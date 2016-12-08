@@ -13,7 +13,7 @@
   padding-left: 60px;
   padding-right: 20px;
   position: fixed;
-  top: 0px;
+  top: 20%;
   left: 35%;
   z-index: 9;
   white-space: pre-wrap;
@@ -75,8 +75,8 @@
 .wasabi-confirm {
   width: 422px;
   height: 140px;
-  box-shadow: 0px 0px 40px #d8d8d8;
-  background-color: #ffffff;
+  box-shadow:  0px 3px 40px 0px rgba(0,0,0,0.4);
+  background-color: #FCFCFC;
   position: fixed;
   top: 0px;
   left: 35%;

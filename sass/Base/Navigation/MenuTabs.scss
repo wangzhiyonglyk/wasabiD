@@ -149,16 +149,15 @@ iframe
 .wasabi-nav-tabs > li .closeicon{
 
     position: absolute;
-    width: 8px;
-    height:8px;
-    top:15px;
+    width: 12px;
+    height:12px;
+    top: 13.44444px;
     right:8px;
     background-image:url('../../../img/icons/close.png') ;
-    background-size: 8px 8px;
+    background-size: 12px 12px;
 }
 
 .wasabi-nav-tabs > li .closeicon:hover{
-
     background-image:url('../../../img/icons/closehover.png') ;
 
 }

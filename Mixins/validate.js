@@ -17,17 +17,20 @@ let Validate={
         var readonly=this.state.readonly;
         var required=this.state.required;
         var helpTip="";
-        if(readonly)
-        {//不能直接返回，防止上一次的验证效果还在，导致无法消除
+        if(readonly) {//不能直接返回，防止上一次的验证效果还在，导致无法消除
         }
-        else {
-            //非只读
-
-            if (value!=null&&value!=undefined && value !== "") {//注意一定要加双等号，用户输入了值，验证有效性
-                if(value.indexOf("<script>")>-1||value.indexOf("--")>-1) {//判断有效性，TODO 后期改为正则
-                        isvalidate=false;
-                        helpTip="输入非法";
-                    }
+        else {//非只读
+             if (value!=null&&value!=undefined && value !== "") {//注意一定要加双等号，用户输入了值，验证有效性
+                //因为有可能输入0
+                if(value.toString()=="NaN")
+                {//多加一层判断，有可能用户
+                    isvalidate=false;
+                    helpTip="非有效数字";
+                }
+                else if(typeof value==="string"&&(value.indexOf("alert(")>-1||value.indexOf("<script>")>-1||value.indexOf("--")>-1)) {//判断有效性，TODO 后期改为正则
+                    isvalidate = false;
+                    helpTip = "输入非法";
+                }
                 else if (this.props.regexp && this.props.regexp !== "") {  //有正则表达式
 
                     isvalidate = this.props.regexp.test(value);

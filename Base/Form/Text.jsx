@@ -129,6 +129,10 @@ var Text=React.createClass({
     componentDidUpdate:function()
     {
         this.validateInput=true;//设置初始化值
+        if(this.state.helpTip=="非有效数字"||this.state.helpTip=="输入非法")
+        {
+            this.refs.input.select();
+        }
     },
     changeHandler:function(event) {
 
@@ -147,14 +151,14 @@ var Text=React.createClass({
                 }
                 else
                 {
-                    istrue = this.validate(event.target.value);
+                    istrue = this.validate(event.target.value,event.target);
                 }
 
 
 
             }
             else {//
-                istrue = this.validate(event.target.value);
+                istrue = this.validate(event.target.value,event.target);
             }
 
 

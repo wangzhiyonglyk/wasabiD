@@ -40,7 +40,7 @@ var MenuTab=React.createClass({
         },
         render: function () {
             return (
-                <li className ={this.props.active?"active":""} >
+                <li className ={this.props.active?"active":""}  title="双击可以关闭">
                     <a onDoubleClick={this.closeHandler}  onClick={this.clickHandler} >
                         <div className={"icon "+this.props.iconCls} style={{width:(this.props.iconCls==null?5:null)}}></div>
                         <div className="closeicon" onClick={ this.closeHandler}></div>

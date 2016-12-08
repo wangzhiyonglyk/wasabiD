@@ -139,7 +139,7 @@ var LinkButton=React.createClass({
             return (<a draggable={this.props.draggable} onDragStart={this.dragStartHandler} title={title}
                        href={this.props.href} onClick={this.clickHandler}
                        className={className+" onlyicon"} disabled={this.state.disabled} name={this.props.name}>
-                <i className={"wasabi-icon "+this.props.iconCls} style={{color:iconColor, display:this.props.iconCls==""?"none":"inline-block"}}></i>
+                <i className={" "+this.props.iconCls} style={{color:iconColor, display:this.props.iconCls==""?"none":"inline-block"}}></i>
             </a>);
         }
         else {
@@ -150,7 +150,7 @@ var LinkButton=React.createClass({
                        href={this.props.href} onClick={this.clickHandler}
                        className={className} disabled={this.state.disabled} name={this.props.name} style={style}>
                         <div className="wasabi-linkbutton-text right" style={linkTextStyle}>{this.props.title}</div>
-                        <i className={"wasabi-icon "+this.props.iconCls}
+                        <i className={" "+this.props.iconCls}
                            style={{color:iconColor,display:this.props.iconCls==""?"none":"inline-block"}}></i>
                     </a>
                 )
@@ -160,8 +160,8 @@ var LinkButton=React.createClass({
                     <a draggable={this.props.draggable} onDragStart={this.dragStartHandler} title={title}
                        href={this.props.href} onClick={this.clickHandler}
                        className={className} disabled={this.state.disabled} name={this.props.name} style={style} >
-                        <div className="wasabi-linkbutton-text " style={linkTextStyle}>{this.props.title}</div>
-                        <i className={"wasabi-icon "+this.props.iconCls+" wasabi-icon-rightTop"}
+                        <div className="wasabi-linkbutton-text" style={linkTextStyle}>{this.props.title}</div>
+                        <i className={" "+this.props.iconCls+" icon-rightTop"}
                            style={{color:iconColor,display:this.props.iconCls==""?"none":"inline-block"}}></i>
                     </a>);
 
@@ -172,9 +172,9 @@ var LinkButton=React.createClass({
                     <a draggable={this.props.draggable} onDragStart={this.dragStartHandler} title={title}
                        href={this.props.href} onClick={this.clickHandler} className={className}
                        disabled={this.state.disabled}  name={this.props.name}  style={style}>
-                        <i className={"wasabi-icon "+this.props.iconCls}
+                        <i className={" "+this.props.iconCls}
                            style={{display:(this.props.iconCls==null||this.props.iconCls=="")?"none":"inline-block"}}></i>
-                        <div className="wasabi-linkbutton-text" style={linkTextStyle}>{this.props.title}</div>
+                        <div className="wasabi-linkbutton-text left" style={linkTextStyle}>{this.props.title}</div>
 
                     </a>
 

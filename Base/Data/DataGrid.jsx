@@ -280,12 +280,10 @@ var DataGrid=React.createClass({
                             onMouseMove={this.headerMouseMoveHandler}
                             onContextMenu={this.headerContextMenuHandler}
                             onMouseDown={this.headerMouseDownHandler}>
-
                             <div className="wasabi-table-cell" name={header.label} style={{
                                 width: (header.width ? header.width : null),
                                 textAlign: (header.align ? header.align : "left")
-                            }}>
-                                {header.label}</div>
+                            }}>{header.label}</div>
                         </th>)
 
 
@@ -384,9 +382,7 @@ var DataGrid=React.createClass({
                     tds.push(<td onClick={this.detailHandler.bind(this,rowIndex,rowData)}
                                  key={"col"+rowIndex.toString()+"-"+columnIndex.toString()}>
                         <div className="wasabi-table-cell" style={{width:(header.width?header.width:null),textAlign:(header.align?header.align:"left")}}>
-                            {content}
-                            <LinkButton iconCls={iconCls} color="#666666" tip="查看详情"></LinkButton>
-
+                            {content}<LinkButton iconCls={iconCls} color="#666666" tip="查看详情"></LinkButton>
                         </div>
                     </td>);
                 }
@@ -394,7 +390,7 @@ var DataGrid=React.createClass({
                     tds.push(<td onClick={this.onClick.bind(this,rowData,rowIndex)}
                                  onDoubleClick={this.onDoubleClick.bind(this,rowData,rowIndex)}
                                  key={"col"+rowIndex.toString()+"-"+columnIndex.toString()}
-                    >  <div className="wasabi-table-cell"    style={{width:(header.width?header.width:null),textAlign:(header.align?header.align:"left")}}>{content}</div></td>);
+                    ><div className="wasabi-table-cell"    style={{width:(header.width?header.width:null),textAlign:(header.align?header.align:"left")}}>{content}</div></td>);
                 }
 
             });
@@ -451,7 +447,7 @@ var DataGrid=React.createClass({
 
             }
             control=  <div key="pagination-detail" className="pagination-detail">
-                        <span className="pagination-info">显示第{benginIndex}
+                <span className="pagination-info">显示第{benginIndex}
                             到{endIndex}条，
                             共{total}条</span>
                 <LinkButton iconCls="icon-reload" name="reload" onClick={this.reload}></LinkButton>
