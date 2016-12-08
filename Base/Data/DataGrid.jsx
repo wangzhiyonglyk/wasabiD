@@ -256,7 +256,7 @@ var DataGrid=React.createClass({
                 return ;
             }else {
                 if (this.state.headerMenu.length > 0 && this.state.headerMenu.indexOf(header.label) > -1) {//父组件更新状态值，发现某一行处理被隐藏中，则不显示
-                        return ;
+                    return ;
                 }
                 else {
                     let sortOrder = "";
@@ -289,7 +289,7 @@ var DataGrid=React.createClass({
 
                 }
             }
-            });
+        });
 
 
         return headers;
@@ -448,7 +448,7 @@ var DataGrid=React.createClass({
             }
             control=  <div key="pagination-detail" className="pagination-detail">
                 <span className="pagination-info">显示第{benginIndex}
-                            到{endIndex}条，
+                    到{endIndex}条，
                             共{total}条</span>
                 <LinkButton iconCls="icon-reload" name="reload" onClick={this.reload}></LinkButton>
             </div>;
@@ -507,7 +507,7 @@ var DataGrid=React.createClass({
                 }
                 pageComponent.unshift(predisabledli);pageComponent.push(lastdisabledli);
                 paginationCom= <div className="pull-right pagination">
-                    <ul className="pagination" style={{marginTop:type=="top"?0:5,marginBottom:type=="top"?5:0}}>
+                    <ul className="pagination" style={{marginTop:type=="top"?0:4,marginBottom:type=="top"?4:0}}>
                         <li key={"lipre"} className="page-pre"><a href="javascript:void(0)" onClick={this.prePaginationHandler} >‹</a></li>
                         <li key={"lifirst"} className={"page-number "+((this.state.pageIndex*1)==(1)?"active":"")}><a
                             href="javascript:void(0)" onClick={this.paginationHandler.bind(this,(1))}>{( 1)}</a></li>
@@ -531,7 +531,7 @@ var DataGrid=React.createClass({
                 }
                 paginationCom = (
                     <div className="pull-right">
-                        <ul className="pagination" style={{marginTop:type=="top"?0:5,marginBottom:type=="top"?5:0}}>
+                        <ul className="pagination" style={{marginTop:type=="top"?0:4,marginBottom:type=="top"?4:0}}>
                             {
                                 pagearr
                             }
@@ -629,14 +629,14 @@ var DataGrid=React.createClass({
         let gridHeight=this.state.height;
         let tableHeight=gridHeight?( this.props.pagePosition=="both")?gridHeight-70:gridHeight-35:null;
         var headerMenuCotrol=[];//右键菜单中隐藏的列
-         if(this.state.headerMenu.length>0)
-         {
+        if(this.state.headerMenu.length>0)
+        {
             this.state.headerMenu.map((item,index)=>
             {
                 headerMenuCotrol.push(
                     <li key={index}><a href="javascript:void(0);" className="header-menu-item" onMouseDown={this.menuHeaderShowHandler.bind(this,index,item)} >{"显示["+item+"]"}</a></li>)
             })
-         }
+        }
         return (<div className="wasabi-table" ref="grid"
                      onPaste={this.onPaste}
                      onMouseDown={this.gridMouseDownHandler}
