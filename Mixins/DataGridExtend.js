@@ -67,8 +67,11 @@ let DataGridExtend= {
         else { //主列表
 
             /*
-            数据生成后,得到表头的各列的宽度,修改固定表头列宽度,使得固定表头与表格对齐
+            数据生成后,先调整两个表格的宽度，因为有可能出现滚动条
+            再得到表头的各列的宽度,修改固定表头列宽度,使得固定表头与表格对齐
              */
+
+            this.refs.headertable.style.width=this.refs.bodytable.getBoundingClientRect().width+"px";
             //固定表头的列
             var headerTableHeader = this.refs.headertable.children[0].children[0].children;
 
@@ -78,12 +81,13 @@ let DataGridExtend= {
             var allwidth=0;
             for (let index = 0; index < bodyTableHeader.length; index++) {//遍历，如果原始表头的列的宽度与固定表头对应列不一样,就设置
                 //设置cell的宽度
-                if (headerTableHeader[index].children[0].getBoundingClientRect().width != bodyTableHeader[index].children[0].getBoundingClientRect().width) {
-                    headerTableHeader[index].children[0].style.width = bodyTableHeader[index].children[0].getBoundingClientRect().width + "px";
-                    bodyTableHeader[index].children[0].style.width = bodyTableHeader[index].children[0].getBoundingClientRect().width + "px";
+                if (headerTableHeader[index].getBoundingClientRect().width != bodyTableHeader[index].getBoundingClientRect().width) {
+                    headerTableHeader[index].style.width = bodyTableHeader[index].getBoundingClientRect().width + "px";
+                    bodyTableHeader[index].style.width = bodyTableHeader[index].getBoundingClientRect().width + "px";
 
                 }
             }
+
             /*
               如果没有设定列表的高度,则要自适应页面的高度,增强布局效果
              */
