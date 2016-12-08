@@ -686,8 +686,8 @@ var DataGrid=React.createClass({
                     {this.renderPagination()}
                 </div>
             </div>
-            <div className="table-loading" style={{display:this.state.loading==true?"block":"none"}}></div>
-            <div className="load-icon"  style={{display:this.state.loading==true?"block":"none"}}></div>
+            <div className="wasabi-table-loading" style={{display:this.state.loading==true?"block":"none"}}></div>
+            <div className="wasabi-load-icon"  style={{display:this.state.loading==true?"block":"none"}}></div>
             <div onMouseUp={this.divideMouseUpHandler}  ref="tabledivide" className="wasabi-table-divide"  style={{top:(this.props.pagePosition=="top"||this.props.pagePosition=="both")?35:0}}></div>
             <div className="header-menu-container" ref="headermenu">
                 <ul className="header-menu">
