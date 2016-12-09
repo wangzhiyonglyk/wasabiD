@@ -12,6 +12,7 @@ var unit=require("../../libs/unit.js");
 var FetchModel=require("../../model/FetchModel.js");
 var LinkButton=require("../Buttons/LinkButton.jsx");
 var CheckBox=require("../Form/CheckBox.jsx");
+var Text=require("../Form/Text.jsx");
 var Radio=require("../Form/Radio.jsx");
 var Message=require("../unit/Message.jsx");
 var shouldComponentUpdate=require("../../Mixins/shouldComponentUpdate.js");
@@ -19,6 +20,7 @@ var DataGridHandler=require("../../Mixins/DataGridHandler.js");
 var DataGridExtend=require("../../Mixins/DataGridExtend.js");
 var pasteExtend=require("../../Mixins/pasteExtend.js");
 var alogHandler=require("../../Mixins/alogHandler.js");//专门为心怡科技做兼容处理
+var DataPage=require("./DataPage.jsx");//分页组件
 
 
 var DataGrid=React.createClass({
@@ -426,20 +428,29 @@ var DataGrid=React.createClass({
     renderTotal:function() {//渲染总记录数，当前记录的下标
         if(this.state.headers&&this.state.headers.length>0)
         {
-            var benginIndex=0; var endIndex=0;//数据开始序号与结束序
-            var total=this.state.total;
-            var control;
+            var beginOrderNumber=0; var endOrderNumber=0;//数据开始序号与结束序
+            var total=this.state.total;//总记录数
+            var pageTotal = ( parseInt(this.state.total / this.state.pageSize));//共多少页
+            if ((this.state.total % this.state.pageSize) > 0) {
+                pageTotal++;//求余后得到最终总页数
+            }
+            if(pageTotal==0)
+            {//数据为空，直接返回
+                return null;
+            }
+
+            var control;//记录数组件
             if(this.state.data instanceof Array ) {
                 if(this.state.data.length>0)
                 {
                     if(this.props.pagination)
                     {
-                        benginIndex=this.state.pageSize*(this.state.pageIndex-1)+1;
-                        endIndex=this.state.pageSize*(this.state.pageIndex-1)+this.state.data.length;
+                        beginOrderNumber=this.state.pageSize*(this.state.pageIndex-1)+1;
+                        endOrderNumber=this.state.pageSize*(this.state.pageIndex-1)+this.state.data.length;
                     }
                     else
                     {
-                        endIndex=this.state.data.length;
+                        endOrderNumber=this.state.data.length;
                         total=this.state.data.length;
                     }
 
@@ -447,10 +458,8 @@ var DataGrid=React.createClass({
 
             }
             control=  <div key="pagination-detail" className="pagination-detail">
-                <span className="pagination-info">显示第{benginIndex}
-                    到{endIndex}条，
-                            共{total}条</span>
-                <LinkButton iconCls="icon-reload" name="reload" onClick={this.reload}></LinkButton>
+                <span className="pagination-info">第{beginOrderNumber}到{endOrderNumber}条,共{pageTotal}页{total}条   </span>
+                <DataPage pageIndex={this.state.pageIndex} pageUpdate={this.pageUpdateHandler} pageSize={this.state.pageSize} pageTotal={pageTotal}></DataPage>
             </div>;
             return control;
         }
@@ -464,74 +473,37 @@ var DataGrid=React.createClass({
         var paginationCom=null;
         if (this.props.pagination) {
 
-            var pageAll = ( parseInt(this.state.total / this.state.pageSize));//共多少页
+            var pageTotal = ( parseInt(this.state.total / this.state.pageSize));//共多少页
             if ((this.state.total % this.state.pageSize) > 0) {
-                pageAll++;//求余后得到最终总页数
+                pageTotal++;//求余后得到最终总页数
             }
-            if(pageAll==0)
+            if(pageTotal==0)
             {//数据为空，直接返回
                 return null;
             }
 
-            if (pageAll > 7) {//大于7页，
+            if (pageTotal >3) {//大于3页，
                 let pageComponent = [];//分页组件
-                let firstIndex=0;//第一个显示哪一页
-                let lastIndex=0;//最后一个显示哪一页
-                let predisabledli= <li key="predis" className="page-last-separator disabled"><a href="javascript:void(0)">...</a></li>;//多余的分页标记
-                let lastdisabledli= <li key="lastdis" className="page-last-separator disabled"><a href="javascript:void(0)">...</a></li>;//多余的分页标记
-                if(this.state.pageIndex>=4&&this.state.pageIndex<=pageAll-3)
-                {//处于中间位置的页号
-                    firstIndex=this.state.pageIndex-2;
-                    lastIndex=this.state.pageIndex+2;
-                }
-                else {
-                    //非中间位置
-                    if(this.state.pageIndex<4) {
-                        //靠前的位置
-                        firstIndex = 2;
-                        lastIndex = 6;
-                        predisabledli=null;//设置为空
-                    }else
-                    {//靠后的位置
-                        if(this.state.pageIndex>pageAll-3)
-                        {
-                            firstIndex = pageAll-5;
-                            lastIndex = pageAll-1;
-                            lastdisabledli=null;//设置为空
-                        }
-                    }
-                }
-                for (let i=firstIndex; i <=lastIndex; i++) {
-                    pageComponent.push(<li key={"li"+i} className={"page-number "+((this.state.pageIndex*1)==(i)?"active":"")}><a
-                        href="javascript:void(0)" onClick={this.paginationHandler.bind(this,(i))}>{(i)}</a></li>);
-                }
-                pageComponent.unshift(predisabledli);pageComponent.push(lastdisabledli);
+                //简化显示方式，否则在grid嵌套时，而数据过多时无法显示完整
                 paginationCom= <div className="pull-right pagination">
                     <ul className="pagination" style={{marginTop:type=="top"?0:4,marginBottom:type=="top"?4:0}}>
-                        <li key={"lipre"} className="page-pre"><a href="javascript:void(0)" onClick={this.prePaginationHandler} >‹</a></li>
-                        <li key={"lifirst"} className={"page-number "+((this.state.pageIndex*1)==(1)?"active":"")}><a
-                            href="javascript:void(0)" onClick={this.paginationHandler.bind(this,(1))}>{( 1)}</a></li>
-                        {
-                            pageComponent
-                        }
+                        <li key={"lipre"} className="page-pre"><a href="javascript:void(0)" onClick={this.prePaginationHandler}>{"<"}</a></li>
 
-                        <li key="lilast" className={"page-number "+((this.state.pageIndex*1)==(pageAll)?"active":"")}><a href="javascript:void(0)"  onClick={this.paginationHandler.bind(this,(pageAll))}>{(pageAll)}</a></li>
-                        <li key="linext"  className="page-next"><a href="javascript:void(0)" onClick={this.nextPaginationHandler} >›</a></li>
+                        <li key="linext"  className="page-next"><a href="javascript:void(0)" onClick={this.nextPaginationHandler} >{">"}</a></li>
                     </ul>
                 </div>;
             }
             else {
-                //小于7页直接显示
-
+                //小于3页直接显示
                 let pagearr = [];
-                for (let i = 0; i < pageAll; i++) {
+                for (let i = 0; i < pageTotal; i++) {
                     var control=<li key={"li"+i} className={"page-number "+((this.state.pageIndex*1)==(i+1)?"active":"")}>
                         <a href="javascript:void(0)"  onClick={this.paginationHandler.bind(this,(i+1))}>{(i + 1)}</a></li>;
                     pagearr.push(control);
                 }
                 paginationCom = (
                     <div className="pull-right">
-                        <ul className="pagination" style={{marginTop:type=="top"?0:4,marginBottom:type=="top"?4:0}}>
+                        <ul className="pagination" >
                             {
                                 pagearr
                             }

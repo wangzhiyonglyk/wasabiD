@@ -193,14 +193,14 @@ var Text=React.createClass({
         }
         if(this.props.onKeyDown!=null)
         {
-            this.props.onKeyDown();
+            this.props.onKeyDown(event);
         }
 
     },
-    keyUpHandler:function() {
+    keyUpHandler:function(event) {
         if(this.props.onKeyUp!=null)
         {
-            this.props.onKeyUp();
+            this.props.onKeyUp(event);
         }
     },
     focusHandler:function() {//焦点事件
@@ -227,6 +227,9 @@ var Text=React.createClass({
         }
     },
 
+    getValue:function () {//获取值
+      return this.state.value;
+    },
 
     render:function() {
         var inputType="text";

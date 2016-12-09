@@ -160,26 +160,27 @@ let GridPicker=React.createClass({
 
     },
     mouseOutHandler:function(event) {//鼠标移开时隐藏下拉
-        var parentE=event.relatedTarget;//相关节点
-        while (parentE&&parentE.nodeName!="BODY")
-        {
-            if(parentE.className.indexOf("dropcontainter")>-1)
-            {
-                break;
-            }
-            parentE=parentE.parentElement;
-        }
-
-        if(parentE==undefined||parentE==null||parentE.nodeName=="BODY")
-        {
-            setTimeout(()=>
-            {
-                this.setState({
-                    show:false,
-                });
-            },200);
-
-        }
+        //TODO 先屏蔽掉
+        // var parentE=event.relatedTarget;//相关节点
+        // while (parentE&&parentE.nodeName!="BODY")
+        // {
+        //     if(parentE.className.indexOf("dropcontainter")>-1)
+        //     {
+        //         break;
+        //     }
+        //     parentE=parentE.parentElement;
+        // }
+        //
+        // if(parentE==undefined||parentE==null||parentE.nodeName=="BODY")
+        // {
+        //     setTimeout(()=>
+        //     {
+        //         this.setState({
+        //             show:false,
+        //         });
+        //     },200);
+        //
+        // }
 
     },
     changeHandler:function(event) {

@@ -14,7 +14,7 @@ let DataGridHandler={
             return ;
         }
         else {//跳转到指定页
-            this.updateHandler(this.state.url,this.state.pageSize,pageIndex,this.state.sortName,this.state.sortOrder,null);
+            this.updateHandler(this.state.url,this.state.pageSize,pageIndex,this.state.sortName,this.state.sortOrder,null,null);
         }
     },
     prePaginationHandler:function() {//上一页
@@ -126,6 +126,8 @@ let DataGridHandler={
                 loading:true,
                 url:url,//更新,有可能从reload那里直接改变了url
                 headers:headers,//更新
+                pageSize:pageSize,
+                pageIndex:pageIndex,
             })
             var actualParams={};
             if(!params&&this.state.params&&typeof this.state.params =="object")
@@ -183,8 +185,8 @@ let DataGridHandler={
         var totalResult;//最终总共记录
         var footerResult;//最终统计数据
         var dataSource=this.props.dataSource;//数据源
-        if(dataSource=="data"&&this.props.backSource!="data")
-        {//dataSource属性为默认,backSource不为默认,说明是旧版本,
+        if(dataSource=="data"&&this.props.backSource!="data"&&this.props.backSource!="data.data")
+        {//dataSource属性为默认,backSource不为默认并且不是旧版的data.data默认值,说明是旧版本中自定义的,
             dataSource=this.props.backSource;
         }
         if(dataSource) {//需要重新指定数据源
@@ -243,7 +245,7 @@ let DataGridHandler={
             //查询成功
             if(dataResult&& dataResult instanceof  Array)
             {//是数组,
-                dataResult= (this.props.pagination == true ? dataResult.slice(0, this.props.pageSize) : dataResult);
+                dataResult= (this.props.pagination == true ? dataResult.slice(0, this.state.pageSize) : dataResult);
             }
             var checkedData=this.state.checkedData;//之前被选择的数据
             if(this.props.clearChecked==false) {//不清除之前的选择

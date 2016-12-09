@@ -9,6 +9,7 @@ var unit=require("../libs/unit.js");
 var FetchModel=require("../model/FetchModel.js");
 var Message=require("../Base/unit/Message.jsx");
 let DataGridExtend= {
+    //表体常用操作
     onClick: function (rowData, rowIndex) {
         if (this.props.selectChecked == true) {
             let key = this.getKey(rowIndex);//获取关键字
@@ -30,7 +31,12 @@ let DataGridExtend= {
 
         }
     },
+    pageUpdateHandler:function (pageSize,pageIndex) {//改变分页大小，或者跳转
+        this.updateHandler(this.state.url,pageSize*1, pageIndex*1, this.state.sortName, this.state.sortOrder, null, null);
+    },
 
+
+    //粘贴事件
     pasteSuccess: function (data) {
         if (this.props.pasteUrl != null && this.props.pasteUrl != "") {//用户定义了粘贴url
             let actualParams = null;//实际参数
@@ -44,6 +50,8 @@ let DataGridExtend= {
             unit.fetch.post(fetchmodel);
         }
     },
+
+    //详情页面
     detailViewHandler: function (detail) {
         var colSpan = this.state.headers.length;
 
@@ -60,6 +68,8 @@ let DataGridExtend= {
             </tr>,
         })
     },
+
+    //调整高宽
     setWidthAndHeight: function () {//重新计算列表的高度,及固定的表头每一列的宽度
         if (this.refs.grid.parentElement.className == "wasabi-detail") {//如果列表是在详情列表中不处理
 
@@ -101,7 +111,7 @@ let DataGridExtend= {
         }
     },
 
-    //表体的处理事件
+    //表体的监听处理事件
     onPaste: function (event) {
         //调用公共用的粘贴处理函数
         this.pasteHandler(event, this.pasteSuccess);
@@ -135,9 +145,7 @@ let DataGridExtend= {
         }
 
     },
-
-    gridContextMenuHandler:function(event)
-    {
+    gridContextMenuHandler:function(event) {
         event.preventDefault();//阻止默认事件
     },
 
