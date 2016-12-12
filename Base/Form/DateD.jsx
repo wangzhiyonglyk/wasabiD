@@ -43,6 +43,8 @@ let DateD = React.createClass({
             isRange:this.props.isRange,
             min:this.props.min,
             max:this.props.max,
+            changeYear:false,//选择年份
+            changeMonth:false,//选择月份
         })
     },
     componentWillReceiveProps:function(nextProps) {
@@ -142,13 +144,52 @@ let DateD = React.createClass({
         }
         return format;
     },
+    changeYear:function () {
+        this.setState({
+            changeYear:!this.state.changeYear,
+            changeMonth:false,
+        })
+
+    },
+    changeMonth:function () {
+        this.setState({
+            changeYear:false,
+            changeMonth:!this.state.changeMonth,
+        })
+    },
+    changeYearHandler:function (value) {
+
+        this.setState({
+            year:value,
+            changeYear:false,
+            changeMonth:false,
+            day:null,//清空
+            min:null,
+            max:null,
+        })
+    },
+    changeMonthHandler:function (value) {
+       this.setState({
+           month:value,
+           changeYear:false,
+           changeMonth:false,
+           day:null,//清空
+           min:null,
+           max:null,
+       })
+    },
+
     render:function(){
         return(
             <div className="wasabi-datetime"  >
                 <CalendarHeader
                     year = {this.state.year}
                     month = {this.state.month}
-                    updateFilter={this.updateYearAndMonth} />
+                    updateFilter={this.updateYearAndMonth}
+                    changeYear={this.changeYear}
+                    changeMonth={this.changeMonth}
+                />
+
                 <CalendarBody
                     year = {this.state.year}
                     month = {this.state.month}
@@ -157,6 +198,10 @@ let DateD = React.createClass({
                     min={this.state.min}
                     max={this.state.max}
                     dayHandler={this.dayHandler}
+                    changeYear={this.state.changeYear}
+                    changeMonth={this.state.changeMonth}
+                    changeYearHandler={this.changeYearHandler}
+                    changeMonthHandler={this.changeMonthHandler}
                 />
             </div>
         )

@@ -42,11 +42,26 @@ let CalendarHeader = React.createClass({
         this.setState(this.state);
         this.props.updateFilter(year,newMonth);// 执行父组件回调函数，改变父组件状态值
     },
+    changeYear:function () {
+        if(this.props.changeYear)
+        {
+            this.props.changeYear();
+        }
+
+    },
+    changeMonth:function () {
+        if(this.props.changeMonth)
+        {
+            this.props.changeMonth();
+        }
+
+    },
     render:function(){
         return(
             <div className="wasabi-datetime-header">
-                <div className="header-text" ><a href="javascript:void(0);" style={{marginRight:2}}>{this.state.year}年</a>
-                    <a  href="javascript:void(0);">{Lang.cn.Month[this.state.month-1]}月</a></div>
+                <div className="header-text" ><a href="javascript:void(0);" style={{marginRight:8}} onClick={this.changeYear}>
+                    <span>{this.state.year+"年"}</span><i style={{fontSize:12,marginTop:2}} className="icon-down"></i></a>
+                    <a  href="javascript:void(0);" onClick={this.changeMonth}><span>{Lang.cn.Month[this.state.month-1]+"月"}</span><i style={{fontSize:12,marginTop:2}} className="icon-down"></i></a></div>
                 <a  href="javascript:void(0);" className="triangle-left"    onClick={this.handleLeftClick}>
                 </a>
                 <a  href="javascript:void(0);" className="triangle-right" onClick={this.handleRightClick}></a>

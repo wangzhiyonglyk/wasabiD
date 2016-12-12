@@ -42,6 +42,10 @@ let DataGridHandler={
             this.paginationHandler(this.state.pageIndex+1);
         }
     },
+    pageSizeHandler:function (event) {
+
+        this.updateHandler(this.state.url,event.target.value*1,this.state.pageIndex,this.state.sortName,this.state.sortOrder,null,null);
+    },
     sumHandler:function(footerModel){//计算某一列的总和
         var sum=null;
         if(this.state.data instanceof  Array)
@@ -267,6 +271,9 @@ let DataGridHandler={
                 footer: footerResult,
                 loading: false,
                 checkedData:this.props.clearChecked==true?new Map():checkedData,
+                detailIndex: null,//重新查询要清空详情
+                detailView: null,
+
 
             })
 
@@ -533,7 +540,7 @@ let DataGridHandler={
         });
     },
     detailHandler:function(rowIndex, rowData) {//执行显示详情功能
-        var key=this.getKey(rowIndex);
+        var key=this.getKey(rowIndex);//获取关键值
         if(key==this.state.detailIndex)
         {
             this.setState({

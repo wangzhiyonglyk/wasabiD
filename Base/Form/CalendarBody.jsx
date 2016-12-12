@@ -5,6 +5,8 @@
  */
 let React=require("react");
 let Lang=require("../Lang/language.js");
+let Text=require("../Form/Text.jsx");
+let Message=require("../Unit/Message.jsx");
 require("../../sass/Base/Form/DateTime.scss");
 let CalendarBody = React.createClass({
     PropTypes:{
@@ -15,25 +17,35 @@ let CalendarBody = React.createClass({
         min:React.PropTypes.number,//最小值，用于日期范围选择
         max:React.PropTypes.number,//最大值,用于日期范围选择
         dayHandler:React.PropTypes.func,//选择后的事件
+        changeYear:React.PropTypes.bool,
+        changeMonth:React.PropTypes.bool,
+        changeYearHandler:React.PropTypes.func,
+        changeMonthHandler:React.PropTypes.func,
     },
     getInitialState:function(){
         return {
             year:this.props.year,
+            tempyear:this.props.tempyear,//临时的，防止输入框改变后对整个组件产生影响
             month:this.props.month,
             day:this.props.day,
             isRange:this.props.isRange,
             min:this.props.min,
             max:this.props.max,
+            changeYear:this.props.changeYear,
+            changeMonth:this.props.changeMonth,
         };
     },
     componentWillReceiveProps:function(nextProps) {
         this.setState({
             year:nextProps.year,
+            tempyear:nextProps.year,
             month:nextProps.month,
             day:nextProps.day,
             isRange:nextProps.isRange,
             min:nextProps.min,
             max:nextProps.max,
+            changeYear:nextProps.changeYear,
+            changeMonth:nextProps.changeMonth,
 
         })
     },
@@ -58,6 +70,35 @@ let CalendarBody = React.createClass({
         })
         this.props.dayHandler(day); // 执行父组件回调函数，改变父组件状态值
     },
+    yearOnChange:function (event) {
+        this.setState({
+            tempyear: event.target.value,
+        })
+    },
+    changeYearHandler:function (value) {
+        if(this.props.changeYearHandler){
+            this.props.changeYearHandler(value);
+        }
+    },
+    changeMonthHandler:function (value) {
+        if(this.props.changeMonthHandler){
+            this.props.changeMonthHandler(value);
+        }
+    },
+    yearOKHandler:function (event) {
+      if(event.keyCode==13)
+      {//回车确定
+          if(event.target.value*1<1900||event.target.value*1>9999){
+              Message.error("不是有效年份");
+              return ;
+      }
+      else {
+              this.changeYearHandler(event.target.value);
+          }
+
+      }
+    },
+
     render:function(){
         var arry1 = [],arry2 = [];
         var getDays = this.getMonthDays(), FirstDayWeek = this.getFirstDayWeek();
@@ -107,9 +148,21 @@ let CalendarBody = React.createClass({
             }
              return control;
         })
+
+        var yearControl=[];
+        for(var index=this.state.year*1-7;index<=this.state.year*1+4;index++) {
+            if(index==this.state.year*1)
+            {
+                yearControl.push(<div className="datespan chosed" onClick={this.changeYearHandler.bind(this,index)} key={"year" + index}>{index}</div>);
+            }
+            else{
+                yearControl.push(<div className="datespan"  onClick={this.changeYearHandler.bind(this,index)} key={"year" + index}>{index}</div>);
+            }
+
+        }
         return(
             <div className="wasabi-datetime-body">
-                <div className="weekul">
+                <div className="weekul" style={{display:(!this.state.changeMonth&&!this.state.changeYear)?"block":"none"}}>
                     <div className="weekspan">{Lang.cn.SUN}</div>
                     <div className="weekspan">{Lang.cn.MON}</div>
                     <div className="weekspan">{Lang.cn.TUE}</div>
@@ -118,7 +171,25 @@ let CalendarBody = React.createClass({
                     <div className="weekspan">{Lang.cn.FRI}</div>
                     <div className="weekspan">{Lang.cn.SAT}</div>
                 </div>
-                <div className="dayul">{node1} {node2}</div>
+                <div className="dayul" style={{display:(!this.state.changeMonth&&!this.state.changeYear)?"block":"none"}}>{node1} {node2}</div>
+                <div  className="wasabi-datetime-month" style={{display:this.state.changeMonth?"block":"none"}}>
+
+                    <div  className={"datespan "+((this.state.month==1)?"chosed":"")} onClick={this.changeMonthHandler.bind(this,1)}>一月</div>
+                    <div  className={"datespan "+((this.state.month==2)?"chosed":"")} onClick={this.changeMonthHandler.bind(this,2)}>二月</div>
+                    <div  className={"datespan "+((this.state.month==3)?"chosed":"")} onClick={this.changeMonthHandler.bind(this,3)}  >三月</div>
+                    <div  className={"datespan "+((this.state.month==4)?"chosed":"")} onClick={this.changeMonthHandler.bind(this,4)}>四月</div>
+                    <div  className={"datespan "+((this.state.month==5)?"chosed":"")} onClick={this.changeMonthHandler.bind(this,5)}>五月</div>
+                    <div  className={"datespan "+((this.state.month==6)?"chosed":"")} onClick={this.changeMonthHandler.bind(this,6)}>六月</div>
+                    <div  className={"datespan "+((this.state.month==7)?"chosed":"")} onClick={this.changeMonthHandler.bind(this,7)}>七月</div>
+                    <div  className={"datespan "+((this.state.month==8)?"chosed":"")} onClick={this.changeMonthHandler.bind(this,8)}>八月</div>
+                    <div  className={"datespan "+((this.state.month==9)?"chosed":"")} onClick={this.changeMonthHandler.bind(this,9)}>九月</div>
+                    <div  className={"datespan "+((this.state.month==10)?"chosed":"")} onClick={this.changeMonthHandler.bind(this,10)}>十月</div>
+                    <div  className={"datespan "+((this.state.month==11)?"chosed":"")} onClick={this.changeMonthHandler.bind(this,11)}>十一月</div>
+                    <div  className={"datespan "+((this.state.month==12)?"chosed":"")} onClick={this.changeMonthHandler.bind(this,12)}>十二月</div>
+                </div>
+                <div  className="wasabi-datetime-year" style={{display:this.state.changeYear?"block":"none"}}>
+                    <div style={{display:"block",textAlign:"center",marginBottom:10}}><input value={this.state.tempyear} name="year" onKeyUp={this.yearOKHandler} style={{width:60,height:30,paddingLeft:5}} title="回车确认" onChange={this.yearOnChange}></input></div>
+                    {yearControl}</div>
             </div>
         )
     }

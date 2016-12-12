@@ -20,7 +20,6 @@ var DataGridHandler=require("../../Mixins/DataGridHandler.js");
 var DataGridExtend=require("../../Mixins/DataGridExtend.js");
 var pasteExtend=require("../../Mixins/pasteExtend.js");
 var alogHandler=require("../../Mixins/alogHandler.js");//专门为心怡科技做兼容处理
-var DataPage=require("./DataPage.jsx");//分页组件
 
 
 var DataGrid=React.createClass({
@@ -149,6 +148,7 @@ var DataGrid=React.createClass({
          url与params而url可能是通过reload方法传进来的,并没有作为状态值绑定
          headers可能是后期才传了,见Page组件可知
          所以此处需要详细判断
+         另外 pageSize组件
          */
         if(nextProps.url) {
             //说明父组件将url作为状态值来绑定的
@@ -358,22 +358,6 @@ var DataGrid=React.createClass({
                 } else {//为空时
                     content = rowData[header.name];
                 }
-                //TODO 先保留旧代码
-                //let whiteSpace="nowrap";//默认不换行,对超过30个字的,设置为换行模式
-                //if(content&&typeof  content !=="string"&&content!=="number") {
-                //
-                //    if(content.key&&content.key.toString().length>30) {
-                //        whiteSpace = "normal";
-                //    }else if(content instanceof  Array&&content.length>0&&content[0].key&&content[0].key.toString().length>30)
-                //    { whiteSpace = "normal";
-                //
-                //    }
-                //}
-                //else if(content &&typeof  content.toString()=="string"&&content.toString().length>30)
-                //{
-                //    whiteSpace="normal";
-                //}
-                // style={{textAlign:(header.align?header.align:"left"),whiteSpace:whiteSpace}}
                 if (columnIndex==0&&this.props.detailAble) {
                     //在第一列显示详情
                     var iconCls="icon-down";//详情列的图标
@@ -459,7 +443,13 @@ var DataGrid=React.createClass({
             }
             control=  <div key="pagination-detail" className="pagination-detail">
                 <span className="pagination-info">第{beginOrderNumber}到{endOrderNumber}条,共{pageTotal}页{total}条   </span>
-                <DataPage pageIndex={this.state.pageIndex} pageUpdate={this.pageUpdateHandler} pageSize={this.state.pageSize} pageTotal={pageTotal}></DataPage>
+                每页 <select value={this.state.pageSize} onChange={this.pageSizeHandler}>
+                    <option value={10}>10</option>
+                    <option value={20}>20</option>
+                    <option value={30}>30</option>
+                    <option value={50}>50</option>
+                    <option value={100}>100</option>
+                </select>  条
             </div>;
             return control;
         }
