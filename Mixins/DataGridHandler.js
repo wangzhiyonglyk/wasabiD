@@ -4,8 +4,8 @@
  */
 var React=require("react");
 var unit=require("../libs/unit.js");
-var FetchModel=require("../model/FetchModel.js");
-var Message=require("../Base/unit/Message.jsx");
+var FetchModel=require("../Model/FetchModel.js");
+var Message=require("../Unit/Message.jsx");
 let DataGridHandler={
 
     //列表常用处理函数

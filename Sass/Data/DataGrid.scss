@@ -1,0 +1,351 @@
+/**
+列表样式。create by wangzy
+ */
+@import url("../base.scss");
+.wasabi-table {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+
+}
+/*
+表格内部一组件的样式
+*/
+.wasabi-table .wasabi-form-group
+{
+  padding:0px;
+  min-height:0px;
+}
+.wasabi-table .wasabi-checkul
+{
+  margin: 0px;
+  padding: 0px;
+  height: 12px;
+}
+.wasabi-table .wasabi-checkul li
+{
+  margin:0px;
+  padding:0px;
+  height: 12px;
+  width: 12px;
+}
+.wasabi-table .wasabi-checkul .checkbox + label {
+  top: 0px;
+  left: 0px;
+  margin: 0px;
+}*
+
+   /*
+   表格容器
+   */
+ .wasabi-table .table-container {
+   width: 100%;
+   position: relative;
+   overflow: hidden;
+ }
+/*
+表头容器
+*/
+.wasabi-table .table-fixHeader
+{
+  margin-bottom: 0px;
+  width: 100%;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  z-index: 1;
+
+}
+
+
+/*
+表格容器
+*/
+.wasabi-table .table-body {
+  width: 100%;
+  overflow: auto;
+}
+/*
+表格基本样式
+*/
+.wasabi-table .table {
+  border: 1px solid #e3e4e5;
+  border-spacing: 0;
+  border-collapse: collapse;
+  margin-bottom: 2px;
+  width: 100%;
+
+}
+
+.wasabi-table .table > thead > tr > th
+{
+  background-color: #eff0f1;
+
+}
+.wasabi-table .table > thead > tr > th,
+.wasabi-table .table > tbody > tr > td {
+  border-right: 1px solid #e3e4e5;
+  border-bottom: 1px solid #e3e4e5;
+  padding: 0px;
+}
+.wasabi-table .table > thead > tr > th:last-child
+{
+  border-right: 0px;
+}
+.wasabi-table .table >  tbody > tr > td:last-child
+{
+  border-right: 0px;
+}
+
+/*
+没有边框的时候
+*/
+
+.wasabi-table .table.table-no-bordered > tbody > tr > td {
+  border-right: 1px solid transparent;
+}
+
+
+
+
+/*
+背景颜色
+*/
+
+.wasabi-table .table > tbody > tr.even {
+  background-color: #f5f6f7;
+}
+.wasabi-table .table > tbody > tr.selected {
+  background-color: #ffe48d; }
+
+.wasabi-table .table > tbody > tr:hover {
+  background-color: #dcf9f8;
+}
+/*
+单元格样式
+*/
+.wasabi-table .wasabi-table-cell{
+  padding-top: 14px;
+  padding-bottom: 14px;
+  padding-left: 5px;
+  padding-right: 5px;
+  display: inline-block;
+}
+/*
+序号列,与checkbox 边距10,为了保持与其他组件对齐
+*/
+.wasabi-table .table > thead > tr > th.check-column .wasabi-table-cell {
+  padding-left: 10px;
+  padding-right: 10px;
+
+}
+
+.wasabi-table .table > tbody > tr > td.check-column .wasabi-table-cell
+{
+  padding-left: 10px;
+  padding-right: 10px;
+
+}
+
+
+
+/*
+排序样式
+*/
+
+.wasabi-table thead th.both {
+  cursor: pointer;
+  background-position:95% 50%;
+  background-repeat: no-repeat;
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAQAAADYWf5HAAAAkElEQVQoz7X QMQ5AQBCF4dWQSJxC5wwax1Cq1e7BAdxD5SL+Tq/QCM1oNiJidwox0355mXnG/DrEtIQ6azioNZQxI0ykPhTQIwhCR+BmBYtlK7kLJYwWCcJA9M4qdrZrd8pPjZWPtOqdRQy320YSV17OatFC4euts6z39GYMKRPCTKY9UnPQ6P+GtMRfGtPnBCiqhAeJPmkqAAAAAElFTkSuQmCC');
+}
+
+.wasabi-table thead th.asc {
+  cursor: pointer;
+  background-position:95% 50%;
+  background-repeat: no-repeat;
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAYAAAByUDbMAAAAZ0lEQVQ4y2NgGLKgquEuFxBPAGI2ahhWCsS/gDibUoO0gPgxEP8H4ttArEyuQYxAPBdqEAxPBImTY5gjEL9DM+wTENuQahAvEO9DMwiGdwAxOymGJQLxTyD+jgWDxCMZRsEoGAVoAADeemwtPcZI2wAAAABJRU5ErkJggg==');
+}
+
+.wasabi-table thead th.desc {
+  cursor: pointer;
+  background-position:95% 50%;
+  background-repeat: no-repeat;
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAYAAAByUDbMAAAAZUlEQVQ4y2NgGAWjYBSggaqGu5FA/BOIv2PBIPFEUgxjB+IdQPwfC94HxLykus4GiD+hGfQOiB3J8SojEE9EM2wuSJzcsFMG4ttQgx4DsRalkZENxL+AuJQaMcsGxBOAmGvopk8AVz1sLZgg0bsAAAAASUVORK5CYII= ');
+}
+
+/*
+分页
+*/
+
+/*
+借用了bootstrap的pagination
+*/
+.pull-right {
+  float: right!important;
+  height: 35px;
+}
+.pagination {
+  display: inline-block;
+  padding-left: 0;
+  margin: 0px;
+  border-radius: 4px;
+  margin-right: 12px;
+}
+.pagination > li {
+  display: inline;
+}
+.pagination > li > a,
+.pagination > li > span {
+  position: relative;
+  float: left;
+  padding: 6px 12px;
+  line-height: 1.42857143;
+  text-decoration: none;
+  background-color: #f5f6f7;
+  border: 1px solid #e3e4e5;
+  margin-left: -1px;
+}
+
+.pagination > li > a:hover,
+.pagination > li > span:hover,
+.pagination > li > a:focus,
+.pagination > li > span:focus {
+
+  color: #2ec9c2;
+  background-color: #ffffff;
+  cursor: default;
+}
+.pagination > .active > a,
+.pagination > .active > span,
+.pagination > .active > a:hover,
+.pagination > .active > span:hover,
+.pagination > .active > a:focus,
+.pagination > .active > span:focus {
+
+  color: #2ec9c2;
+  background-color: #ffffff;
+  cursor: default;
+}
+.wasabi-table-pagination
+{
+  display: block;
+  padding-top: 0px;
+  height: 35px;
+}
+.wasabi-table-pagination .pagination-detail {
+  padding-left:20px;
+  float:left;
+  padding-top: 10px;
+
+}
+
+.wasabi-table-pagination div.pagination .pagination {
+  margin: 0;
+}
+
+.wasabi-table-pagination .pagination a {
+  padding: 6px 12px;
+  line-height: 1.428571429;
+}
+
+.wasabi-table-pagination .pagination-info {
+
+  margin-right: 5px;
+}
+
+.wasabi-table-pagination .btn-group {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.wasabi-table-pagination .dropup .dropdown-menu {
+  margin-bottom: 0;
+}
+
+.wasabi-table-pagination .page-list {
+  display: inline-block;
+}
+
+/*
+正在加载
+*/
+.wasabi-table .wasabi-table-loading {
+  position: absolute;
+  float: left;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  background-color: #000000;
+  opacity: 0.1;
+
+}
+
+
+.wasabi-table  .wasabi-load-icon
+{
+
+  position: absolute;
+  left: 50%;
+  top:20%;
+  background-image: url("../../img/loading.gif");
+  background-size: 16px 16px;
+  background-repeat: no-repeat;
+  width:16px;
+  height: 16px;
+}
+.wasabi-table .wasabi-table-divide
+{
+  position: absolute;
+  height: 100%;
+  width: 1px;
+  z-index: 2;
+  top:0px;
+  display: none;
+  cursor: ew-resize;
+  background-color: #dedede;
+
+}
+.wasabi-table .header-menu-container {
+  z-index: 2;
+  position: absolute;
+  display: none;
+  height: auto;
+  width: 120px;
+  top: 0px;
+  left: 0px;
+
+  .header-menu {
+    float: left;
+    min-width: 160px;
+    padding: 5px 0;
+    margin: 2px 0 0;
+    font-size: 14px;
+    text-align: left;
+    list-style: none;
+    background-color: #fff;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    border: 1px solid #ccc;
+    border: 1px solid rgba(0, 0, 0, .15);
+    border-radius: 4px;
+    -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+    a {
+      display: block;
+      padding: 3px 20px;
+      clear: both;
+      font-weight: normal;
+      line-height: 1.42857143;
+      color: #666666;
+      white-space: nowrap;
+      text-decoration: none;
+    }
+    a:hover {
+      color: #262626;
+      background-color: #f5f5f5;
+    }
+  }
+}

@@ -4,9 +4,9 @@ date:2016-10-30
 desc:单页面应用的事件处理模型
  */
 let React=require("react");
-let Message=require("../../Base/Unit/Message.jsx");
+let Message=require("../../Unit/Message.jsx");
 let unit=require("../../libs/unit.js");
-let FetchModel=require("../../model/FetchModel.js");
+let FetchModel=require("../../Model/FetchModel.js");
 let PageHandlerMixins={
     getHandler:function(id,disabled){//获取一个实例模型
         var getUrl=this.state.getUrl;

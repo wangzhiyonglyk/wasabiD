@@ -1,0 +1,42 @@
+@import url("../base.scss") ;
+.wasabi-tree {
+  line-height: 26px;
+}
+.wasabi-tree cite{
+  padding: 0 3px;
+  position: absolute;
+  top: -7px;
+
+
+}
+.wasabi-tree li {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.wasabi-tree a{
+  position: relative;
+  color: #666666;
+}
+.wasabi-tree a:hover {
+  color: #3c92a7;
+}
+.wasabi-tree a.selected {
+  color: #3c92a7;
+}
+.wasabi-tree i{
+  padding-left: 3px;
+  font-size: 14px;
+
+}
+
+.wasabi-tree li ul {
+  display: none;
+  margin-left: 30px;
+}
+.wasabi-tree li ul.show
+{
+  display: block!important;
+}
+

@@ -4,8 +4,8 @@
 
  */
 let React=require("react");
-var validation=require("../Base/Lang/validation.js");
-var regexp=require("../Base/Lang/regs.js");
+var validation=require("../Lang/validation.js");
+var regexp=require("../Lang/regs.js");
 let Validate={
     validate:function(value) {
         if(value==null||value==undefined)

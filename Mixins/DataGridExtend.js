@@ -6,8 +6,8 @@
  */
 let React=require("react");
 var unit=require("../libs/unit.js");
-var FetchModel=require("../model/FetchModel.js");
-var Message=require("../Base/unit/Message.jsx");
+var FetchModel=require("../Model/FetchModel.js");
+var Message=require("../Unit/Message.jsx");
 let DataGridExtend= {
     //表体常用操作
     onClick: function (rowData, rowIndex) {
@@ -80,8 +80,13 @@ let DataGridExtend= {
             数据生成后,先调整两个表格的宽度，因为有可能出现滚动条
             再得到表头的各列的宽度,修改固定表头列宽度,使得固定表头与表格对齐
              */
+if(this.refs.bodytable.getBoundingClientRect().width==0) {//TODO 暂时不清楚为什么会0的情况
 
-            this.refs.headertable.style.width=this.refs.bodytable.getBoundingClientRect().width+"px";
+}
+else {
+    this.refs.headertable.style.width = this.refs.bodytable.getBoundingClientRect().width + "px";
+}
+
             //固定表头的列
             var headerTableHeader = this.refs.headertable.children[0].children[0].children;
 

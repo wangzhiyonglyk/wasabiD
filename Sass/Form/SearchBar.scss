@@ -1,0 +1,44 @@
+//create by wangzy
+//date:2016-05-10
+//desc:菜单树的样式
+@import url("../base.scss") ;
+.wasabi-searchbar
+{
+margin: 0px;
+  padding-top: 5px;
+  padding-left: 10px;
+  padding-bottom: 5px;
+  width:100%;
+  overflow: visible;
+}
+.wasabi-searchbar .leftform
+{
+  float: left;
+}
+.wasabi-searchbar .rightbutton
+{
+  width:120px;
+  position: relative;
+  float: right;
+}
+
+ .wasabi-searchbar-down
+{
+  background-image: url("../../img/btndown.png");
+   width: 13px !important;
+   height: 20px;
+   background-size: 13px 20px;
+   background-repeat: no-repeat;
+   background-color: transparent;
+   margin-top: 4px;
+}
+.wasabi-searchbar-up
+{
+  background-image: url("../../img/btnup.png");
+  width: 13px !important;
+  height: 20px;
+  background-size: 13px 20px;
+  background-repeat: no-repeat;
+  background-color: transparent;
+  margin-top: 4px;
+}

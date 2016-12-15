@@ -1,0 +1,126 @@
+/*线性进度条的样式*/
+.wasabi-lineProgress-wrap{
+  display: flex;
+  align-items: center;
+  overflow:hidden
+}
+.wasabi-lineProgress{
+  border-radius: 10px;
+  background-color: #e1e1e1;
+  position: relative;
+  float: left;
+}
+.wasabi-lineProgress-percentShow{
+  background-color: #2db7f5;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  border-radius: 10px;
+}
+.wasabi-lineProgress-percentShow.success{
+  background-color:#87d068 ;
+}
+
+.wasabi-percentShowActive{
+  background-color:#ffffff;
+  border-radius: 10px;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 0;
+  opacity: 0.8;
+}
+.wasabi-lineProgress-percentShow.exception{
+  background-color:orangered;
+}
+.wasabi-lineProgress-percentShow.success{
+  background-color:#87d068;
+}
+
+.wasabi-showInfo{
+  float: left;
+  margin-left: 10px;
+}
+.progress-showIcon{
+    min-width: 14px;
+    min-height: 14px;
+    background: red;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.progress-showIcon.success{
+    background: #87d068;
+}
+
+.progress-showIcon .icon{
+  width: 60%;
+  height: 60%;
+  background-image: url('../../img/progress_exception.png');
+  background-repeat: no-repeat;
+  background-position:  center center;
+  background-size: 100% 100%;
+}
+
+.progress-showIcon.success .icon{
+  background-image: url('../../img/progress_success.png');
+  background-repeat: no-repeat;
+  background-position:  center center;
+  background-size: 100% 100%;
+}
+
+
+
+/*环形进度条的样式*/
+
+.wasabi-pie{
+  border-radius: 50%;
+  background: #e1e1e1;
+  background-image: linear-gradient(to right,#e1e1e1 50%,#2db7f5 0);
+  position: relative;
+}
+.wasabi-pie-cover{
+  width: 70%;
+  height: 70%;
+  border-radius: 50%;
+  background: #ffffff;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  color: #2db7f5;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  align-items: center;
+  justify-content: center;
+}
+.wasabi-pie:before{
+  content: "";
+  display: block;
+  margin-left: 50%;
+  height: 100%;
+
+  border-radius: 0 100% 100% 0 / 50%;
+  background-color: inherit;
+  transform-origin: left;
+  animation: spin 50s linear infinite,bg 100s step-end infinite;
+  animation-play-state: paused;
+  animation-delay: inherit;
+}
+@keyframes spin {
+  to {transform: rotate(.5turn)}
+}
+@keyframes bg {
+  50% {background: #2db7f5;}
+}
+
+.pie-showInfo{
+  word-break: normal;
+  width: auto;
+  display: block;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow: hidden;
+  text-align: center;
+}

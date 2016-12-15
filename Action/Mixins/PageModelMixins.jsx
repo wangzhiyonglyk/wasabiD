@@ -5,10 +5,10 @@
  */
 
 let React=require("react");
-let ButtonModel =require("../../model/ButtonModel.js");
-let FetchModel =require("../../model/FetchModel.js");
-let FormModel =require("../../model/FormModel.js");
-let HeaderModel =require("../../model/HeaderModel.js");
+let ButtonModel =require("../../Model/ButtonModel.js");
+let FetchModel =require("../../Model/FetchModel.js");
+let FormModel =require("../../Model/FormModel.js");
+let HeaderModel =require("../../Model/HeaderModel.js");
 let unit=require("../../libs/unit.js");
 let PageModelMixins= {
     modelUrl:function(){//获取模型的url

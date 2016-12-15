@@ -4,16 +4,15 @@
  */
 let React=require("react");
 
-let SearchBar =require("../Base/Form/SearchBar.jsx");
-let Form =require("../Base/Form/Form.jsx");
-let Toolbar =require("../Base/Buttons/Toolbar.jsx");
-let DataGrid =require("../Base/Data/DataGrid.jsx");
-let SlidePanel =require("../Base/Layout/SlidePanel.jsx");
+let SearchBar =require("../Form/SearchBar.jsx");
+let Form =require("../Form/Form.jsx");
+let Toolbar =require("../Buttons/Toolbar.jsx");
+let DataGrid =require("../Data/DataGrid.jsx");
+let SlidePanel =require("../Layout/SlidePanel.jsx");
  let PageHandlerMixins=require("./Mixins/PageHandlerMixins.jsx");
  let PageModelMixins=require("./Mixins/PageModelMixins.jsx");
-var alogHandler=require("../Mixins/alogHandler.js");//专门为心怡科技做兼容处理
 let Page=React.createClass({
-        mixins: [PageHandlerMixins, PageModelMixins,alogHandler],
+        mixins: [PageHandlerMixins, PageModelMixins],
         propTypes: {
             title: React.PropTypes.string.isRequired,//页面的标题
             controller: React.PropTypes.string.isRequired,//控制器名称

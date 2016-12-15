@@ -4,12 +4,12 @@
  desc:excel数据导入组件
  */
 let  React=require("react");
-let Modal=require("../Base/Layout/Modal.jsx");
-let Button=require("../Base/Buttons/Button.jsx");
-let Message=require("../Base/unit/Message.jsx");
+let Modal=require("../Layout/Modal.jsx");
+let Button=require("../Buttons/Button.jsx");
+let Message=require("../Unit/Message.jsx");
 let fileType=require("../libs/fileType.js");
 var unit=require("../libs/unit.js");
-require("../sass/Action/Import.scss");
+require("../Sass/Action/Import.scss");
 let  Import=React.createClass({
     propTypes: {
         name:React.PropTypes.string,//文件字段名称

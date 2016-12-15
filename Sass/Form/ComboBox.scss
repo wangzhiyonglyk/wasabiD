@@ -1,0 +1,264 @@
+/*create by wangzy
+date:2016-04-26
+desc:日期选择样式
+*/
+@import url("../base.scss");
+.combobox {
+  width: 100%;
+  height: 34px;
+  display: block;
+  position: relative;
+}
+
+/*下拉图标*/
+.combobox .pickericon{
+  font-family: 'icomoon' !important;
+  font-style: normal;
+  display: block;
+  width: 34px;
+  height: 34px;
+
+  border-left: 1px solid #d7dde2;
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  cursor: pointer;
+
+}
+
+.combobox .pickericon:before{
+  -webkit-transition: top,-webkit-transform 0.6s;
+  transition: top,-webkit-transform 0.6s;
+  transition: top,transform 0.6s;
+  transition:  top,transform 0.6s,-webkit-transform 0.6s;
+  font-size: 13px;
+  content: "\E915";
+  position: absolute;
+  top: 10px;
+  left: 9px;
+  color: #d7dde2;
+}
+.combobox .pickericon.rotate:before{
+  -webkit-transform: rotate(180deg);
+  transform: rotate(180deg);
+}
+/*下拉添加图标*/
+.combobox .pickeradd{
+  font-family: 'icomoon' !important;
+  font-style: normal;
+  display: block;
+  width: 34px;
+  height: 34px;
+
+  border-left: 1px solid #d7dde2;
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  cursor: pointer;
+}
+.combobox .pickeradd:before
+{
+  content: "\e93e";
+  color: #d7dde2;
+  font-size: 18px;
+  padding: 0px;
+  position: absolute;
+  top: 6px;
+  left: 6.6666px;
+  font-weight: normal;
+}
+/*清空图标*/
+.combobox .picker-clear{
+  font-family: 'icomoon' !important;
+  font-style: normal;
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  right: 40px;
+  top: 8px;
+  cursor: pointer;
+
+}
+.combobox .picker-clear:before{
+  font-size:16px;
+  content: "\e90c";
+  color: #bbbbbb;
+}
+
+/**/
+.combobox .dropcontainter{
+  padding:0px;
+  margin: 0px;;
+  display: none;
+  position: absolute;
+  overflow: visible;
+  z-index:3;
+  top:34px;
+  border:1px solid #d7dde2;
+  box-shadow: 0px 0px 20px #dddddd;
+  background-color: white;
+}
+
+/*多行添加文本*/
+.combobox .mutiText{
+width:250px;
+  height: 180px;
+}
+
+/*日期*/
+.combobox .date {
+  width:249px;
+  height:244px;
+
+}
+.combobox .date.time {
+  height:286px;
+
+}
+
+/*日期范围*/
+.combobox .range
+{
+  width:501px;
+  height:286px;
+}
+.combobox .range.default
+{
+  left:0px;
+}
+.combobox .range.left
+{
+  left: 0px;
+}
+.combobox .range.right
+{
+  left: -170px;
+}
+/*联级选择*/
+.combobox .picker
+{
+  width:410px;
+  height:527px;
+  overflow: visible;
+
+
+}
+.combobox .picker.default
+{
+  left: 0px;
+}
+.combobox .picker.left
+{
+  left:0px;
+}
+.combobox .picker.right
+{
+  left:-170px;
+}
+/*下拉列表*/
+.combobox .gridpicker{
+  width:410px;
+  height:527px;
+  padding:0px;
+  margin: 0px;;
+  display: none;
+  position: absolute;
+  left: 0px;
+  z-index:4;
+  top:34px;
+  border:1px solid #d7dde2;
+  box-shadow: 0px 0px 20px #dddddd;
+  background: white;
+  overflow: auto;
+}
+.combobox .gridpicker.default
+{
+  left: 0px;
+}
+.combobox .gridpicker.left
+{
+  left:0px;
+}
+.combobox .gridpicker.right
+{
+  left:-140px;
+}
+/*下拉列表*/
+.combobox .treepicker{
+  width:250px;
+  height:400px;
+  padding:0px;
+  margin: 0px;;
+  display: none;
+  position: absolute;
+  left: 0px;
+  z-index:4;
+  top:34px;
+  border:1px solid #d7dde2;
+  box-shadow: 0px 0px 20px #dddddd;
+  background: white;
+  overflow: auto;
+}
+.combobox .treepicker.default
+{
+  left: 0px;
+}
+.combobox .treepicker.left
+{
+  left:0px;
+}
+.combobox .treepicker.right
+{
+  left:-60px;
+}
+
+/*下拉面板*/
+.combobox .panelpicker
+{
+  width:410px;
+  height:527px;
+  padding:0px;
+  margin: 0px;;
+  display: none;
+  position: absolute;
+  z-index:4;
+  top:34px;
+  background: white;
+
+}
+.combobox .panelpicker.default
+{
+  left: 0px;
+}
+.combobox .panelpicker.left
+{
+  left:0px;
+}
+.combobox .panelpicker.right
+{
+  left:-170px;
+}
+
+.combobox .ok
+{
+  display: block;
+ width: 100%;
+  height:40px;
+  border-top: 1px solid #f0f0f0;
+  border-bottom: none;
+  text-align: right;
+  float: left;
+
+}
+.combobox .ok .wasabi-button
+{
+  margin-top:5px;
+  margin-bottom: 5px;
+  min-width: 66px;
+  width:66px;
+}
+.combobox .mutiText .ok
+{
+  text-align: center;
+  border-top: none;
+}
