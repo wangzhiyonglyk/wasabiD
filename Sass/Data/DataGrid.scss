@@ -64,6 +64,7 @@
 .wasabi-table .table-body {
   width: 100%;
   overflow: auto;
+  margin-bottom: 1px;
 }
 /*
 表格基本样式
@@ -72,7 +73,6 @@
   border: 1px solid #e3e4e5;
   border-spacing: 0;
   border-collapse: collapse;
-  margin-bottom: 2px;
   width: 100%;
 
 }
@@ -88,14 +88,14 @@
   border-bottom: 1px solid #e3e4e5;
   padding: 0px;
 }
-.wasabi-table .table > thead > tr > th:last-child
-{
-  border-right: 0px;
-}
-.wasabi-table .table >  tbody > tr > td:last-child
-{
-  border-right: 0px;
-}
+//.wasabi-table .table > thead > tr > th:last-child
+//{
+//  border-right: 0px;
+//}
+//.wasabi-table .table >  tbody > tr > td:last-child
+//{
+//  border-right: 0px;
+//}
 
 /*
 没有边框的时候
@@ -130,6 +130,9 @@
   padding-left: 5px;
   padding-right: 5px;
   display: inline-block;
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
 }
 /*
 序号列,与checkbox 边距10,为了保持与其他组件对齐

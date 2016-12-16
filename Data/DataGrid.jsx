@@ -19,11 +19,12 @@ var shouldComponentUpdate=require("../Mixins/shouldComponentUpdate.js");
 var DataGridHandler=require("../Mixins/DataGridHandler.js");
 var DataGridExtend=require("../Mixins/DataGridExtend.js");
 var pasteExtend=require("../Mixins/pasteExtend.js");
+var ClickAway=require("../Unit/ClickAway.js");
 
 
 
 var DataGrid=React.createClass({
-    mixins:[shouldComponentUpdate,DataGridHandler,DataGridExtend,pasteExtend],
+    mixins:[shouldComponentUpdate,DataGridHandler,DataGridExtend,pasteExtend,ClickAway],
     propTypes: {
         width:React.PropTypes.oneOfType([
             React.PropTypes.number,
@@ -211,6 +212,7 @@ var DataGrid=React.createClass({
         {//如果存在url,
             this.updateHandler(this.state.url,this.state.pageSize,this.state.pageIndex,this.state.sortName,this.state.sortOrder)
         }
+        this.registerClickAway(this.hideMenuHandler, this.refs.grid);//注册全局单击事件
     },
     componentDidUpdate:function() {
         this.setWidthAndHeight();//重新计算列表的高度,固定的表头每一列的宽度
