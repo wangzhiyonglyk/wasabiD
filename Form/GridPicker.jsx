@@ -216,8 +216,7 @@ let GridPicker=React.createClass({
             show: !this.state.show
         });
     },
-    clearHandler:function()
-    {//清除数据
+    clearHandler:function() {//清除数据
         if(this.props.onSelect!=null)
         {
             this.props.onSelect("","",this.props.name,null);

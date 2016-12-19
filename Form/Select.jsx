@@ -287,6 +287,15 @@ let Select=React.createClass({
         this.unbindClickAway();//卸载全局单击事件
     },
     changeHandler:function(event) {
+        this.setState({
+            show:false,
+            value:event.target.value,
+            text:event.target.text,
+        });
+        if(this.props.onSelect!=null)
+        {
+            this.props.onSelect(event.target.value,event.target.value,this.props.name,null);
+        }
     },
     onSelect:function(value,text,rowData) {//选中事件
         this.isChange=true;//代表自身发生了改变,防止父组件没有绑定value,text的状态值,而导致无法选择的结果
@@ -411,7 +420,7 @@ let Select=React.createClass({
                     <div className={"nice-select "}  style={style}    >
                         <i className={"picker-clear"} onClick={this.clearHandler} style={{display:this.state.readonly?"none":(this.state.value==""||!this.state.value)?"none":"inline"}}></i>
                         <i className={"icon "+(this.state.show?"rotate":"")} onClick={this.showOptions}></i>
-                        <input type="text" {...inputProps} value={this.state.text}  onClick={this.showOptions}  onChange={this.changeHandler}  />
+                        <input type="text" {...inputProps} value={this.state.text}    onChange={this.changeHandler}  />
 
                         {
                             control
