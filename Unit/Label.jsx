@@ -18,7 +18,7 @@ let Label=React.createClass({
         return {
             name: "",
             hide: false,
-            help:"这是帮助信息",
+            help:null,
             required: false
         }
 
