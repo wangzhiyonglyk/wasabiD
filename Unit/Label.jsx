@@ -9,15 +9,16 @@ let React=require("react");
 let Label=React.createClass({
     propTypes: {
 
-    name:React.PropTypes.oneOfType([React.PropTypes.string,React.PropTypes.object,React.PropTypes.element,React.PropTypes.node]),//名称
-    hide:React.PropTypes.bool,//是否隐藏
+        name:React.PropTypes.oneOfType([React.PropTypes.string,React.PropTypes.object,React.PropTypes.element,React.PropTypes.node]),//名称
+        hide:React.PropTypes.bool,//是否隐藏
+        help:React.PropTypes.string,//帮助文字
         required:React.PropTypes.bool,//是否必填项
     },
     getDefaultProps:function() {
-
         return {
             name: "",
             hide: false,
+            help:"这是帮助信息",
             required: false
         }
 
@@ -26,8 +27,19 @@ let Label=React.createClass({
         return {
             name:this.props.name,
             hide: this.props.hide,
+            showHelp:false,
             required: this.props.required
         }
+    },
+    helpHandler:function () {
+        this.setState({
+            showHelp:!this.state.showHelp
+        })
+    },
+    hide:function () {//给父组件调用
+        this.setState({
+            showHelp:false
+        })
     },
     componentWillReceiveProps:function(nextProps) {
         this.setState({
@@ -36,11 +48,11 @@ let Label=React.createClass({
             required:nextProps.required
         })
     },
-render(){
-   return  <div className={"wasabi-form-group-label "+(this.state.required?"required":"") }
-         style={{display:(this.state.hide?"none":(this.state.name&&this.state.name!="")?"table":"none")}}>
-        <label>{this.state.name}</label>
-    </div>
-}
+    render(){
+        return  <div className={"wasabi-form-group-label "+(this.state.required?"required":"") }
+                     style={{display:(this.state.hide?"none":(this.state.name&&this.state.name!="")?"table":"none")}}>
+            <label>{this.state.name}<a className="help" onClick={this.helpHandler} style={{display:(this.props.help?"inline-block":"none")}}>?</a><div className="heip-text" style={{display:(this.state.showHelp?"block":"none")}} >{this.props.help}</div></label>
+        </div>
+    }
 })
 module .exports=Label;

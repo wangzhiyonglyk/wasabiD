@@ -1,0 +1,18 @@
+@import url("../base.scss");
+
+.wasabi-transfer{
+  width: 610px;
+  margin: auto;
+}
+.wasabi-transfer:focus {
+  outline: none;
+}
+.wasabi-transfer-left,.wasabi-transfer-right{width:260px;height:360px;border:1px solid #d7dde2;overflow: auto;}
+.wasabi-transfer-left  li,.wasabi-transfer-right li{line-height:35px;font-size:14px;padding-left:10px;border-bottom:1px solid #d7dde2;cursor:pointer;}
+.wasabi-transfer-left li:hover,.wasabi-transfer-right li:hover{background:#dedede;}
+.wasabi-transfer-left li.on,.wasabi-transfer-right li.on{background:#dcf9f8;}
+
+.wasabi-transfer-left{float:left;}
+.wasabi-transfer-middle{width:86px;float:left;text-align:center; padding-top:100px;}
+
+.wasabi-transfer-right{float:right;}

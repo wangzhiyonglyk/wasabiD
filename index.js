@@ -19,6 +19,7 @@ exports.Toolbar = require('./Buttons/Toolbar.jsx');//LinkButton按钮集合组�
 /*****************数据组件******************/
 exports.DataGrid = require('./Data/DataGrid.jsx');//数据列表组件
 exports.Tree = require('./Data/Tree.jsx');//树的组件
+exports.Transfer = require('./Data/Transfer.jsx');//穿梭框组件
 
 /*****************表单集组件******************/
 exports.SearchBar = require('./Form/searchBar.jsx');//表单查询组件

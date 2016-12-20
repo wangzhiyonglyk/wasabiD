@@ -131,7 +131,9 @@ let DatePicker=React.createClass({
 
         this.registerClickAway(this.hidePicker, this.refs.picker);//注册全局单击事件
     },
-
+    onBlur:function () {
+        this.refs.label.hide();
+    },
     splitDate:function(splitdate) {//拆分日期格式
         var regs=/^(\d{4})-(\d{2})-(\d{2})$/;
         if(splitdate&&splitdate!=""&&regs.test(splitdate))
@@ -322,11 +324,11 @@ let DatePicker=React.createClass({
         }//文本框的属性
         return (
             <div className={componentClassName+this.state.validateClass} style={style} ref="picker">
-                <Label name={this.props.label} hide={this.state.hide} required={this.state.required}></Label>
+                <Label name={this.props.label} ref="label" hide={this.state.hide} required={this.state.required}></Label>
                 <div className={ "wasabi-form-group-body"} style={{width:!this.props.label?"100%":null}}>
                     <div className="combobox" style={{display:this.props.hide==true?"none":"block"}}>
                         <i className={"picker-clear"} onClick={this.clearHandler} style={{display:this.state.readonly?"none":(this.state.value==""||!this.state.value)?"none":"inline"}}></i>
-                        <i className={"pickericon  " +(this.state.show?" rotate":"")} onClick={this.showPicker}></i>
+                        <i className={"pickericon  " +(this.state.show?" rotate":"")} onBlur={this.onBlur} onClick={this.showPicker}></i>
                         <input type="text" {...inputProps} value={this.state.text} onClick={this.showPicker} onChange={this.changeHandler}/>
                         <div className={"dropcontainter "+controlDropClassName+" "+size+" "+this.props.position}
                              style={{display:this.state.show==true?"block":"none"}} >
@@ -337,7 +339,7 @@ let DatePicker=React.createClass({
                         </div>
                     </div>
                     <small className={"wasabi-help-block "+this.props.position}
-                           style={{display:(this.state.helpTip&&this.state.helpTip!="")?this.state.helpShow:"none"}}>{this.state.helpTip}</small>
+                           style={{display:(this.state.helpTip&&this.state.helpTip!="")?this.state.helpShow:"none"}}><div className="text">{this.state.helpTip}</div></small>
                 </div>
             </div>
 

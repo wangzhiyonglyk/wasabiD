@@ -340,6 +340,9 @@ let Select=React.createClass({
     getComponentData:function() {//只读属性，获取当前下拉的数据源
         return this.state.data;
     },
+    onBlur:function () {
+        this.refs.label.hide();
+    },
     filterChangeHandler:function(event) {//筛选查询
         let filterData=[];
         this.state.data.filter((item,index)=>{
@@ -415,18 +418,18 @@ let Select=React.createClass({
 
         return (
             <div className={componentClassName+this.state.validateClass} style={style} ref="select" >
-                <Label name={this.props.label} hide={this.state.hide} required={this.state.required}></Label>
+                <Label name={this.props.label} ref="label" hide={this.state.hide} required={this.state.required}></Label>
                 <div className={ "wasabi-form-group-body"} >
                     <div className={"nice-select "}  style={style}    >
                         <i className={"picker-clear"} onClick={this.clearHandler} style={{display:this.state.readonly?"none":(this.state.value==""||!this.state.value)?"none":"inline"}}></i>
                         <i className={"icon "+(this.state.show?"rotate":"")} onClick={this.showOptions}></i>
-                        <input type="text" {...inputProps} value={this.state.text}    onChange={this.changeHandler}  />
+                        <input type="text" {...inputProps} value={this.state.text} onBlur={this.onBlur}    onChange={this.changeHandler}  />
 
                         {
                             control
                         }
                     </div>
-                    <small className={"wasabi-help-block "+this.props.position} style={{display:(this.state.helpTip&&this.state.helpTip!="")?this.state.helpShow:"none"}}>{this.state.helpTip}</small>
+                    <small className={"wasabi-help-block "+this.props.position} style={{display:(this.state.helpTip&&this.state.helpTip!="")?this.state.helpShow:"none"}}><div className="text">{this.state.helpTip}</div></small>
                 </div>
             </div>
 

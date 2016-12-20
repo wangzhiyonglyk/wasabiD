@@ -15,7 +15,7 @@
   position: fixed;
   top: 20%;
   left: 35%;
-  z-index: 9;
+  z-index: 999999;
   white-space: pre-wrap;
   -webkit-transition: opacity 2s;
   transition:opacity 2s;
@@ -28,7 +28,7 @@
 {
   -webkit-animation: shake 0.5s;
           animation: shake 0.5s;
-  background-color: #f93123;
+  background-color: #de2c3b;
 }
 .wasabi-message.info
 {
@@ -80,7 +80,7 @@
   position: fixed;
   top: 0px;
   left: 35%;
-  z-index: 9;
+  z-index: 999999;
 
 }
 .wasabi-confirm .message {

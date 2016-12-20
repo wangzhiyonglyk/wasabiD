@@ -89,6 +89,11 @@ var LinkButton=React.createClass({
             this.props.onClick(this.props.name,this.props.title);
         }
     },
+    setDisabled:function (disabled) {
+        this.setState({
+            disabled:disabled
+        })
+    },
     dragStartHandler:function(event) {
         //event.dataTransfer.effectAllowed = "move";
         //event.dataTransfer.setDragImage(event.target, 0, 0);
@@ -117,18 +122,18 @@ var LinkButton=React.createClass({
             className += " " + "onlytext";//只有文字
         }
         let style=this.setStyle();//设置按钮样式
-        var linkTextStyle=null;//文本样式
+        var linkTextStyle={};//文本样式
         var iconColor=null;//图标颜色，因为图标基本使用了字体
         if(this.props.backgroundColor) {
             style.backgroundColor = this.props.backgroundColor;
         }
         if(this.props.color) {//单独设置了颜色
-            linkTextStyle={};  linkTextStyle.color=this.props.color;
+             linkTextStyle.color=this.props.color;
             iconColor=this.props.color;
         }
         else if(style.color) {//如果样式中设置了颜色，则取这个颜色
             linkTextStyle.color = style.color;
-            iconColor = tstyle.color;
+            iconColor = style.color;
         }
 
         var title=this.props.tip;//提示信息
@@ -138,7 +143,7 @@ var LinkButton=React.createClass({
         if (this.props.title =="") {//纯图标
             return (<a draggable={this.props.draggable} onDragStart={this.dragStartHandler} title={title}
                        href={this.props.href} onClick={this.clickHandler}
-                       className={className+" onlyicon"} disabled={this.state.disabled} name={this.props.name}>
+                       className={className+" onlyicon"} disabled={this.state.disabled} name={this.props.name} style={style}>
                 <i className={" "+this.props.iconCls} style={{color:iconColor, display:this.props.iconCls==""?"none":"inline-block"}}></i>
             </a>);
         }

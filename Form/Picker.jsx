@@ -213,6 +213,9 @@ let  Picker =  React.createClass({
     },
     changeHandler:function(event) {
     },
+    onBlur:function () {
+      this.refs.label.hide();
+    },
     showPicker:function() {//显示选择
         if (this.state.readonly) {
             //只读不显示
@@ -653,12 +656,12 @@ let  Picker =  React.createClass({
 
         return (
         <div className={componentClassName+this.state.validateClass} style={style} ref="picker" >
-            <Label name={this.props.label} hide={this.state.hide} required={this.state.required}></Label>
+            <Label name={this.props.label} ref="label" hide={this.state.hide} required={this.state.required}></Label>
             <div className={ "wasabi-form-group-body"} style={{width:!this.props.label?"100%":null}}>
                 <div className="combobox"  style={{display:this.props.hide==true?"none":"block"}}   >
                     <i className={"picker-clear"} onClick={this.clearHandler} style={{display:this.state.readonly?"none":(this.state.value==""||!this.state.value)?"none":"inline"}}></i>
                     <i className={"pickericon " +(this.state.show?"rotate":"")} onClick={this.showPicker}></i>
-                    <input type="text" {...inputProps}  value={this.state.text} onClick={this.showPicker}  onChange={this.changeHandler}     />
+                    <input type="text" {...inputProps} onBlur={this.onBlur} value={this.state.text} onClick={this.showPicker}  onChange={this.changeHandler}     />
                     <div className={"dropcontainter  picker "+this.props.position} style={{display:this.state.show==true?"block":"none"}}   >
                         <div className="picker">
                             {this.renderHot()}
@@ -673,7 +676,7 @@ let  Picker =  React.createClass({
 
                     </div>
                 </div>
-                <small className={"wasabi-help-block "+this.props.position} style={{display:(this.state.helpTip&&this.state.helpTip!="")?this.state.helpShow:"none"}}>{this.state.helpTip}</small>
+                <small className={"wasabi-help-block "+this.props.position} style={{display:(this.state.helpTip&&this.state.helpTip!="")?this.state.helpShow:"none"}}><div className="text">{this.state.helpTip}</div></small>
             </div>
         </div>
 

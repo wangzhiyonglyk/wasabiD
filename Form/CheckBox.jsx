@@ -352,7 +352,7 @@ e.preventDefault();//因为有用户借助label属性生成新的checkbox,所以
                         control
                     }
                 </ul>
-                <small className={"wasabi-help-block "+this.props.position} style={{display:(this.state.helpTip&&this.state.helpTip!="")?this.state.helpShow:"none"}}>{this.state.helpTip}</small>
+                <small className={"wasabi-help-block "+this.props.position} style={{display:(this.state.helpTip&&this.state.helpTip!="")?this.state.helpShow:"none"}}><div className="text">{this.state.helpTip}</div></small>
             </div>
         </div>
 

@@ -10,11 +10,13 @@ require("../Sass/Data/DataGridDetail.scss");
 var React=require("react");
 var unit=require("../libs/unit.js");
 var FetchModel=require("../Model/FetchModel.js");
+var Button=require("../Buttons/Button.jsx");
 var LinkButton=require("../Buttons/LinkButton.jsx");
 var CheckBox=require("../Form/CheckBox.jsx");
 var Text=require("../Form/Text.jsx");
 var Radio=require("../Form/Radio.jsx");
 var Message=require("../Unit/Message.jsx");
+var Transfer=require("./Transfer.jsx");
 var shouldComponentUpdate=require("../Mixins/shouldComponentUpdate.js");
 var DataGridHandler=require("../Mixins/DataGridHandler.js");
 var DataGridExtend=require("../Mixins/DataGridExtend.js");
@@ -51,6 +53,7 @@ var DataGrid=React.createClass({
         data:React.PropTypes.array,//当前页数据（json）
 
         url:React.PropTypes.string,//ajax地址
+        headerUrl:React.PropTypes.string,//获取后台所有列的数据的url
         backSource:React.PropTypes.string,//ajax的返回的数据源中哪个属性作为数据源,为null时直接后台返回的数据作为数据源(旧版本)
         dataSource:React.PropTypes.string,//ajax的返回的数据源中哪个属性作为数据源,为null时直接后台返回的数据作为数据源(新版本)
         totalSource:React.PropTypes.string,//ajax的返回的数据源中哪个属性作为总记录数,为null时直接后台返回的数据中的total
@@ -74,6 +77,7 @@ var DataGrid=React.createClass({
         clearChecked:React.PropTypes.bool,//刷新数据后是否清除选择,
         pasteUrl:React.PropTypes.string,//粘贴后的url
         pasteParamsHandler:React.PropTypes.func,//对粘贴后的数据进行处理,形成参数并且返回
+
     },
     getDefaultProps:function(){
         return{
@@ -96,6 +100,7 @@ var DataGrid=React.createClass({
             updateHandler:null,
             detailHandler:null,
             url:null,//
+            headerUrl:null,
             backSource:"data",//
             dataSource:"data",//
             totalSource:"total",//
@@ -114,6 +119,7 @@ var DataGrid=React.createClass({
             pasteParamsHandler:null,
 
 
+
         }
     },
     getInitialState:function() {
@@ -125,6 +131,7 @@ var DataGrid=React.createClass({
         }
         return {
             url:this.props.url,
+            headerUrl:this.props.headerUrl,
             params:unit.clone( this.props.params),//这里一定要复制,只有复制才可以比较两次参数是否发生改变没有,防止父组件状态任何改变而导致不停的查询
             pageIndex:this.props.pageIndex,
             pageSize:this.props.pageSize,
@@ -135,11 +142,14 @@ var DataGrid=React.createClass({
             detailView:null,//详情行,
             detailIndex:null,//显示详情的行下标
             total:this.props.total,//总记录数
-            loading:(this.props.url&&this.props.url!="")?true:false,//显示正在加载图示
+            loading:(this.props.url||this.props.headerUrl)?true:false,//显示正在加载图示
             footer:this.props.footer,//页脚
             headers:this.props.headers,//表头会可能后期才传送,也会动态改变
             height:this.props.height,//如果没有设置高度还要从当前页面中计算出来空白高度,以适应布局
-            headerMenu:[]//被隐藏的列
+            headerMenu:[],//被隐藏的列
+            panelShow:false,//列表的操作面板
+            headerData:headerData,//所有的列
+            headerSelectData:[],//已经选择的列
 
 
         }
@@ -277,6 +287,11 @@ var DataGrid=React.createClass({
                         }
                     }
                     //使用label作为元素name属性，是因为可能有多个列对应同一个字段
+                    var menuControl=null;//打开操作面板的菜单图标
+                    if(this.state.headerUrl&&index==0)
+                    {//在第一列显示
+                        menuControl=<LinkButton style={{color:"#666666",fontSize:12,position:"absolute"}} iconCls={"icon-catalog"} name="menu" tip="菜单" onClick={this.panelShow}/>
+                    }
                     headers.push(
                         <th key={"header" + index.toString()} name={header.label} {...props}
                             className={"" + sortOrder}
@@ -287,7 +302,7 @@ var DataGrid=React.createClass({
                             <div className="wasabi-table-cell" name={header.label} style={{
                                 width: (header.width ? header.width : null),
                                 textAlign: (header.align ? header.align : "left")
-                            }}>{header.label}</div>
+                            }}><span>{header.label}</span>{menuControl}</div>
                         </th>)
 
 
@@ -446,12 +461,12 @@ var DataGrid=React.createClass({
             control=  <div key="pagination-detail" className="pagination-detail">
                 <span className="pagination-info">第{beginOrderNumber}到{endOrderNumber}条,共{pageTotal}页{total}条   </span>
                 每页 <select value={this.state.pageSize} onChange={this.pageSizeHandler}>
-                    <option value={10}>10</option>
-                    <option value={20}>20</option>
-                    <option value={30}>30</option>
-                    <option value={50}>50</option>
-                    <option value={100}>100</option>
-                </select>  条
+                <option value={10}>10</option>
+                <option value={20}>20</option>
+                <option value={30}>30</option>
+                <option value={50}>50</option>
+                <option value={100}>100</option>
+            </select>  条
             </div>;
             return control;
         }
@@ -653,11 +668,15 @@ var DataGrid=React.createClass({
             <div className="wasabi-table-loading" style={{display:this.state.loading==true?"block":"none"}}></div>
             <div className="wasabi-load-icon"  style={{display:this.state.loading==true?"block":"none"}}></div>
             <div onMouseUp={this.divideMouseUpHandler}  ref="tabledivide" className="wasabi-table-divide"  style={{top:(this.props.pagePosition=="top"||this.props.pagePosition=="both")?35:0}}></div>
-            <div className="header-menu-container" ref="headermenu">
-                <ul className="header-menu">
+            <div className="wasabi-header-menu-container" ref="headermenu">
+                <ul className="wasabi-header-menu">
                     <li key="first"><a href="javascript:void(0);" className="header-menu-item" onMouseDown={this.menuHideHandler} >隐藏此列</a></li>
                     {headerMenuCotrol}
                 </ul>
+            </div>
+            <div className="wasabi-table-panel" style={{height:this.state.panelShow?402:0,border:this.state.panelShow?null:"none"}}>
+                <div className="ok"><Button name="ok" onClick={this.panelHeaderDataOkHandler} theme={"green"} title={"确定"}></Button></div>
+                <Transfer data={this.state.headerData} selectData={this.state.headerSelectData} onSelect={this.panelHeaderSelectHandlerheader}/>
             </div>
         </div>);
     }

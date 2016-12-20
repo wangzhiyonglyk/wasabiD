@@ -38,12 +38,12 @@ let Tree=React.createClass({
         }
     },
     getInitialState(){
-        var newData= newData=  this.setValueAndText(nextProps.data);//对数据进行处理
+        var newData=  this.setValueAndText(this.props.data);//对数据进行处理
         return {
             name:this.props.name,
             text: this.props.text,
             value: this.props.value,
-            data:this.props.data,
+            data:newData,
             onSelect: this.props.onSelect,
         }
     },

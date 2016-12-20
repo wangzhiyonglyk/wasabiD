@@ -29,7 +29,7 @@ let Validate={
                 }
                 else if(typeof value==="string"&&(value.indexOf("alert(")>-1||value.indexOf("<script>")>-1||value.indexOf("--")>-1)) {//判断有效性，TODO 后期改为正则
                     isvalidate = false;
-                    helpTip = "输入非法";
+                    helpTip = "非有效数字";
                 }
                 else if (this.props.regexp && this.props.regexp !== "") {  //有正则表达式
 

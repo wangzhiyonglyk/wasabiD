@@ -208,9 +208,11 @@ var Text=React.createClass({
         }
     },
     blurHandler:function() {
+        this.refs.label.hide();
         this.validate(this.state.value);
     },
     clickHandler:function(event) {//单击事件
+
         if(this.props.onClick!=null) {
             var model = {};
             try {//有可能存在复制不成功的情况
@@ -274,10 +276,11 @@ var Text=React.createClass({
 
 
         return (<div className={componentClassName+this.state.validateClass} style={style} onPaste={this.onPaste}>
-                <Label name={this.props.label} hide={this.state.hide} required={this.state.required}></Label>
+                <Label name={this.props.label} ref="label" hide={this.state.hide} required={this.state.required}></Label>
                 <div className={ "wasabi-form-group-body"} style={{width:!this.props.label?"100%":null}}>
                     {control}
-                    <small className={"wasabi-help-block "+this.props.position} style={{display:(this.state.helpTip&&this.state.helpTip!="")?this.state.helpShow:"none"}}>{this.state.helpTip}</small>
+                    <small className={"wasabi-help-block "+this.props.position} style={{display:(this.state.helpTip&&this.state.helpTip!="")?this.state.helpShow:"none"}}>
+                        <div className="text">{this.state.helpTip}</div></small>
                 </div>
             </div>
         )

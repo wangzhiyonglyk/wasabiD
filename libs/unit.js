@@ -35,24 +35,24 @@ baseUtil.GetArgsFromHref = function (sHref, sArgName) {
 //判断浏览器类型
 baseUtil. BrowserType=function(){
     var browserType="";
-    var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串
-    if (userAgent.indexOf("Opera") > -1) {//判断是否Opera浏览器
+    var userAgent = navigator.userAgent.toLowerCase(); //取得浏览器的userAgent字符串
+    if (userAgent.indexOf("opera") > -1) {//判断是否Opera浏览器
         browserType= "Opera"
     }
-    else if(userAgent.indexOf("OPR")>-1)
+    else if(userAgent.indexOf("opr")>-1)
     {//新版本是这个
         browserType= "Opera";
     }
-    else  if (userAgent.indexOf("Firefox") > -1) {//判断是否Firefox浏览器
+    else  if (userAgent.indexOf("firefox") > -1) {//判断是否Firefox浏览器
         browserType= "Firefox";
     }
-    else if (userAgent.indexOf("Chrome") > -1){//先判断是否Chrome浏览器
+    else if (userAgent.indexOf("chrome") > -1){//先判断是否Chrome浏览器
         browserType= "Chrome";
     }
-    else  if (userAgent.indexOf("Safari") > -1) {//判断是否Safari浏览器
+    else  if (userAgent.indexOf("safari") > -1) {//判断是否Safari浏览器
         browserType= "Safari";
     }
-    else if (navigator.appName == "Microsoft Internet Explorer") {////判断是否IE浏览器
+    else if ( /msie|trident/.test(userAgent)) {////判断是否IE浏览器
         browserType=  IEType();
     }
 
@@ -61,22 +61,22 @@ baseUtil. BrowserType=function(){
 }
 //判断IE类型
 baseUtil.IEType=function() {
-    if(navigator.appName == "Microsoft Internet Explorer" && navigator.userAgent.indexOf("MSIE 6.")>-1){
+    if( navigator.userAgent.indexOf("MSIE 6.")>-1){
         return ("IE 6");
     }
-    else if(navigator.appName == "Microsoft Internet Explorer" && navigator.userAgent.indexOf("MSIE 7.")>-1){
+    else if(navigator.userAgent.indexOf("MSIE 7.")>-1){
         return ("IE 7");
     }
-    else if(navigator.appName == "Microsoft Internet Explorer" &&  navigator.userAgent.indexOf("MSIE 8.")>-1){
+    else if(navigator.userAgent.indexOf("MSIE 8.")>-1){
         return("IE 8");
     }
-    else if(navigator.appName == "Microsoft Internet Explorer" &&  navigator.userAgent.indexOf("MSIE 9.")>-1){
+    else if( navigator.userAgent.indexOf("MSIE 9.")>-1){
         return("IE 9");
     }
-    else if(navigator.appName == "Microsoft Internet Explorer" &&  navigator.userAgent.indexOf("MSIE 10.")>-1){
+    else if( navigator.userAgent.indexOf("MSIE 10.")>-1){
         return ("IE 10");
     }
-    else if(navigator.appName == "Microsoft Internet Explorer" &&  navigator.userAgent.indexOf("MSIE 11.")>-1){
+    else if(  navigator.userAgent.toLowerCase().indexOf("trident")>-1){
         return ("IE 11");
     }
 }

@@ -378,6 +378,25 @@ let DataGridExtend= {
             headers:headers,
             headerMenu:headerMenu
         })
+    },
+
+    //自定义列面板的处理事件
+    panelShow:function () {//面板显示/隐藏
+        this.setState({
+            panelShow:!this.state.panelShow
+        })
+    },
+
+    panelHeaderSelectHandler:function (data,selectData) {//自定义列中穿梭框的选择事件
+        this.setState({
+            headerData:data,
+            headerSelectData:selectData
+        })
+    },
+    panelHeaderDataOkHandler:function () {//自定义列中确定按钮的单击事件
+        this.setState({
+            panelShow:false
+        })
     }
 }
 module .exports=DataGridExtend;

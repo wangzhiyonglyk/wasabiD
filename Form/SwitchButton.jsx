@@ -124,12 +124,12 @@ let SwitchButton = React.createClass({
 
         return (
         <div className={componentClassName+this.state.validateClass} style={style}>
-            <Label name={this.props.label} hide={this.state.hide} required={this.state.required}></Label>
+            <Label name={this.props.label} ref="label" hide={this.state.hide} required={this.state.required}></Label>
             <div className={ "wasabi-form-group-body"} style={{width:!this.props.label?"100%":null}}>
                 <div className={className} onClick={this.handleClick}>
                     <div className={"slideblock "}></div>
                 </div>
-                <small className={"wasabi-help-block "+this.props.position} style={{display:(this.state.helpTip&&this.state.helpTip!="")?this.state.helpShow:"none"}}>{this.state.helpTip}</small>
+                <small className={"wasabi-help-block "+this.props.position} style={{display:(this.state.helpTip&&this.state.helpTip!="")?this.state.helpShow:"none"}}><div className="text">{this.state.helpTip}</div></small>
             </div>
         </div>
 
