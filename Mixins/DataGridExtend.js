@@ -393,11 +393,73 @@ let DataGridExtend= {
             headerSelectData:selectData
         })
     },
-    panelHeaderDataOkHandler:function () {//自定义列中确定按钮的单击事件
+    getHeaderDataHandler:function (headerUrl) {//获取自定义列
+        if(!headerUrl){
+            headerUrl=this.state.headerUrl;
+        }
+        var fetchmodel=new FetchModel(headerUrl,null,this.getHeaderDataHandlerSuccess);
+        console.log("datagrid-header-get:",fetchmodel);
+        unit.fetch.get(fetchmodel);
+    },
+    getHeaderDataHandlerSuccess:function (result) {
+      if(result.data&&result.data instanceof  Array) {
+          let headerData=[]; let headerSelectData=[];
+          let newHeaders=[];
+          result.data.map((header,index)=>{
+              try {
+                  if(header.name&&header.label&&(header.hide!=null&&header.hide!=undefined)) {
+                     if(header.hide==true)
+                     {//当前要隐藏的
+                         headerData.push(header);
+
+                         let filterResult= this.state.headers.filter((filterHeader,filterIndex)=>{
+                             return  header.name==filterHeader.name;
+                         });
+                         if(filterResult.length>0)
+                         {//说明该列的显示方式已经定义过了。
+
+                             newHeaders.push(filterResult);
+                         }
+                         else
+                         {//说明没有
+                             newHeaders.push(header);
+
+                         }
+                     }
+                     else
+                     {
+                         headerSelectData.push(header);
+                     }
+                  }
+                  else
+                  {
+                      throw new Error("返回的headerData 数据格式不对:{name:'',label:'',hide:true}");
+                  }
+              }
+              catch(e) {
+                  throw new Error(e.message);
+              }
+
+          })
+          this.setState({
+              headers:newHeaders,//新的表头
+              headerData:headerData,//后台返回所有的列
+              headerSelectData:headerSelectData,//当前用户设置好的列
+          })
+      }
+    },
+    saveHeaderDataHandler:function () {//自定义列中确定按钮的单击事件
+        var fetchmodel=new FetchModel(this.state.headerUrl,{model:this.state.headerSelectData},this.headerDataHandlerError());
+        console.log("datagrid-header-save:",fetchmodel);
+        unit.fetch.post(fetchmodel);
+    },
+    headerDataHandlerError:function(errorCode,message) {//查询失败
+        console.log("datagrid-header-data-error",errorCode,message);
+        Message. error(message);
         this.setState({
-            panelShow:false
+            loading:false,
         })
-    }
+    },
 }
 module .exports=DataGridExtend;
 

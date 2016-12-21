@@ -54,6 +54,7 @@ var DataGrid=React.createClass({
 
         url:React.PropTypes.string,//ajax地址
         headerUrl:React.PropTypes.string,//获取后台所有列的数据的url
+        saveHeaderDataUrl:React.PropTypes.string,//保存自定义列的数据的url
         backSource:React.PropTypes.string,//ajax的返回的数据源中哪个属性作为数据源,为null时直接后台返回的数据作为数据源(旧版本)
         dataSource:React.PropTypes.string,//ajax的返回的数据源中哪个属性作为数据源,为null时直接后台返回的数据作为数据源(新版本)
         totalSource:React.PropTypes.string,//ajax的返回的数据源中哪个属性作为总记录数,为null时直接后台返回的数据中的total
@@ -64,11 +65,6 @@ var DataGrid=React.createClass({
         detailHandler:React.PropTypes.func,//展示详情的函数，父组件一定要有返回值,返回详情组件
         footer:React.PropTypes.array,//页脚,
         footerSource:React.PropTypes.string,//页脚数据源,
-        lang:React.PropTypes.oneOf([
-            "java",
-            "C#",
-            "php"
-        ]),//后端语言
         pagePosition:React.PropTypes.oneOf([
             "top",
             "bottom",
@@ -101,6 +97,7 @@ var DataGrid=React.createClass({
             detailHandler:null,
             url:null,//
             headerUrl:null,
+            saveHeaderDataUrl:null,
             backSource:"data",//
             dataSource:"data",//
             totalSource:"total",//
@@ -112,7 +109,6 @@ var DataGrid=React.createClass({
             onChecked:null,
             footerSource:"footer",//页脚数据源
             selectChecked:false,
-            lang:"java",
             pagePosition:"bottom",//默认分页在底部
             clearChecked:true,//是否清空选择的
             pasteUrl:null,
@@ -132,6 +128,7 @@ var DataGrid=React.createClass({
         return {
             url:this.props.url,
             headerUrl:this.props.headerUrl,
+            saveHeaderDataUrl:this.props.saveHeaderDataUrl,
             params:unit.clone( this.props.params),//这里一定要复制,只有复制才可以比较两次参数是否发生改变没有,防止父组件状态任何改变而导致不停的查询
             pageIndex:this.props.pageIndex,
             pageSize:this.props.pageSize,
@@ -148,8 +145,8 @@ var DataGrid=React.createClass({
             height:this.props.height,//如果没有设置高度还要从当前页面中计算出来空白高度,以适应布局
             headerMenu:[],//被隐藏的列
             panelShow:false,//列表的操作面板
-            headerData:headerData,//所有的列
-            headerSelectData:[],//已经选择的列
+            headerData:[],//后台返回所有的列
+            headerSelectData:[],//当前用户设置好的列
 
 
         }
@@ -170,20 +167,27 @@ var DataGrid=React.createClass({
              为假:说明是父组件仅仅使用了状态值作为通信方式,先判断是否有params变化，没有则不查询,有从第一页开始查询
              *********
              */
-            if (this.isReloadType!=true&&this.paramNotEaqual(  nextProps.params)) {
+
+            //存在着这种情况,后期才传headers,headerUrl,saveHeaderDataUrl,所以要更新一下
+            if(nextProps.headerUrl&&this.state.headerUrl!=nextProps.headerUrl) {//地址不空并且地址发生改变，重新查询
+                this.getHeaderDataHandler(nextProps.headerUrl);//
+            }
+            this.setState({
+                headers: nextProps.headers,
+                headerUrl:nextProps.headerUrl,
+                saveHeaderDataUrl:nextProps.saveHeaderDataUrl,
+            })
+
+            if (this.isReloadType!=true&&this.paramNotEaqual(  nextProps.params,this.state.params)) {
                 //仅仅通过状态值更新,参数有变,更新
                 this.updateHandler(nextProps.url,this.state.pageSize, 1, this.state.sortName, this.state.sortOrder, nextProps.params,nextProps.headers);
             }
             else {//父组件状态值没有发生变化,或者使用reload方法更新的
 
-                if(nextProps.headers)
-                { //存在着这种情况,后期才传headers,所以要更新一下
-                    this.setState({
-                        headers: nextProps.headers,
-                    })
-                }
+
 
             }
+
 
         }
         else
@@ -210,6 +214,8 @@ var DataGrid=React.createClass({
                         sortOrder: nextProps.sortOrder,
                         loading: false,
                         headers: nextProps.headers,//表头可能会更新
+                        headerUrl:nextProps.headerUrl,
+                        saveHeaderDataUrl:saveHeaderDataUrl,
                     })
                 }
             }
@@ -218,7 +224,10 @@ var DataGrid=React.createClass({
     },
     componentDidMount:function(){
         //渲染后再开始加载数据
-        if(this.state.url&&this.state.url!="")
+        if(this.state.headerUrl){//如果存在自定义列
+          this.getHeaderDataHandler();
+        }
+        if(this.state.url)
         {//如果存在url,
             this.updateHandler(this.state.url,this.state.pageSize,this.state.pageIndex,this.state.sortName,this.state.sortOrder)
         }
@@ -674,9 +683,9 @@ var DataGrid=React.createClass({
                     {headerMenuCotrol}
                 </ul>
             </div>
-            <div className="wasabi-table-panel" style={{height:this.state.panelShow?402:0,border:this.state.panelShow?null:"none"}}>
-                <div className="ok"><Button name="ok" onClick={this.panelHeaderDataOkHandler} theme={"green"} title={"确定"}></Button></div>
-                <Transfer data={this.state.headerData} selectData={this.state.headerSelectData} onSelect={this.panelHeaderSelectHandlerheader}/>
+            <div className="wasabi-table-panel" style={{height:this.state.panelShow?246:0,border:this.state.panelShow?null:"none"}}>
+                <div className="ok"><Button name="ok" onClick={this.saveHeaderDataHandler} theme={"green"} title={"确定"}></Button></div>
+                <Transfer data={this.state.headerData} valueField={"name"} textField={"label"} selectData={this.state.headerSelectData} onSelect={this.panelHeaderSelectHandlerheader}/>
             </div>
         </div>);
     }

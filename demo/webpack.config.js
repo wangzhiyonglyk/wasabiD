@@ -4,6 +4,10 @@
  * date 2016-01-28
  * desc:打包入口
  */
+    //var path=require("path");
+//var node_modules = path.resolve(__dirname, 'node_modules');
+//var pathToReact = path.resolve(node_modules, 'react/dist/react.min.js');
+//var pathToReactOOM = path.resolve(node_modules, 'react-dom/dist/react-dom.min.js');
 var webpack = require('webpack');
 var commonsPlugin = new webpack.optimize.CommonsChunkPlugin('common.js');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
@@ -13,8 +17,11 @@ module.exports = {
     ],//获取打包css
     //页面入口文件配置
     entry: {
+        /*******************************登录页，主页,我的桌面 ******************************/
+
 
     },
+
     //入口文件输出配置
     output: {
         path: './build/js',
@@ -33,15 +40,19 @@ module.exports = {
             //.js 文件使用babel 来编译处理,"babel-loader"也是一个合法的名称,babel5.0预设插件不需要的
             { test: /\.jsx?$/,  loader: 'babel',query:{presets:["es2015","react","stage-0"]} },
             //图片文件使用 url-loader 来处理，小于8kb的直接转为base64
-            { test: /\.(png|jpg|gif)$/,loader: 'url-loader?limit=8192&name=../img/[name].[ext]'}
-        ]
+            { test: /\.(png|jpg|gif)$/,loader: 'url-loader?limit=8192&name=../img/[name].[ext]'},
+            //打包字体
+            {test: /\.(woff|woff2|svg|eot|ttf)\??.*$/, loader: 'file?name=../font/[name].[ext]'},
+        ],
+        //noParse: [pathToReact,pathToReactOOM]
     },
     //其它解决方案配置
     resolve: {
 
         extensions: ['',  '.js',".jsx" ,'.json', '.scss'],
         alias: {
-
+            //'react': pathToReact,
+            //"react-dom":pathToReactOOM,
         }
     },
     devtool:'source-map'

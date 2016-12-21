@@ -41,7 +41,13 @@ var Form=React.createClass({
             "green",
             "cancel"
         ]),
-        columns:React.PropTypes.number,//自定义列数
+        columns:React.PropTypes.oneOf([//关闭按钮默认主题
+            "none",//不处理
+              1,
+              2,
+              3,
+              4
+        ]),
     },
     getDefaultProps:function() {
         return {
@@ -58,7 +64,7 @@ var Form=React.createClass({
             closeHandler:null,//关闭事件的回调事件
             submitTheme:"green",//提交按钮默认主题
             closeTheme:"cancel",//关闭按钮默认主题
-            columns:null,//自定义列数
+            columns:null,//null系统自行处理列数
         }
 
     },
@@ -360,12 +366,12 @@ var Form=React.createClass({
 
         //表单实际宽度
         let  actualWidth=this.props.width?this.props.width:this.availWidth;//总宽度
-        let columnClass="";//列样式
+        let columnClass="";//列排版样式
         if(this.state.columns)
         {//如果自定义了,则以自定义为标准
             columns=this.state.columns;
         }
-        else {//否则自动计算
+        else if(this.state.columns==null){//没设置，则自动计算
             if (actualWidth <= 610) {//一列
                 columns = 1;
 
@@ -383,24 +389,30 @@ var Form=React.createClass({
 
             }
         }
+        else  if(this.state.columns=="none"||this.state.columns==0)
+        {//不处理
+
+        }
         if(this.state.model.length<columns) {//如果数据小于列数
             columns = this.state.model.length;
         }
-        switch (columns) {
-            case 1:
-                columnClass = "oneline";
-                break;
-            case 2:
-                columnClass = "twoline";
-                break;
-            case 3:
-                columnClass = "threeline";
-                break;
-            case 4:
-                columnClass = "fourline";
-                break;
-
+        if(columns>0) {//需要处理列的排版
+            switch (columns) {
+                case 1:
+                    columnClass = "oneline";
+                    break;
+                case 2:
+                    columnClass = "twoline";
+                    break;
+                case 3:
+                    columnClass = "threeline";
+                    break;
+                case 4:
+                    columnClass = "fourline";
+                    break;
+            }
         }
+
 
 
         style.width=actualWidth;//设置表单的宽度
@@ -436,21 +448,26 @@ var Form=React.createClass({
                     {
 
                         this.state.model.map((child,index) =>{
-                            let position=orderIndex%result.columns;//求余,计算在表单中列位置
-                            if(position==0)
-                            {
-                                position="left";
+                            let position="right";//默认都靠右
+                            if(result.columns) {//需要计算列的位置
+                                position = orderIndex % result.columns;//求余,计算在表单中列位置
+                                if (position == 0) {
+                                    position = "left";
+                                }
+                                else if (position == result.columns - 1) {
+                                    position = "right";
+                                }
+                                else {
+                                    position = "default";
+                                }
                             }
-                            else if(position==result.columns-1)
-                            {
-                                position="right";
+
+                            var size="";//列的大小
+                            if(result.columns) {//需要计算列的大小
+
+                                child.onlyline == true ? "onlyline" : child.size;
                             }
-                            else {
-                                position="default";
-                            }
-                            var size=child.onlyline==true?"onlyline":child.size;//组件大小
-                            if(child.hide==true)
-                            {//如果隐藏的话，不计算序号
+                            if(child.hide==true) {//如果隐藏的话，不计算序号
 
                             }
                             else {

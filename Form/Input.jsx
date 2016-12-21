@@ -14,6 +14,7 @@ var ComboBox=require("./ComboBox.jsx");
 var Text=require("./Text.jsx");
 var None=require("./None.jsx");
 var Button=require("../Buttons/Button.jsx");
+var LinkButton=require("../Buttons/LinkButton.jsx");
 let setStyle=require("../Mixins/setStyle.js");
 var unit=require("../libs/unit.js");
 var shouldComponentUpdate=require("../Mixins/shouldComponentUpdate.js");
@@ -47,6 +48,7 @@ var Input=React.createClass({
             "treepicker",//下拉树选择
             "panelpicker",//面板选择
             "button",//普通按钮
+            "linkbutton",//链接按钮
             "muti"//多行文本
         ]),//输入框的类型
         name:React.PropTypes.string.isRequired,//字段名
@@ -66,6 +68,7 @@ var Input=React.createClass({
         style:React.PropTypes.object,//自定义style
         className:React.PropTypes.string,//自定义class
         size:React.PropTypes.oneOf([
+            "none",
             "default",
             "large",//兼容性值,与two相同
             "two",
@@ -104,6 +107,14 @@ var Input=React.createClass({
         thirdParamsKey:React.PropTypes.string,//第三层节点的后台参数中传递二级节点value值的参数名称
         hotTitle:React.PropTypes.string,//热门选择标题
         hotData:React.PropTypes.array,//热门选择的数据
+
+        //其他属性,参见其他按钮
+        iconCls:React.PropTypes.string,
+        iconAlign:React.PropTypes.oneOf([
+            "left",
+            "right",
+            "rightTop"
+        ]),//图片位置
 
     },
     getDefaultProps:function() {
@@ -183,7 +194,7 @@ var Input=React.createClass({
             data: nextProps.data,
         });
     },
-    changeHandler:function(event) {
+    changeHandler:function(event) {//文本框的值改变事件
         this.setState({
             value: event.target.value,
             text: event.target.value,
@@ -191,13 +202,6 @@ var Input=React.createClass({
         if (this.props.onChange != null) {
             this.props.onChange(event.target.value);//自定义的改变事件
         }
-        //回传给表单组件
-        if (this.props.backFormHandler != null) {
-            this.props.backFormHandler(event.target.value, event.target.value, this.props.name);
-        }
-    },
-    backFormHandler:function(value,text,name,rows)
-    {
         //回传给表单组件
         if (this.props.backFormHandler != null) {
             this.props.backFormHandler(event.target.value, event.target.value, this.props.name);
@@ -223,7 +227,7 @@ var Input=React.createClass({
         }
     },
     validate:function(value) {
-        if(this.props.type=="button")
+        if(this.props.type=="button"||this.props.type=="linkbutton")
         {
             return true;
         }
@@ -290,12 +294,22 @@ var Input=React.createClass({
         return control;
     },
     render:function() {
-        var size=this.props.onlyline==true?"onlyline":this.props.size;//组件大小
+        var size=this.props.onlyline?"onlyline":this.props.size;
         var componentClassName=  "wasabi-form-group "+size+" "+(this.props.className?this.props.className:"");//组件的基本样式
+        var style=this.props.style;
+        if(!style)
+        {
+            style={};
+        }
+        style.lineHeight="35px";
         if(this.props.type=="button")
         {
 
-           return <div className={componentClassName}>    <label className="wasabi-form-group-label" /><Button {...this.props} title={this.props.label} onClick={this.buttonClick}></Button></div>
+           return <div className={componentClassName} style={style}>   <Button {...this.props} title={this.props.label} onClick={this.buttonClick}></Button></div>
+        }
+        else if(this.props.type=="linkbutton") {
+            return <div className={componentClassName} style={style}><LinkButton {...this.props} title={this.props.label}
+                                                                   onClick={this.buttonClick}></LinkButton></div>
         }
         else
         {

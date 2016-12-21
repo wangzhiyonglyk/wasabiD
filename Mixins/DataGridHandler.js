@@ -171,7 +171,6 @@ let DataGridHandler={
             所以回传
              */
             var fetchmodel=new FetchModel(url,this.loadSuccess.bind(this,url,pageSize,pageIndex,sortName,sortOrder,params),actualParams,this.loadError);
-            fetchmodel.lang=this.props.lang;
             console.log("datagrid-开始查询:",fetchmodel);
             unit.fetch.post(fetchmodel);
         }
@@ -287,32 +286,32 @@ let DataGridHandler={
             loading:false,
         })
     },
-    paramNotEaqual:function(params) {//判断前后参数是否相同
+    paramNotEaqual:function(newParam,oldParam) {//判断前后参数是否相同
         let isupdate=false;
-        if(!params&&!this.state.params)
+        if(!newParam&&!oldParam)
         {//都为空
             isupdate=false;//
             return isupdate;
         }
-        else if(params&&!this.state.params&&Object.keys(params).length==0)
+        else if(newParam&&!oldParam&&Object.keys(newParam).length==0)
         {//原来没有参数,现在有了参数,但参数个数为0
             isupdate=false;
             return isupdate;
 
         }
-        else if(params&&!this.state.params&&Object.keys(params).length>0)
+        else if(newParam&&!oldParam&&Object.keys(newParam).length>0)
         {//原来没有参数,现在有了参数,但是参数个数不为0
             isupdate=true;
             return isupdate;
 
         }
-        else if(!params&&this.state.params)
+        else if(!newParam&&oldParam)
         {//清空了参数
             isupdate=true;
             return isupdate;
 
         }
-        else if(params&&this.state.params&&(Object.keys(params).length!=Object.keys(this.state.params).length))
+        else if(newParam&&oldParam&&(Object.keys(newParam).length!=Object.keys(oldParam).length))
         {//都有参数,但是参数个数已经不一样了
             isupdate=true;
             return isupdate;
@@ -320,12 +319,12 @@ let DataGridHandler={
         else
         { //有参数,但参数个数相同,对比
 
-            for(var par in params)
+            for(var par in newParam)
             {
                 try {
 
 
-                    if (params[par] == this.state.params[par]) {
+                    if (newParam[par] == oldParam[par]) {
                         continue;
                     }
                     else {
@@ -485,7 +484,7 @@ let DataGridHandler={
         }
         else {//传了url
 
-            if( this.paramNotEaqual(params))
+            if( this.paramNotEaqual(params,this.state.params))
             {//参数发生改变,从第一页查起
                 this.updateHandler(url,this.state.pageSize, 1, this.state.sortName, this.state.sortOrder,params);
 

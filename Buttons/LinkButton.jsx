@@ -140,7 +140,7 @@ var LinkButton=React.createClass({
         if(title==""||!title) {//如果没有，则默认为文本
             title = this.props.title;
         }
-        if (this.props.title =="") {//纯图标
+        if (!this.props.title ) {//纯图标
             return (<a draggable={this.props.draggable} onDragStart={this.dragStartHandler} title={title}
                        href={this.props.href} onClick={this.clickHandler}
                        className={className+" onlyicon"} disabled={this.state.disabled} name={this.props.name} style={style}>
