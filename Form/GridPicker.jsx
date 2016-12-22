@@ -144,6 +144,7 @@ let GridPicker=React.createClass({
                 required: nextProps.required,
                 params:nextProps.params,
                 validateClass:"",//重置验证样式
+                helpTip:validation["required"],//提示信息
             })
 
         }
@@ -156,6 +157,7 @@ let GridPicker=React.createClass({
                 required: nextProps.required,
                 params:nextProps.params,
                 validateClass:"",//重置验证样式
+                helpTip:validation["required"],//提示信息
             })
         }
 
@@ -165,7 +167,7 @@ let GridPicker=React.createClass({
         this.registerClickAway(this.hidePicker, this.refs.picker);//注册全局单击事件
     },
     onBlur:function () {
-        this.refs.label.hide();
+        this.refs.label.hideHelp();//隐藏帮助信息
     },
     changeHandler:function(event) {
     },

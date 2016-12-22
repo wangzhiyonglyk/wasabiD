@@ -9,6 +9,9 @@ let setStyle=require("../Mixins/setStyle.js");
 var validate=require("../Mixins/validate.js");
 var shouldComponentUpdate=require("../Mixins/shouldComponentUpdate.js");
 var Label=require("../Unit/Label.jsx");
+var Message=require("../Unit/Message.jsx");
+var FetchModel=require("../Model/FetchModel.js");
+var unit=require("../libs/unit.js");
 
 var Text=React.createClass({
     mixins:[setStyle,validate,shouldComponentUpdate],
@@ -60,6 +63,7 @@ var Text=React.createClass({
         max:React.PropTypes.number,//最大值,最大长度
         onClick:React.PropTypes.func,//单击事件
         onChange:React.PropTypes.func,//值改变事件
+        validateUrl:React.PropTypes.string,//后台验证的url
 
     },
     getDefaultProps:function() {
@@ -89,6 +93,7 @@ var Text=React.createClass({
             max:null,
             onClick:null,
             onChange:null,
+            validateUrl:null,
 
 
         }
@@ -101,12 +106,13 @@ var Text=React.createClass({
             value:this.props.value,
             text:this.props.text,
             readonly:this.props.readonly,
-            //验证
             required:this.props.required,
             validateClass:"",//验证的样式
             helpShow:"none",//提示信息是否显示
             helpTip:validation["required"],//提示信息
             invalidTip:"",
+            validateState:null,//是否正在验证
+
         }
     },
     componentWillReceiveProps:function(nextProps) {
@@ -119,6 +125,7 @@ var Text=React.createClass({
             readonly: nextProps.readonly,
             required: nextProps.required,
             validateClass:"",//重置验证样式
+            helpTip:validation["required"],//提示信息
         });
 
     },
@@ -140,7 +147,7 @@ var Text=React.createClass({
                 //数字,或者正数时
                 if(event.target.value=="-"||((!this.state.value||this.state.value.toString().indexOf(".")<0)&&event.target.value.length>0&&event.target.value.toString().lastIndexOf(".")==event.target.value.length-1))
                 {
-                    //第一次输入负号,或者输入小数点时原来没有小数点或为空时）时.不回传给父组件也不验证
+                    //第一次输入负号,或者输入小数点时原来没有小数点或为空时）时.不回传给父组件
                     this.setState({
                         value: event.target.value,
                         text:event.target.value,
@@ -149,14 +156,14 @@ var Text=React.createClass({
                 }
                 else
                 {
-                    istrue = this.validate(event.target.value,event.target);
+                    // istrue = this.validate(event.target.value,event.target);
                 }
 
 
 
             }
             else {//
-                istrue = this.validate(event.target.value,event.target);
+                // istrue = this.validate(event.target.value,event.target);
             }
 
 
@@ -196,6 +203,14 @@ var Text=React.createClass({
 
     },
     keyUpHandler:function(event) {
+        if(event.keyCode==13)
+        {
+            if(this.props.validateUrl)
+            {
+                this.validateHandler(event.target.value);
+            }
+        }
+
         if(this.props.onKeyUp!=null)
         {
             this.props.onKeyUp(event);
@@ -207,9 +222,17 @@ var Text=React.createClass({
             this.props.onFocus();
         }
     },
-    blurHandler:function() {
-        this.refs.label.hide();
-        this.validate(this.state.value);
+    blurHandler:function(event) {
+
+        if(this.props.validateUrl) {//后台验证
+           this.validateHandler(event.target.value);
+        }
+        else {//普通验证
+            this.validate(this.state.value);
+        }
+
+        this.refs.label.hideHelp();//隐藏帮助信息
+
     },
     clickHandler:function(event) {//单击事件
 
@@ -231,6 +254,25 @@ var Text=React.createClass({
       return this.state.value;
     },
 
+    validateHandler:function (value) {//后台请求验证
+        this.setState({
+            validateState:"validing",//正在验证
+        })
+        var fetchmodel=new FetchModel(this.props.validateUrl,this.validateHandlerSuccess,{key:value});
+        console.log("text-validing:",fetchmodel);
+        unit.fetch.post(fetchmodel);
+    },
+    validateHandlerSuccess:function () {//后台请求验证成功
+        this.setState({
+            validateState:"valid",//验证成功
+        })
+    },
+    validateHandlerError:function (errorCode,message) {//后台请求验证失败
+        Message.error(message);
+        this.setState({
+            validateState:"invalid",//验证失败
+        })
+    },
     render:function() {
         var inputType="text";
         if(this.props.type=="password") {
@@ -279,6 +321,7 @@ var Text=React.createClass({
                 <Label name={this.props.label} ref="label" hide={this.state.hide} required={this.state.required}></Label>
                 <div className={ "wasabi-form-group-body"} style={{width:!this.props.label?"100%":null}}>
                     {control}
+                    <i className={this.state.validateState} style={{display:(this.state.validateState?"block":"none")}} ></i>
                     <small className={"wasabi-help-block "+this.props.position} style={{display:(this.state.helpTip&&this.state.helpTip!="")?this.state.helpShow:"none"}}>
                         <div className="text">{this.state.helpTip}</div></small>
                 </div>

@@ -22,11 +22,11 @@ var DataGridHandler=require("../Mixins/DataGridHandler.js");
 var DataGridExtend=require("../Mixins/DataGridExtend.js");
 var pasteExtend=require("../Mixins/pasteExtend.js");
 var ClickAway=require("../Unit/ClickAway.js");
-
+var showUpdate=require("../Mixins/showUpdate.js");
 
 
 var DataGrid=React.createClass({
-    mixins:[shouldComponentUpdate,DataGridHandler,DataGridExtend,pasteExtend,ClickAway],
+    mixins:[shouldComponentUpdate,DataGridHandler,DataGridExtend,pasteExtend,ClickAway,showUpdate],
     propTypes: {
         width:React.PropTypes.oneOfType([
             React.PropTypes.number,
@@ -178,7 +178,7 @@ var DataGrid=React.createClass({
                 saveHeaderDataUrl:nextProps.saveHeaderDataUrl,
             })
 
-            if (this.isReloadType!=true&&this.paramNotEaqual(  nextProps.params,this.state.params)) {
+            if (this.isReloadType!=true&&this.showUpdate(  nextProps.params,this.state.params)) {
                 //仅仅通过状态值更新,参数有变,更新
                 this.updateHandler(nextProps.url,this.state.pageSize, 1, this.state.sortName, this.state.sortOrder, nextProps.params,nextProps.headers);
             }
@@ -232,6 +232,7 @@ var DataGrid=React.createClass({
             this.updateHandler(this.state.url,this.state.pageSize,this.state.pageIndex,this.state.sortName,this.state.sortOrder)
         }
         this.registerClickAway(this.hideMenuHandler, this.refs.grid);//注册全局单击事件
+        window.resizeMethod=this.resizeTableWidthHandler;
     },
     componentDidUpdate:function() {
         this.setWidthAndHeight();//重新计算列表的高度,固定的表头每一列的宽度
@@ -639,8 +640,8 @@ var DataGrid=React.createClass({
             </div>
 
             <div className="table-container">
-                <div className="table-fixHeader" ref="tablefixHeader">
-                    <table  className={className} key="headertable"  ref="headertable"
+                <div className="table-fixHeader" ref="fixedTableContainer">
+                    <table  className={className} key="fixedTable"  ref="fixedTable"
                             onMouseMove={this.fixedTableMouseMoveHandler} onMouseUp={this.fixedTableMouseUpHandler}>
                         <thead>
                         <tr>
@@ -649,9 +650,9 @@ var DataGrid=React.createClass({
                         </thead>
                     </table>
                 </div>
-                <div className="table-body"  ref="tablebody" style={{height:tableHeight}}
+                <div className="table-body"  ref="realTableContainer" style={{height:tableHeight}}
                      onScroll={this.tableBodyScrollHandler}>
-                    <table  className={className} key="bodytable"  ref="bodytable">
+                    <table  className={className} key="realTable"  ref="realTable">
                         <thead >
                         <tr>
                             {headerControl}
@@ -684,7 +685,7 @@ var DataGrid=React.createClass({
                 </ul>
             </div>
             <div className="wasabi-table-panel" style={{height:this.state.panelShow?246:0,border:this.state.panelShow?null:"none"}}>
-                <div className="ok"><Button name="ok" onClick={this.saveHeaderDataHandler} theme={"green"} title={"确定"}></Button></div>
+                <div className="ok"><Button name="ok" delay={3000} onClick={this.saveHeaderDataHandler} theme={"green"} title={"确定"}></Button></div>
                 <Transfer data={this.state.headerData} valueField={"name"} textField={"label"} selectData={this.state.headerSelectData} onSelect={this.panelHeaderSelectHandlerheader}/>
             </div>
         </div>);

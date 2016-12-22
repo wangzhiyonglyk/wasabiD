@@ -74,56 +74,18 @@ let DataGridExtend= {
 
         }
         else { //主列表
-
-            /*
-             数据生成后,先调整两个表格的宽度，因为有可能出现滚动条
-             再得到表头的各列的宽度,修改固定表头列宽度,使得固定表头与表格对齐
-             */
-
-            if (this.refs.bodytable.getBoundingClientRect().width == 0) {//TODO 暂时不清楚为什么会0的情况
+            if (this.refs.realTable.getBoundingClientRect().width == 0) {//TODO 暂时不清楚为什么会0的情况
 
             }
             else {
-                var width = null;//判断是否需要调整表格及列的宽度
-                if (this.refs.tablebody.getBoundingClientRect().width == this.refs.bodytable.getBoundingClientRect().width && this.refs.tablebody.getBoundingClientRect().height <this.refs.bodytable.getBoundingClientRect().height) {
-                    //如果列表与容器的宽度,说明刚好有内侧滚动条
-                    width = this.refs.bodytable.getBoundingClientRect().width - 10;
-                }
-                else {
-                    if (!this.refs.headertable.style.width || this.refs.headertable.style.width == "100%" || this.refs.bodytable.getBoundingClientRect().width != this.refs.headertable.getBoundingClientRect().width) {//没有设定宽度,或者宽度不相等
-                        width = this.refs.bodytable.getBoundingClientRect().width;
-                    }
-                }
-                if (width) {//如果需要调整宽度
-
-                    this.refs.headertable.style.width = (width) + "px";
-                    this.refs.bodytable.style.width = (width) + "px";
-                }
-
-                //固定表头的列
-                var headerTableHeaderth = this.refs.headertable.children[0].children[0].children;
-                //列表的原始表头的列
-                var bodyTableHeaderth = this.refs.bodytable.children[0].children[0].children;
-
-                for (let index = 0; index < bodyTableHeaderth.length; index++) {//遍历，如果原始表头的列的宽度与固定表头对应列不一样,就设置
-                    //设置th的宽度
-                    if( bodyTableHeaderth[index].getBoundingClientRect().width!=   headerTableHeaderth[index].getBoundingClientRect().width)
-                    {
-                        headerTableHeaderth[index].style.width = bodyTableHeaderth[index].getBoundingClientRect().width + "px";
-                        bodyTableHeaderth[index].style.width = bodyTableHeaderth[index].getBoundingClientRect().width + "px";
-                        //设置cell
-                        headerTableHeaderth[index].children[0].style.width =( bodyTableHeaderth[index].getBoundingClientRect().width-1) + "px";
-                        bodyTableHeaderth[index].children[0].style.width = (bodyTableHeaderth[index].getBoundingClientRect().width-1) + "px";
-                    }
-
-                }
-
-
-
+                /*
+                 数据生成后,先调整两个表格的宽度，因为有可能出现滚动条
+                 再得到表头的各列的宽度,修改固定表头列宽度,使得固定表头与表格对齐
+                 */
+                this.resizeTableWidthHandler();//调速表格的宽度
+                this.resizeCellWidthHandler(0);//调整单元格的宽度
 
             }
-
-
 
             /*
              如果没有设定列表的高度,则要自适应页面的高度,增强布局效果
@@ -201,7 +163,7 @@ let DataGridExtend= {
     //表头的处理事件
     headerMouseMoveHandler: function (event) {//表头列,鼠标经过事件,用以判断
         let position = event.target.getBoundingClientRect();
-        let last=this.refs.headertable.getBoundingClientRect().right-position.right;
+        let last=this.refs.fixedTable.getBoundingClientRect().right-position.right;
         if(last>0&&last<=3)
         {//说明是最后一列,不处理
             return;
@@ -273,70 +235,23 @@ let DataGridExtend= {
 
     //表体横行滚动的处理事件
     tableBodyScrollHandler: function (event) {//监听列表的横向滚动的事件,以便固定表头可以一同滚动
-        this.refs.tablefixHeader.style.left = "-" + event.target.scrollLeft + "px";
+        this.refs.fixedTableContainer.style.left = "-" + event.target.scrollLeft + "px";
 
     },
 
     //分割线的处理事件
     divideMouseUpHandler: function (event) {//分割线,鼠标松开事件
+        event.target.style.display = "none";
+        this.refs.grid.style.webkitUserSelect = "text";//可以选择
         let diffWidth = event.clientX - this.divideinitLeft;
         if (diffWidth <= this.moveHeaderWidth - 2 * this.moveHeaderWidth) {//缩小的宽度小于原来的宽度时不处理
 
-            //分割线隐藏
-
-            event.target.style.display = "none";
-            this.refs.grid.style.webkitUserSelect = "text";//可以选择
         }
         else {
-            let headers = this.state.headers;//列表数据
-            var headerTableHeader = this.refs.headertable.children[0].children[0].children;//当前列表样式
-
-            for (let index = 0; index < headers.length; index++) {
-                if (headers[index].label == this.moveHeaderName) {//需要调整的列的宽度
-                    headers[index].width = this.moveHeaderWidth + diffWidth;
-                    //值设置为空
-                    this.moveHeaderName = null;
-                    this.moveHeaderWidth = null;
-                    this.divideinitLeft = null;
-                    //分割线隐藏
-
-                    event.target.style.display = "none";
-                    //重新设置表格宽度,否则在100%下调整宽度效果不明显
-                    var newwidth = this.refs.headertable.getBoundingClientRect().width + diffWidth;
-                    this.refs.headertable.style.width = newwidth + "px";
-                    this.refs.bodytable.style.width = newwidth + "px";
-                    if (newwidth < this.refs.grid.getBoundingClientRect().width) {//整个列表缩小了,分页组件的宽度相应缩小
-                        this.refs.toppagination.style.width = newwidth + "px";
-                        this.refs.bottompagination.style.width = newwidth + "px";
-
-                    }
-                    else {//分页组件与列表容器一样的宽度
-                        this.refs.toppagination.style.width = this.refs.grid.getBoundingClientRect().width + "px";
-                        this.refs.bottompagination.style.width = this.refs.grid.getBoundingClientRect().width + "px";
-                    }
-
-                }
-                else {//不要调整的列
-                    if (headers[index].width) {//已经自定义过宽度了
-
-                    }
-                    else {//没自定义过宽度的,则根据当前效果得到实际宽度,以避免页面出现晃动,这里不能用map
-                        for (var filterIndex = 0; filterIndex < headerTableHeader.length; filterIndex++) {
-                            if (headerTableHeader[filterIndex].getAttribute("name") == headers[index].name) {
-                                headers[index].width = headerTableHeader[filterIndex].getBoundingClientRect().width;//获取当前列的宽度
-                            }
-                        }
-
-                    }
-
-                }
-            }
-
-            this.setState({
-                headers: headers
-            })
+            this.resizeCellWidthHandler(diffWidth);//调整宽度
         }
     },
+
 
     //右键菜单处理事件
     menuHideHandler:function(event) {//没有使用单击事件,用户有可能继续使用鼠标右键,隐藏某一列的事件
@@ -380,13 +295,12 @@ let DataGridExtend= {
         })
     },
 
-    //自定义列面板的处理事件
+    //操作面板面板的处理事件
     panelShow:function () {//面板显示/隐藏
         this.setState({
             panelShow:!this.state.panelShow
         })
     },
-
     panelHeaderSelectHandler:function (data,selectData) {//自定义列中穿梭框的选择事件
         this.setState({
             headerData:data,
@@ -397,69 +311,179 @@ let DataGridExtend= {
         if(!headerUrl){
             headerUrl=this.state.headerUrl;
         }
-        var fetchmodel=new FetchModel(headerUrl,null,this.getHeaderDataHandlerSuccess);
-        console.log("datagrid-header-get:",fetchmodel);
-        unit.fetch.get(fetchmodel);
+        if(headerUrl)
+        {
+            var fetchmodel=new FetchModel(headerUrl,this.getHeaderDataHandlerSuccess,{url:this.state.url},this.headerDataHandlerError);
+            console.log("datagrid-header-get:",fetchmodel);
+            unit.fetch.post(fetchmodel);
+        }
+
     },
     getHeaderDataHandlerSuccess:function (result) {
-      if(result.data&&result.data instanceof  Array) {
-          let headerData=[]; let headerSelectData=[];
-          let newHeaders=[];
-          result.data.map((header,index)=>{
-              try {
-                  if(header.name&&header.label&&(header.hide!=null&&header.hide!=undefined)) {
-                     if(header.hide==true)
-                     {//当前要隐藏的
-                         headerData.push(header);
+        if(result.rows)
+        {
+            result.data=result.rows;
+        }
+        if(result.data&&result.data instanceof  Array) {
+            let headerData=[]; let headerSelectData=[];
+            let newHeaders=[];
+            result.data.map((header,index)=>{
+                try {
+                    if(header.name&&header.label&&(header.hide!=null&&header.hide!=undefined)) {
+                        if(header.hide==true)
+                        {//当前要隐藏的
+                            headerData.push(header);
 
-                         let filterResult= this.state.headers.filter((filterHeader,filterIndex)=>{
-                             return  header.name==filterHeader.name;
-                         });
-                         if(filterResult.length>0)
-                         {//说明该列的显示方式已经定义过了。
+                        }
+                        else
+                        {
+                            let filterResult= this.state.headers.filter((filterHeader,filterIndex)=>{
+                                return  header.name==filterHeader.name;
+                            });
+                            if(filterResult.length>0)
+                            {//说明该列的显示方式已经定义过了。
 
-                             newHeaders.push(filterResult);
-                         }
-                         else
-                         {//说明没有
-                             newHeaders.push(header);
+                                newHeaders.push(filterResult[0]);
+                            }
+                            else
+                            {//说明没有
+                                newHeaders.push(header);
 
-                         }
-                     }
-                     else
-                     {
-                         headerSelectData.push(header);
-                     }
-                  }
-                  else
-                  {
-                      throw new Error("返回的headerData 数据格式不对:{name:'',label:'',hide:true}");
-                  }
-              }
-              catch(e) {
-                  throw new Error(e.message);
-              }
+                            }
+                            headerSelectData.push(header);
+                        }
+                    }
+                    else
+                    {
+                        throw new Error("返回的headerData 数据格式不对:{name:'',label:'',hide:true}");
+                    }
+                }
+                catch(e) {
+                    throw new Error(e.message);
+                }
 
-          })
-          this.setState({
-              headers:newHeaders,//新的表头
-              headerData:headerData,//后台返回所有的列
-              headerSelectData:headerSelectData,//当前用户设置好的列
-          })
-      }
+            })
+            this.setState({
+                headers:newHeaders,//新的表头
+                headerData:headerData,//后台返回所有的列
+                headerSelectData:headerSelectData,//当前用户设置好的列
+            })
+        }
     },
     saveHeaderDataHandler:function () {//自定义列中确定按钮的单击事件
-        var fetchmodel=new FetchModel(this.state.headerUrl,{model:this.state.headerSelectData},this.headerDataHandlerError());
-        console.log("datagrid-header-save:",fetchmodel);
-        unit.fetch.post(fetchmodel);
+        if(this.state.saveHeaderDataUrl)
+        {
+            var fetchmodel=new FetchModel(this.state.saveHeaderDataUrl,this.saveHeaderDataHandlerSuccess,{url:this.state.url,model:this.state.headerSelectData.concat(this.state.headerData)});
+            console.log("datagrid-header-save:",fetchmodel);
+            unit.fetch.post(fetchmodel);
+        }
+
+    },
+    saveHeaderDataHandlerSuccess:function (result) {
+        if(result.success) {
+            Message.success("保存成功");
+            this.setState({
+                panelShow: false
+            })
+        }
+
     },
     headerDataHandlerError:function(errorCode,message) {//查询失败
         console.log("datagrid-header-data-error",errorCode,message);
         Message. error(message);
-        this.setState({
-            loading:false,
-        })
     },
+
+    //单元格宽度调整
+    resizeCellWidthHandler:function (diffWidth) {//调整单元格的宽度
+        var headerTableHeaderth = this.refs.fixedTable.children[0].children[0].children;
+        //列表的原始表头的列
+        var realTableHeaderth = this.refs.realTable.children[0].children[0].children;
+
+        for (let index = 0; index < realTableHeaderth.length; index++) {//遍历，如果原始表头的列的宽度与固定表头对应列不一样,就设置
+            //设置th的宽度
+            if (realTableHeaderth[index].getBoundingClientRect().width != headerTableHeaderth[index].getBoundingClientRect().width) {
+                let width = realTableHeaderth[index].getBoundingClientRect().width;
+                if (realTableHeaderth[index].getAttribute("name") == this.moveHeaderName) {
+                    width = this.moveHeaderWidth + diffWidth;
+                    //清空
+                    this.moveHeaderName = null;
+                    this.moveHeaderWidth = null;
+                    this.divideinitLeft = null;
+                }
+                headerTableHeaderth[index].style.width = width + "px";
+                realTableHeaderth[index].style.width = width + "px";
+                //设置cell
+                headerTableHeaderth[index].children[0].style.width = ( width - 1) + "px";
+                realTableHeaderth[index].children[0].style.width = (width - 1) + "px";
+            }
+
+        }
+
+    },
+
+    //表格宽度调整
+    resizeTableWidthHandler:function () {
+        var width = null;//判断是否需要调整表格的宽度
+        var diffWidth=null;//判断高速表格宽度后，是否需要调整最后一列的宽度
+        if ((this.refs.realTableContainer.getBoundingClientRect().width == this.refs.realTable.getBoundingClientRect().width)
+            && this.refs.realTableContainer.getBoundingClientRect().height <this.refs.realTable.getBoundingClientRect().height
+        ) {
+            //如果列表与列表容器的宽度,说明刚好有内侧滚动条
+            width = this.refs.realTable.getBoundingClientRect().width - 10;
+        }
+        else  if ((this.refs.realTableContainer.getBoundingClientRect().width == this.refs.realTable.getBoundingClientRect().width)
+            && this.refs.realTable.getBoundingClientRect().height==1
+        ) {
+            width = this.refs.realTable.getBoundingClientRect().width - 10;
+            diffWidth=10;
+        }
+        else if (!this.refs.fixedTable.style.width ||
+            this.refs.fixedTable.style.width == "100%"
+            || this.refs.realTable.getBoundingClientRect().width != this.refs.fixedTable.getBoundingClientRect().width) {
+            //没有设定宽度,或者宽度不相等
+            width = this.refs.realTable.getBoundingClientRect().width;
+        }
+        else if(this.refs.grid.getBoundingClientRect().width-20 ==this.refs.realTable.getBoundingClientRect().width ) {//页面的滚动条没有了
+            diffWidth = -10;
+        }
+
+
+
+        if (width) {//如果需要调整宽度
+
+            this.refs.fixedTable.style.width = (width) + "px";
+            this.refs.realTable.style.width = (width) + "px";
+            if(this.refs.realTable.getBoundingClientRect().width!=width)
+            {//修改后发现宽度仍然不一样，调整最后一列的宽度，原因是页面本身出现了滚动条
+                diffWidth=  (this.refs.realTable.getBoundingClientRect().width-width);
+
+            }
+        }
+
+        if(diffWidth)
+        {//需要继续调整最后一列的宽度
+            //
+            var realTableHeaderth = this.refs.realTable.children[0].children[0].children;
+            var fixedTableHeaderth = this.refs.fixedTable.children[0].children[0].children;
+
+            for (let index = this.props.selectAble?1:0; index < realTableHeaderth.length; index++) {//遍历，如果原始表头的列的宽度与固定表头对应列不一样,就设置
+                let thwidth = realTableHeaderth[index].getBoundingClientRect().width;
+                if(index==realTableHeaderth.length-1)
+                {
+                    thwidth=thwidth-diffWidth;
+                }
+
+                this.state.headers[this.props.selectAble?index-1:index].width=thwidth-1;
+            }
+
+            this.setState({
+                headers: this.state.headers
+            })
+        }
+    },
+
+
+
 }
 module .exports=DataGridExtend;
 

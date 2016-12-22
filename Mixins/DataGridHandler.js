@@ -286,64 +286,6 @@ let DataGridHandler={
             loading:false,
         })
     },
-    paramNotEaqual:function(newParam,oldParam) {//判断前后参数是否相同
-        let isupdate=false;
-        if(!newParam&&!oldParam)
-        {//都为空
-            isupdate=false;//
-            return isupdate;
-        }
-        else if(newParam&&!oldParam&&Object.keys(newParam).length==0)
-        {//原来没有参数,现在有了参数,但参数个数为0
-            isupdate=false;
-            return isupdate;
-
-        }
-        else if(newParam&&!oldParam&&Object.keys(newParam).length>0)
-        {//原来没有参数,现在有了参数,但是参数个数不为0
-            isupdate=true;
-            return isupdate;
-
-        }
-        else if(!newParam&&oldParam)
-        {//清空了参数
-            isupdate=true;
-            return isupdate;
-
-        }
-        else if(newParam&&oldParam&&(Object.keys(newParam).length!=Object.keys(oldParam).length))
-        {//都有参数,但是参数个数已经不一样了
-            isupdate=true;
-            return isupdate;
-        }
-        else
-        { //有参数,但参数个数相同,对比
-
-            for(var par in newParam)
-            {
-                try {
-
-
-                    if (newParam[par] == oldParam[par]) {
-                        continue;
-                    }
-                    else {
-                        isupdate = true;
-                        return isupdate;
-                    }
-                }catch (e)
-                {
-                    isupdate = true;
-                    return isupdate;
-                }
-
-            }
-
-        }
-
-
-    },
-
     //选择处理函数
     getKey:function (index,pageIndex) {//获取指定行的关键字，没有指定页号则为当前页
         if(!pageIndex) {
@@ -484,7 +426,7 @@ let DataGridHandler={
         }
         else {//传了url
 
-            if( this.paramNotEaqual(params,this.state.params))
+            if( this.showUpdate(params,this.state.para))
             {//参数发生改变,从第一页查起
                 this.updateHandler(url,this.state.pageSize, 1, this.state.sortName, this.state.sortOrder,params);
 
@@ -534,6 +476,12 @@ let DataGridHandler={
     addRow:function(rowData) {//添加一行
         let newData=this.state.data;
         newData.push(rowData);
+        this.setState({
+            data:newData
+        });
+    },
+    deleteRow:function (index) {
+        let newData=this.state.data.splice(index,1);
         this.setState({
             data:newData
         });

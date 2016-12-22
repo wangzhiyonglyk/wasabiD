@@ -102,7 +102,7 @@ label
   cursor: not-allowed;
 }
 .wasabi-form-control:focus {
-  border-color: #0ec2bc;
+  border-color: #25d7b9;
 
 }
 
@@ -244,6 +244,137 @@ input验证通过,暂时没用
   left: 0px;
 
 }
+
+/*
+后台验证
+ */
+.wasabi-form-group-body .valid,.wasabi-form-group-body .invalid,.wasabi-form-group-body .validing{
+  font-family: 'icomoon' !important;
+  font-style: normal;
+  width: 14px;
+  height: 14px;
+  position: absolute;
+  right: 10px;
+  top: 8px;
+  cursor: pointer;
+}
+
+/*
+验证成功
+*/
+.wasabi-form-group-body .valid:before{
+  font-size:16px;
+  content: "\e95c";
+  color: #25d7b9;
+}
+/*
+验证失败
+ */
+
+.wasabi-form-group-body .invalid:before{
+  font-size:16px;
+  content: "\e918";
+  color: #de2c3b;
+
+}
+
+.wasabi-form-group-body .validing {
+  top: 10px;
+  border-radius: 100%;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+  border: 1px solid #3c92a7;
+  border-bottom-color: transparent;
+  display: inline-block;
+  -webkit-animation: rotate 0.75s 0s linear infinite;
+  animation: rotate 0.75s 0s linear infinite;
+}
+
+@keyframes rotate {
+  0% {
+    -webkit-transform: rotate(0deg) scale(1);
+    transform: rotate(0deg) scale(1); }
+
+  50% {
+    -webkit-transform: rotate(180deg) scale(0.6);
+    transform: rotate(180deg) scale(0.6); }
+
+  100% {
+    -webkit-transform: rotate(360deg) scale(1);
+    transform: rotate(360deg) scale(1); } }
+
+
+
+.wasabi-form-group-body .timeer
+{
+  background-color: transparent;
+  box-shadow: inset 0px 0px 0px 2px #3c92a7;
+  border-radius: 50%;
+  width: 14px;
+  height: 14px;
+  position: relative;
+}
+.timeer:after, .timeer:before{
+  position: absolute;
+  content:"";
+  background-color: #3c92a7;
+}
+.timeer:after{
+  width: 6px;
+  height: 2px;
+  top: 6px;
+  left: 6px;
+  background-color: #3c92a7;
+  -webkit-transform-origin: 1px 1px;
+  -moz-transform-origin: 1px 1px;
+  transform-origin: 1px 1px;
+  -webkit-animation: minhand 2s linear infinite;
+  -moz-animation: minhand 2s linear infinite;
+  animation: minhand 2s linear infinite;
+}
+.timeer:before{
+  width: 5px;
+  height: 2px;
+  top: 6px;
+  left: 6px;
+  background-color: #3c92a7;
+  -webkit-transform-origin: 1px 1px;
+  -moz-transform-origin: 1px 1px;
+  transform-origin: 1px 1px;
+  -webkit-animation: hrhand 8s linear infinite;
+  -moz-animation: hrhand 8s linear infinite;
+  animation: hrhand 8s linear infinite;
+}
+@-webkit-keyframes minhand{
+  0%{-webkit-transform:rotate(0deg)}
+  100%{-webkit-transform:rotate(360deg)}
+}
+@-moz-keyframes minhand{
+  0%{-moz-transform:rotate(0deg)}
+  100%{-moz-transform:rotate(360deg)}
+}
+@keyframes minhand{
+  0%{transform:rotate(0deg)}
+  100%{transform:rotate(360deg)}
+}
+
+@-webkit-keyframes hrhand{
+  0%{-webkit-transform:rotate(0deg)}
+  100%{-webkit-transform:rotate(360deg)}
+}
+@-moz-keyframes hrhand{
+  0%{-moz-transform:rotate(0deg)}
+  100%{-moz-transform:rotate(360deg)}
+}
+@keyframes hrhand{
+  0%{transform:rotate(0deg)}
+  100%{transform:rotate(360deg)}
+}
+
+
+
+
+
 
 /*
 提交表单,注意此处不方便媒体查询，因为弹出层，与滑动面板都有嵌套

@@ -20,33 +20,40 @@ let Validate={
         if(readonly) {//不能直接返回，防止上一次的验证效果还在，导致无法消除
         }
         else {//非只读
-             if (value!=null&&value!=undefined && value !== "") {//注意一定要加双等号，用户输入了值，验证有效性
-                //因为有可能输入0
-                if(value.toString()=="NaN")
-                {//多加一层判断，有可能用户
-                    isvalidate=false;
-                    helpTip="非有效数字";
-                }
-                else if(typeof value==="string"&&(value.indexOf("alert(")>-1||value.indexOf("<script>")>-1||value.indexOf("--")>-1)) {//判断有效性，TODO 后期改为正则
-                    isvalidate = false;
-                    helpTip = "非有效数字";
-                }
-                else if (this.props.regexp && this.props.regexp !== "") {  //有正则表达式
+            if(this.state.validateState&&this.state.validateState!="valid")
+            {//处理于后台验证中,或者是验证失败
+                isvalidate=false;
+            }
+            else
+            {//没有后台验证，或者后台验证已经成功
+                if (value!=null&&value!=undefined && value !== "") {//注意一定要加双等号，用户输入了值，验证有效性
 
-                    isvalidate = this.props.regexp.test(value);
-                    if (!isvalidate) {//无效
+                    //因为有可能输入0
+                    if(value.toString()=="NaN")
+                    {//多加一层判断，有可能用户
+                        isvalidate=false;
+                        helpTip="非有效数字";
+                    }
+                    else if(typeof value==="string"&&(value.indexOf("alert(")>-1||value.indexOf("<script>")>-1||value.indexOf("--")>-1)) {//判断有效性，TODO 后期改为正则
+                        isvalidate = false;
+                        helpTip = "非有效数字";
+                    }
+                    else if (this.props.regexp && this.props.regexp !== "") {  //有正则表达式
 
-                        if (!this.props.invalidTip && this.props.invalidTip !== "") {//用户自定义错误提示信息
-                            helpTip = this.props.invalidTip;
+                        isvalidate = this.props.regexp.test(value);
+                        if (!isvalidate) {//无效
+
+                            if (!this.props.invalidTip && this.props.invalidTip !== "") {//用户自定义错误提示信息
+                                helpTip = this.props.invalidTip;
+                            }
+                            else {//用默认提示
+                                helpTip = validation["invalidTip"];
+                            }
                         }
-                        else {//用默认提示
-                            helpTip = validation["invalidTip"];
+                        else {//有效
                         }
                     }
-                    else {//有效
-                    }
-                }
-                else {//没有正则表达式，则验证默认正则
+                    else {//没有正则表达式，则验证默认正则
 
                         if (regexp[this.props.type]) {
 
@@ -161,17 +168,19 @@ let Validate={
                     }
 
 
-            }
-            else {//输入没有输入
-                if (required) {
-                    //必填
-                    isvalidate = false;//
-                    helpTip = validation["required"];
-                } else {
-                    //认为验证有效
                 }
+                else {//输入没有输入
+                    if (required) {
+                        //必填
+                        isvalidate = false;//
+                        helpTip = validation["required"];
+                    } else {
+                        //认为验证有效
+                    }
 
+                }
             }
+
         }
 
 

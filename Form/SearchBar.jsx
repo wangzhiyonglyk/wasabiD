@@ -230,6 +230,7 @@ var SearchBar=React.createClass({
             this.props.expandHandler(expand);
         }
 
+
     },
     setColumns:function () {//计算列数及样式
         var style={};//表单栏样式

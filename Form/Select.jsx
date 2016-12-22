@@ -59,6 +59,7 @@ let Select=React.createClass({
         data:React.PropTypes.array,//自定义数据源
         extraData:React.PropTypes.array,//额外的数据,对url有效
         onSelect: React.PropTypes.func,//选中后的事件，回传，value,与text,data
+        writable:React.PropTypes.bool,//输入框是否可写
 
 
 
@@ -96,6 +97,7 @@ let Select=React.createClass({
             data:null,
             extraData:null,
             onSelect:null,
+            writable:false,
 
         };
     },
@@ -181,6 +183,7 @@ let Select=React.createClass({
             readonly: nextProps.readonly,
             required: nextProps.required,
             validateClass:"",//重置验证样式
+            helpTip:validation["required"],//提示信息
         })
 
     },
@@ -287,15 +290,19 @@ let Select=React.createClass({
         this.unbindClickAway();//卸载全局单击事件
     },
     changeHandler:function(event) {
-        this.setState({
-            show:false,
-            value:event.target.value,
-            text:event.target.text,
-        });
-        if(this.props.onSelect!=null)
+        if(this.props.writable)
         {
-            this.props.onSelect(event.target.value,event.target.value,this.props.name,null);
+            this.setState({
+                show:false,
+                value:event.target.value,
+                text:event.target.text,
+            });
+            if(this.props.onSelect!=null)
+            {
+                this.props.onSelect(event.target.value,event.target.value,this.props.name,null);
+            }
         }
+
     },
     onSelect:function(value,text,rowData) {//选中事件
         this.isChange=true;//代表自身发生了改变,防止父组件没有绑定value,text的状态值,而导致无法选择的结果
@@ -341,7 +348,7 @@ let Select=React.createClass({
         return this.state.data;
     },
     onBlur:function () {
-        this.refs.label.hide();
+        this.refs.label.hideHelp();//隐藏帮助信息
     },
     filterChangeHandler:function(event) {//筛选查询
         let filterData=[];

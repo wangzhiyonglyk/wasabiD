@@ -152,6 +152,7 @@ let  Picker =  React.createClass({
                 thirdParams:nextProps.thirdParams,
                 thirdParamsKey:nextProps.thirdParamsKey,
                 validateClass:"",//重置验证样式
+                helpTip:validation["required"],//提示信息
             })
         }
         else {
@@ -178,6 +179,7 @@ let  Picker =  React.createClass({
                 thirdParams:nextProps.thirdParams,
                 thirdParamsKey:nextProps.thirdParamsKey,
                 validateClass:"",//重置验证样式
+                helpTip:validation["required"],//提示信息
             })
 
 
@@ -212,9 +214,10 @@ let  Picker =  React.createClass({
         Message. error(message);
     },
     changeHandler:function(event) {
+
     },
     onBlur:function () {
-      this.refs.label.hide();
+        this.refs.label.hideHelp();//隐藏帮助信息
     },
     showPicker:function() {//显示选择
         if (this.state.readonly) {

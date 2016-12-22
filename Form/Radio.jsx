@@ -143,6 +143,7 @@ let Radio=React.createClass({
                 readonly:nextProps.readonly,
                 required:nextProps.required,
                 validateClass:"",//重置验证样式
+                helpTip:validation["required"],//提示信息
             })
         }
         else {
@@ -168,6 +169,7 @@ let Radio=React.createClass({
                 readonly:nextProps.readonly,
                 required:nextProps.required,
                 validateClass:"",//重置验证样式
+                helpTip:validation["required"],//提示信息
             })
 
         }

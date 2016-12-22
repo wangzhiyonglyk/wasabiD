@@ -18,7 +18,7 @@ var Panel=React.createClass({
             "warning",
             "danger",
         ]),//主题
-        width:React.PropTypes.number,//宽度
+        width:React.PropTypes.oneOfType([React.PropTypes.string,React.PropTypes.number]),//宽度
         height:React.PropTypes.number,//高度
         expand:React.PropTypes.bool,//是否展开
         expandAble:React.PropTypes.bool,//是否允许展开

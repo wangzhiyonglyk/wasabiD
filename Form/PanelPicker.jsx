@@ -105,17 +105,20 @@ var PanelPicker = React.createClass({
             //验证
             required:this.props.required,
             helpShow:"none",//提示信息是否显示
-            helpTip:validation["required"],//提示信息
             invalidTip:"",
             validateClass:"",//重置验证样式
+            helpTip:validation["required"],//提示信息
         })
     },
     componentDidMount:function () {
 
         this.registerClickAway(this.hidePicker, this.refs.picker);//注册全局单击事件
     },
+    changeHandler:function(event) {
+
+    },
     onBlur:function () {
-        this.refs.label.hide();
+        this.refs.label.hideHelp();//隐藏帮助信息
     },
     showPicker:function() {//显示选择
         if(this.state.readonly)
@@ -136,8 +139,7 @@ var PanelPicker = React.createClass({
         })
         this.unbindClickAway();//卸载全局单击事件
     },
-    clearHandler:function()
-    {//清除数据
+    clearHandler:function() {//清除数据
         if(this.props.onSelect!=null)
         {
             this.props.onSelect("","",this.props.name,null);

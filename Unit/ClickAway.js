@@ -1,6 +1,6 @@
 /**
  * Created by wangzhiyong on 2016/12/12.
- * 从rctui改造过来，暂时先es5语法
+ * 从rctui改造过来,绑定全局单击事件
  */
 let React=require("react");
 let dom=require("./dom.js");
@@ -30,6 +30,7 @@ let ClickAway= {
 
     getClickAwayEvent () {
         let fn = this._clickAwayEvent;
+        console.log(fn);
         if (!fn) {
             fn = (event) => {
                 let el = this.clickAwayTarget || ReactDOM.findDOMNode(this);

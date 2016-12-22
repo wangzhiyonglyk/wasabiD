@@ -122,9 +122,9 @@ let DatePicker=React.createClass({
             //验证
             required:this.props.required,
             helpShow:"none",//提示信息是否显示
-            helpTip:validation["required"],//提示信息
             invalidTip:"",
             validateClass:"",//重置验证样式
+            helpTip:validation["required"],//提示信息
         })
     },
     componentDidMount:function(){
@@ -132,7 +132,7 @@ let DatePicker=React.createClass({
         this.registerClickAway(this.hidePicker, this.refs.picker);//注册全局单击事件
     },
     onBlur:function () {
-        this.refs.label.hide();
+        this.refs.label.hideHelp();//隐藏帮助信息
     },
     splitDate:function(splitdate) {//拆分日期格式
         var regs=/^(\d{4})-(\d{2})-(\d{2})$/;

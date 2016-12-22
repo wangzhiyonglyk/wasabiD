@@ -126,6 +126,7 @@ let TreePicker=React.createClass({
             readonly: nextProps.readonly,
             required: nextProps.required,
             validateClass:"",//重置验证样式
+            helpTip:validation["required"],//提示信息
         })
     },
     componentDidUpdate:function() {
@@ -142,6 +143,9 @@ let TreePicker=React.createClass({
         this.registerClickAway(this.hidePicker, this.refs.picker);//注册全局单击事件
     },
     changeHandler:function(event) {
+    },
+    onBlur:function () {
+        this.refs.label.hideHelp();//隐藏帮助信息
     },
     showPicker:function() {//显示选择
         if (this.state.readonly) {
@@ -211,12 +215,12 @@ let TreePicker=React.createClass({
 
 
         return <div className={componentClassName+this.state.validateClass} style={style} ref="picker">
-            <Label name={this.props.label} hide={this.state.hide} required={this.state.required}></Label>
+            <Label name={this.props.label} ref="label" hide={this.state.hide} required={this.state.required}></Label>
             <div className={ "wasabi-form-group-body"} style={{width:!this.props.label?"100%":null}}>
                 <div className="combobox"  style={{display:this.props.hide==true?"none":"block"}}   >
                     <i className={"picker-clear "} onClick={this.clearHandler} style={{display:this.state.readonly?"none":(this.state.value==""||!this.state.value)?"none":"inline"}}></i>
                     <i className={"pickericon  " +(this.state.show?"rotate":"")} onClick={this.showPicker}></i>
-                    <input type="text" {...inputProps}  value={this.state.text}  onClick={this.showPicker} onChange={this.changeHandler}     />
+                    <input type="text" {...inputProps}  value={this.state.text} onBlur={this.onBlur}   onClick={this.showPicker} onChange={this.changeHandler}     />
                     <div className={"dropcontainter treepicker  "+this.props.position} style={{height:this.props.height,display:this.state.show==true?"block":"none"}}  >
                         <Tree
                             name={this.props.name}  value={this.state.value} text={this.state.text}

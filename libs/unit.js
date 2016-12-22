@@ -308,7 +308,7 @@ baseUtil.fetch = {
     },
     post:function(fetchmodel){
         fetchmodel=this.formatModel(fetchmodel);//如果是心怡科技旧系统,将参数转义
-        console.log(fetchmodel);
+
         fetch(
             fetchmodel.url,
             {

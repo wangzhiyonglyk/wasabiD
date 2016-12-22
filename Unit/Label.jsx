@@ -36,7 +36,7 @@ let Label=React.createClass({
             showHelp:!this.state.showHelp
         })
     },
-    hide:function () {//给父组件调用
+    hideHelp:function () {//给父组件调用
         this.setState({
             showHelp:false
         })
