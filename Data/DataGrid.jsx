@@ -13,7 +13,7 @@ var FetchModel=require("../Model/FetchModel.js");
 var Button=require("../Buttons/Button.jsx");
 var LinkButton=require("../Buttons/LinkButton.jsx");
 var CheckBox=require("../Form/CheckBox.jsx");
-var Text=require("../Form/Text.jsx");
+var Input=require("../Form/Input.jsx");
 var Radio=require("../Form/Radio.jsx");
 var Message=require("../Unit/Message.jsx");
 var Transfer=require("./Transfer.jsx");
@@ -53,8 +53,7 @@ var DataGrid=React.createClass({
         data:React.PropTypes.array,//当前页数据（json）
 
         url:React.PropTypes.string,//ajax地址
-        headerUrl:React.PropTypes.string,//获取后台所有列的数据的url
-        saveHeaderDataUrl:React.PropTypes.string,//保存自定义列的数据的url
+
         backSource:React.PropTypes.string,//ajax的返回的数据源中哪个属性作为数据源,为null时直接后台返回的数据作为数据源(旧版本)
         dataSource:React.PropTypes.string,//ajax的返回的数据源中哪个属性作为数据源,为null时直接后台返回的数据作为数据源(新版本)
         totalSource:React.PropTypes.string,//ajax的返回的数据源中哪个属性作为总记录数,为null时直接后台返回的数据中的total
@@ -73,6 +72,12 @@ var DataGrid=React.createClass({
         clearChecked:React.PropTypes.bool,//刷新数据后是否清除选择,
         pasteUrl:React.PropTypes.string,//粘贴后的url
         pasteParamsHandler:React.PropTypes.func,//对粘贴后的数据进行处理,形成参数并且返回
+        menu:React.PropTypes.bool,//是否显示菜单按钮
+        menuPanel:React.PropTypes.any,//菜单面板
+        headerUrl:React.PropTypes.string,//自定义列地址
+        editAble:React.PropTypes.bool,//是否允许编辑
+        updateUrl:React.PropTypes.string,//列更新的地址
+
 
     },
     getDefaultProps:function(){
@@ -96,8 +101,7 @@ var DataGrid=React.createClass({
             updateHandler:null,
             detailHandler:null,
             url:null,//
-            headerUrl:null,
-            saveHeaderDataUrl:null,
+
             backSource:"data",//
             dataSource:"data",//
             totalSource:"total",//
@@ -113,8 +117,11 @@ var DataGrid=React.createClass({
             clearChecked:true,//是否清空选择的
             pasteUrl:null,
             pasteParamsHandler:null,
-
-
+            menu:false,
+            menuPanel:null,
+            headerUrl:null,
+            editAble:false,//是否允许编辑
+            updateUrl:null,
 
         }
     },
@@ -127,8 +134,7 @@ var DataGrid=React.createClass({
         }
         return {
             url:this.props.url,
-            headerUrl:this.props.headerUrl,
-            saveHeaderDataUrl:this.props.saveHeaderDataUrl,
+
             params:unit.clone( this.props.params),//这里一定要复制,只有复制才可以比较两次参数是否发生改变没有,防止父组件状态任何改变而导致不停的查询
             pageIndex:this.props.pageIndex,
             pageSize:this.props.pageSize,
@@ -145,8 +151,15 @@ var DataGrid=React.createClass({
             height:this.props.height,//如果没有设置高度还要从当前页面中计算出来空白高度,以适应布局
             headerMenu:[],//被隐藏的列
             panelShow:false,//列表的操作面板
-            headerData:[],//后台返回所有的列
-            headerSelectData:[],//当前用户设置好的列
+            menu:this.props.menu,
+            menuPanel:this.props.menuPanel,
+            headerUrl:this.props.headerUrl,
+            updateUrl:this.props.updateUrl,
+            editAble:this.props.editAble,
+            editIndex:null,//当前处理编辑的列
+            remoteHeaders:null,//自定义列的数据
+
+
 
 
         }
@@ -168,19 +181,42 @@ var DataGrid=React.createClass({
              *********
              */
 
-            //存在着这种情况,后期才传headers,headerUrl,saveHeaderDataUrl,所以要更新一下
-            if(nextProps.headerUrl&&this.state.headerUrl!=nextProps.headerUrl) {//地址不空并且地址发生改变，重新查询
-                this.getHeaderDataHandler(nextProps.headerUrl);//
+            //先更新一些可能会更新的属性
+            //先处理表头的筛选，因为可能存在远程的加载的表头数据
+            var filterResult=  this.headerFilterHandler(this.state.remoteHeaders);
+            var neeeUpdate= this.showUpdate(this.state.headers,filterResult.headers);
+
+            if(!neeeUpdate)
+            {
+                if(nextProps.menuPanel)
+                {
+                    neeeUpdate=true;//因为菜单面板是react元素，无法对比，所以只要不为空就更新
+
+                }
+                if(!neeeUpdate)
+                {
+                    if(this.state.headerUrl!=nextProps.headerUrl)
+                    {
+                        neeeUpdate=true;
+                    }
+                }
             }
-            this.setState({
-                headers: nextProps.headers,
-                headerUrl:nextProps.headerUrl,
-                saveHeaderDataUrl:nextProps.saveHeaderDataUrl,
-            })
+            if(neeeUpdate) {
+                this.setState({
+                    headers: filterResult.headers,
+                    menuPanel: nextProps.menuPanel,
+                    headerUrl: nextProps.headerUrl
+                })
+            }
+
+            if(this.state.headerUrl!=nextProps.headerUrl)
+            {
+                this.getHeaderDataHandler(nextProps.headerUrl);
+            }
 
             if (this.isReloadType!=true&&this.showUpdate(  nextProps.params,this.state.params)) {
                 //仅仅通过状态值更新,参数有变,更新
-                this.updateHandler(nextProps.url,this.state.pageSize, 1, this.state.sortName, this.state.sortOrder, nextProps.params,nextProps.headers);
+                this.updateHandler(nextProps.url,this.state.pageSize, 1, this.state.sortName, this.state.sortOrder, nextProps.params);
             }
             else {//父组件状态值没有发生变化,或者使用reload方法更新的
 
@@ -214,8 +250,7 @@ var DataGrid=React.createClass({
                         sortOrder: nextProps.sortOrder,
                         loading: false,
                         headers: nextProps.headers,//表头可能会更新
-                        headerUrl:nextProps.headerUrl,
-                        saveHeaderDataUrl:saveHeaderDataUrl,
+                        menuPanel:nextProps.menuPanel,
                     })
                 }
             }
@@ -225,14 +260,13 @@ var DataGrid=React.createClass({
     componentDidMount:function(){
         //渲染后再开始加载数据
         if(this.state.headerUrl){//如果存在自定义列
-          this.getHeaderDataHandler();
+            this.getHeaderDataHandler();
         }
         if(this.state.url)
         {//如果存在url,
             this.updateHandler(this.state.url,this.state.pageSize,this.state.pageIndex,this.state.sortName,this.state.sortOrder)
         }
         this.registerClickAway(this.hideMenuHandler, this.refs.grid);//注册全局单击事件
-        window.resizeMethod=this.resizeTableWidthHandler;
     },
     componentDidUpdate:function() {
         this.setWidthAndHeight();//重新计算列表的高度,固定的表头每一列的宽度
@@ -258,8 +292,7 @@ var DataGrid=React.createClass({
             if(this.props.singleSelect==true){
                 headers.push(
                     <th  key="headercheckbox" className="check-column" name="check-column" style={{width:35}} >
-                        <div className="wasabi-table-cell" name="check-column" >
-                        </div>
+                        <div className="wasabi-table-cell" name="check-column" ></div>
                     </th>
 
                 );
@@ -267,7 +300,7 @@ var DataGrid=React.createClass({
             else {
                 headers.push(
                     <th key="headercheckbox" className="check-column" name="check-column" style={{width:35}} >
-                        <div className="wasabi-table-cell" name="check-column"> <CheckBox {...props} ></CheckBox></div>
+                        <div className="wasabi-table-cell" name="check-column"><CheckBox {...props} ></CheckBox></div>
                     </th>
                 );
             }
@@ -298,10 +331,18 @@ var DataGrid=React.createClass({
                     }
                     //使用label作为元素name属性，是因为可能有多个列对应同一个字段
                     var menuControl=null;//打开操作面板的菜单图标
-                    if(this.state.headerUrl&&index==0)
+                    var savecontrol=null;//保存按钮
+                    if(this.state.menu&&index==0)
                     {//在第一列显示
-                        menuControl=<LinkButton style={{color:"#666666",fontSize:12,position:"absolute"}} iconCls={"icon-catalog"} name="menu" tip="菜单" onClick={this.panelShow}/>
+                        menuControl=<LinkButton key="menu" style={{color:"#666666",fontSize:12,position:"absolute"}} iconCls={"icon-catalog"} name="menu" tip="菜单" onClick={this.panelShow}/>
+
                     }
+                    if(this.state.editIndex!=null&&index==0)
+                    {//0是有效值
+                        savecontrol=<LinkButton key="save" style={{color:"#666666",fontSize:12,position:"absolute"}} iconCls={"icon-submit"} name="save" tip="保存" onClick={this.remoteUpdateRow.bind(this,null)}/>
+                    }
+
+
                     headers.push(
                         <th key={"header" + index.toString()} name={header.label} {...props}
                             className={"" + sortOrder}
@@ -312,7 +353,7 @@ var DataGrid=React.createClass({
                             <div className="wasabi-table-cell" name={header.label} style={{
                                 width: (header.width ? header.width : null),
                                 textAlign: (header.align ? header.align : "left")
-                            }}><span>{header.label}</span>{menuControl}</div>
+                            }}><span>{header.label}</span>{menuControl}{savecontrol}</div>
                         </th>)
 
 
@@ -385,26 +426,55 @@ var DataGrid=React.createClass({
                 } else {//为空时
                     content = rowData[header.name];
                 }
-                if (columnIndex==0&&this.props.detailAble) {
-                    //在第一列显示详情
-                    var iconCls="icon-down";//详情列的图标
-                    if(this.state.detailIndex==key)
-                    {
-                        iconCls="icon-up";//详情列-展开
+
+
+                if(this.state.editIndex!=null &&this.state.editIndex==rowIndex&&header.editor)
+                {
+                    let currentValue=rowData[header.name];
+                    let currentText=rowData[header.name];
+                    if(typeof header.editor.content=== 'function') {
+                        let valueResult= header.editor.content(rowData,rowIndex);
+                        if(valueResult)
+                        {
+                            currentValue=valueResult.value;
+                            currentText=valueResult.text;
+
+                        }
                     }
-                    tds.push(<td onClick={this.detailHandler.bind(this,rowIndex,rowData)}
-                                 key={"col"+rowIndex.toString()+"-"+columnIndex.toString()}>
-                        <div className="wasabi-table-cell" style={{width:(header.width?header.width:null),textAlign:(header.align?header.align:"left")}}>
-                            {content}<LinkButton iconCls={iconCls} color="#666666" tip="查看详情"></LinkButton>
-                        </div>
-                    </td>);
-                }
-                else {
-                    tds.push(<td onClick={this.onClick.bind(this,rowData,rowIndex)}
-                                 onDoubleClick={this.onDoubleClick.bind(this,rowData,rowIndex)}
+                    tds.push(<td onClick={this.onClick.bind(this,rowIndex,rowData)}
+                                 onDoubleClick={this.onDoubleClick.bind(this,rowIndex,rowData)}
                                  key={"col"+rowIndex.toString()+"-"+columnIndex.toString()}
-                    ><div className="wasabi-table-cell"    style={{width:(header.width?header.width:null),textAlign:(header.align?header.align:"left")}}>{content}</div></td>);
+                    ><div className="wasabi-table-cell"    style={{width:(header.width?header.width:null),textAlign:(header.align?header.align:"left")}}>
+                        <Input {...header.editor.options} type={header.editor.type} value={currentValue} text={currentText} onChange={this.rowEditHandler.bind(this,columnIndex)}
+                               onSelect={this.rowEditHandler.bind(this,columnIndex)} label={""}></Input>
+                    </div></td>);
                 }
+                else
+                {
+                    if (columnIndex==0&&this.props.detailAble) {
+
+                        //在第一列显示详情
+                        var iconCls="icon-down";//详情列的图标
+                        if(this.state.detailIndex==key)
+                        {
+                            iconCls="icon-up";//详情列-展开
+                        }
+
+                        tds.push(<td onClick={this.detailHandler.bind(this,rowIndex,rowData)}
+                                     key={"col"+rowIndex.toString()+"-"+columnIndex.toString()}>
+                            <div className="wasabi-table-cell" style={{width:(header.width?header.width:null),textAlign:(header.align?header.align:"left")}}>
+                                <div style={{float:"left"}}> {content}</div><LinkButton iconCls={iconCls} color="#666666" tip="查看详情"></LinkButton>
+                            </div>
+                        </td>);
+                    }
+                    else {
+                        tds.push(<td onClick={this.onClick.bind(this,rowIndex,rowData)}
+                                     onDoubleClick={this.onDoubleClick.bind(this,rowIndex,rowData)}
+                                     key={"col"+rowIndex.toString()+"-"+columnIndex.toString()}
+                        ><div className="wasabi-table-cell"    style={{width:(header.width?header.width:null),textAlign:(header.align?header.align:"left")}}>{content}</div></td>);
+                    }
+                }
+
 
             });
             let trClassName=null;
@@ -412,7 +482,7 @@ var DataGrid=React.createClass({
             {//不是选中行的时候
                 trClassName="even";
             }
-            if((rowIndex*1)==this.state.focusIndex&&this.props.foncusAble)
+            if((rowIndex*1)==this.focusIndex&&this.props.foncusAble)
             {
                 trClassName="selected";
             }
@@ -626,69 +696,69 @@ var DataGrid=React.createClass({
                     <li key={index}><a href="javascript:void(0);" className="header-menu-item" onMouseDown={this.menuHeaderShowHandler.bind(this,index,item)} >{"显示["+item+"]"}</a></li>)
             })
         }
-        return (<div className="wasabi-table" ref="grid"
-                     onPaste={this.onPaste}
-                     onMouseDown={this.gridMouseDownHandler}
-                     onContextMenu={this.gridContextMenuHandler}
-                     style={{width:this.props.width,height:gridHeight}}  >
-            <div className="wasabi-table-pagination" ref="toppagination"
-                 style={{display:(this.props.pagePosition=="top"||this.props.pagePosition=="both")?this.props.pagination?"block":"none":"none"}}>
-                {this.renderTotal()}
-                <div style={{display:(this.props.pagination?"block":(this.state.data instanceof Array &&this.state.data.length>0)?"block":"none")}}>
-                    {this.renderPagination("top")}
+        return (
+            <div className="wasabi-table" ref="grid"
+                 onPaste={this.onPaste}
+                 onMouseDown={this.gridMouseDownHandler}
+                 onContextMenu={this.gridContextMenuHandler}
+                 style={{width:this.props.width,height:gridHeight}}  >
+                <div className="wasabi-table-pagination" ref="toppagination"
+                     style={{display:(this.props.pagePosition=="top"||this.props.pagePosition=="both")?this.props.pagination?"block":"none":"none"}}>
+                    {this.renderTotal()}
+                    <div style={{display:(this.props.pagination?"block":(this.state.data instanceof Array &&this.state.data.length>0)?"block":"none")}}>
+                        {this.renderPagination("top")}
+                    </div>
                 </div>
-            </div>
 
-            <div className="table-container">
-                <div className="table-fixHeader" ref="fixedTableContainer">
-                    <table  className={className} key="fixedTable"  ref="fixedTable"
-                            onMouseMove={this.fixedTableMouseMoveHandler} onMouseUp={this.fixedTableMouseUpHandler}>
-                        <thead>
-                        <tr>
-                            {headerControl}
-                        </tr>
-                        </thead>
-                    </table>
+                <div className="table-container">
+                    <div className="table-fixed" ref="fixedTableContainer">
+                        <table  className={className} key="fixedTable"  ref="fixedTable"
+                                onMouseMove={this.fixedTableMouseMoveHandler} onMouseUp={this.fixedTableMouseUpHandler}>
+                            <thead>
+                            <tr>
+                                {headerControl}
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div className="table-realTable"  ref="realTableContainer" style={{height:tableHeight}}
+                         onScroll={this.tableBodyScrollHandler}>
+                        <table  className={className} key="realTable"  ref="realTable">
+                            <thead >
+                            <tr>
+                                {headerControl}
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {
+                                this.renderBody()
+                            }
+                            {
+                                this.renderFooter()
+                            }
+                            </tbody>
+                        </table>
+                    </div></div>
+                <div className="wasabi-table-pagination" ref="bottompagination"
+                     style={{display:(this.props.pagination?"block":(this.props.pagePosition=="bottom"||this.props.pagePosition=="both")?"block":"none")}}>
+                    {this.renderTotal()}
+                    <div style={{display:(this.props.pagination?"block":(this.state.data instanceof Array &&this.state.data.length>0)?"block":"none")}}>
+                        {this.renderPagination()}
+                    </div>
                 </div>
-                <div className="table-body"  ref="realTableContainer" style={{height:tableHeight}}
-                     onScroll={this.tableBodyScrollHandler}>
-                    <table  className={className} key="realTable"  ref="realTable">
-                        <thead >
-                        <tr>
-                            {headerControl}
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {
-                            this.renderBody()
-                        }
-                        {
-                            this.renderFooter()
-                        }
-                        </tbody>
-                    </table>
-                </div></div>
-            <div className="wasabi-table-pagination" ref="bottompagination"
-                 style={{display:(this.props.pagination?"block":(this.props.pagePosition=="bottom"||this.props.pagePosition=="both")?"block":"none")}}>
-                {this.renderTotal()}
-                <div style={{display:(this.props.pagination?"block":(this.state.data instanceof Array &&this.state.data.length>0)?"block":"none")}}>
-                    {this.renderPagination()}
+                <div className="wasabi-table-loading" style={{display:this.state.loading==true?"block":"none"}}></div>
+                <div className="wasabi-load-icon"  style={{display:this.state.loading==true?"block":"none"}}></div>
+                <div onMouseUp={this.divideMouseUpHandler}  ref="tabledivide" className="wasabi-table-divide"  style={{top:(this.props.pagePosition=="top"||this.props.pagePosition=="both")?35:0}}></div>
+                <div className="wasabi-header-menu-container" ref="headermenu">
+                    <ul className="wasabi-header-menu">
+                        <li key="first"><a href="javascript:void(0);" className="header-menu-item" onMouseDown={this.menuHideHandler} >隐藏此列</a></li>
+                        {headerMenuCotrol}
+                    </ul>
                 </div>
-            </div>
-            <div className="wasabi-table-loading" style={{display:this.state.loading==true?"block":"none"}}></div>
-            <div className="wasabi-load-icon"  style={{display:this.state.loading==true?"block":"none"}}></div>
-            <div onMouseUp={this.divideMouseUpHandler}  ref="tabledivide" className="wasabi-table-divide"  style={{top:(this.props.pagePosition=="top"||this.props.pagePosition=="both")?35:0}}></div>
-            <div className="wasabi-header-menu-container" ref="headermenu">
-                <ul className="wasabi-header-menu">
-                    <li key="first"><a href="javascript:void(0);" className="header-menu-item" onMouseDown={this.menuHideHandler} >隐藏此列</a></li>
-                    {headerMenuCotrol}
-                </ul>
-            </div>
-            <div className="wasabi-table-panel" style={{height:this.state.panelShow?246:0,border:this.state.panelShow?null:"none"}}>
-                <div className="ok"><Button name="ok" delay={3000} onClick={this.saveHeaderDataHandler} theme={"green"} title={"确定"}></Button></div>
-                <Transfer data={this.state.headerData} valueField={"name"} textField={"label"} selectData={this.state.headerSelectData} onSelect={this.panelHeaderSelectHandlerheader}/>
-            </div>
-        </div>);
+                <div className="wasabi-table-panel" style={{height:this.state.panelShow?350:0,border:this.state.panelShow?null:"none"}}>
+                    <div className="wasabi-table-panel-body"> {this.state.menuPanel}</div>
+                </div>
+            </div>);
     }
 });
 module .exports=DataGrid;

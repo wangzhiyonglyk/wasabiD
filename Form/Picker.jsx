@@ -20,14 +20,14 @@ var Message=require("../Unit/Message.jsx");
 var ClickAway=require("../Unit/ClickAway.js");
 let  Picker =  React.createClass({
     mixins:[setStyle,validate,showUpdate,shouldComponentUpdate,ClickAway],
-     propTypes: {
+    propTypes: {
         name:React.PropTypes.string.isRequired,//字段名
-         label:React.PropTypes.oneOfType([React.PropTypes.string,React.PropTypes.element,React.PropTypes.node]),//字段文字说明属性
-         title:React.PropTypes.string,//提示信息
+        label:React.PropTypes.oneOfType([React.PropTypes.string,React.PropTypes.element,React.PropTypes.node]),//字段文字说明属性
+        title:React.PropTypes.string,//提示信息
         width:React.PropTypes.number,//宽度
         height:React.PropTypes.number,//高度
-         value:React.PropTypes.oneOfType([React.PropTypes.number,React.PropTypes.string]),//默认值,
-         text:React.PropTypes.oneOfType([React.PropTypes.number,React.PropTypes.string]),//默认文本值
+        value:React.PropTypes.oneOfType([React.PropTypes.number,React.PropTypes.string]),//默认值,
+        text:React.PropTypes.oneOfType([React.PropTypes.number,React.PropTypes.string]),//默认文本值
         placeholder:React.PropTypes.string,//输入框预留文字
         readonly:React.PropTypes.bool,//是否只读
         required:React.PropTypes.bool,//是否必填
@@ -37,13 +37,14 @@ let  Picker =  React.createClass({
         invalidTip:React.PropTypes.string,//无效时的提示字符
         style:React.PropTypes.object,//自定义style
         className:React.PropTypes.string,//自定义class
-         size:React.PropTypes.oneOf([
-             "default",
-             "large",//兼容性值,与two相同
-             "two",
-             "three",
-             "onlyline"
-         ]),//组件表单的大小
+        size:React.PropTypes.oneOf([
+            "none",
+            "default",
+            "large",//兼容性值,与two相同
+            "two",
+            "three",
+            "onlyline"
+        ]),//组件表单的大小
         position:React.PropTypes.oneOf([
             "left",
             "default",
@@ -70,44 +71,44 @@ let  Picker =  React.createClass({
         hotData:React.PropTypes.array,//热门选择的数据
     },
     getDefaultProps :function(){
-      return {
-          name:"",
-          label:null,
-          title:null,
-          width:null,
-          height:null,
-          value:"",
-          text:"",
-          placeholder:"",
-          readonly:false,
-          required:false,
-          onlyline:false,
-          hide:false,
-          regexp:null,
-          invalidTip:null,
-          style:null,
-          className:null,
-          size:"default",
-          position:"default",
+        return {
+            name:"",
+            label:null,
+            title:null,
+            width:null,
+            height:null,
+            value:"",
+            text:"",
+            placeholder:"",
+            readonly:false,
+            required:false,
+            onlyline:false,
+            hide:false,
+            regexp:null,
+            invalidTip:null,
+            style:null,
+            className:null,
+            size:"default",
+            position:"default",
 
-          //其他属性
-          valueField:"value",
-          textField:"text",
-          url:null,
-          params:null,
-          dataSource:"data",
-          data:null,
-          onSelect:null,
-          //其他属性
-          secondUrl:null,
-          secondParams:null,
-          secondParamsKey:null,
-          thirdUrl:null,
-          thirdParams:null,
-          thirdParamsKey:null,
-          hotTitle:"热门选择",
-          hotData:null,
-      }
+            //其他属性
+            valueField:"value",
+            textField:"text",
+            url:null,
+            params:null,
+            dataSource:"data",
+            data:null,
+            onSelect:null,
+            //其他属性
+            secondUrl:null,
+            secondParams:null,
+            secondParamsKey:null,
+            thirdUrl:null,
+            thirdParams:null,
+            thirdParamsKey:null,
+            hotTitle:"热门选择",
+            hotData:null,
+        }
 
 
     },
@@ -153,6 +154,8 @@ let  Picker =  React.createClass({
                 thirdParamsKey:nextProps.thirdParamsKey,
                 validateClass:"",//重置验证样式
                 helpTip:validation["required"],//提示信息
+                show:false,
+
             })
         }
         else {
@@ -180,6 +183,7 @@ let  Picker =  React.createClass({
                 thirdParamsKey:nextProps.thirdParamsKey,
                 validateClass:"",//重置验证样式
                 helpTip:validation["required"],//提示信息
+                show:false,
             })
 
 
@@ -219,14 +223,14 @@ let  Picker =  React.createClass({
     onBlur:function () {
         this.refs.label.hideHelp();//隐藏帮助信息
     },
-    showPicker:function() {//显示选择
+    showPicker:function(type) {//显示选择
         if (this.state.readonly) {
             //只读不显示
             return;
         }
         else {
             this.setState({
-                show: true
+                show: type==1?!this.state.show:true
             })
         }
         this.bindClickAway();//绑定全局单击事件
@@ -270,6 +274,18 @@ let  Picker =  React.createClass({
             this.props.onSelect(value, text, this.props.name);
         }
     },
+
+    flodChildren:function (data) {//将节点折叠起来
+        for(var index=0;index<data.length;index++)
+        {
+            data[index].expand=false;
+            if(data[index].childrens &&data[index].childrens instanceof  Array)
+            {
+                data[index].childrens=  this.flodChildren(data[index].childrens);//遍历
+            }
+        }
+        return data;
+    },
     activeProvince :function(currentProvinceIndex,currentProvinceValue) {//一级节点激活
         var newData=this.state.data;
         let selectValue=this.state.value;
@@ -278,16 +294,18 @@ let  Picker =  React.createClass({
             var newData=this.state.data;
             if((newData[currentProvinceIndex].childrens instanceof  Array)&&newData[currentProvinceIndex].childrens.length>0) {
                 //有子节点则不执行选中事件
-                newData[currentProvinceIndex].expand=!newData[currentProvinceIndex].expand;//如果为展开状态则隐藏,否则展开
+                var expand=newData[currentProvinceIndex].expand;
+                newData=  this.flodChildren(newData);//折叠
+                newData[currentProvinceIndex].expand=!expand;//如果为展开状态则隐藏,否则展开
 
             }
             else {//没有则立即执行选中事件
+                selectValue=newData[currentProvinceIndex].value;
+                selectText=newData[currentProvinceIndex].text;
                 if (this.props.onSelect != null) {
-                    selectValue=newData[currentProvinceIndex].value;
-                    selectText=newData[currentProvinceIndex].text;
-                    this.props.onSelect(selectValue, selectText, this.props.name);
-                    this.showPicker();
+                    this.props.onSelect(selectValue, selectText, this.props.name,null);
                 }
+
             }
             this.validate(selectValue);//验证
             this.setState({
@@ -324,22 +342,21 @@ let  Picker =  React.createClass({
             }
             else {//没有二级节点的url
                 var newData=this.state.data;
-                for(let index=0;index<newData.length;index++)
-                {
-                    newData[index].expand=false;//设置其他节点不展开
-                }
-                newData[currentProvinceIndex].expand=true;
+
+                var expand= newData[currentProvinceIndex].expand;
+                newData= this.flodChildren(newData);//折叠
+                newData[currentProvinceIndex].expand=!expand;
 
                 if((newData[currentProvinceIndex].childrens instanceof  Array)&&newData[currentProvinceIndex].childrens.length>0) {
                     //有子节点则不执行选中事件
                 }
                 else {//没有则立即执行选中事件
+                    selectValue=newData[currentProvinceIndex].value;
+                    selectText=newData[currentProvinceIndex].text;
                     if (this.props.onSelect != null) {
-                        selectValue=newData[currentProvinceIndex].value;
-                        selectText=newData[currentProvinceIndex].text;
-                        this.props.onSelect(selectValue, selectText, this.props.name);
-                        this.showPicker();
+                        this.props.onSelect(selectValue, selectText, this.props.name,null);
                     }
+
                 }
                 this.validate(selectValue);//验证
                 this.setState({
@@ -369,21 +386,18 @@ let  Picker =  React.createClass({
         }
         cityData=this.setPickerModel(realData);//生成二级节点数据模型
         if(cityData instanceof  Array &&cityData.length>0) {//有数据
-            for(var index=0;index<newData.length;index++)
-            {
-                newData[index].expand=false;
-            }
-            newData[currentProviceIndex].expand=true;//当前一级节点展开
             newData[currentProviceIndex].childrens=cityData;//将查询的二级节点赋值给一级激活节点
+            var expand=newData[currentProviceIndex].expand;
+            newData=this.flodChildren(newData);//折叠
+            newData[currentProviceIndex].expand=!expand;//当前一级节点展开
+
 
         }
-        else {//没有数据,则直接选择
+        else {//没有数据,则直接执行选择事件
+            selectValue=newData[currentProviceIndex].value;
+            selectText=newData[currentProviceIndex].text;
             if (this.props.onSelect != null) {
-                selectValue=newData[currentProviceIndex].value;
-                selectText=newData[currentProviceIndex].text;
-
-                this.props.onSelect(selectValue, selectText, this.props.name);
-                this.showPicker();
+                this.props.onSelect(selectValue, selectText, this.props.name,null);
             }
         }
         this.validate(selectValue);//验证
@@ -406,17 +420,16 @@ let  Picker =  React.createClass({
             //当前节点为激活节点
             if((newData[this.state.provinceActiveIndex].childrens[currentCityIndex].childrens instanceof  Array)&&newData[this.state.provinceActiveIndex].childrens[currentCityIndex].childrens.length>0) {
                 //有子节点(三级节点)则不执行选中事件
-                newData[this.state.provinceActiveIndex].childrens[currentCityIndex].expand=!newData[this.state.provinceActiveIndex].childrens[currentCityIndex].expand;//如果为展开状态则隐藏,否则展开
-                this.setState({
-                    data:newData,
-                })
+                var expand=newData[this.state.provinceActiveIndex].childrens[currentCityIndex].expand;
+                newData=this.flodChildren(newData);//折叠
+                newData[this.state.provinceActiveIndex].expand=true;//一级节点展开
+                newData[this.state.provinceActiveIndex].childrens[currentCityIndex].expand=!expand;//如果为展开状态则隐藏,否则展开
             }
             else {//没有则立即执行选中事件
+                selectValue=newData[this.state.provinceActiveIndex].value+","+newData[this.state.provinceActiveIndex].childrens[currentCityIndex].value;
+                selectText=newData[this.state.provinceActiveIndex].text+","+newData[this.state.provinceActiveIndex].childrens[currentCityIndex].text;
                 if (this.props.onSelect != null) {
-                     selectValue=newData[this.state.provinceActiveIndex].value+","+newData[this.state.provinceActiveIndex].childrens[currentCityIndex].value;
-                     selectText=newData[this.state.provinceActiveIndex].text+","+newData[this.state.provinceActiveIndex].childrens[currentCityIndex].text;
-                    this.props.onSelect(selectValue, selectText, this.props.name);
-                    this.showPicker();
+                    this.props.onSelect(selectValue, selectText, this.props.name,null);
                 }
             }
             this.validate(selectValue);//验证
@@ -427,6 +440,7 @@ let  Picker =  React.createClass({
                 cityActiveIndex:currentCityIndex,
                 distinctActiveIndex:null,
             });
+
 
         }
         else
@@ -456,17 +470,20 @@ let  Picker =  React.createClass({
                 {
                     newData[this.state.provinceActiveIndex].childrens[index].expand=false;
                 }
-                newData[this.state.provinceActiveIndex].childrens[currentCityIndex].expand=true;
+                var expand=newData[this.state.provinceActiveIndex].childrens[currentCityIndex].expand;
+                newData= this.flodChildren(newData);//折叠
+
+                newData[this.state.provinceActiveIndex].expand=true;//一级节点展开
+                newData[this.state.provinceActiveIndex].childrens[currentCityIndex].expand=!expand;
 
                 if((newData[this.state.provinceActiveIndex].childrens[currentCityIndex].childrens instanceof  Array)&&newData[this.state.provinceActiveIndex].childrens[currentCityIndex].childrens.length>0) {
                     //有子节点(三级节点)则不执行选中事件
                 }
                 else {//没有则立即执行选中事件
+                    selectValue=newData[this.state.provinceActiveIndex].value+","+newData[this.state.provinceActiveIndex].childrens[currentCityIndex].value;
+                    selectText=newData[this.state.provinceActiveIndex].text+","+newData[this.state.provinceActiveIndex].childrens[currentCityIndex].text;
                     if (this.props.onSelect != null) {
-                         selectValue=newData[this.state.provinceActiveIndex].value+","+newData[this.state.provinceActiveIndex].childrens[currentCityIndex].value;
-                         selectText=newData[this.state.provinceActiveIndex].text+","+newData[this.state.provinceActiveIndex].childrens[currentCityIndex].text;
-                        this.props.onSelect(selectValue, selectText, this.props.name);
-                        this.showPicker();
+                        this.props.onSelect(selectValue, selectText, this.props.name,null);
                     }
                 }
                 this.validate(selectValue);//验证
@@ -499,17 +516,19 @@ let  Picker =  React.createClass({
             {
                 newData[this.state.provinceActiveIndex].childrens[index].expand=false;
             }
-            newData[this.state.provinceActiveIndex].childrens[currentCityIndex].expand=true;
             newData[this.state.provinceActiveIndex].childrens[currentCityIndex].childrens=distinctData;//将查询的三级节点赋值给二级激活节点
+            var expand=  newData[this.state.provinceActiveIndex].childrens[currentCityIndex].expand;
+            newData= this.flodChildren(newData);//折叠
+            newData[this.state.provinceActiveIndex].expand=true;//一级节点展开
+            newData[this.state.provinceActiveIndex].childrens[currentCityIndex].expand=!expand;
 
         }
         else
         {
+            selectValue=newData[this.state.provinceActiveIndex].value+","+newData[this.state.provinceActiveIndex].childrens[currentCityIndex].value;
+            selectText=newData[this.state.provinceActiveIndex].text+","+newData[this.state.provinceActiveIndex].childrens[currentCityIndex].text;
             if (this.props.onSelect != null) {
-                 selectValue=newData[this.state.provinceActiveIndex].value+","+newData[this.state.provinceActiveIndex].childrens[currentCityIndex].value;
-                 selectText=newData[this.state.provinceActiveIndex].text+","+newData[this.state.provinceActiveIndex].childrens[currentCityIndex].text;
-              this .props.onSelect(selectValue, selectText, this.props.name);
-                this.showPicker();
+                this.props.onSelect(selectValue, selectText, this.props.name,null);
             }
         }
         this.validate(selectValue);//验证
@@ -531,18 +550,18 @@ let  Picker =  React.createClass({
         {
             newData[this.state.provinceActiveIndex].childrens[this.state.cityActiveIndex].childrens[index].expand=false;
         }
-
+        newData=this.flodChildren(newData);//折叠
+        newData[this.state.provinceActiveIndex].expand=true; newData[this.state.provinceActiveIndex].childrens[this.state.cityActiveIndex].expand=true;
         newData[this.state.provinceActiveIndex].childrens[this.state.cityActiveIndex].childrens[currentDistinctIndex].expand=true;
+        selectValue=newData[this.state.provinceActiveIndex].value +","
+            +newData[this.state.provinceActiveIndex].childrens[this.state.cityActiveIndex].value+","
+            +newData[this.state.provinceActiveIndex].childrens[this.state.cityActiveIndex].childrens[currentDistinctIndex].value;
+        selectText=newData[this.state.provinceActiveIndex].text +","
+            +newData[this.state.provinceActiveIndex].childrens[this.state.cityActiveIndex].text+","
+            +newData[this.state.provinceActiveIndex].childrens[this.state.cityActiveIndex].childrens[currentDistinctIndex].text;
 
         if (this.props.onSelect != null) {
-             selectValue=newData[this.state.provinceActiveIndex].value +","
-                +newData[this.state.provinceActiveIndex].childrens[this.state.cityActiveIndex].value+","
-                +newData[this.state.provinceActiveIndex].childrens[this.state.cityActiveIndex].childrens[currentDistinctIndex].value;
-             selectText=newData[this.state.provinceActiveIndex].text +","
-                +newData[this.state.provinceActiveIndex].childrens[this.state.cityActiveIndex].text+","
-                +newData[this.state.provinceActiveIndex].childrens[this.state.cityActiveIndex].childrens[currentDistinctIndex].text;
             this.props.onSelect(selectValue, selectText, this.props.name,null);
-            this.showPicker();
         }
         this.validate(selectValue);//验证
         this.setState({
@@ -563,7 +582,7 @@ let  Picker =  React.createClass({
                     <p style={{display:(this.props.hotTitle&&this.props.hotTitle!="")?"block":"none"}}>{this.props.hotTitle}</p>
                     <ul>{controlArray}</ul></div>
                 <div className= "line" > </div >
-                </div>
+            </div>
         }
         else {
             return null;
@@ -645,43 +664,43 @@ let  Picker =  React.createClass({
         var componentClassName=  "wasabi-form-group "+size+" "+(this.props.className?this.props.className:"");//组件的基本样式
         var style =this.setStyle("input");//设置样式
         let inputProps=
-        {
-            readOnly:this.state.readonly==true?"readonly":null,
-            style:style,
-            name:this.props.name,
-            placeholder:(this.props.placeholder===""||this.props.placeholder==null)?this.state.required?"必填项":"":this.props.placeholder,
-            className:"wasabi-form-control  "+(this.props.className!=null?this.props.className:""),
-            title:this.props.title,
+            {
+                readOnly:this.state.readonly==true?"readonly":null,
+                style:style,
+                name:this.props.name,
+                placeholder:(this.props.placeholder===""||this.props.placeholder==null)?this.state.required?"必填项":"":this.props.placeholder,
+                className:"wasabi-form-control  "+(this.props.className!=null?this.props.className:""),
+                title:this.props.title,
 
-        }//文本框的属性
+            }//文本框的属性
         var control=this.renderProvince();
 
 
         return (
-        <div className={componentClassName+this.state.validateClass} style={style} ref="picker" >
-            <Label name={this.props.label} ref="label" hide={this.state.hide} required={this.state.required}></Label>
-            <div className={ "wasabi-form-group-body"} style={{width:!this.props.label?"100%":null}}>
-                <div className="combobox"  style={{display:this.props.hide==true?"none":"block"}}   >
-                    <i className={"picker-clear"} onClick={this.clearHandler} style={{display:this.state.readonly?"none":(this.state.value==""||!this.state.value)?"none":"inline"}}></i>
-                    <i className={"pickericon " +(this.state.show?"rotate":"")} onClick={this.showPicker}></i>
-                    <input type="text" {...inputProps} onBlur={this.onBlur} value={this.state.text} onClick={this.showPicker}  onChange={this.changeHandler}     />
-                    <div className={"dropcontainter  picker "+this.props.position} style={{display:this.state.show==true?"block":"none"}}   >
-                        <div className="picker">
-                            {this.renderHot()}
-                            <ul className="wrap" >
-                                <p>{this.props.placeholder}</p>
-                                {
-                                    this.renderProvince()
-                                }
-                            </ul>
+            <div className={componentClassName+this.state.validateClass} style={style} ref="picker" >
+                <Label name={this.props.label} ref="label" hide={this.state.hide} required={this.state.required}></Label>
+                <div className={ "wasabi-form-group-body"} style={{width:!this.props.label?"100%":null}}>
+                    <div className="combobox"  style={{display:this.props.hide==true?"none":"block"}}   >
+                        <i className={"picker-clear"} onClick={this.clearHandler} style={{display:this.state.readonly?"none":(this.state.value==""||!this.state.value)?"none":"inline"}}></i>
+                        <i className={"pickericon " +(this.state.show?"rotate":"")} onClick={this.showPicker.bind(this,1)}></i>
+                        <input type="text" {...inputProps} onBlur={this.onBlur} value={this.state.text} onClick={this.showPicker.bind(this,2)}  onChange={this.changeHandler}     />
+                        <div className={"dropcontainter  picker "+this.props.position} style={{display:this.state.show==true?"block":"none"}}   >
+                            <div className="picker">
+                                {this.renderHot()}
+                                <ul className="wrap" >
+                                    <p>{this.props.placeholder}</p>
+                                    {
+                                        this.renderProvince()
+                                    }
+                                </ul>
+
+                            </div>
 
                         </div>
-
                     </div>
+                    <small className={"wasabi-help-block "+this.props.position} style={{display:(this.state.helpTip&&this.state.helpTip!="")?this.state.helpShow:"none"}}><div className="text">{this.state.helpTip}</div></small>
                 </div>
-                <small className={"wasabi-help-block "+this.props.position} style={{display:(this.state.helpTip&&this.state.helpTip!="")?this.state.helpShow:"none"}}><div className="text">{this.state.helpTip}</div></small>
             </div>
-        </div>
 
 
         )

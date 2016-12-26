@@ -140,8 +140,17 @@ let CalendarBody = React.createClass({
             }
             else if(choseed)
             {
-                control=<div className={"datespan chosed"} key={"li2"+index}  onClick={this.dayHandler.bind(this,item)}>{item}</div>;
-            }
+                if(this.state.isRange)
+                {
+                    control=<div className={"datespan chosed"} key={"li2"+index}  onClick={this.dayHandler.bind(this,item)}>{item}</div>;
+
+                }
+                else
+                {
+                    control=<div className={"datespan "} key={"li2"+index}  onClick={this.dayHandler.bind(this,item)}><div className="onlyradius">{item}</div></div>;
+
+                }
+           }
             else {
 
                 control=<div className={"datespan "} key={"li2"+index}  onClick={this.dayHandler.bind(this,item)}><div className="radius">{item}</div></div>;

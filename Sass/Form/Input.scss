@@ -95,6 +95,7 @@ label
   transition: border-color ease-in-out .6s, box-shadow ease-in-out .6s;
   outline: none;
   overflow: hidden;
+  resize: none;
 }
 .wasabi-form-control[disabled], .wasabi-form-control[readonly]{
   background-color: #eee;

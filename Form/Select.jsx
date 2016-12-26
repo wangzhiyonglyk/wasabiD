@@ -34,8 +34,11 @@ let Select=React.createClass({
         style:React.PropTypes.object,//自定义style
         className:React.PropTypes.string,//自定义class
         size:React.PropTypes.oneOf([
+            "none",
             "default",
-            "large",
+            "large",//兼容性值,与two相同
+            "two",
+            "three",
             "onlyline"
         ]),//组件表单的大小
         position:React.PropTypes.oneOf([
@@ -59,7 +62,7 @@ let Select=React.createClass({
         data:React.PropTypes.array,//自定义数据源
         extraData:React.PropTypes.array,//额外的数据,对url有效
         onSelect: React.PropTypes.func,//选中后的事件，回传，value,与text,data
-        writable:React.PropTypes.bool,//输入框是否可写
+
 
 
 
@@ -136,7 +139,7 @@ let Select=React.createClass({
             helpShow:"none",//提示信息是否显示
             helpTip:validation["required"],//提示信息
             invalidTip:"",
-            filterValue:"",//筛选框的值
+            filterValue:null,//筛选框的值
         }
     },
     componentWillReceiveProps:function(nextProps) {
@@ -184,6 +187,7 @@ let Select=React.createClass({
             required: nextProps.required,
             validateClass:"",//重置验证样式
             helpTip:validation["required"],//提示信息
+            filterValue:null,
         })
 
     },
@@ -271,7 +275,7 @@ let Select=React.createClass({
         console.log("select-error",errorCode,message);
         Message. error(message);
     },
-    showOptions:function() {//显示下拉选项
+    showOptions:function(type) {//显示下拉选项
         if (this.state.readonly) {
             return;
         }
@@ -279,7 +283,7 @@ let Select=React.createClass({
             this.props.onClick();
         }
         this.setState({
-            show: !this.state.show,
+            show: type==1?!this.state.show:true,
         });
         this.bindClickAway();//绑定全局单击事件
     },
@@ -289,21 +293,7 @@ let Select=React.createClass({
         });
         this.unbindClickAway();//卸载全局单击事件
     },
-    changeHandler:function(event) {
-        if(this.props.writable)
-        {
-            this.setState({
-                show:false,
-                value:event.target.value,
-                text:event.target.text,
-            });
-            if(this.props.onSelect!=null)
-            {
-                this.props.onSelect(event.target.value,event.target.value,this.props.name,null);
-            }
-        }
 
-    },
     onSelect:function(value,text,rowData) {//选中事件
         this.isChange=true;//代表自身发生了改变,防止父组件没有绑定value,text的状态值,而导致无法选择的结果
         this.rowData=rowData;//临时保存起来
@@ -339,6 +329,7 @@ let Select=React.createClass({
                 show:false,
                 value:value,
                 text:text,
+                filterValue:null,
             });
         }
         this.validate(value);//
@@ -348,23 +339,44 @@ let Select=React.createClass({
         return this.state.data;
     },
     onBlur:function () {
+        if(this.state.filterValue!=null) {
+            this.setState({
+                filterValue: null
+            })
+        }
+
         this.refs.label.hideHelp();//隐藏帮助信息
     },
     filterChangeHandler:function(event) {//筛选查询
-        let filterData=[];
-        this.state.data.filter((item,index)=>{
-            if(item.text.toLowerCase().indexOf(event.target.value.toLowerCase())>-1)
+        let filterData=[]; let notfilterdData=[];
+        this.state.data.map((item,index)=>{
+            if(event.target.value!=""&&item.text.toLowerCase().indexOf(event.target.value.toLowerCase())>-1)
             {
-                filterData.unshift(item);
+                filterData.unshift({name:item,index:item.text.toLowerCase().indexOf(event.target.value.toLowerCase())});
             }
             else
             {
-                filterData.push((item));
+                notfilterdData.push((item));
             }
         })
+        //冒泡排序
+        for(var i=0;i<filterData.length-1;i++){
+            for(var j=0;j<filterData.length-i-1;j++){
+                if(filterData[j].index>filterData[j+1].index){
+                    var swap=filterData[j];
+                    filterData[j]=filterData[j+1];
+                    filterData[j+1]=swap;
+                }
+            }
+        }
+        let newFitlerData=[];
+        for(var i=0;i<filterData.length;i++) {
+          newFitlerData.push(filterData[i].name);
+        }
         this.setState({
-            data:filterData,
+            data:newFitlerData.concat(notfilterdData),
             filterValue:event.target.value,
+
         })
 
     },
@@ -399,11 +411,6 @@ let Select=React.createClass({
         var control=null;
         if(this.state.data&&this.state.data.length>0) {
             control = <ul style={{display:this.state.show==true?"block":"none"}}  >
-                <li key="searchli"  className="searchli" style={{display:this.state.data.length>5?"block":"none"}}><div   className="search" style={{width:this.props.width}}>
-                    <input type="text" placeholder={"请输入过滤条件"}
-                           value={this.state.filterValue}  onChange={this.filterChangeHandler } />
-                    <div className="icon" ></div>
-                </div></li>
                 {
                     this.state.data.map((child, i)=> {
                         var checked = false;
@@ -429,8 +436,8 @@ let Select=React.createClass({
                 <div className={ "wasabi-form-group-body"} >
                     <div className={"nice-select "}  style={style}    >
                         <i className={"picker-clear"} onClick={this.clearHandler} style={{display:this.state.readonly?"none":(this.state.value==""||!this.state.value)?"none":"inline"}}></i>
-                        <i className={"icon "+(this.state.show?"rotate":"")} onClick={this.showOptions}></i>
-                        <input type="text" {...inputProps} value={this.state.text} onBlur={this.onBlur}    onChange={this.changeHandler}  />
+                        <i className={"icon "+(this.state.show?"rotate":"")} onClick={this.showOptions.bind(this,1)}></i>
+                        <input type="text" {...inputProps}  value={this.state.filterValue!=null?this.state.filterValue:this.state.text} onClick={this.showOptions.bind(this,2)} onBlur={this.onBlur}    onChange={this.filterChangeHandler}  />
 
                         {
                             control

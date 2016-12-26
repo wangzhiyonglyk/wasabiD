@@ -30,7 +30,6 @@ let ClickAway= {
 
     getClickAwayEvent () {
         let fn = this._clickAwayEvent;
-        console.log(fn);
         if (!fn) {
             fn = (event) => {
                 let el = this.clickAwayTarget || ReactDOM.findDOMNode(this);

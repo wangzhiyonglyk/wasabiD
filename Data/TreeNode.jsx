@@ -133,19 +133,23 @@ let TreeNode=React.createClass({
                 nodeControl.push(<TreeNode    rootValue={this.state.rootValue} rootText={this.state.rootText} {...item} isParent={isParent} onSelect={this.onSelect} key={index} />);
             });
         }
-        var iconCls=this.state.iconCls;//图标
+        var iconCls=this.state.iconCls;//默认图标图标
         if(this.state.isParent)
         {//如果是父节点
-            if(this.state.show){
+            if(this.state.open){//打开状态，
                 iconCls=this.state.iconOpen?this.state.iconOpen:this.state.iconCls;
             }
-            else {
+            else {//关闭状态
                 iconCls = this.state.iconClose?this.state.iconClose :this.state.iconCls;
 
             }
         }
+        else
+        {
+
+        }
         return    <li ref="node" >
-            <i className={this.state.show?"icon-drop":"icon-zright"} style={{display:this.state.isParent?"inline":"none"}} onClick={this.showHandler}></i>
+            <i className={this.state.open?"icon-drop":"icon-zright"} style={{display:this.state.isParent?"inline":"none"}} onClick={this.showHandler}></i>
             <a href={this.state.href} title={tip} onClick={this.onSelect.bind(this,this.state.value,this.state.text,null,this.state.property)} className={this.state.selected?"selected":""}>
                 <i className={iconCls}></i> <cite>{this.state.text}</cite></a>
             <ul className={this.state.open?"show":""}>

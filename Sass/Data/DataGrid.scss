@@ -44,9 +44,9 @@
    overflow: hidden;
  }
 /*
-表头容器
+固定表头容器
 */
-.wasabi-table .table-fixHeader
+.wasabi-table .table-fixed
 {
   margin-bottom: 0px;
   width: 100%;
@@ -61,7 +61,7 @@
 /*
 表格容器
 */
-.wasabi-table .table-body {
+.wasabi-table .table-realTable {
   width: 100%;
   overflow: auto;
   margin-bottom: 1px;
@@ -131,8 +131,10 @@
   padding-right: 5px;
   display: inline-block;
   width: 100%;
-  overflow: hidden;
-  white-space: nowrap;
+  overflow: visible;
+}
+.wasabi-table .wasabi-table-cell .wasabi-form-group{
+  width: 100%;
 }
 /*
 序号列,与checkbox 边距10,为了保持与其他组件对齐
@@ -187,6 +189,7 @@
 .pull-right {
   float: right!important;
   height: 35px;
+  margin-right: 10px;
 }
 .pagination {
   display: inline-block;
@@ -356,9 +359,9 @@
 }
 .wasabi-table .wasabi-table-panel {
   position: absolute;
-  width: 420px;
+  width: 600px;
   top: 48px;
-  left:35px;
+  left: 35px;
   background: #ffffff;
   height: 0px;
   border: 1px solid #D8D8D8;
@@ -366,19 +369,10 @@
   box-shadow: 0px 3px 40px 0px rgba(0, 0, 0, 0.4);
   transition: height 0.5s;
   overflow: hidden;
-  .ok {
-    display: block;
+  .wasabi-table-panel-body {
     width: 100%;
-    height: 40px;
-    border-top: 1px solid #f0f0f0;
-    border-bottom: none;
-    text-align: right;
-    float: left;
-    .wasabi-button {
-      margin-top: 5px;
-      margin-bottom: 5px;
-      min-width: 66px;
-      width: 66px;
-    }
+    height: 100%;
+
   }
+
 }

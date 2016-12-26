@@ -1,7 +1,7 @@
 /**
  * Created by wangzhiyong on 2016/10/25.
  * 将原有的单击与双击事件
- * 将新增的 ,粘贴,拖动,鼠标右键,滚动,固定表头,固定列等功能
+ * 将新增,修改,粘贴,鼠标右键,滚动,固定表头,固定列,等功能
  * 作为DataGrid扩展功能
  */
 let React=require("react");
@@ -10,7 +10,8 @@ var FetchModel=require("../Model/FetchModel.js");
 var Message=require("../Unit/Message.jsx");
 let DataGridExtend= {
     //表体常用操作
-    onClick: function (rowData, rowIndex) {
+    onClick: function (rowIndex,rowData) {
+
         if (this.props.selectChecked == true) {
             let key = this.getKey(rowIndex);//获取关键字
             if (this.state.checkedData.has(key)) {
@@ -21,14 +22,45 @@ let DataGridExtend= {
             }
         }
         if (this.props.onClick != null) {
-            this.props.onClick(rowIndex, rowData);//注意参数换了位置,因为早期版本就是这样子
+            this.props.onClick(rowIndex,rowData);//注意参数换了位置,因为早期版本就是这样子
         }
 
     },
-    onDoubleClick: function (rowData, rowIndex) {
-        if (this.props.onDoubleClick != null) {
-            this.props.onDoubleClick(rowIndex, rowData);
+    onDoubleClick: function (rowIndex,rowData ) {
+        if (this.props.onDoubleClick != null) {//如果自定义了,
+            this.props.onDoubleClick(rowData,rowIndex );
 
+        }
+        else if(this.state.editAble) {//没有自定义,允许编辑表格
+            if (this.state.editIndex != null && this.state.editIndex != rowIndex) {//说明上一行编辑完成
+                this.remoteUpdateRow(rowIndex);
+            }
+            else {//没有上一行
+                this.setState({
+                    editIndex: rowIndex
+                })
+            }
+        }
+    },
+    remoteUpdateRow:function (newEditIndex) {//远程提交某一行数据
+        if (this.state.updateUrl) {//定义url,保存上一行
+            var fetchmodel = new FetchModel(this.state.updateUrl, this.remoteUpdateRowuccess.bind(this,newEditIndex), {model: this.state.data[this.state.editIndex]}, this.ajaxError);
+            console.log("datagrid-updateRow:", fetchmodel);
+            unit.fetch.post(fetchmodel);
+        }
+        else {//没有定义url
+            this.setState({
+                editIndex: newEditIndex,
+                data:this.state.data,
+            })
+        }
+    },
+    remoteUpdateRowuccess:function (newEditIndex,result) {//远程提交某一行数据dnsl
+        if (result.success) {
+            this.setState({
+                editIndex: newEditIndex,
+                data:this.state.data,
+            })
         }
     },
     pageUpdateHandler:function (pageSize,pageIndex) {//改变分页大小，或者跳转
@@ -71,7 +103,7 @@ let DataGridExtend= {
     //调整高宽
     setWidthAndHeight: function () {//重新计算列表的高度,及固定的表头每一列的宽度
         if (this.refs.grid.parentElement.className == "wasabi-detail") {//如果列表是在详情列表中不处理
-
+            console.log("Test");
         }
         else { //主列表
             if (this.refs.realTable.getBoundingClientRect().width == 0) {//TODO 暂时不清楚为什么会0的情况
@@ -106,7 +138,7 @@ let DataGridExtend= {
         this.pasteHandler(event, this.pasteSuccess);
     },
 
-    gridMouseDownHandler:function(event){
+    gridMouseDownHandler:function(event){//鼠标按下事件
 
         if(event.button!=2)
         {//不是鼠标右键
@@ -133,13 +165,14 @@ let DataGridExtend= {
         }
 
     },
-    hideMenuHandler:function () {//隐藏菜单
+    hideMenuHandler:function (event) {//外层组件的单击事件，隐藏菜单，远程更新某一行
         this.refs.headermenu.style.display="none";//表头菜单隐藏
         this.menuHeaderName=null;//清空
         this.unbindClickAway();//卸载全局单击事件
     },
+
     gridContextMenuHandler:function(event) {
-        event.preventDefault();//阻止默认事件
+        // event.preventDefault();//阻止默认事件
     },
 
     //固定表头容器的处理事件
@@ -301,124 +334,45 @@ let DataGridExtend= {
             panelShow:!this.state.panelShow
         })
     },
-    panelHeaderSelectHandler:function (data,selectData) {//自定义列中穿梭框的选择事件
-        this.setState({
-            headerData:data,
-            headerSelectData:selectData
-        })
-    },
-    getHeaderDataHandler:function (headerUrl) {//获取自定义列
-        if(!headerUrl){
-            headerUrl=this.state.headerUrl;
-        }
-        if(headerUrl)
-        {
-            var fetchmodel=new FetchModel(headerUrl,this.getHeaderDataHandlerSuccess,{url:this.state.url},this.headerDataHandlerError);
-            console.log("datagrid-header-get:",fetchmodel);
-            unit.fetch.post(fetchmodel);
-        }
 
-    },
-    getHeaderDataHandlerSuccess:function (result) {
-        if(result.rows)
-        {
-            result.data=result.rows;
-        }
-        if(result.data&&result.data instanceof  Array) {
-            let headerData=[]; let headerSelectData=[];
-            let newHeaders=[];
-            result.data.map((header,index)=>{
-                try {
-                    if(header.name&&header.label&&(header.hide!=null&&header.hide!=undefined)) {
-                        if(header.hide==true)
-                        {//当前要隐藏的
-                            headerData.push(header);
-
-                        }
-                        else
-                        {
-                            let filterResult= this.state.headers.filter((filterHeader,filterIndex)=>{
-                                return  header.name==filterHeader.name;
-                            });
-                            if(filterResult.length>0)
-                            {//说明该列的显示方式已经定义过了。
-
-                                newHeaders.push(filterResult[0]);
-                            }
-                            else
-                            {//说明没有
-                                newHeaders.push(header);
-
-                            }
-                            headerSelectData.push(header);
-                        }
-                    }
-                    else
-                    {
-                        throw new Error("返回的headerData 数据格式不对:{name:'',label:'',hide:true}");
-                    }
-                }
-                catch(e) {
-                    throw new Error(e.message);
-                }
-
-            })
-            this.setState({
-                headers:newHeaders,//新的表头
-                headerData:headerData,//后台返回所有的列
-                headerSelectData:headerSelectData,//当前用户设置好的列
-            })
-        }
-    },
-    saveHeaderDataHandler:function () {//自定义列中确定按钮的单击事件
-        if(this.state.saveHeaderDataUrl)
-        {
-            var fetchmodel=new FetchModel(this.state.saveHeaderDataUrl,this.saveHeaderDataHandlerSuccess,{url:this.state.url,model:this.state.headerSelectData.concat(this.state.headerData)});
-            console.log("datagrid-header-save:",fetchmodel);
-            unit.fetch.post(fetchmodel);
-        }
-
-    },
-    saveHeaderDataHandlerSuccess:function (result) {
-        if(result.success) {
-            Message.success("保存成功");
-            this.setState({
-                panelShow: false
-            })
-        }
-
-    },
-    headerDataHandlerError:function(errorCode,message) {//查询失败
-        console.log("datagrid-header-data-error",errorCode,message);
-        Message. error(message);
-    },
 
     //单元格宽度调整
     resizeCellWidthHandler:function (diffWidth) {//调整单元格的宽度
-        var headerTableHeaderth = this.refs.fixedTable.children[0].children[0].children;
-        //列表的原始表头的列
-        var realTableHeaderth = this.refs.realTable.children[0].children[0].children;
 
-        for (let index = 0; index < realTableHeaderth.length; index++) {//遍历，如果原始表头的列的宽度与固定表头对应列不一样,就设置
-            //设置th的宽度
-            if (realTableHeaderth[index].getBoundingClientRect().width != headerTableHeaderth[index].getBoundingClientRect().width) {
-                let width = realTableHeaderth[index].getBoundingClientRect().width;
+        if(diffWidth) {//拖动宽度
+            var realTableHeaderth = this.refs.realTable.children[0].children[0].children;
+            for (var index = 0; index < realTableHeaderth.length; index++) {
                 if (realTableHeaderth[index].getAttribute("name") == this.moveHeaderName) {
-                    width = this.moveHeaderWidth + diffWidth;
+                    this.state.headers[this.props.selectAble ? index - 1 : index].width = this.moveHeaderWidth + diffWidth;
                     //清空
                     this.moveHeaderName = null;
                     this.moveHeaderWidth = null;
                     this.divideinitLeft = null;
+                    //重新渲染
+                    this.setState({
+                        headers: this.state.headers
+                    })
+                    break;
                 }
-                headerTableHeaderth[index].style.width = width + "px";
-                realTableHeaderth[index].style.width = width + "px";
-                //设置cell
-                headerTableHeaderth[index].children[0].style.width = ( width - 1) + "px";
-                realTableHeaderth[index].children[0].style.width = (width - 1) + "px";
             }
-
         }
+        else {//只是微调宽度
+            var headerTableHeaderth = this.refs.fixedTable.children[0].children[0].children;
+            //列表的原始表头的列
+            var realTableHeaderth = this.refs.realTable.children[0].children[0].children;
 
+            for (let index = 0; index < realTableHeaderth.length; index++) {//遍历，如果原始表头的列的宽度与固定表头对应列不一样,就设置
+                //设置th的宽度
+                if (realTableHeaderth[index].getBoundingClientRect().width != headerTableHeaderth[index].getBoundingClientRect().width) {
+                    let width = realTableHeaderth[index].getBoundingClientRect().width;
+                    headerTableHeaderth[index].style.width = width + "px";
+                    realTableHeaderth[index].style.width = width + "px";
+                    //设置cell
+                    headerTableHeaderth[index].children[0].style.width = ( width - 1) + "px";
+                    realTableHeaderth[index].children[0].style.width = (width - 1) + "px";
+                }
+            }
+        }
     },
 
     //表格宽度调整
@@ -460,8 +414,7 @@ let DataGridExtend= {
             }
         }
 
-        if(diffWidth)
-        {//需要继续调整最后一列的宽度
+        if(diffWidth) {//需要继续调整最后一列的宽度
             //
             var realTableHeaderth = this.refs.realTable.children[0].children[0].children;
             var fixedTableHeaderth = this.refs.fixedTable.children[0].children[0].children;
@@ -480,6 +433,95 @@ let DataGridExtend= {
                 headers: this.state.headers
             })
         }
+    },
+
+     //自定义列事件
+    getHeaderDataHandler:function (headerUrl) {//获取自定义列
+        if(!headerUrl){
+            headerUrl=this.state.headerUrl;
+        }
+        if(headerUrl)
+        {
+            var fetchmodel=new FetchModel(headerUrl,this.getHeaderDataHandlerSuccess,{url:this.state.url},this.ajaxError);
+            console.log("datagrid-header-get:",fetchmodel);
+            unit.fetch.post(fetchmodel);
+        }
+        this.setState({
+            loading:true,//正在加载
+        })
+
+    },
+    getHeaderDataHandlerSuccess:function (result) {
+        if(result.rows)
+        {
+            result.data=result.rows;
+        }
+      var filterResult=  this.headerFilterHandler(result.data);
+        //更新
+        this.setState({
+            headers: filterResult.headers,
+            remoteHeaders: filterResult.remoteHeaders,
+            loading: false,//正在加载
+        })
+
+    },
+    headerFilterHandler:function (remoteHeaders) {
+        if(remoteHeaders&&remoteHeaders instanceof  Array) {
+            let newHeaders=[];
+            remoteHeaders.map((header,index)=>{
+                try {
+                    if(header.name&&header.label&&(header.hide!=null&&header.hide!=undefined)) {
+                        let filterResult = this.state.headers.filter((filterHeader, filterIndex) => {
+                            return header.name == filterHeader.name;
+                        });
+                        if (filterResult.length > 0) {//说明该列的显示方式已经定义过了，则使用旧的
+
+                            newHeaders.push(filterResult[0]);//
+                        }
+                        else {//说明没有，则添加
+                            newHeaders.push(header);//
+
+                        }
+                    }
+                    else
+                    {
+                        throw new Error("返回的headerData 数据格式不对:{name:'',label:'',hide:true}");
+                    }
+                }
+                catch(e) {
+                    throw new Error(e.message);
+                }
+
+            })
+            return {
+                remoteHeaders:remoteHeaders,
+                 headers:newHeaders
+            }
+        }
+        else
+        {
+            return {
+                remoteHeaders:remoteHeaders,
+                headers:this.state.headers
+            }
+        }
+    },
+
+    rowEditHandler:function (columnIndex,value, text, name, data) {
+          if (this.state.headers[columnIndex].editor && typeof this.state.headers[columnIndex].editor.edited === "function") {
+              //得到新的一行数据
+              this.state.data[this.state.editIndex] = this.state.headers[columnIndex].editor.edited(value, text, this.state.data[this.state.editIndex]);//先将值保存起来，不更新状态
+
+          }
+          else if(this.state.headers[columnIndex].editor ) {
+              //没有则默认以value作为值
+              this.state.data[this.state.editIndex][name] = value;//先将值保存起来，不更新状态值
+          }
+    },
+
+    //错误处理事件
+    ajaxError:function (errorCode,message) {
+        Message.error(message);
     },
 
 

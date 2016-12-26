@@ -35,6 +35,7 @@ let TreePicker=React.createClass({
         style:React.PropTypes.object,//自定义style
         className:React.PropTypes.string,//自定义class
         size:React.PropTypes.oneOf([
+            "none",
             "default",
             "large",//兼容性值,与two相同
             "two",
@@ -147,14 +148,14 @@ let TreePicker=React.createClass({
     onBlur:function () {
         this.refs.label.hideHelp();//隐藏帮助信息
     },
-    showPicker:function() {//显示选择
+    showPicker:function(type) {//显示选择
         if (this.state.readonly) {
             //只读不显示
             return;
         }
         else {
             this.setState({
-                show: !this.state.show
+                show: type==1?!this.state.show:true
             })
         }
         this.bindClickAway();//绑定全局单击事件
@@ -198,7 +199,7 @@ let TreePicker=React.createClass({
         }
     },
     render:function() {
-        console.log("treegrid",this.state.value,this.state.text);
+
         var size=this.props.onlyline==true?"onlyline":this.props.size;//组件大小
         var componentClassName=  "wasabi-form-group "+size+" "+(this.props.className?this.props.className:"");//组件的基本样式
         var style =this.setStyle("input");//设置样式
@@ -219,8 +220,8 @@ let TreePicker=React.createClass({
             <div className={ "wasabi-form-group-body"} style={{width:!this.props.label?"100%":null}}>
                 <div className="combobox"  style={{display:this.props.hide==true?"none":"block"}}   >
                     <i className={"picker-clear "} onClick={this.clearHandler} style={{display:this.state.readonly?"none":(this.state.value==""||!this.state.value)?"none":"inline"}}></i>
-                    <i className={"pickericon  " +(this.state.show?"rotate":"")} onClick={this.showPicker}></i>
-                    <input type="text" {...inputProps}  value={this.state.text} onBlur={this.onBlur}   onClick={this.showPicker} onChange={this.changeHandler}     />
+                    <i className={"pickericon  " +(this.state.show?"rotate":"")} onClick={this.showPicker.bind(this,1)}></i>
+                    <input type="text" {...inputProps}  value={this.state.text} onBlur={this.onBlur}   onClick={this.showPicker.bind(this,2)} onChange={this.changeHandler}     />
                     <div className={"dropcontainter treepicker  "+this.props.position} style={{height:this.props.height,display:this.state.show==true?"block":"none"}}  >
                         <Tree
                             name={this.props.name}  value={this.state.value} text={this.state.text}

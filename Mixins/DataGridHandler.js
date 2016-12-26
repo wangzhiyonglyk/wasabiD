@@ -44,7 +44,7 @@ let DataGridHandler={
     },
     pageSizeHandler:function (event) {
 
-        this.updateHandler(this.state.url,event.target.value*1,this.state.pageIndex,this.state.sortName,this.state.sortOrder,null,null);
+        this.updateHandler(this.state.url,event.target.value*1,this.state.pageIndex,this.state.sortName,this.state.sortOrder,null);
     },
     sumHandler:function(footerModel){//计算某一列的总和
         var sum=null;
@@ -111,7 +111,7 @@ let DataGridHandler={
     },
 
     //更新函数
-    updateHandler:function(url,pageSize,pageIndex,sortName,sortOrder,params,headers){////数据处理函数,更新
+    updateHandler:function(url,pageSize,pageIndex,sortName,sortOrder,params){////数据处理函数,更新
         /*
          url与params而url可能是通过reload方法传进来的,并没有作为状态值绑定
          headers可能是后期才传了,见Page组件可知
@@ -121,15 +121,11 @@ let DataGridHandler={
         {//如果为空,先取状态值中...
             url=this.state.url;
         }
-        if(!headers)
-        {//如果为空,先取状态值中...
-            headers=this.state.headers;
-        }
+
         if(url) {
             this.setState({
                 loading:true,
                 url:url,//更新,有可能从reload那里直接改变了url
-                headers:headers,//更新
                 pageSize:pageSize,
                 pageIndex:pageIndex,
             })
@@ -324,9 +320,7 @@ let DataGridHandler={
         }
     },
     onMouseDown:function(index) {//一定要用鼠标按下事件,不保存在状态值中
-        this.setState({
-            focusIndex:index
-        })
+         this.focusIndex=index;//不更新状态值，否则导致频繁的更新
     },
     checkCurrentPageCheckedAll:function() {//判断当前页是否全部选中
         if(this.state.data instanceof Array )
@@ -441,7 +435,7 @@ let DataGridHandler={
     },
     getFocusIndex:function() { //只读函数,用于父组件获取数据
 
-        return this.state.focusIndex;
+        return this.focusIndex;
     },
     getFocusRowData:function(index) {//获取当前焦点行的数据
         if(index!=null&&index!=undefined)
@@ -450,7 +444,7 @@ let DataGridHandler={
         }
         else
         {
-            index=this.state.focusIndex;
+            index=this.focusIndex;
         }
         return this.state.data[index];
     },
@@ -473,6 +467,11 @@ let DataGridHandler={
         }
 
     },
+    editRow:function (rowIndex) {
+      this.setState({
+          editIndex:rowIndex
+      })
+    },
     addRow:function(rowData) {//添加一行
         let newData=this.state.data;
         newData.push(rowData);
@@ -486,7 +485,8 @@ let DataGridHandler={
             data:newData
         });
     },
-    detailHandler:function(rowIndex, rowData) {//执行显示详情功能
+    detailHandler:function(rowIndex,rowData ) {//执行显示详情功能
+
         var key=this.getKey(rowIndex);//获取关键值
         if(key==this.state.detailIndex)
         {

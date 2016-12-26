@@ -35,6 +35,7 @@ var PanelPicker = React.createClass({
         style:React.PropTypes.object,//自定义style
         className:React.PropTypes.string,//自定义class
         size:React.PropTypes.oneOf([
+            "none",
             "default",
             "large",//兼容性值,与two相同
             "two",
@@ -120,7 +121,7 @@ var PanelPicker = React.createClass({
     onBlur:function () {
         this.refs.label.hideHelp();//隐藏帮助信息
     },
-    showPicker:function() {//显示选择
+    showPicker:function(type) {//显示选择
         if(this.state.readonly)
         {
             //只读不显示
@@ -128,7 +129,7 @@ var PanelPicker = React.createClass({
         }
         else {
             this.setState({
-                show: !this.state.show
+                show: type==1?!this.state.show:true
             })
         }
         this.bindClickAway();//绑定全局单击事件
@@ -190,8 +191,8 @@ var PanelPicker = React.createClass({
                     <div className="combobox" style={{display:this.props.hide==true?"none":"block"}}
                         >
                         <i className={"picker-clear"} onClick={this.clearHandler} style={{display:(this.state.readonly?"none":this.state.value==""||!this.state.value)?"none":"inline"}}></i>
-                        <i className={"pickericon "+(this.state.show?"rotate":"")} onClick={this.showPicker}></i>
-                        <input type="text" {...inputProps} value={this.state.text} onBlur={this.onBlur} onClick={this.showPicker} onChange={this.changeHandler}/>
+                        <i className={"pickericon "+(this.state.show?"rotate":"")} onClick={this.showPicker.bind(this,1)}></i>
+                        <input type="text" {...inputProps} value={this.state.text} onBlur={this.onBlur} onClick={this.showPicker.bind(this,2)} onChange={this.changeHandler}/>
                         <div className={ "dropcontainter panelpicker "+this.props.position }
                              style={{display:this.state.show==true?"block":"none"}}>
                             {

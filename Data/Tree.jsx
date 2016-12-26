@@ -48,8 +48,6 @@ let Tree=React.createClass({
         }
     },
     componentWillReceiveProps:function(nextProps) {
-        console.log("tree",nextProps,nextProps.text);
-
         /*
          this.isChange :代表自身发生了改变,防止父组件没有绑定value,text,而导致无法选择
          */

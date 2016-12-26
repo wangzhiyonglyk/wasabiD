@@ -6,7 +6,7 @@
 let React=require("react");
 
 let SearchBox=require("./SearchBox.jsx");
-let DataGrid=require("../Data/DataGrid.jsx");
+let DataGrid=require("../Data/CopyDataGrid.jsx");//注意这里的引用
 var unit=require("../libs/unit.js");
 var validation=require("../Lang/validation.js");
 let setStyle=require("../Mixins/setStyle.js");
@@ -35,6 +35,7 @@ let GridPicker=React.createClass({
         style:React.PropTypes.object,//自定义style
         className:React.PropTypes.string,//自定义class
         size:React.PropTypes.oneOf([
+            "none",
             "default",
             "large",//兼容性值,与two相同
             "two",
@@ -56,25 +57,6 @@ let GridPicker=React.createClass({
         data:React.PropTypes.array,//自定义数据源
         onSelect: React.PropTypes.func,//选中后的事件，回传，value,与text,data
 
-        //grid
-        tableName:React.PropTypes.string,//表格名称,方便父组件通过refs引用
-        selectAble:React.PropTypes.bool,// 是否显示选择，默认值 false
-        detailAble:React.PropTypes.bool,//是否显示详情,默认值 false
-        borderAble:React.PropTypes.bool,//是否显示表格边框，默认值 false
-        pagination:React.PropTypes.bool,//是否显示详情,默认值 false
-        pageIndex:React.PropTypes.number,//当前页号
-        pageSize:React.PropTypes.number,//分页大小，默认20
-        sortName:React.PropTypes.string,//排序字段,
-        sortOrder:React.PropTypes.string,//排序方式,默认asc,
-        keyField:React.PropTypes.string.isRequired,//关键字段,这里必填写项
-        headers:React.PropTypes.array.isRequired,//表头设置
-        total:React.PropTypes.number,// 总条目数，默认为 0
-        updateHandler:React.PropTypes.func,//页面更新事件
-        detailHandler:React.PropTypes.func,//父组件，处理详情的函数，父组件一定要有返回值
-        totalSource:React.PropTypes.string,//ajax的返回的数据源中哪个属性作为总记录数,为null时直接后台返回的数据中的total
-        onDoubleClick:React.PropTypes.func,//双击事件
-        selectChecked:React.PropTypes.bool,//选择的时候是否代码选中
-        onChecked:React.PropTypes.func,//表格中有一行被选中
     },
     getDefaultProps:function() {
         return {
@@ -171,14 +153,14 @@ let GridPicker=React.createClass({
     },
     changeHandler:function(event) {
     },
-    showPicker:function() {//显示选择
+    showPicker:function(type) {//显示选择
         if (this.state.readonly) {
             //只读不显示
             return;
         }
         else {
             this.setState({
-                show: !this.state.show
+                show: type==1?!this.state.show:true
             })
         }
         this.bindClickAway();//绑定全局单击事件
@@ -239,31 +221,32 @@ let GridPicker=React.createClass({
         var componentClassName=  "wasabi-form-group "+size+" "+(this.props.className?this.props.className:"");//组件的基本样式
         var style =this.setStyle("input");//设置样式
         let inputProps=
-        {
-            readOnly:this.state.readonly==true?"readonly":null,
-            style:style,
-            name:this.props.name,
-            placeholder:(this.props.placeholder===""||this.props.placeholder==null)?this.state.required?"必填项":"":this.props.placeholder,
-            className:"wasabi-form-control  "+(this.props.className!=null?this.props.className:""),
-            title:this.props.title,
+            {
+                readOnly:this.state.readonly==true?"readonly":null,
+                style:style,
+                name:this.props.name,
+                placeholder:(this.props.placeholder===""||this.props.placeholder==null)?this.state.required?"必填项":"":this.props.placeholder,
+                className:"wasabi-form-control  "+(this.props.className!=null?this.props.className:""),
+                title:this.props.title,
 
-        }//文本框的属性
+            }//文本框的属性
         let props= {...this.props};
         props.onClick = this.onSelect;//生定向，但是仍然保留原来的属性
         props.width=410;
         props.height=398;
         props.url=this.state.url;
         props.data=this.state.data;
-        return<div className={componentClassName+this.state.validateClass} style={style} ref="picker">
+        props.type=null;
+        return <div className={componentClassName+this.state.validateClass} style={style} ref="picker">
             <Label name={this.props.label} ref="label" hide={this.state.hide} required={this.state.required}></Label>
             <div className={ "wasabi-form-group-body"} style={{width:!this.props.label?"100%":null}}>
                 <div className="combobox"  style={{display:this.props.hide==true?"none":"block"}}   >
                     <i className={"picker-clear "} onClick={this.clearHandler} style={{display:this.state.readonly?"none":(this.state.value==""||!this.state.value)?"none":"inline"}}></i>
-                    <i className={"pickericon  " +(this.state.show?"rotate":"")} onClick={this.showPicker}></i>
-                    <input type="text" {...inputProps}  value={this.state.text} onBlur={this.onBlur}  onClick={this.showPicker} onChange={this.changeHandler}     />
+                    <i className={"pickericon  " +(this.state.show?"rotate":"")} onClick={this.showPicker.bind(this,1)}></i>
+                    <input type="text" {...inputProps}  value={this.state.text} onBlur={this.onBlur}  onClick={this.showPicker.bind(this,2)} onChange={this.changeHandler}     />
                     <div className={"dropcontainter gridpicker  "+this.props.position} style={{height:this.props.height,display:this.state.show==true?"block":"none"}}  >
-                            <SearchBox name={this.props.name} valueField={this.props.valueField} textField={this.props.textField} onSearch={this.onSearch}></SearchBox>
-                            <DataGrid {...props} params={this.state.params}></DataGrid>
+                        <SearchBox name={this.props.name} valueField={this.props.valueField} textField={this.props.textField} onSearch={this.onSearch}></SearchBox>
+                        <DataGrid {...props} params={this.state.params}></DataGrid>
 
 
                     </div>

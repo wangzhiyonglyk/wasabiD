@@ -96,6 +96,8 @@ exports.NodeModel = require('./Model/NodeModel.js');//树节点数据模型
 
 
 exports.unit = require('./libs/unit.js');//常用函数
+exports.ClickAway = require('./Unit/ClickAway.js');//全局单击事件
+
 
 
 

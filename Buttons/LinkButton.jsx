@@ -150,6 +150,7 @@ var LinkButton=React.createClass({
         else {
 
             if (this.props.iconAlign == "right") {
+
                 return (
                     <a draggable={this.props.draggable} onDragStart={this.dragStartHandler} title={title}
                        href={this.props.href} onClick={this.clickHandler}

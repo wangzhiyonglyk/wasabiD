@@ -45,6 +45,7 @@ var Text=React.createClass({
         style:React.PropTypes.object,//自定义style
         className:React.PropTypes.string,//自定义class
         size:React.PropTypes.oneOf([
+            "none",
             "default",
             "large",//兼容性值,与two相同
             "two",

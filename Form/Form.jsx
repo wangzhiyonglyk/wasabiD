@@ -43,10 +43,10 @@ var Form=React.createClass({
         ]),
         columns:React.PropTypes.oneOf([//关闭按钮默认主题
             "none",//不处理
-              1,
-              2,
-              3,
-              4
+            1,
+            2,
+            3,
+            4
         ]),
     },
     getDefaultProps:function() {
@@ -82,16 +82,23 @@ var Form=React.createClass({
             model:(this.props.model),//一定复制
             pickerRowModel:new Map(),//下拉框中选中的完整数据
             disabled:this.props.disabled,//是否只读
-            columns:this.props.columns//自定义列数
+            columns:this.props.columns,//自定义列数
 
         }
     },
     componentWillReceiveProps:function(nextProps) {
-        this.setState({
-            model:( nextProps.model),
-            disabled:nextProps.disabled,
-            columns:nextProps.columns,
-        })
+      if(this.isChange) {//说明父组件调用了changerHandler事件，用来监听脏数据，不进行更新
+            this.isChange=false;//置空
+      }
+      else {
+          this.setState({
+              model: ( nextProps.model),
+              disabled: nextProps.disabled,
+              columns: nextProps.columns,
+          })
+      }
+
+
     },
     changeHandler:function(value,text,name,data) {
         //子组件值发生改变时
@@ -103,17 +110,22 @@ var Form=React.createClass({
             {
                 newModel[i].value=value;
                 newModel[i].text=text;
-                if(newModel[i].type=="select"||(newModel[i].type=="picker"))
-                {
-                    pickerRowModel.set(newModel[i].name,data);
+                if(newModel[i].type=="select"||newModel[i].type=="gridpicker") {
+                    pickerRowModel.set(newModel[i].name, data);
 
                 }
                 break ;
             }
         }
+        if(this.props.changeHandler){//用于回传给父组件是否有改变
+            this.isChange=true;//标记
+            this.props.changeHandler(newModel);
+        }
+        //执行父组件的方法时，下面的代码是不会执行的，但因为是引用类型，所以其实父组件的model已经发生改变了，其他组件有同样的现象
+        //在这里特意注明一下而已，2016-12-24
         this.setState({
-            model:newModel,
-            pickerRowModel:pickerRowModel
+            model:( newModel),
+            pickerRowModel:(pickerRowModel),
         })
     },
     getData:function() {//获取当前表单的数据，没有验证
@@ -160,7 +172,7 @@ var Form=React.createClass({
         return data;
 
     },
-    setData:function(data) {//设置值
+    setData:function(data) {//设置值,data是对象
         if(!data)
         {
             return ;
@@ -291,6 +303,7 @@ var Form=React.createClass({
             model:newModel
         })
     },
+
     submitHandler:function() {
         //提交 数据
         var data={};//各个字段对应的值
@@ -449,6 +462,7 @@ var Form=React.createClass({
 
                         this.state.model.map((child,index) =>{
                             let position="right";//默认都靠右
+
                             if(result.columns) {//需要计算列的位置
                                 position = orderIndex % result.columns;//求余,计算在表单中列位置
                                 if (position == 0) {
@@ -461,47 +475,48 @@ var Form=React.createClass({
                                     position = "default";
                                 }
                             }
-
-                            var size="";//列的大小
+                            var size="default";//列的大小
+                            child.onlyline == true ? "onlyline" : child.size;
                             if(result.columns) {//需要计算列的大小
 
-                                child.onlyline == true ? "onlyline" : child.size;
+                                if (child.hide == true) {//如果隐藏的话，不计算序号
+
+                                }
+                                else {
+                                    if (size == "default") {
+                                        orderIndex++;
+                                    }
+                                    else if (size == "large" || size == "two") {
+
+                                        if (result.columns == 1) {
+                                            orderIndex++;//每行只有一列,算一列
+                                        }
+                                        else {
+                                            orderIndex += 2;//算两列
+                                        }
+
+                                    }
+                                    else if (size == "three") {
+
+                                        if (result.columns == 1 || result.columns == 2) {
+                                            orderIndex++;//每行只有一列或者两列,算一列
+                                        }
+                                        else {
+                                            orderIndex += 3;//算三列
+                                        }
+
+                                    }
+                                    else if (size == "onlyline") {
+                                        orderIndex += result.columns;
+                                    }
+                                }
                             }
-                            if(child.hide==true) {//如果隐藏的话，不计算序号
 
-                            }
-                            else {
-                                if (size == "default") {
-                                    orderIndex++;
-                                }
-                                else if (size == "large" || size == "two") {
 
-                                    if (result.columns == 1) {
-                                        orderIndex++;//每行只有一列,算一列
-                                    }
-                                    else {
-                                        orderIndex += 2;//算两列
-                                    }
-
-                                }
-                                else if (size == "three") {
-
-                                    if (result.columns == 1 || result.columns == 2) {
-                                        orderIndex++;//每行只有一列或者两列,算一列
-                                    }
-                                    else {
-                                        orderIndex += 3;//算三列
-                                    }
-
-                                }
-                                else if (size == "onlyline") {
-                                    orderIndex += result.columns;
-                                }
-                            }
                             return(
                                 <Input ref={child.name}
                                        key={child.name+index.toString()}
-                                    {...child}
+                                       {...child}
                                        position={position}
                                        readonly={this.state.disabled==true?true:child.readonly}
                                        backFormHandler={this.changeHandler}
