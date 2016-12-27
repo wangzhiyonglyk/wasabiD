@@ -288,9 +288,10 @@ let DataGridHandler={
             pageIndex = this.state.pageIndex;
         }
         let key = pageIndex.toString() + "-" + index.toString();//默认用序号作为关键字
-        if (this.state.data[index][this.props.keyField]) {
-            key = this.state.data[index][this.props.keyField];//如果能获取关键字段，则用关键字段
-        }
+
+        // if (this.state.data.length<index&&this.state.data[index][this.props.keyField]) {//有可能是新增的数据
+        //     key = this.state.data[index][this.props.keyField];//如果能获取关键字段，则用关键字段
+        // }
         return key;
     },
     onChecked:function(index,value) {//选中事件
@@ -319,8 +320,26 @@ let DataGridHandler={
             this.props.onChecked(data);//用于返回
         }
     },
-    onMouseDown:function(index) {//一定要用鼠标按下事件,不保存在状态值中
+    onMouseDown:function(index,event) {//一定要用鼠标按下事件,不保存在状态值中
+        if(this.props.focusAble) {
+            let node = event.target;
+            while (node.nodeName.toLowerCase() != "tr" && node.nodeName.toLowerCase() != "body") {
+                node = node.parentElement;
+            }
+            var trs=this.refs.realTable.children[1].children;
+            for(var i=0;i<trs.length;i++)
+            {
+                trs[i].className=trs[i].className.replace("selected","");//先去掉
+            }
+            if (node.className.indexOf("selected") > -1) {
+
+            }
+            else {
+                node.className = node.className + " selected";
+            }
+        }
          this.focusIndex=index;//不更新状态值，否则导致频繁的更新
+
     },
     checkCurrentPageCheckedAll:function() {//判断当前页是否全部选中
         if(this.state.data instanceof Array )
@@ -458,32 +477,6 @@ let DataGridHandler={
     },
     getFooterData:function() {//获取得页脚的统计值
         return this.footerActualData;
-    },
-    updateRow:function(rowIndex,rowData) {// //只读函数,用于父组件不通过状态值来更新组件本身,更新某一行数据
-        if(rowIndex>=0&&rowIndex<this.state.pageSize) {
-            var newData = this.state.data;
-            newData[rowIndex] = rowData;
-            this.setState({data:newData});
-        }
-
-    },
-    editRow:function (rowIndex) {
-      this.setState({
-          editIndex:rowIndex
-      })
-    },
-    addRow:function(rowData) {//添加一行
-        let newData=this.state.data;
-        newData.push(rowData);
-        this.setState({
-            data:newData
-        });
-    },
-    deleteRow:function (index) {
-        let newData=this.state.data.splice(index,1);
-        this.setState({
-            data:newData
-        });
     },
     detailHandler:function(rowIndex,rowData ) {//执行显示详情功能
 

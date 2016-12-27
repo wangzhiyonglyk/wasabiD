@@ -121,6 +121,9 @@
 .wasabi-table .table > tbody > tr:hover {
   background-color: #dcf9f8;
 }
+.wasabi-table .table > tbody > tr.selected:hover {
+  background-color: #ffe48d;
+}
 /*
 单元格样式
 */

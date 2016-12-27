@@ -49,17 +49,32 @@ let DataGridExtend= {
             unit.fetch.post(fetchmodel);
         }
         else {//没有定义url
+            if(this.state.addData.has(this.getKey(this.state.editIndex)))
+            {//说明是属于新增的
+                this.state.addData.set(this.getKey(this.state.editIndex),this.state.data[this.state.editIndex]);
+            }
+            else {//属于修改的
+                this.state.updatedData.set(this.getKey(this.state.editIndex),this.state.data[this.state.editIndex]);
+            }
             this.setState({
                 editIndex: newEditIndex,
                 data:this.state.data,
+                addData:this.state.addData,
+                updatedData:this.state.updatedData
             })
         }
     },
-    remoteUpdateRowuccess:function (newEditIndex,result) {//远程提交某一行数据dnsl
+    remoteUpdateRowuccess:function (newEditIndex,result) {//远程提交某一行数据
+        if(this.state.addData.has(this.getKey(this.state.editIndex)))
+        {//说明是属于新增的
+            this.state.addData.delete(this.getKey(this.state.editIndex));
+        }
+        else {//属于修改的
+            this.state.updatedData.delete(this.getKey(this.state.editIndex));
+        }
         if (result.success) {
             this.setState({
                 editIndex: newEditIndex,
-                data:this.state.data,
             })
         }
     },
@@ -507,7 +522,8 @@ let DataGridExtend= {
         }
     },
 
-    rowEditHandler:function (columnIndex,value, text, name, data) {
+    //表格内部修改的监听事件
+    rowEditHandler:function (columnIndex,value, text, name, data) {  //表格内部修改的监听事件
           if (this.state.headers[columnIndex].editor && typeof this.state.headers[columnIndex].editor.edited === "function") {
               //得到新的一行数据
               this.state.data[this.state.editIndex] = this.state.headers[columnIndex].editor.edited(value, text, this.state.data[this.state.editIndex]);//先将值保存起来，不更新状态
@@ -517,14 +533,90 @@ let DataGridExtend= {
               //没有则默认以value作为值
               this.state.data[this.state.editIndex][name] = value;//先将值保存起来，不更新状态值
           }
+
+        if(this.state.addData.has(this.state.editIndex))
+        {//说明是属于新增的
+            this.state.addData.set(this.getKey(this.state.editIndex),this.state.data[this.state.editIndex]);
+        }
+        else {//属于修改的
+            this.state.updatedData.set(this.getKey(this.state.editIndex),this.state.data[this.state.editIndex]);
+        }
     },
 
     //错误处理事件
-    ajaxError:function (errorCode,message) {
+    ajaxError:function (errorCode,message) {//错误处理事件
         Message.error(message);
     },
 
+    //新增，修改，删除
+    addRow:function(rowData,editable) {//添加一行,如果editable为true，说明添加以后处理编辑状态
+        let newData=this.state.data;
+        newData.push(rowData);
+        this.state.addData.set(this.getKey(newData.length-1),rowData);//添加到脏数据里
+        this.setState({
+            data:newData,
+            addData:this.state.addData,
+            editIndex:editable?newData.length-1:null,
+        });
+    },
+    deleteRow:function (index) {
 
+        this.state.deleteData.push(this.state.data.splice(index,1));
+        let newData=this.state.data.splice(index,1);
+
+        this.setState({
+            data:newData,
+            deleteData:this.state.deleteData
+        });
+    },
+    editRow:function (rowIndex) {//让某一个处理编辑状态
+
+        this.setState({
+            editIndex:rowIndex
+        })
+
+    },
+    updateRow:function(rowIndex,rowData) {// //只读函数,更新某一行数据
+        this.state.updatedData.set(this.getKey(rowIndex),rowData);//更新某一行
+
+        if(rowIndex>=0&&rowIndex<this.state.data.length) {
+            var newData = this.state.data;
+            newData[rowIndex] = rowData;
+            this.setState(
+                {
+                    data: newData,
+                    updatedData: newData
+                });
+        }
+    },
+
+    //获取各类脏数据，及清空脏数据
+    getAddData:function () {//获取新增数据
+        var addData=[];
+        for (let value of this.state.addData.values()) {
+            addData.push(value);
+        }
+        return addData;
+    },
+    getUpdateData:function () {//获取被修改过的数据
+        var updatedData=[];
+        for (let value of this.state.updatedData.values()) {
+            updatedData.push(value);
+        }
+        return updatedData;
+    },
+    getDeleteData:function () {//获取被删除的数据
+      return this.state.deleteData;
+    },
+    clearDirtyData:function () {//清除脏数据
+
+        //清除脏数据
+        this.setState({
+            addData:new Map(),
+            updatedData:new Map(),
+            deleteData:[],
+        })
+    },
 
 }
 module .exports=DataGridExtend;

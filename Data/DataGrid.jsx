@@ -37,7 +37,7 @@ var DataGrid=React.createClass({
         singleSelect:React.PropTypes.bool,//是否为单选,默认值为 false
         detailAble:React.PropTypes.bool,//是否显示详情,默认值 false
         borderAble:React.PropTypes.bool,//是否显示表格边框，默认值 false
-        foncusAble:React.PropTypes.bool,//是否显示焦点行，默认值 false
+        focusAble:React.PropTypes.bool,//是否显示焦点行，默认值 false
         pagination:React.PropTypes.bool,//是否分页,默认值 true
         selectChecked:React.PropTypes.bool,//选择行的时候是否同时选中
         pageIndex:React.PropTypes.number,//当前页号
@@ -87,7 +87,7 @@ var DataGrid=React.createClass({
             selectAble:false,
             singleSelect:false,
             detailAble:false,
-            foncusAble:false,
+            focusAble:true,
             borderAble:false,
             pagination:true,
             pageIndex:1,
@@ -158,7 +158,9 @@ var DataGrid=React.createClass({
             editAble:this.props.editAble,
             editIndex:null,//当前处理编辑的列
             remoteHeaders:null,//自定义列的数据
-
+            addData:new Map(),//新增的数据,因为有可能新增一个空的，然后再修改
+            updatedData:new Map(),//被修改过的数据，因为要判断曾经是否修改
+            deleteData:[],//删除的数据
 
 
 
@@ -482,7 +484,7 @@ var DataGrid=React.createClass({
             {//不是选中行的时候
                 trClassName="even";
             }
-            if((rowIndex*1)==this.focusIndex&&this.props.foncusAble)
+            if((rowIndex*1)==this.focusIndex&&this.props.focusAble)
             {
                 trClassName="selected";
             }

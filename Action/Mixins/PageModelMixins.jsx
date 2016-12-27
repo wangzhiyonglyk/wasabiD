@@ -161,8 +161,7 @@ let PageModelMixins= {
         unit.fetch.get(fetchModel);
     },
     initModelSuccess:function(result) {//获取数据模型成功
-       if(result.data!=null&&result.data instanceof Array)
-       {
+       if(result.data!=null&&result.data instanceof Array) {
            if(this.props.overrideModel)
            {//用户进行一步处理数据模型,有返回值
                 let returnValue=this.props.overrideModel(result.data);

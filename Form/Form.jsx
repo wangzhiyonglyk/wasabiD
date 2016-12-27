@@ -69,6 +69,7 @@ var Form=React.createClass({
 
     },
     getInitialState:function() {
+        this.isChange=false;
         //初始化时就获取可用宽度,如果每次更新获取,会产生晃动
         if(window.screen.availWidth<document.documentElement.clientWidth)
         {//屏幕可用宽度小,有滚动条
@@ -87,46 +88,51 @@ var Form=React.createClass({
         }
     },
     componentWillReceiveProps:function(nextProps) {
-      if(this.isChange) {//说明父组件调用了changerHandler事件，用来监听脏数据，不进行更新
-            this.isChange=false;//置空
-      }
-      else {
-          this.setState({
-              model: ( nextProps.model),
-              disabled: nextProps.disabled,
-              columns: nextProps.columns,
-          })
-      }
+        this.setState({
+            model: ( nextProps.model),
+            disabled: nextProps.disabled,
+            columns: nextProps.columns,
+        })
+    },
+    componentDidUpdate:function () {
+            if (this.props.changeHandler) {//用于父组件监听是否表单是否有修改，用于立即更新父组件中的按钮的权限之类的,
+                this.props.changeHandler();
+            }
+    },
+    changeHandler:function(value,text,name,data) {//
+        var newModel = this.state.model;
+        var pickerRowModel = this.state.pickerRowModel;
+        for (var i = 0; i < newModel.length; i++) {
+            if (newModel[i].name == name) {
+                newModel[i].value = value;
+                newModel[i].text = text;
+                if (newModel[i].type == "select" || newModel[i].type == "gridpicker") {
+                    pickerRowModel.set(newModel[i].name, data);
+                }
+                break;
+            }
+        }
+        this.isChange=true;
+
+        this.setState({
+            model: ( newModel),
+            pickerRowModel: (pickerRowModel),
+
+        })
+
 
 
     },
-    changeHandler:function(value,text,name,data) {
-        //子组件值发生改变时
-        var newModel=this.state.model;
-        var pickerRowModel=this.state.pickerRowModel;
-        for(var i=0;i<newModel.length;i++)
-        {
-            if(newModel[i].name==name)
-            {
-                newModel[i].value=value;
-                newModel[i].text=text;
-                if(newModel[i].type=="select"||newModel[i].type=="gridpicker") {
-                    pickerRowModel.set(newModel[i].name, data);
-
-                }
-                break ;
-            }
-        }
-        if(this.props.changeHandler){//用于回传给父组件是否有改变
-            this.isChange=true;//标记
-            this.props.changeHandler(newModel);
-        }
-        //执行父组件的方法时，下面的代码是不会执行的，但因为是引用类型，所以其实父组件的model已经发生改变了，其他组件有同样的现象
-        //在这里特意注明一下而已，2016-12-24
-        this.setState({
-            model:( newModel),
-            pickerRowModel:(pickerRowModel),
-        })
+    getState:function () {//只读方法，用父组件其他方法里来获取表单是否发生改变
+         if(this.isChange) {
+             return true;
+         }
+         else {
+             return false;
+         }
+    },
+    clearDirtyData:function () {//清除组件的表单脏数据状态
+        this.isChange=false;
     },
     getData:function() {//获取当前表单的数据，没有验证
         var data={};
@@ -173,6 +179,7 @@ var Form=React.createClass({
 
     },
     setData:function(data) {//设置值,data是对象
+        this.isChange=false;
         if(!data)
         {
             return ;
