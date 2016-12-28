@@ -297,11 +297,6 @@ var Input=React.createClass({
         var size=this.props.onlyline?"onlyline":this.props.size;
         var componentClassName=  "wasabi-form-group "+size+" "+(this.props.className?this.props.className:"");//组件的基本样式
         var style=this.props.style;
-        if(!style)
-        {
-            style={};
-        }
-        style.lineHeight="35px";
         if(this.props.type=="button")
         {
 
