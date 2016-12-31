@@ -98,6 +98,16 @@ let CalendarBody = React.createClass({
 
       }
     },
+    yearonBlur:function (event) {
+        if(event.target.value*1<1900||event.target.value*1>9999){
+            Message.error("不是有效年份");
+            return ;
+        }
+        else {
+            this.changeYearHandler(event.target.value);
+        }
+
+    },
 
     render:function(){
         var arry1 = [],arry2 = [];
@@ -197,7 +207,7 @@ let CalendarBody = React.createClass({
                     <div  className={"datespan "+((this.state.month==12)?"chosed":"")} onClick={this.changeMonthHandler.bind(this,12)}>十二月</div>
                 </div>
                 <div  className="wasabi-datetime-year" style={{display:this.state.changeYear?"block":"none"}}>
-                    <div style={{display:"block",textAlign:"center",marginBottom:10}}><input value={this.state.tempyear} name="year" onKeyUp={this.yearOKHandler} style={{width:60,height:30,paddingLeft:5}} title="回车确认" onChange={this.yearOnChange}></input></div>
+                    <div style={{display:"block",textAlign:"center",marginBottom:10}}><input value={this.state.tempyear} name="year" onBlur={this.yearonBlur} onKeyUp={this.yearOKHandler} style={{width:60,height:30,paddingLeft:5}} title="回车确认" onChange={this.yearOnChange}></input></div>
                     {yearControl}</div>
             </div>
         )
