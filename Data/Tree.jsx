@@ -12,8 +12,8 @@ let Tree=React.createClass({
     mixins:[showUpdate],
     propTypes: {
             name:React.PropTypes.string,//树名称
+             value:React.PropTypes.oneOfType([React.PropTypes.number,React.PropTypes.string]),//值
             text:React.PropTypes.oneOfType([React.PropTypes.number,React.PropTypes.string]),//标题
-            value:React.PropTypes.oneOfType([React.PropTypes.number,React.PropTypes.string]),//值
             valueField: React.PropTypes.string,//数据字段值名称
             textField:React.PropTypes.string,//数据字段文本名称
             url:React.PropTypes.string,//后台查询地址

@@ -41,7 +41,7 @@ var Form=React.createClass({
             "green",
             "cancel"
         ]),
-        columns:React.PropTypes.oneOf([//关闭按钮默认主题
+        columns:React.PropTypes.oneOf([//表单的列数，为none则系统不自动排版，为null则系统自动排版，为数字则指定列数
             "none",//不处理
             1,
             2,
@@ -539,9 +539,9 @@ var Form=React.createClass({
                     </div>
                 </div>
                 <div className="form-submit" style={{display:(formSubmitVisible==true?"block":"none")}}>
-                    <Button theme="green" onClick={this.submitHandler} title={this.props.submitTitle}  hide={this.state.disabled==true?true:this.props.submitHide==true?true:false}  >
+                    <Button theme={this.props.submitTheme} onClick={this.submitHandler}  title={this.props.submitTitle}  hide={this.state.disabled==true?true:this.props.submitHide==true?true:false}  >
                     </Button>
-                    <Button  theme="cancel" onClick={this.closeHandler}  title={this.props.closeTitle}  hide={this.state.disabled==true?true:this.props.closeHide==true?true:false}   >
+                    <Button  theme={this.props.closeTheme} onClick={this.closeHandler}  title={this.props.closeTitle}  hide={this.state.disabled==true?true:this.props.closeHide==true?true:false}   >
                     </Button>
                 </div>
             </div>

@@ -28,7 +28,7 @@ let DataGridExtend= {
     },
     onDoubleClick: function (rowIndex,rowData ) {
         if (this.props.onDoubleClick != null) {//如果自定义了,
-            this.props.onDoubleClick(rowData,rowIndex );
+            this.props.onDoubleClick(rowIndex,rowData );
 
         }
         else if(this.state.editAble) {//没有自定义,允许编辑表格
@@ -549,20 +549,20 @@ let DataGridExtend= {
     },
 
     //新增，修改，删除
-    addRow:function(rowData,editable) {//添加一行,如果editable为true，说明添加以后处理编辑状态
+    addRow:function(rowData,editAble) {//添加一行,如果editable为true，说明添加以后处理编辑状态
         let newData=this.state.data;
         newData.push(rowData);
         this.state.addData.set(this.getKey(newData.length-1),rowData);//添加到脏数据里
         this.setState({
             data:newData,
             addData:this.state.addData,
-            editIndex:editable?newData.length-1:null,
+            editIndex:editAble?newData.length-1:null,
         });
     },
-    deleteRow:function (index) {
+    deleteRow:function (rowIndex) {//删除指定行数据
 
-        this.state.deleteData.push(this.state.data.splice(index,1));
-        let newData=this.state.data.splice(index,1);
+        this.state.deleteData.push(this.state.data.splice(rowIndex,1));
+        let newData=this.state.data.splice(rowIndex,1);
 
         this.setState({
             data:newData,

@@ -7,7 +7,7 @@ class  NodeModel {
     constructor(value, text, isParent = false) {
         this.value = value;//值
         this.text = text;//标题
-        this.isParent = isParent;//是否父节点
+        this.isParent = isParent;//是否父节点,如果没有强制，则会根据是否有子节点来判断是为父节点
         this.tip = null;//提示信息
         this.iconCls = "icon-file";//默认图标
         this.iconClose = "icon-folder";//关闭图标
@@ -22,7 +22,7 @@ class  NodeModel {
         this.key = "id";//向后台传输的字段名
         this.params = null;//向后台传输的额外参数
         this.property = null;////其他数据,TODO 先保留，暂时没处理
-        this.nodes = [];////子节点数据
+        this.data = [];////子节点数据
         this.onSelect = null;////选中后的事件
 
     }
