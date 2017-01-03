@@ -112,11 +112,24 @@ let DataGridHandler={
 
     //更新函数
     updateHandler:function(url,pageSize,pageIndex,sortName,sortOrder,params){////数据处理函数,更新
+
+
+        if(this.state.addData.length>0||this.state.deleteData.length>0||this.state.updatedData.length>0) {
+            Message.confirm("有脏数据,是否继续更新列表?", this.updateHandlerConfirm.bind(this, url, pageSize, pageIndex, sortName, sortOrder, params), () => {
+                return;
+            })
+
+        }
+        else{
+            this.updateHandlerConfirm(url, pageSize, pageIndex, sortName, sortOrder, params);
+        }
+    },
+    updateHandlerConfirm(url, pageSize, pageIndex, sortName, sortOrder, params){
         /*
-         url与params而url可能是通过reload方法传进来的,并没有作为状态值绑定
-         headers可能是后期才传了,见Page组件可知
-         所以此处需要详细判断
-         */
+     url与params而url可能是通过reload方法传进来的,并没有作为状态值绑定
+     headers可能是后期才传了,见Page组件可知
+     所以此处需要详细判断
+     */
         if(!url)
         {//如果为空,先取状态值中...
             url=this.state.url;
@@ -162,9 +175,9 @@ let DataGridHandler={
             {
             }
             /*
-            在查询失败后可能要继续调用updateHandler查询前一页数据,所以传url,以便回调,
-            而pageSize,pageIndex,sortName,sortOrder,params这些参数在查询成功后再更新
-            所以回传
+             在查询失败后可能要继续调用updateHandler查询前一页数据,所以传url,以便回调,
+             而pageSize,pageIndex,sortName,sortOrder,params这些参数在查询成功后再更新
+             所以回传
              */
             var fetchmodel=new FetchModel(url,this.loadSuccess.bind(this,url,pageSize,pageIndex,sortName,sortOrder,params),actualParams,this.loadError);
             console.log("datagrid-开始查询:",fetchmodel);

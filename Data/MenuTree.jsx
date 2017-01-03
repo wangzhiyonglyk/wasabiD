@@ -4,7 +4,7 @@
  desc:树组件
  */
 let React=require("react");
-require("../../sass/Base/Data/MenuTree.scss");
+require("../Sass/Data/MenuTree.scss");
 var MenuTree = React.createClass({
     propTypes: {
         collapsed: React.PropTypes.bool,//是否允许折叠
