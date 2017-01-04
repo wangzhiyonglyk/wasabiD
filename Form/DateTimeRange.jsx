@@ -118,6 +118,10 @@ let DateTimeRange=React.createClass({
         })
     },
     firstHandler:function(value) {//开始日期选择事件
+        if(value&&value.indexOf(" ")>-1)
+        {//有时间
+            value=value.split(" ")[0];
+        }
         var min_day=this.state.first_min;
         var max_day=this.state.first_max;
         /*单向选择判断*/
@@ -173,6 +177,10 @@ let DateTimeRange=React.createClass({
             });
     },
     secondHandler:function(value) {//结束日期选择事
+        if(value&&value.indexOf(" ")>-1)
+        {//有时间
+            value=value.split(" ")[0];
+        }
         var min_day=this.state.second_min;
         var max_day=this.state.second_max;
         /*单向选择判断*/

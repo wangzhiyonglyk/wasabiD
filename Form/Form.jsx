@@ -88,6 +88,7 @@ var Form=React.createClass({
         }
     },
     componentWillReceiveProps:function(nextProps) {
+        this.showUpdate=false;//清除自身标记
         this.setState({
             model: ( nextProps.model),
             disabled: nextProps.disabled,
@@ -95,9 +96,18 @@ var Form=React.createClass({
         })
     },
     componentDidUpdate:function () {
+        if(this.isChange&&this.showUpdate)
+        {
+            this.showUpdate=false;
             if (this.props.changeHandler) {//用于父组件监听是否表单是否有修改，用于立即更新父组件中的按钮的权限之类的,
                 this.props.changeHandler();
             }
+        }
+        else
+        {
+
+        }
+
     },
     changeHandler:function(value,text,name,data) {//
         var newModel = this.state.model;
@@ -112,7 +122,8 @@ var Form=React.createClass({
                 break;
             }
         }
-        this.isChange=true;
+        this.isChange=true;//用于对外标记
+        this.showUpdate=true;//用于自身标记
 
         this.setState({
             model: ( newModel),
@@ -123,7 +134,7 @@ var Form=React.createClass({
 
 
     },
-    getState:function () {//只读方法，用父组件其他方法里来获取表单是否发生改变
+    getState:function () {//只读方法，用于父组件其他方法里来获取表单是否发生改变
          if(this.isChange) {
              return true;
          }
@@ -293,6 +304,7 @@ var Form=React.createClass({
         return  JSON.parse(window.localStorage.getItem(name+"data"))
     },
     clearData:function() {//清空数据
+        this.isChange=false;//清除脏数据状态
         var newModel=this.state.model;
         for(let i=0;i<newModel.length;i++)
         {

@@ -13,7 +13,8 @@ var MenuTab=React.createClass({
             url:React.PropTypes.string,//子页面地址
             active:React.PropTypes.bool,//是否为激活状态
             clickHandler:React.PropTypes.func.isRequired,//激活后的回调事件,
-            closeHandler:React.PropTypes.func.isRequired//页面关闭事件
+            closeHandler:React.PropTypes.func.isRequired,//页面关闭事件
+            hide:React.PropTypes.bool,//是否隐藏
 
         },
         getDefaultProps:function()
@@ -21,8 +22,18 @@ var MenuTab=React.createClass({
             return {
                 active:false,
                 iconCls:null,
+                hide:false,
             }
         },
+    getInitialState() {
+        return {
+            active:this.props.active,
+            hide:this.props.hide,
+        }
+    },
+    componentWillReceiveProps(nextProps) {
+      this.setState(nextProps);
+    },
         clickHandler:function(event) {
             this.rippleHandler(event);
             if(event.target.nodeName=="A"||event.target.className=="text"||event.target.className=="icon")
@@ -40,10 +51,10 @@ var MenuTab=React.createClass({
         },
         render: function () {
             return (
-                <li className ={this.props.active?"active":""}  title="双击可以关闭">
+                <li className ={this.state.active?"active":""} style={{display:this.state.hide?"none":"inline-block"}}  title="双击可以关闭">
                     <a onDoubleClick={this.closeHandler}  onClick={this.clickHandler} >
                         <div className={"icon "+this.props.iconCls} style={{width:(this.props.iconCls==null?5:null)}}></div>
-                        <div className="closeicon" onClick={ this.closeHandler}></div>
+                        <div className="closeicon icon-close" onClick={ this.closeHandler}></div>
 
                         <div className="text" >{this.props.title}</div>
                         <div className="split"></div>

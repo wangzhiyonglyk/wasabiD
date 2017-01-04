@@ -5,12 +5,14 @@
     overflow: visible;
 
 }
+
 .wasabi-detail .wasabi-table
 {
     background-color: #0d3f42;
     overflow: visible;
 
 }
+
 /*
 表格容器
 */
@@ -45,8 +47,13 @@
 .wasabi-detail .wasabi-table .table div{
     color:#c1d6d7;
 }
-.wasabi-detail .wasabi-table .table span{
+.wasabi-detail .wasabi-table span{
     color:#c1d6d7;
+}
+.wasabi-detail .wasabi-table .page-select
+{
+    background-color: #0d3f42;
+    color: #c1d6d7;
 }
 .wasabi-detail .wasabi-table .table > thead > tr > th {
 

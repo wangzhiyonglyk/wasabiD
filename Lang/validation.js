@@ -13,7 +13,7 @@ var  validation= {
     idcard:"身份证号码格式不正确",
     required: '',
     invalidTip:"输入格式无效",
-    date:"日期格式为2010-10-10",
+    date:"日期格式为: 0000-00-00",
     max: {
         array: '最多选择 {0} 个选项',
         number: '不能大于 {0}',

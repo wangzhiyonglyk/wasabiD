@@ -23,6 +23,15 @@ iframe
     height: 40px;
     background-color:#0d4043;
 }
+.wasabi-nav-tabs  li {
+    float:left;
+    position: relative;
+    display: block;
+    height: 40px;
+    padding-left: 1px;
+
+}
+
 .wasabi-nav-tabs .tabmenu
 {
     background-image:url('../../img/menu.png');
@@ -82,16 +91,46 @@ iframe
    color: #ffffff;
 }
 
-.wasabi-nav-tabs > li {
-    float:left;
-    position: relative;
-    display: block;
-    height: 40px;
-
-    padding-right: 1px;
+.wasabi-nav-tabs .left{
+    width: 20px;
 }
 
-.wasabi-nav-tabs > li > a {
+.wasabi-nav-tabs .left:before{
+    font-size: 20px;
+    color: #86a0a1;
+    top:9px;
+    position: absolute;
+
+}
+.wasabi-nav-tabs .left:hover:before
+{
+    color: #ffffff;
+}
+.wasabi-nav-tabs .right{
+    width: 20px;
+}
+.wasabi-nav-tabs .right:before{
+    font-size: 20px;
+    color: #86a0a1;
+    top:9px;
+    position: absolute;
+}
+.wasabi-nav-tabs .right:hover:before {
+    color: #ffffff;
+}
+
+.wasabi-nav-tabs .content{
+overflow: hidden;
+    position: relative;
+}
+
+.wasabi-nav-tabs > .content>ul{
+    position: relative;
+    left:0px;
+}
+
+
+.wasabi-nav-tabs > .content>ul>li > a {
     position: relative;
     display: block;
     height: 40px;
@@ -105,16 +144,16 @@ iframe
     padding-right: 1px;
     overflow: hidden;
 }
-.wasabi-nav-tabs > li > a:hover
+.wasabi-nav-tabs > .content ul>li > a:hover
 {
     background-color: #114e52;
 
 }
-.wasabi-nav-tabs > li.active > a{
+.wasabi-nav-tabs > .content ul>li.active > a{
     background-color: #114e52;
 }
 
-.wasabi-nav-tabs > li > a .text{
+.wasabi-nav-tabs > .content ul>li > a .text{
     color:#86a0a1;
     font-size: 12px;
     width:150px;
@@ -127,14 +166,14 @@ iframe
     border: none;
 }
 
-.wasabi-nav-tabs > li > a:hover .text{
+.wasabi-nav-tabs > .content ul>li> a:hover .text{
     color: #ffffff;
 }
-.wasabi-nav-tabs > li.active > a .text{
+.wasabi-nav-tabs > .content ul>li.active > a .text{
     color: #ffffff;
 }
 
-.wasabi-nav-tabs > li .icon{
+.wasabi-nav-tabs > .content ul>li .icon{
     top: 12px;
     left: 10px;
     position: absolute;
@@ -143,26 +182,32 @@ iframe
 
 
 }
-.wasabi-nav-tabs > li.active .icon {
+.wasabi-nav-tabs > .content ul>li.active .icon {
     color: white;
 }
-.wasabi-nav-tabs > li .closeicon{
-
+.wasabi-nav-tabs > .content ul>li .closeicon{
     position: absolute;
-    width: 12px;
-    height:12px;
-    top: 13.44444px;
-    right:8px;
-    background-image:url('../../img/icons/close.png') ;
-    background-size: 12px 12px;
+    top: 9px;
+    right: 8px;
+    padding: 5px;
+    font-size: 10px;
+    text-align: center;
+    cursor: pointer;
+}
+.wasabi-nav-tabs > .content ul>li .closeicon:before {
+color: #86a0a1;
+
+}
+.wasabi-nav-tabs > .content ul>li.active .closeicon:before{
+    color:#ffffff;
+}
+.wasabi-nav-tabs > .content ul>li .closeicon:hover:before{
+
+    color:#2ec9c2;
+
 }
 
-.wasabi-nav-tabs > li .closeicon:hover{
-    background-image:url('../../img/icons/closehover.png') ;
-
-}
-
-.wasabi-nav-tabs > li .split{
+.wasabi-nav-tabs > .content ul>li .split{
     float: right;
     or: transparent;
     width: 1px;

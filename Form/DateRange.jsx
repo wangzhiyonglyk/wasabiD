@@ -5,6 +5,7 @@ desc:日期范围选择控件
  */
 let React=require("react");
 let Lang=require("../Lang/language.js");
+let regs=require("../Lang/regs.js");
 let DateD=require("./DateD.jsx");
 let Button=require("../Buttons/Button.jsx");
 var shouldComponentUpdate=require("../Mixins/shouldComponentUpdate.js");
@@ -15,83 +16,53 @@ let DateRange=React.createClass({
         firstDate:React.PropTypes.string,//第一个日期
         secondDate:React.PropTypes.string,//第二个日期
         onSelect:React.PropTypes.func,//确定事件
+        attachTime:React.PropTypes.bool,//j是否附加时间格式
+        time:React.PropTypes.string,
+    },
+    getDefaultProps:function () {
+        return{
+            name:null,
+            firstDate:null,
+            secondDate:null,
+            onSelect:null,//
+
+            attachTime:true,
+            time:"00:00:00"
+        }
     },
     getInitialState:function() {
         //先设置默认值的，再判断用户是否有输入值
-        var regs=/^(\d{4})-(\d{2})-(\d{2})$/;
-        var newDate =  new Date();
-        var first_year=newDate.getFullYear();
-        var first_month=newDate.getMonth()+1;
-        var first_day=null;
-        let first_min=null; let first_max=null;
-        let second_min=null;let second_max=null;
 
-        if(this.props.firstDate&&regs.test(this.props.firstDate))
-        {//输入了值
-            first_year=this.props.firstDate.split("-")[0]*1;
-            first_month=this.props.firstDate.split("-")[1]*1;
-            first_day=this.props.firstDate.split("-")[2]*1;
-        }
-        //设置第二日期的默认值
-        var second_year=first_year;var second_month;var second_day=null;
-        second_month = parseInt(first_month) + 1;
-        if( second_month > 12 ){
-            second_year ++;
-            second_month = 1;
-        }
-        else {
-
-        }
-        if(this.props.secondDate&&regs.test(this.props.secondDate))
-        {//输入了值
-            if(this.props.secondDate.split("-")[0]*1>first_year||this.props.secondDate.split("-")[1]*1>first_month) {//不相等才赋值
-                second_year = this.props.secondDate.split("-")[0] * 1;
-                second_month = this.props.secondDate.split("-")[1] * 1;
-                second_max=  second_day = this.props.secondDate.split("-")[2] * 1;
-                second_min=1;
-                first_min=first_day;
-                first_max=31;
-            }
-            else  if(this.props.secondDate.split("-")[0]*1==first_year||this.props.secondDate.split("-")[1]*1==first_month) {//不相等才赋值
-
-                first_max =this.props.secondDate.split("-")[2] * 1;
-                first_min=first_day;
-            }
-        }
-        else {//第二日期没有值
-            first_min=first_max=first_day;
-        }
-        return{
-            first_year:first_year,
-            first_month:first_month,
-            first_day:first_day,
-            first_min:first_min,
-            first_max:first_max,
-            second_year:second_year,
-            second_month:second_month,
-            second_day:second_day,
-            second_min:second_min,
-            second_max:second_max,
-        }
+        return  this.setDefaultState(this.props);
     },
     componentWillReceiveProps:function(nextProps) {
        this.setDefaultState(nextProps);
     },
     setDefaultState(props){
         //先设置默认值的，再判断用户是否有输入值
-        var regs=/^(\d{4})-(\d{2})-(\d{2})$/;
+
         var newDate =  new Date();
         var first_year=newDate.getFullYear();
         var first_month=newDate.getMonth()+1;
         var first_day=null;
         let first_min=null; let first_max=null;
         let second_min=null;let second_max=null;
+        var firstDate=props.firstDate;
 
-        if(props.firstDate&&regs.test(props.firstDate))
-        {//输入了值
-            first_year=props.firstDate.split("-")[0]*1;
-            first_month=props.firstDate.split("-")[1]*1;
-            first_day=props.firstDate.split("-")[2]*1;
+        if(firstDate&&firstDate.indexOf(" ")>-1&&regs.datetime(firstDate)) {//有时间
+            firstDate= props.firstDate.split(" ")[0];
+        }
+        else if(regs.date.test(firstDate)) {//正规的日期格式
+
+        }
+        else{
+            firstDate=null;
+
+        }
+        if(firstDate) {
+            first_year = firstDate.split("-")[0] * 1;
+            first_month = firstDate.split("-")[1] * 1;
+            first_day = firstDate.split("-")[2] * 1;
         }
         //设置第二日期的默认值
         var second_year=first_year;var second_month;var second_day=null;
@@ -103,19 +74,32 @@ let DateRange=React.createClass({
         else {
 
         }
-        if(props.secondDate&&regs.test(props.secondDate))
+        //第二个日期
+        var secondDate = props.secondDate;
+        if (secondDate&&secondDate.indexOf(" ") > -1 && regs.datetime(secondDate)) {//有时间
+            secondDate = props.secondDate.split(" ")[0];
+        }
+        else if (secondDate&&regs.date.test(secondDate)) {//正规的日期格式
+
+        }
+        else {
+            secondDate = null;
+
+
+        }
+        if(secondDate)
         {//输入了值
-            if(props.secondDate.split("-")[0]*1>first_year||props.secondDate.split("-")[1]*1>first_month) {//不相等才赋值
-                second_year = props.secondDate.split("-")[0] * 1;
-                second_month = props.secondDate.split("-")[1] * 1;
-                second_max=  second_day = props.secondDate.split("-")[2] * 1;
+            if(secondDate.split("-")[0]*1>first_year||secondDate.split("-")[1]*1>first_month) {//不相等才赋值
+                second_year = secondDate.split("-")[0] * 1;
+                second_month = secondDate.split("-")[1] * 1;
+                second_max=  second_day = secondDate.split("-")[2] * 1;
                 second_min=1;
                 first_min=first_day;
                 first_max=31;
             }
-            else  if(props.secondDate.split("-")[0]*1==first_year||props.secondDate.split("-")[1]*1==first_month) {//不相等才赋值
+            else  if(secondDate.split("-")[0]*1==first_year||secondDate.split("-")[1]*1==first_month) {//不相等才赋值
 
-                first_max =props.secondDate.split("-")[2] * 1;
+                first_max =secondDate.split("-")[2] * 1;
                 first_min=first_day;
             }
         }
@@ -154,6 +138,10 @@ let DateRange=React.createClass({
         })
     },
     firstHandler:function(value) {//开始日期选择事件
+        if(value&&value.indexOf(" ")>-1)
+        {//有时间
+            value=value.split(" ")[0];
+        }
         var min_day=this.state.first_min;
         var max_day=this.state.first_max;
         /*单向选择判断*/
@@ -209,6 +197,10 @@ let DateRange=React.createClass({
             });
     },
     secondHandler:function(value) {//结束日期选择事
+        if(value&&value.indexOf(" ")>-1)
+        {//有时间
+            value=value.split(" ")[0];
+        }
         var min_day=this.state.second_min;
         var max_day=this.state.second_max;
         /*单向选择判断*/
@@ -280,7 +272,13 @@ let DateRange=React.createClass({
 
         if(this.props.onSelect!=null)
         {
+
                if(firstDate&&secondDate) {
+                   if(this.props.attachTime)
+                   {
+                       firstDate+=" "+this.props.time;
+                       secondDate+=" "+this.props.time;
+                   }
                    this.props.onSelect(firstDate + "," + secondDate, firstDate + "," + secondDate, this.props.name);
                }
 

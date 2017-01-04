@@ -13,6 +13,7 @@ let DateRange=require("./DateRange.jsx");
 let DateTimeRange=require("./DateTimeRange.jsx");
 
 var validation=require("../Lang/validation.js");
+var regs=require("../Lang/regs.js");
 let setStyle=require("../Mixins/setStyle.js");
 var validate=require("../Mixins/validate.js");
 var shouldComponentUpdate=require("../Mixins/shouldComponentUpdate.js");
@@ -136,8 +137,8 @@ let DatePicker=React.createClass({
         this.refs.label.hideHelp();//隐藏帮助信息
     },
     splitDate:function(splitdate) {//拆分日期格式
-        var regs=/^(\d{4})-(\d{2})-(\d{2})$/;
-        if(splitdate&&splitdate!=""&&regs.test(splitdate))
+
+        if(splitdate&&splitdate!=""&&regs.date.test(splitdate))
         {
             var  returnvalue={
                 year:splitdate.split("-")[0],
@@ -151,8 +152,9 @@ let DatePicker=React.createClass({
         }
 
     },
-    splitDateTime:function(datetime) {//TODO暂时不验证
-        if(datetime)
+    splitDateTime:function(datetime) {//
+
+        if(datetime&&regs.datetime(datetime)&&datetime.indexOf(" ")>-1)
         {//如果不为空
             var splitdate=datetime.split(" ")[0];
             if(splitdate&&splitdate!="")
@@ -211,8 +213,7 @@ let DatePicker=React.createClass({
             this.props.onSelect(value,text,this.props.name,null);
         }
     },
-    clearHandler:function()
-    {//清除数据
+    clearHandler:function() {//清除数据
         if(this.props.onSelect!=null)
         {
             this.props.onSelect("","",this.props.name,null);
@@ -227,8 +228,41 @@ let DatePicker=React.createClass({
     },
     changeHandler:function(event) {
     },
+    setText:function () {
+        var text=this.state.text;
+        if(this.props.type=="date") {
+            if (text && text.indexOf(" ") > -1) {
+                text = text.split(" ")[0];//除去显示的时间格式
+            }
+        }else if(this.props.type=="daterange") {
+            if(text&&text.indexOf(" ")>-1) {
+
+                var arr = text.split(",");
+                text = "";
+                if (arr.length > 0 && arr[0].indexOf(" ") > -1) {
+                    text = arr[0].split(" ")[0];
+                }
+
+                if (arr.length == 2) {
+                    if (arr[0].indexOf(" ") > -1) {
+                        text = arr[0].split(" ")[0];
+                    }
+                    if (arr[1].indexOf(" ") > -1) {
+                        text += "," + arr[1].split(" ")[0];
+                    }
+                }
+            }
+
+        }
+        return text;
+    },
     renderDate:function() {
         var dateobj=this.splitDate(this.state.value);
+        if(this.state.value.indexOf(" ")>-1)
+        {//说明有时间
+            var dateobj=this.splitDateTime(this.state.value);
+        }
+
         return <DateD ref="combobox"  name={this.props.name} showTime={false} {...dateobj}  onSelect={this.onSelect}></DateD>
 
     },
@@ -293,17 +327,14 @@ let DatePicker=React.createClass({
             case "date":
                 control = this.renderDate();
                 controlDropClassName = "date";
-
                 break;
             case "datetime":
                 control = this.renderDateTime();
                 controlDropClassName = "date time";
-
                 break;
             case "daterange":
                 control = this.renderDateRange();
                 controlDropClassName = "range";
-
                 break;
             case "datetimerange":
                 control = this.renderDateTimeRange();
@@ -323,6 +354,8 @@ let DatePicker=React.createClass({
             title:this.props.title,
 
         }//文本框的属性
+
+      var text=  this.setText();
         return (
             <div className={componentClassName+this.state.validateClass} style={style} ref="picker">
                 <Label name={this.props.label} ref="label" hide={this.state.hide} required={this.state.required}></Label>
@@ -330,7 +363,7 @@ let DatePicker=React.createClass({
                     <div className="combobox" style={{display:this.props.hide==true?"none":"block"}}>
                         <i className={"picker-clear"} onClick={this.clearHandler} style={{display:this.state.readonly?"none":(this.state.value==""||!this.state.value)?"none":"inline"}}></i>
                         <i className={"pickericon  " +(this.state.show?" rotate":"")} onBlur={this.onBlur} onClick={this.showPicker.bind(this,1)}></i>
-                        <input type="text" {...inputProps} value={this.state.text} onClick={this.showPicker.bind(this,2)} onChange={this.changeHandler}/>
+                        <input type="text" {...inputProps} value={text} onClick={this.showPicker.bind(this,2)} onChange={this.changeHandler}/>
                         <div className={"dropcontainter "+controlDropClassName+" "+size+" "+this.props.position}
                              style={{display:this.state.show==true?"block":"none"}} >
                             {

@@ -297,14 +297,21 @@ let DataGridHandler={
     },
     //选择处理函数
     getKey:function (index,pageIndex) {//获取指定行的关键字，没有指定页号则为当前页
+        let key;
         if(!pageIndex) {
             pageIndex = this.state.pageIndex;
         }
-        let key = pageIndex.toString() + "-" + index.toString();//默认用序号作为关键字
+        if(index==null&&index==undefined)
+        {
+            console.log(new Error("index 值传错"));
+        }
+        else
+        {
+             key = pageIndex.toString() + "-" + index.toString();//默认用序号作为关键字
+        }
 
-        // if (this.state.data.length<index&&this.state.data[index][this.props.keyField]) {//有可能是新增的数据
-        //     key = this.state.data[index][this.props.keyField];//如果能获取关键字段，则用关键字段
-        // }
+
+
         return key;
     },
     onChecked:function(index,value) {//选中事件
@@ -492,7 +499,6 @@ let DataGridHandler={
         return this.footerActualData;
     },
     detailHandler:function(rowIndex,rowData ) {//执行显示详情功能
-
         var key=this.getKey(rowIndex);//获取关键值
         if(key==this.state.detailIndex)
         {

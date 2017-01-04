@@ -19,6 +19,7 @@ let DateD = React.createClass({
         min:React.PropTypes.number,//最小值，用于日期范围选择
         max:React.PropTypes.number,//最大值,用于日期范围选择
         onSelect:React.PropTypes.func,//选择后的事件
+        attachTime:React.PropTypes.bool,//j是否附加时间格式
 
     },
     getDefaultProps:function() {
@@ -29,6 +30,7 @@ let DateD = React.createClass({
             isRange:false,///默认否
             min:null,//默认为空，不属于日期范围选择
             max:null,//默认为空，不属于日期范围选择
+            attachTime:true,
         }
 
     },
@@ -90,6 +92,10 @@ let DateD = React.createClass({
         if(this.props.onSelect!=null) {
             let  value=this.state.year+"-"+(this.state.month.toString().length==1?"0"+this.state.month.toString():this.state.month)
                 +"-"+(day<10?"0"+day.toString():day);
+            if(this.props.attachTime)
+            {//如果需要附加时间
+                value=value+" 00:00:00";
+            }
             this.props.onSelect(value,value,this.props.name);
         }
 

@@ -32,14 +32,21 @@ var DataGrid=React.createClass({
             React.PropTypes.number,
             React.PropTypes.string,
         ]) ,//宽度
-        height:React.PropTypes.number,//高度
+        height:React.PropTypes.oneOfType([
+            React.PropTypes.number,
+            React.PropTypes.string,
+        ]) ,//高度
         selectAble:React.PropTypes.bool,// 是否显示选择，默认值 false
         singleSelect:React.PropTypes.bool,//是否为单选,默认值为 false
         detailAble:React.PropTypes.bool,//是否显示详情,默认值 false
-        borderAble:React.PropTypes.bool,//是否显示表格边框，默认值 false
         focusAble:React.PropTypes.bool,//是否显示焦点行，默认值 false
+        editAble:React.PropTypes.bool,//是否允许编辑
+        borderAble:React.PropTypes.bool,//是否显示表格边框，默认值 false
+
+        clearChecked:React.PropTypes.bool,//刷新数据后是否清除选择,true
+        selectChecked:React.PropTypes.bool,//选择行的时候是否同时选中,false
         pagination:React.PropTypes.bool,//是否分页,默认值 true
-        selectChecked:React.PropTypes.bool,//选择行的时候是否同时选中
+
         pageIndex:React.PropTypes.number,//当前页号
         pageSize:React.PropTypes.number,//分页大小，默认20
         sortName:React.PropTypes.string,//排序字段,
@@ -49,33 +56,37 @@ var DataGrid=React.createClass({
         ]),//排序方式,默认asc,
         keyField:React.PropTypes.string,//关键字段
         headers:React.PropTypes.array,//表头设置
-        total:React.PropTypes.number,// 总条目数，默认为 0
+        footer:React.PropTypes.array,//页脚,
+        total:React.PropTypes.number,// 总条目数，有url没用，默认为 0
         data:React.PropTypes.array,//当前页数据（json）
 
         url:React.PropTypes.string,//ajax地址
 
-        backSource:React.PropTypes.string,//ajax的返回的数据源中哪个属性作为数据源,为null时直接后台返回的数据作为数据源(旧版本)
-        dataSource:React.PropTypes.string,//ajax的返回的数据源中哪个属性作为数据源,为null时直接后台返回的数据作为数据源(新版本)
-        totalSource:React.PropTypes.string,//ajax的返回的数据源中哪个属性作为总记录数,为null时直接后台返回的数据中的total
+        backSource:React.PropTypes.string,//ajax的返回的数据源中哪个属性作为数据源(旧版本)
+        dataSource:React.PropTypes.string,//ajax的返回的数据源中哪个属性作为数据源(新版本)
+        footerSource:React.PropTypes.string,//页脚数据源,
+        totalSource:React.PropTypes.string,//ajax的返回的数据源中哪个属性作为总记录数源
+
         params:React.PropTypes.object,//查询条件
         onClick:React.PropTypes.func,//单击事件
         onDoubleClick:React.PropTypes.func,//双击事件
-        onChecked:React.PropTypes.func,//表格中有一行被选中
+        onChecked:React.PropTypes.func,//监听表格中某一行被选中/取消
+        updateHandler:React.PropTypes.func,//手动更新事件，父组件一定要有返回值,返回详情组件
         detailHandler:React.PropTypes.func,//展示详情的函数，父组件一定要有返回值,返回详情组件
-        footer:React.PropTypes.array,//页脚,
-        footerSource:React.PropTypes.string,//页脚数据源,
+
+
         pagePosition:React.PropTypes.oneOf([
             "top",
             "bottom",
             "both"
         ]),//分页栏的位置
-        clearChecked:React.PropTypes.bool,//刷新数据后是否清除选择,
+
         pasteUrl:React.PropTypes.string,//粘贴后的url
         pasteParamsHandler:React.PropTypes.func,//对粘贴后的数据进行处理,形成参数并且返回
         menu:React.PropTypes.bool,//是否显示菜单按钮
         menuPanel:React.PropTypes.any,//菜单面板
         headerUrl:React.PropTypes.string,//自定义列地址
-        editAble:React.PropTypes.bool,//是否允许编辑
+
         updateUrl:React.PropTypes.string,//列更新的地址
 
 
@@ -87,8 +98,10 @@ var DataGrid=React.createClass({
             selectAble:false,
             singleSelect:false,
             detailAble:false,
-            focusAble:false,
+            focusAble:true,
             borderAble:false,
+            clearChecked:true,//是否清空选择的
+            selectChecked:false,
             pagination:true,
             pageIndex:1,
             pageSize:20,
@@ -98,10 +111,7 @@ var DataGrid=React.createClass({
             headers:[],
             total:0,
             data:[],
-            updateHandler:null,
-            detailHandler:null,
             url:null,//
-
             backSource:"data",//
             dataSource:"data",//
             totalSource:"total",//
@@ -109,12 +119,15 @@ var DataGrid=React.createClass({
             footer:null,//页脚
             onClick:null,
             onDoubleClick:null,
-            onPaste:null,
+
             onChecked:null,
+            updateHandler:null,
+            detailHandler:null,
+
             footerSource:"footer",//页脚数据源
-            selectChecked:false,
+
             pagePosition:"bottom",//默认分页在底部
-            clearChecked:true,//是否清空选择的
+
             pasteUrl:null,
             pasteParamsHandler:null,
             menu:false,
@@ -158,7 +171,9 @@ var DataGrid=React.createClass({
             editAble:this.props.editAble,
             editIndex:null,//当前处理编辑的列
             remoteHeaders:null,//自定义列的数据
-
+            addData:new Map(),//新增的数据,因为有可能新增一个空的，然后再修改
+            updatedData:new Map(),//被修改过的数据，因为要判断曾经是否修改
+            deleteData:[],//删除的数据
 
 
 
@@ -308,7 +323,7 @@ var DataGrid=React.createClass({
         }
         this.state.headers.map((header, index) => {
 
-            if (!header&&header.hide == true) {
+            if (!header||header.hide == true) {
                 //隐藏则不显示
                 return ;
             }else {
@@ -428,53 +443,29 @@ var DataGrid=React.createClass({
                 }
 
 
-                // if(this.state.editIndex!=null &&this.state.editIndex==rowIndex&&header.editor)
-                // {
-                //     let currentValue=rowData[header.name];
-                //     let currentText=rowData[header.name];
-                //     if(typeof header.editor.content=== 'function') {
-                //         let valueResult= header.editor.content(rowData,rowIndex);
-                //         if(valueResult)
-                //         {
-                //             currentValue=valueResult.value;
-                //             currentText=valueResult.text;
-                //
-                //         }
-                //     }
-                //     tds.push(<td onClick={this.onClick.bind(this,rowIndex,rowData)}
-                //                  onDoubleClick={this.onDoubleClick.bind(this,rowIndex,rowData)}
-                //                  key={"col"+rowIndex.toString()+"-"+columnIndex.toString()}
-                //     ><div className="wasabi-table-cell"    style={{width:(header.width?header.width:null),textAlign:(header.align?header.align:"left")}}>
-                //         <Input {...header.editor.options} type={header.editor.type} value={currentValue} text={currentText} onChange={this.rowEditHandler.bind(this,columnIndex)}
-                //                onSelect={this.rowEditHandler.bind(this,columnIndex)} label={""}></Input>
-                //     </div></td>);
-                // }
-                // else
-                // {
-                //     if (columnIndex==0&&this.props.detailAble) {
-                //
-                //         //在第一列显示详情
-                //         var iconCls="icon-down";//详情列的图标
-                //         if(this.state.detailIndex==key)
-                //         {
-                //             iconCls="icon-up";//详情列-展开
-                //         }
-                //
-                //         tds.push(<td onClick={this.detailHandler.bind(this,rowIndex,rowData)}
-                //                      key={"col"+rowIndex.toString()+"-"+columnIndex.toString()}>
-                //             <div className="wasabi-table-cell" style={{width:(header.width?header.width:null),textAlign:(header.align?header.align:"left")}}>
-                //                 <div style={{float:"left"}}> {content}</div><LinkButton iconCls={iconCls} color="#666666" tip="查看详情"></LinkButton>
-                //             </div>
-                //         </td>);
-                //     }
-                //     else {
-                //         tds.push(<td onClick={this.onClick.bind(this,rowIndex,rowData)}
-                //                      onDoubleClick={this.onDoubleClick.bind(this,rowIndex,rowData)}
-                //                      key={"col"+rowIndex.toString()+"-"+columnIndex.toString()}
-                //         ><div className="wasabi-table-cell"    style={{width:(header.width?header.width:null),textAlign:(header.align?header.align:"left")}}>{content}</div></td>);
-                //     }
-                // }
-                      //TODO ，这里不处理编辑功能
+                if(this.state.editIndex!=null &&this.state.editIndex==rowIndex&&header.editor)
+                {
+                    // let currentValue=rowData[header.name];
+                    // let currentText=rowData[header.name];
+                    // if(typeof header.editor.content=== 'function') {
+                    //     let valueResult= header.editor.content(rowData,rowIndex);
+                    //     if(valueResult)
+                    //     {
+                    //         currentValue=valueResult.value;
+                    //         currentText=valueResult.text;
+                    //
+                    //     }
+                    // }
+                    // tds.push(<td onClick={this.onClick.bind(this,rowIndex,rowData)}
+                    //              onDoubleClick={this.onDoubleClick.bind(this,rowIndex,rowData)}
+                    //              key={"col"+rowIndex.toString()+"-"+columnIndex.toString()}
+                    // ><div className="wasabi-table-cell"    style={{width:(header.width?header.width:null),textAlign:(header.align?header.align:"left")}}>
+                    //     <Input {...header.editor.options} type={header.editor.type} value={currentValue} text={currentText} onChange={this.rowEditHandler.bind(this,columnIndex)}
+                    //            onSelect={this.rowEditHandler.bind(this,columnIndex)} label={""}></Input>
+                    // </div></td>);
+                }
+                else
+                {
                     if (columnIndex==0&&this.props.detailAble) {
 
                         //在第一列显示详情
@@ -497,6 +488,8 @@ var DataGrid=React.createClass({
                                      key={"col"+rowIndex.toString()+"-"+columnIndex.toString()}
                         ><div className="wasabi-table-cell"    style={{width:(header.width?header.width:null),textAlign:(header.align?header.align:"left")}}>{content}</div></td>);
                     }
+                }
+
 
             });
             let trClassName=null;
@@ -562,7 +555,7 @@ var DataGrid=React.createClass({
             }
             control=  <div key="pagination-detail" className="pagination-detail">
                 <span className="pagination-info">第{beginOrderNumber}到{endOrderNumber}条,共{pageTotal}页{total}条   </span>
-                每页 <select value={this.state.pageSize} onChange={this.pageSizeHandler}>
+                每页 <select className="page-select" value={this.state.pageSize} onChange={this.pageSizeHandler}>
                 <option value={10}>10</option>
                 <option value={20}>20</option>
                 <option value={30}>30</option>
@@ -784,3 +777,4 @@ var DataGrid=React.createClass({
     }
 });
 module .exports=DataGrid;
+
