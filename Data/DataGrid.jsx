@@ -647,7 +647,7 @@ var DataGrid=React.createClass({
                     if(footerchild[0].value!=null&&footerchild[0].value!=undefined)
                     {//如果有值
                         var obj={};obj[header.name]=footerchild[0].value;
-                        footerActualData.push(obj);
+                        this.footerActualData.push(obj);
                         tds.push(<td key={headerindex+header.name}>{footerchild[0].value}</td>)
                     }
                     else {

@@ -407,11 +407,11 @@ let DataGridExtend= {
         if (width) {//如果需要调整宽度
             this.refs.fixedTable.style.width = (width) + "px";
             this.refs.realTable.style.width = (width) + "px";
-            this.setAlign();//调整对齐问题
+
         }
 
 
-
+        this.setAlign();//调整对齐问题
 
     },
     setAlign:function (type) {
