@@ -103,7 +103,7 @@ let DateTime = React.createClass({
 
 
             let  value=this.state.year+"-"+(this.state.month.toString().length==1?"0"+this.state.month.toString():this.state.month)
-                +"-"+(day<10?"0"+day.toString():day)+(time?" "+time:"");
+                +"-"+(day*1<10?"0"+day.toString():day)+(time?" "+time:"");
             this.props.onSelect(value,value,this.props.name);
         }
 

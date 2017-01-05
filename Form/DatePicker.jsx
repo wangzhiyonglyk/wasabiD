@@ -138,7 +138,19 @@ let DatePicker=React.createClass({
     },
     splitDate:function(splitdate) {//拆分日期格式
 
-        if(splitdate&&splitdate!=""&&regs.date.test(splitdate))
+
+        if(splitdate&&splitdate.indexOf(" ")>-1&&regs.datetime(splitdate))
+        {//有时间
+
+            splitdate=splitdate.split(" ")[0];
+            var  returnvalue={
+                year:splitdate.split("-")[0],
+                month:splitdate.split("-")[1],
+                day:splitdate.split("-")[2],
+            }
+            return returnvalue;
+        }
+         else if(regs.date.test(splitdate))
         {
             var  returnvalue={
                 year:splitdate.split("-")[0],
@@ -258,9 +270,9 @@ let DatePicker=React.createClass({
     },
     renderDate:function() {
         var dateobj=this.splitDate(this.state.value);
-        if(this.state.value.indexOf(" ")>-1)
+        if(this.state.value&&  this.state.value.indexOf(" ")>-1)
         {//说明有时间
-            var dateobj=this.splitDateTime(this.state.value);
+             dateobj=this.splitDateTime(this.state.value);
         }
 
         return <DateD ref="combobox"  name={this.props.name} showTime={false} {...dateobj}  onSelect={this.onSelect}></DateD>
