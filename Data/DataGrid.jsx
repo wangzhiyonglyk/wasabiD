@@ -3,6 +3,7 @@
  * desc:列表组件,由此组件开始独立重构所组件,不再依赖
  * wasabi框架的第一个组件
  * 2016-06-09后开始调整整个样式
+ * 2017-01-04 注意了,这里渲染分页与复制的CopyDataGrid不一样，因为CopyDataGrid宽度比较小可能放不下
  *
  */
 require("../Sass/Data/DataGrid.scss");
@@ -554,14 +555,14 @@ var DataGrid=React.createClass({
 
             }
             control=  <div key="pagination-detail" className="pagination-detail">
-                <span className="pagination-info">第{beginOrderNumber}到{endOrderNumber}条,共{pageTotal}页{total}条   </span>
-                每页 <select className="page-select" value={this.state.pageSize} onChange={this.pageSizeHandler}>
+                <span className="pagination-info">第{this.state.pageIndex}/{pageTotal}页,共{total}行记录</span>
+                每页<select className="page-select" value={this.state.pageSize} onChange={this.pageSizeHandler}>
                 <option value={10}>10</option>
                 <option value={20}>20</option>
                 <option value={30}>30</option>
                 <option value={50}>50</option>
                 <option value={100}>100</option>
-            </select>  条
+            </select>条
             </div>;
             return control;
         }
@@ -606,6 +607,91 @@ var DataGrid=React.createClass({
                 paginationCom = (
                     <div className="pull-right">
                         <ul className="pagination" >
+                            {
+                                pagearr
+                            }
+                        </ul>
+                    </div>
+                )
+
+            }
+
+        }
+        return paginationCom;
+
+    },
+    renderPaginationTwo:function(type) {//显示分页控件
+        var paginationCom=null;
+        if (this.props.pagination) {
+
+            var pageAll = ( parseInt(this.state.total / this.state.pageSize));//共多少页
+            if ((this.state.total % this.state.pageSize) > 0) {
+                pageAll++;//求余后得到最终总页数
+            }
+            if(pageAll==0)
+            {//数据为空，直接返回
+                return null;
+            }
+
+            if (pageAll > 7) {//大于7页，
+                let pageComponent = [];//分页组件
+                let firstIndex=0;//第一个显示哪一页
+                let lastIndex=0;//最后一个显示哪一页
+                let predisabledli= <li key="predis" className="page-last-separator disabled"><a href="javascript:void(0)">...</a></li>;//多余的分页标记
+                let lastdisabledli= <li key="lastdis" className="page-last-separator disabled"><a href="javascript:void(0)">...</a></li>;//多余的分页标记
+                if(this.state.pageIndex>=4&&this.state.pageIndex<=pageAll-3)
+                {//处于中间位置的页号
+                    firstIndex=this.state.pageIndex-2;
+                    lastIndex=this.state.pageIndex+2;
+                }
+                else {
+                    //非中间位置
+                    if(this.state.pageIndex<4) {
+                        //靠前的位置
+                        firstIndex = 2;
+                        lastIndex = 6;
+                        predisabledli=null;//设置为空
+                    }else
+                    {//靠后的位置
+                        if(this.state.pageIndex>pageAll-3)
+                        {
+                            firstIndex = pageAll-5;
+                            lastIndex = pageAll-1;
+                            lastdisabledli=null;//设置为空
+                        }
+                    }
+                }
+                for (let i=firstIndex; i <=lastIndex; i++) {
+                    pageComponent.push(<li key={"li"+i} className={"page-number "+((this.state.pageIndex*1)==(i)?"active":"")}><a
+                        href="javascript:void(0)" onClick={this.paginationHandler.bind(this,(i))}>{(i)}</a></li>);
+                }
+                pageComponent.unshift(predisabledli);pageComponent.push(lastdisabledli);
+                paginationCom= <div className="pull-right pagination">
+                    <ul className="pagination" style={{marginTop:type=="top"?0:3,marginBottom:type=="top"?3:0}}>
+                        <li key={"lipre"} className="page-pre"><a href="javascript:void(0)" onClick={this.prePaginationHandler} >‹</a></li>
+                        <li key={"lifirst"} className={"page-number "+((this.state.pageIndex*1)==(1)?"active":"")}><a
+                            href="javascript:void(0)" onClick={this.paginationHandler.bind(this,(1))}>{( 1)}</a></li>
+                        {
+                            pageComponent
+                        }
+
+                        <li key="lilast" className={"page-number "+((this.state.pageIndex*1)==(pageAll)?"active":"")}><a href="javascript:void(0)"  onClick={this.paginationHandler.bind(this,(pageAll))}>{(pageAll)}</a></li>
+                        <li key="linext"  className="page-next"><a href="javascript:void(0)" onClick={this.nextPaginationHandler} >›</a></li>
+                    </ul>
+                </div>;
+            }
+            else {
+                //小于7页直接显示
+
+                let pagearr = [];
+                for (let i = 0; i < pageAll; i++) {
+                    var control=<li key={"li"+i} className={"page-number "+((this.state.pageIndex*1)==(i+1)?"active":"")}>
+                        <a href="javascript:void(0)"  onClick={this.paginationHandler.bind(this,(i+1))}>{(i + 1)}</a></li>;
+                    pagearr.push(control);
+                }
+                paginationCom = (
+                    <div className="pull-right">
+                        <ul className="pagination" style={{marginTop:type=="top"?0:3,marginBottom:type=="top"?3:0}}>
                             {
                                 pagearr
                             }
@@ -721,7 +807,7 @@ var DataGrid=React.createClass({
                      style={{display:(this.props.pagePosition=="top"||this.props.pagePosition=="both")?this.props.pagination?"block":"none":"none"}}>
                     {this.renderTotal()}
                     <div style={{display:(this.props.pagination?"block":(this.state.data instanceof Array &&this.state.data.length>0)?"block":"none")}}>
-                        {this.renderPagination("top")}
+                        {this.renderPaginationTwo("top")}
                     </div>
                 </div>
 
@@ -758,7 +844,7 @@ var DataGrid=React.createClass({
                      style={{display:(this.props.pagination?"block":(this.props.pagePosition=="bottom"||this.props.pagePosition=="both")?"block":"none")}}>
                     {this.renderTotal()}
                     <div style={{display:(this.props.pagination?"block":(this.state.data instanceof Array &&this.state.data.length>0)?"block":"none")}}>
-                        {this.renderPagination()}
+                        {this.renderPaginationTwo()}
                     </div>
                 </div>
                 <div className="wasabi-table-loading" style={{display:this.state.loading==true?"block":"none"}}></div>

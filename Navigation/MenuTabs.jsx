@@ -33,8 +33,11 @@ class MenuTabs extends  React.Component {
                  rightIndex=availNum-1;
              }
          }
+        //复制一份，当菜单关闭时用于比较显示的位置，不能直接复制给状态值，这样会导致不停的刷新
+         this.oldTabs=unit.clone(this.props.tabs);
+
         this.  state = {
-            tabs: unit.clone(this.props.tabs),
+            tabs: this.props.tabs,
             homeActive: -1,//主页是否处于激活状态
             menuVisible: false,
             leftIndex: 0,//可见的第一个下标
@@ -70,12 +73,12 @@ class MenuTabs extends  React.Component {
              rightIndex=nextProps.tabs.length-1;
          }
          else{
-             if(nextProps.tabs.length>this.state.tabs.length){//追加了
+             if(nextProps.tabs.length>this.oldTabs.length){//追加了
 
                  leftIndex=nextProps.tabs.length-this.state.availNum;
                  rightIndex=nextProps.tabs.length-1;
              }
-             else if(nextProps.tabs.length<this.state.tabs.length) {//减少了
+             else if(nextProps.tabs.length<this.oldTabs.length) {//减少了
 
                  if(rightIndex<nextProps.tabs.length-1)
                  {//不用处理，仍然可以显示
@@ -84,7 +87,7 @@ class MenuTabs extends  React.Component {
                  else
                  {//左侧处理，右侧显示最后一个
 
-                     leftIndex=this.state.leftIndex-(this.state.tabs.length-nextProps.tabs.length);
+                     leftIndex=this.state.leftIndex-(this.oldTabs.length-nextProps.tabs.length);
                      rightIndex=nextProps.tabs.length-1;
                  }
 
@@ -94,7 +97,7 @@ class MenuTabs extends  React.Component {
 
 
             this.setState({
-                tabs:unit.clone( nextProps.tabs),
+                tabs:( nextProps.tabs),
                 leftIndex:leftIndex,
                 rightIndex:rightIndex,
                 homeActive: (nextProps.tabs&&nextProps.tabs.length>0)?false:true,
@@ -151,8 +154,8 @@ class MenuTabs extends  React.Component {
 
     tabCloseHandler(index) {
 
-
-        var newTabs =unit.clone( this.state.tabs);
+      this.oldTabs=unit.clone( this.state.tabs);//保留旧的
+        var newTabs =this.state.tabs;
         var parentuuid = newTabs[index].parentuuid;
         var parentIndex = null;//父页面的下标
         for (var i = 0; i < newTabs.length; i++) {
@@ -282,7 +285,7 @@ class MenuTabs extends  React.Component {
         }
 
         return (
-            <div>
+            <div className="wasabi-nav-container">
                 <ul className=" wasabi-nav-tabs" ref="menutab">
                     <li className={"tabmenu "+(this.state.menuVisible?"close":"")} onClick={this.menuHandler}></li>
                     <li className={"tabhome "+((this.state.homeActive)?"active":"")} title="首页" onClick={this.homeHandler}>

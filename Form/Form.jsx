@@ -308,15 +308,8 @@ var Form=React.createClass({
         var newModel=this.state.model;
         for(let i=0;i<newModel.length;i++)
         {
-            if( newModel[i].readonly)
-            {
-
-            }
-            else {
-                newModel[i].value=null;
-                newModel[i].text=null;
-            }
-
+            newModel[i].value=null;
+            newModel[i].text=null;
         }
         this.setState({
             model:newModel

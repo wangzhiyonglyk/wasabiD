@@ -1,10 +1,13 @@
 
 @import url("../base.scss") ;
+.wasabi-nav-container>section{
+    width: 100%;
+    position: absolute;
+    top:40px;
+}
 .tabsection
 {
-    width: 100%;
     display: none;
-    padding-top: 10px;
 }
 .checkedsection
 {
@@ -22,6 +25,10 @@ iframe
     margin-top: 0px;
     height: 40px;
     background-color:#0d4043;
+    position: absolute;
+    top: 0px;
+    width: 100%;
+
 }
 .wasabi-nav-tabs  li {
     float:left;

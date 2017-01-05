@@ -554,14 +554,14 @@ var DataGrid=React.createClass({
 
             }
             control=  <div key="pagination-detail" className="pagination-detail">
-                <span className="pagination-info">第{beginOrderNumber}到{endOrderNumber}条,共{pageTotal}页{total}条   </span>
-                每页 <select className="page-select" value={this.state.pageSize} onChange={this.pageSizeHandler}>
+                <span className="pagination-info">第{this.state.pageIndex}/{pageTotal}页,共{total}行记录</span>
+                每页<select className="page-select" value={this.state.pageSize} onChange={this.pageSizeHandler}>
                 <option value={10}>10</option>
                 <option value={20}>20</option>
                 <option value={30}>30</option>
                 <option value={50}>50</option>
                 <option value={100}>100</option>
-            </select>  条
+            </select>条
             </div>;
             return control;
         }

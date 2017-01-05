@@ -368,7 +368,13 @@ let DataGridExtend= {
 
                     for(var rowIndex=0;rowIndex<realTableBodyTr.length;rowIndex++)
                     {//调整表体对应列的宽度
-                        realTableBodyTr[rowIndex].children[index].children[0].style.width = ( width - 1) + "px";
+                        try
+                        {//存在子表的问题
+                            realTableBodyTr[rowIndex].children[index].children[0].style.width = ( width - 1) + "px";
+                        }
+                        catch (e){
+
+                        }
                     }
                      if(diffWidth<0) {
                          this.refs.realTable.style.width = (this.refs.realTable.getBoundingClientRect().width + diffWidth).toString() + "px";

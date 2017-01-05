@@ -198,7 +198,7 @@ let DataGridHandler={
         var footerResult;//最终统计数据
         var dataSource=this.props.dataSource;//数据源
         if(dataSource=="data"&&this.props.backSource!="data"&&this.props.backSource!="data.data")
-        {//dataSource属性为默认,backSource不为默认并且不是旧版的data.data默认值,说明是旧版本中自定义的,
+        {//dataSource属性为默认,backSource不为默认又不是旧版的data.data默认值,说明是旧版本中自定义的,
             dataSource=this.props.backSource;
         }
         if(dataSource) {//需要重新指定数据源
@@ -232,17 +232,21 @@ let DataGridHandler={
             footerResult= unit.getSource( result,this.props.footerSource);
         }
         else
-        {
+        {//没有指定，
             if(result.footer)
             {
                 footerResult=result.footer;//默认的
             }
             else
             {
-                footerResult=null;//空值
+
             }
 
 
+        }
+        if(!footerResult)
+        {
+            footerResult=this.state.footer;
         }
         console.log("datagrid-fetch结果",{
             "原数据":result,

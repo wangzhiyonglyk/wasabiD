@@ -72,25 +72,29 @@ class SlidePanel extends  React.Component{
     }
     render() {
             return <div className={"wasabi-slidepanel "}  style={{width:this.state.panelwidth}}>
-                <div className="overlay" style={{width:this.state.panelwidth,opacity:this.state.overlayOpacity}}></div>
-                <div className="container" style={{width:this.state.containerwidth}}>
-                    <div className="close"></div>
-                        <div className="header">
+                <div className="slide-overlay" style={{width:this.state.panelwidth,opacity:this.state.overlayOpacity}}></div>
+                <div className="slide-container" style={{width:this.state.containerwidth}}>
+
+                        <div className="slide-header">
                             <div className="title">{this.props.title}</div>
-                            <div className="buttoncontainer"><Toolbar buttons={this.props.buttons}
-                                                              buttonClick={this.buttonClick}></Toolbar>
-                            </div>
-                            <div className="close">
-                            <Button name="close" title="关闭" onClick={this.slideHandler}></Button>
-                            </div>
+
 
                         </div>
-                        <div className="body">
+                        <div className="slide-body">
                             {
                                 this.props.children
                             }
 
                         </div>
+                    <div className="slide-footer">
+
+                            <div className="slide-toolbar"><Toolbar buttons={this.props.buttons} buttonClick={this.buttonClick}></Toolbar></div>
+                        <div className="slide-close">
+                            <Button name="close" title="关闭" onClick={this.slideHandler}></Button>
+                        </div>
+
+
+                    </div>
                 </div>
             </div>
         }
