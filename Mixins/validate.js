@@ -55,7 +55,11 @@ let Validate={
                     }
                     else {//没有正则表达式，则验证默认正则
 
-                        if (regexp[this.props.type]) {
+                        if(this.props.type=="date") {//日期允许带时间
+
+                            isvalidate= regexp.date.test(value)||regexp.datetime(value);
+                        }
+                        else if (regexp[this.props.type]) {
 
                             if (typeof regexp[this.props.type] == "function") {
                                 isvalidate = regexp[this.props.type](value);
