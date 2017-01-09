@@ -77,12 +77,21 @@ iframe
     color:#ffffff;
 }
 .wasabi-nav-tabs .tabuser {
+
     width: 40px;
     height:40px;
     float:right;
     font-family: 'icomoon' !important;
     color:#86a0a1;
 
+}
+.wasabi-nav-tabs .tabuser-control{
+    width: 300px;
+    overflow-x: hidden;
+    overflow-y: visible;
+    height: 40px;
+    font-family: 'icomoon' !important;
+    color:#86a0a1;
 }
 .wasabi-nav-tabs .tabuser:before
 {
@@ -97,6 +106,7 @@ iframe
 {
    color: #ffffff;
 }
+
 
 .wasabi-nav-tabs .left{
     width: 20px;

@@ -23,8 +23,8 @@ var Toolbar=React.createClass({
             className:"",
         }
     },
-    buttonClick:function(name,title) {
-      this.props.buttonClick(name,title);//执行父组件的事件
+    buttonClick:function(name,title,event) {
+      this.props.buttonClick(name,title,event);//执行父组件的事件
     },
     render: function () {
         let props={
@@ -37,13 +37,13 @@ var Toolbar=React.createClass({
                 if(this.props.type=="button")
                 {
                     buttonlist.push(
-                        <Button key={child.name} {...child} onClick={this.buttonClick.bind(this,child.name,child.title)}>
+                        <Button key={child.name} {...child} onClick={this.buttonClick}>
                         </Button>);
                 }
                 else
                 {
                     buttonlist.push(
-                        <LinkButton key={child.name} {...child} onClick={this.buttonClick.bind(this,child.name,child.title)}>
+                        <LinkButton key={child.name} {...child} onClick={this.buttonClick}>
                         </LinkButton>);
                 }
 

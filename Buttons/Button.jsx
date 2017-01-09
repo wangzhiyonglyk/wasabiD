@@ -69,8 +69,7 @@ let  Button  = React.createClass({
             hide:nextProps.hide,
         })
     },
-    componentDidUpdate:function()
-    {
+    componentDidUpdate:function() {
         if(this.delay==1)
         {//开始延迟,执行父组件方法
             this.delay=2;//处理中
@@ -125,7 +124,7 @@ let  Button  = React.createClass({
         else
         {
             if (this.props.onClick) {
-                this.props.onClick(this.props.name,this.props.title);
+                this.props.onClick(this.props.name,this.props.title,event);
             }
         }
 

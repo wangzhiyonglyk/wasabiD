@@ -304,7 +304,7 @@ let Radio=React.createClass({
             })
         }
         return (
-            <div className={componentClassName+this.state.validateClass} style={style}>
+            <div className={componentClassName+this.state.validateClass}  style={style}>
                 <Label name={this.props.label} hide={this.state.hide} required={this.state.required}></Label>
                 <div className={ "wasabi-form-group-body"} style={{width:!this.props.label?"100%":null}}>
                     <ul className="wasabi-checkul">

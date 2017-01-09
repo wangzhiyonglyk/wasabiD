@@ -5,10 +5,10 @@ var React =require("react");
 var TabSection=React.createClass(
     {
         propTypes:
-        {
-            url:React.PropTypes.string,
-            active:React.PropTypes.bool
-        },
+            {
+                url:React.PropTypes.string,
+                active:React.PropTypes.bool
+            },
 
         getDefaultProps:function()
         {
@@ -18,10 +18,13 @@ var TabSection=React.createClass(
         },
         getInitialState:function()
         {
-           var  height=document.documentElement.clientHeight-40;
-         return{
+            var  height=document.documentElement.clientHeight-40;
+            return{
                 bodyHeight:height
             }
+        },
+        componentWillReceiveProps(nextProps) {
+            this.setState(nextProps);
         },
         componentDidMount:function()
         {
@@ -29,6 +32,10 @@ var TabSection=React.createClass(
         },
 
         render: function () {
+            if(this.props.url.indexOf("pendingOrder")>-1)
+            {
+                console.log("pendingOrder");
+            }
             return (  <section ref="tabsection" style={{height:this.state.bodyHeight}} className={this.props.active==true?"checkedsection":"tabsection"}>
                 <iframe src={this.props.url} style={{height:this.state.bodyHeight}} ></iframe>
             </section>);

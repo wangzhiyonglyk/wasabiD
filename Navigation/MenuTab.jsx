@@ -4,19 +4,19 @@
 var React =require("react");
 var addRipple=require("../Mixins/addRipple.js");
 var MenuTab=React.createClass({
-    mixins:[addRipple],
+        mixins:[addRipple],
         propTypes:
-        {
-            index:React.PropTypes.number.isRequired,//在父组件中的序号，用于关闭
-            title:React.PropTypes.string.isRequired,//标题
-            iconCls:React.PropTypes.string,//图标
-            url:React.PropTypes.string,//子页面地址
-            active:React.PropTypes.bool,//是否为激活状态
-            clickHandler:React.PropTypes.func.isRequired,//激活后的回调事件,
-            closeHandler:React.PropTypes.func.isRequired,//页面关闭事件
-            hide:React.PropTypes.bool,//是否隐藏
+            {
+                index:React.PropTypes.number.isRequired,//在父组件中的序号，用于关闭
+                title:React.PropTypes.string.isRequired,//标题
+                iconCls:React.PropTypes.string,//图标
+                url:React.PropTypes.string,//子页面地址
+                active:React.PropTypes.bool,//是否为激活状态
+                clickHandler:React.PropTypes.func.isRequired,//激活后的回调事件,
+                closeHandler:React.PropTypes.func.isRequired,//页面关闭事件
+                hide:React.PropTypes.bool,//是否隐藏,由于过多导致的这个属性
 
-        },
+            },
         getDefaultProps:function()
         {
             return {
@@ -25,15 +25,16 @@ var MenuTab=React.createClass({
                 hide:false,
             }
         },
-    getInitialState() {
-        return {
-            active:this.props.active,
-            hide:this.props.hide,
-        }
-    },
-    componentWillReceiveProps(nextProps) {
-      this.setState(nextProps);
-    },
+        getInitialState() {
+            return {
+                active:this.props.active,
+                hide:this.props.hide,
+            }
+        },
+        componentWillReceiveProps(nextProps) {
+            var props={...nextProps};
+            this.setState(props);
+        },
         clickHandler:function(event) {
             this.rippleHandler(event);
             if(event.target.nodeName=="A"||event.target.className=="text"||event.target.className=="icon")
@@ -43,11 +44,10 @@ var MenuTab=React.createClass({
         },
         closeHandler:function(event)
         {
-            if(this.props.title=="我的桌面")
-            {
-                return ;
+            if(this.props.closeHandler) {
+                this.props.closeHandler(this.props.index);
             }
-            this.props.closeHandler(this.props.index);
+
         },
         render: function () {
             return (
@@ -58,7 +58,7 @@ var MenuTab=React.createClass({
 
                         <div className="text" >{this.props.title}</div>
                         <div className="split"></div>
-                       </a></li>
+                    </a></li>
             )
         }
     }

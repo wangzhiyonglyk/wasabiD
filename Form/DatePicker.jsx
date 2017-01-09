@@ -354,7 +354,7 @@ let DatePicker=React.createClass({
                 break;
         }
         var size = this.props.onlyline == true ? "onlyline" : this.props.size;//组件大小
-        var componentClassName = "wasabi-form-group " + size + " " + (this.props.className ? this.props.className : "");//组件的基本样式
+        var componentClassName = "wasabi-form-group " + size ;//组件的基本样式
         var style = this.setStyle("input");//设置样式
         let inputProps =
         {
@@ -369,7 +369,7 @@ let DatePicker=React.createClass({
 
       var text=  this.setText();
         return (
-            <div className={componentClassName+this.state.validateClass} style={style} ref="picker">
+            <div className={componentClassName+this.state.validateClass}  ref="picker">
                 <Label name={this.props.label} ref="label" hide={this.state.hide} required={this.state.required}></Label>
                 <div className={ "wasabi-form-group-body"} style={{width:!this.props.label?"100%":null}}>
                     <div className="combobox" style={{display:this.props.hide==true?"none":"block"}}>

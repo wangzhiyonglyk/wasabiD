@@ -86,7 +86,7 @@ var LinkButton=React.createClass({
 
         if(this.props.onClick!=null)
         {
-            this.props.onClick(this.props.name,this.props.title);
+            this.props.onClick(this.props.name,this.props.title,event);
         }
     },
     setDisabled:function (disabled) {
