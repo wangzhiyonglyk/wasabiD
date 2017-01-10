@@ -301,7 +301,6 @@ let DataGridExtend= {
 
     //右键菜单处理事件
     menuHideHandler:function(event) {//没有使用单击事件,用户有可能继续使用鼠标右键,隐藏某一列的事件
-
         let headers = this.state.headers;//列表数据
         let headerMenu=this.state.headerMenu;
         for (let index = 0; index < headers.length; index++) {
@@ -541,12 +540,16 @@ let DataGridExtend= {
     //新增，修改，删除
     addRow:function(rowData,editAble) {//添加一行,如果editable为true，说明添加以后处理编辑状态
         let newData=this.state.data;
-        newData.push(rowData);
-        this.state.addData.set(this.getKey(newData.length-1),rowData);//添加到脏数据里
+        newData.unshift(rowData);
+        this.state.addData.set(this.getKey(0),rowData);//添加到脏数据里
+        this.focusIndex=0;
         this.setState({
+            detailIndex: null,
+            detailView: null,
             data:newData,
+            total:this.state.total+1,
             addData:this.state.addData,
-            editIndex:editAble?newData.length-1:null,
+            editIndex:editAble?0:null,
         });
     },
     deleteRow:function (rowIndex) {//删除指定行数据
@@ -556,6 +559,7 @@ let DataGridExtend= {
 
         this.setState({
             data:newData,
+            total:this.state.total-1,
             deleteData:this.state.deleteData
         });
     },

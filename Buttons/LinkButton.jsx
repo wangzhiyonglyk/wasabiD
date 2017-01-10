@@ -13,19 +13,15 @@ var LinkButton=React.createClass({
     propTypes: {
         name:React.PropTypes.string,//名称
         title:React.PropTypes.string,//标题
-        theme: React.PropTypes.oneOf([//主题
-            "primary",
-            "default",
-            "green",
-            "none",
-        ]),//主题
+
         width:React.PropTypes.number,//宽度
         height:React.PropTypes.number,//高度
         iconCls:React.PropTypes.string,//图片
         iconAlign:React.PropTypes.oneOf([
             "left",
             "right",
-            "rightTop"
+            "rightTop",
+            "rightBottom"
         ]),//图片位置
         href:React.PropTypes.string,//链接地址
         onClick:React.PropTypes.func,//单击地址
@@ -41,7 +37,6 @@ var LinkButton=React.createClass({
         return{
             name:"",//关联值
             title:"",//标题、
-            theme:"none",//主题
             iconAlign:"left",//图标位置
             href:"javascript:void(0)",//连接地址
             iconCls:null,//默认为空
@@ -58,7 +53,7 @@ var LinkButton=React.createClass({
     },
     getInitialState: function () {
         return {
-            theme:this.props.theme,
+
             disabled:this.props.disabled,
             title:this.props.title,
             tip:this.props.tip,
@@ -67,7 +62,7 @@ var LinkButton=React.createClass({
     },
     componentWillReceiveProps: function (nextProps) {
         this.setState({
-            theme: nextProps.theme,
+
             disabled: nextProps.disabled,
             title: (nextProps.title)? nextProps.title:this.state.title,
             tip: nextProps.tip,
@@ -79,14 +74,13 @@ var LinkButton=React.createClass({
         {
             return ;
         }
-        if(this.props.ripple&&this.state.theme!="none")
+        if(this.props.ripple)
         {//允许特效，并且不是空主题
             this.rippleHandler(event);//添加波纹特效
         }
 
-        if(this.props.onClick!=null)
-        {
-            this.props.onClick(this.props.name,this.props.title,event);
+        if(this.props.onClick!=null) {
+            this.props.onClick(this.props.name, this.props.title, event);
         }
     },
     setDisabled:function (disabled) {
@@ -114,7 +108,7 @@ var LinkButton=React.createClass({
         if(this.state.hide==true){
             return null;
         }
-        var className = "wasabi-linkbutton "+this.state.theme;//按钮样式
+        var className = "wasabi-linkbutton ";//按钮样式
         if(this.props.className) {//自定义class
             className += " " + this.props.className;
         }
@@ -171,6 +165,16 @@ var LinkButton=React.createClass({
                            style={{color:iconColor,display:this.props.iconCls==""?"none":"inline-block"}}></i>
                     </a>);
 
+            }
+            else if (this.props.iconAlign == "rightBottom"){
+                return (
+                    <a draggable={this.props.draggable}  onDragStart={this.dragStartHandler} title={title}
+                       href={this.props.href} onClick={this.clickHandler}
+                       className={className} disabled={this.state.disabled} name={this.props.name} style={style} >
+                        <div className="wasabi-linkbutton-text" style={linkTextStyle}>{this.props.title}</div>
+                        <i className={" "+this.props.iconCls+" icon-rightBottom"}
+                           style={{color:iconColor,display:this.props.iconCls==""?"none":"inline-block"}}></i>
+                    </a>);
             }
             else {
                 return (

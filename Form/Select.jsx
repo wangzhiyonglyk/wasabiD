@@ -146,9 +146,10 @@ let Select=React.createClass({
         /*
          this.isChange :代表自身发生了改变,防止父组件没有绑定value,text,而导致无法选择
          */
-        this.isChange=false;//重置
+
         var value=this.isChange?this.state.value: nextProps.value;
         var text = this.isChange?this.state.text: nextProps.text;
+        this.isChange=false;//重置
         var newData = null;
         if(nextProps.data!=null&&nextProps.data instanceof  Array &&(!nextProps.url||nextProps.url=="")) {//没有url,传的是死数据
             newData=[];
@@ -297,6 +298,8 @@ let Select=React.createClass({
     onSelect:function(value,text,rowData) {//选中事件
         this.isChange=true;//代表自身发生了改变,防止父组件没有绑定value,text的状态值,而导致无法选择的结果
         this.rowData=rowData;//临时保存起来
+        var newvalue = "";
+        var newtext = "";
         if(value==undefined)
         {
             console.error("绑定的valueField没有")
@@ -306,17 +309,32 @@ let Select=React.createClass({
             console.error("绑定的textField没有");
         }
         if(this.state.multiple) {
-            var newvalue = "";
-            var newtext = "";
-            var oldvalue = "," + this.state.value.toString();//加逗号是为了防止判断失误，国为某些可能正好包含在另外一个值中
-            var oldtext = "," + this.state.text.toString();
-            if (oldvalue.indexOf("," + value.toString()) > -1) {//取消选中
-                newvalue = oldvalue.replace("," + value.toString(), "");
-                newtext = oldtext.replace("," + text.toString(), "");
+
+            var oldvalue =[];
+            var oldtext =[];
+            if(this.state.value)
+            {
+                oldvalue=this.state.value.toString().split(",");
+                oldtext=this.state.text.toString().split(",");
+            }
+            if (oldvalue.indexOf(value.toString()) > -1) {//取消选中
+               oldvalue.splice(oldvalue.indexOf(value.toString()),1);
+                oldtext.splice(oldvalue.indexOf(value.toString()),1);
+                newvalue=oldvalue.join(",");
+                newtext=oldtext.join(",");
             }
             else {//选中
-                newvalue = this.state.value + "," + value;
-                newtext = this.state.text + "," + text;
+                if(this.state.value)
+                {
+                    newvalue = this.state.value + "," + value;
+                    newtext = this.state.text + "," + text;
+                }
+                else
+                {
+                    newvalue = value;
+                    newtext =  text;
+                }
+
             }
             this.setState({
                 value:newvalue,
@@ -325,14 +343,16 @@ let Select=React.createClass({
         }
         else
         {
+            var newvalue = value;
+            var newtext = text;
             this.setState({
                 show:false,
-                value:value,
-                text:text,
+                value:newvalue,
+                text:newtext,
                 filterValue:null,
             });
         }
-        this.validate(value);//
+        this.validate(newvalue);//
 
     },
     getComponentData:function() {//只读属性，获取当前下拉的数据源
