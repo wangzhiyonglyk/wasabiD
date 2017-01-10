@@ -396,7 +396,7 @@ let Select=React.createClass({
     render:function() {
 
         var size=this.props.onlyline==true?"onlyline":this.props.size;//组件大小
-        var componentClassName=  "wasabi-form-group ";//组件的基本样式
+        var componentClassName=  "wasabi-form-group "+size;//组件的基本样式
         var style =this.setStyle("input");//设置样式
         let inputProps=
         {
