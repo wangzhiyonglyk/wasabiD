@@ -237,7 +237,7 @@ let GridPicker=React.createClass({
         props.url=this.state.url;
         props.data=this.state.data;
         props.type=null;
-        return <div className={componentClassName+this.state.validateClass}  ref="picker">
+        return <div className={componentClassName+this.state.validateClass}  ref="picker" style={ this.props.controlStyle}>
             <Label name={this.props.label} ref="label" hide={this.state.hide} required={this.state.required}></Label>
             <div className={ "wasabi-form-group-body"} style={{width:!this.props.label?"100%":null}}>
                 <div className="combobox"  style={{display:this.props.hide==true?"none":"block"}}   >

@@ -203,6 +203,7 @@ let TreePicker=React.createClass({
         var size=this.props.onlyline==true?"onlyline":this.props.size;//组件大小
         var componentClassName=  "wasabi-form-group "+size;//组件的基本样式
         var style =this.setStyle("input");//设置样式
+
         let inputProps=
             {
                 readOnly:this.state.readonly==true?"readonly":null,
@@ -215,7 +216,7 @@ let TreePicker=React.createClass({
             }//文本框的属性
 
 
-        return <div className={componentClassName+this.state.validateClass}  ref="picker">
+        return <div className={componentClassName+this.state.validateClass}  ref="picker" style={ this.props.controlStyle}>
             <Label name={this.props.label} ref="label" hide={this.state.hide} required={this.state.required}></Label>
             <div className={ "wasabi-form-group-body"} style={{width:!this.props.label?"100%":null}}>
                 <div className="combobox"  style={{display:this.props.hide==true?"none":"block"}}   >

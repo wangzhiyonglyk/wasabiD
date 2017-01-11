@@ -66,6 +66,7 @@ var Input=React.createClass({
         regexp:React.PropTypes.string,//正则表达式
         invalidTip:React.PropTypes.string,//无效时的提示字符
         style:React.PropTypes.object,//自定义style
+        controlStyle:React.PropTypes.object,//自定义外层样式
         className:React.PropTypes.string,//自定义class
         size:React.PropTypes.oneOf([
             "none",
@@ -135,6 +136,7 @@ var Input=React.createClass({
             regexp:null,
             invalidTip:null,
             style:null,
+            controlStyle:null,
             className:null,
             size:"default",
             position:"default",
@@ -221,9 +223,9 @@ var Input=React.createClass({
             this.props.onClick(this.props.name,this.state.value,model);
         }
     },
-    buttonClick:function(name,title) {//按钮的单击事件
+    buttonClick:function(name,title,event) {//按钮的单击事件
         if(this.props.onClick!=null) {
-            this.props.onClick(name,title);
+            this.props.onClick(name,title,event);
         }
     },
     validate:function(value) {

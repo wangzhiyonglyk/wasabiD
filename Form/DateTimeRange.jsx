@@ -174,6 +174,8 @@ let DateTimeRange=React.createClass({
                 first_max:max_day,
                 second_min:second_min,
                 second_max:second_max,
+                first_time:this.refs.begin.getValue(),
+                second_time:this.refs.end.getValue(),
             });
     },
     secondHandler:function(value) {//结束日期选择事
@@ -230,6 +232,8 @@ let DateTimeRange=React.createClass({
                     second_max:max_day,
                     first_min:first_min,
                     first_max:first_max,
+                      first_time:this.refs.begin.getValue(),
+                    second_time:this.refs.end.getValue(),
          });
     },
     onSelectHandler:function() {
@@ -250,15 +254,14 @@ let DateTimeRange=React.createClass({
         if (firstDate && secondDate) {
 
                 if (this.props.onSelect != null) {
-                    var first_time = " "+this.refs.begin.getValue();
-                    let second_time = " "+this.refs.end.getValue();
+                    var first_time = " "+(this.state.first_time?this.state.first_time:this.refs.begin.getValue());
+                    let second_time = " "+(this.state.second_time?this.state.second_time:this.refs.end.getValue());
                     this.props.onSelect(firstDate + first_time + "," + secondDate + second_time, firstDate + first_time + "," + secondDate + second_time, this.props.name);
 
                 }
         }
     },
     beginTimeHandler:function (time) {
-        console.log(time);
         this.setState({
             first_time:time,
         })
@@ -289,7 +292,8 @@ let DateTimeRange=React.createClass({
          return (<div>
              <div className="ok">
                  <div style={{float:"left",marginLeft:5,marginTop:5}} >
-                     <Time name="begin" type="time" key="begin" onSelect={this.beginTimeHandler} ref="begin" hour={firstHour} minute={firstMinute} second={firstSecond}></Time>
+                     <Time name="begin" type="time" key="begin" onSelect={this.beginTimeHandler} ref="begin"
+                           hour={firstHour} minute={firstMinute} second={firstSecond}></Time>
                  </div>
                  <div  style={{float:"left",marginLeft:68,marginTop:5,height:32}}>
                      <Time name="end" type="time" key="end" ref="end" onSelect={this.endTimeHandler}  hour={secondHour} minute={secondMinute} second={secondSecond}></Time>

@@ -84,7 +84,7 @@ let  Button  = React.createClass({
             },this.props.delay);
 
             if (this.props.onClick) {
-                this.props.onClick();
+                this.props.onClick(this.props.name,this.props.title,this.event);
 
 
             }
@@ -116,6 +116,7 @@ let  Button  = React.createClass({
         {//不立即执行父组件方法
             this.title = this.state.title;//保存原来的title
             this.delay=1;//处理开始
+            this.event=event;
             this.setState({
                 title: "处理中...",
                 disabled: true,

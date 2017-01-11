@@ -451,7 +451,7 @@ let Select=React.createClass({
         }
 
         return (
-            <div className={componentClassName+this.state.validateClass}  ref="select" >
+            <div className={componentClassName+this.state.validateClass}  ref="select" style={ this.props.controlStyle} >
                 <Label name={this.props.label} ref="label" hide={this.state.hide} required={this.state.required}></Label>
                 <div className={ "wasabi-form-group-body"} >
                     <div className={"nice-select "}  style={style}    >

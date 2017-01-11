@@ -23,9 +23,9 @@ var TabSection=React.createClass(
                 bodyHeight:height
             }
         },
-        componentWillReceiveProps(nextProps) {
-            this.setState(nextProps);
-        },
+        // componentWillReceiveProps(nextProps) {
+        //     this.setState(nextProps);
+        // },
         componentDidMount:function()
         {
 

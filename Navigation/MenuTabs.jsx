@@ -245,9 +245,6 @@ class MenuTabs extends  React.Component {
 
         }
 
-
-
-
         this.setState({
             tabs: newTabs,
             leftIndex:leftIndex,
@@ -271,14 +268,17 @@ class MenuTabs extends  React.Component {
         }
     }
     rightClickHandler() {
-        if(this.state.rightIndex<this.state.tabs.length-1)
-        {
+        if (this.state.rightIndex < this.state.tabs.length - 1) {
             this.setState({
-                leftIndex:this.state.leftIndex+1,
-                rightIndex:this.state.rightIndex+1,
+                leftIndex: this.state.leftIndex + 1,
+                rightIndex: this.state.rightIndex + 1,
             })
         }
     }
+
+
+
+
 
     render() {
         var tabobj = [];
@@ -291,18 +291,8 @@ class MenuTabs extends  React.Component {
             if (this.state.tabs.length > this.state.availNum) {//大于可用个数
                 showArrow = true;
             }
-            var currentIndex=0;//当前实体下标
+
             this.state.tabs.map((child, index) => {
-                let hide=(currentIndex>=this.state.leftIndex&&currentIndex<=this.state.rightIndex)?false:true;
-                if(child.active==false&&child.disabled){
-                    hide=true;//本身不是激活节点,又不可用就隐藏，被认为不是实体
-                }
-                else
-                {
-                    currentIndex++;
-                }
-
-
                 if (child.active == true) {//保存当前激活标签uuid，用于子标签中打开新标签时设置其父标签
                     window.localStorage.setItem("alog_currentTabUUID", child.uuid);//保存当前激活节点，用于新建tab
                     if (child.parentuuid != null) {//记录当前节点的父节点，用于关闭时更新父tab
@@ -315,9 +305,9 @@ class MenuTabs extends  React.Component {
                     }
 
                 }
-                tabobj.push(<Tab key={"tab" + index} index={index}  title={child.title} iconCls={child.iconCls}
+                tabobj.push(<Tab key={"tab" + index}  onContextMenu={this.headerContextMenuHandler} index={index}  title={child.title} iconCls={child.iconCls}
                                  active={child.active} clickHandler={tabclickHandler}
-                                 closeHandler={tabCloseHandler} hide={hide} disabled={child.disabled}></Tab>);
+                                 closeHandler={tabCloseHandler} hide={(index>=this.state.leftIndex&&index<=this.state.rightIndex)?false:true} ></Tab>);
                 sectionobj.push(<TabSection key={"tabsection" + index} url={child.url}
                                             active={(this.state.homeActive) ? false : child.active}
                                             content={child.content}></TabSection>);
@@ -351,6 +341,7 @@ class MenuTabs extends  React.Component {
                     </li>
                 </ul>
                 { sectionobj}
+
             </div>);
 
     }

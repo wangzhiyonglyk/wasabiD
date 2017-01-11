@@ -176,7 +176,7 @@ let Time=React.createClass({
 
     getValue:function()
     {
-        return this.state.hour+":"+this.state.minute+":"+this.state.second,this.state.hour+":"+this.state.minute+":"+this.state.second;
+        return this.state.hour+":"+this.state.minute+":"+this.state.second;
     },
     showHandler:function() {
         this.setState({
@@ -189,6 +189,7 @@ let Time=React.createClass({
 
     },
     render:function() {
+
 
       return <div className="wasabi-time-picker-panel-inner" onMouseOut={this.mouseOutHandler}>
           <div className="wasabi-time-picker-panel-input-wrap">

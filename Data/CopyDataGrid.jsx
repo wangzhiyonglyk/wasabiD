@@ -553,15 +553,19 @@ var DataGrid=React.createClass({
                 }
 
             }
-            control=  <div key="pagination-detail" className="pagination-detail">
-                <span className="pagination-info">第{this.state.pageIndex}/{pageTotal}页,共{total}行记录</span>
-                每页<select className="page-select" value={this.state.pageSize} onChange={this.pageSizeHandler}>
-                <option value={10}>10</option>
-                <option value={20}>20</option>
-                <option value={30}>30</option>
-                <option value={50}>50</option>
-                <option value={100}>100</option>
-            </select>条
+            var  totalControl=<span className="pagination-info">第{this.state.pageIndex}/{pageTotal}页,共{total}行记录</span>;
+            if(this.props.pagination==false)
+            {
+                totalControl=<span className="pagination-info">共{total}行记录</span>;
+            }
+            control=  <div key="pagination-detail" className="pagination-detail">{totalControl}
+                <div style={{display:this.props.pagination?"inline-block":"none"}}>每页<select className="page-select" value={this.state.pageSize} onChange={this.pageSizeHandler}>
+                    <option value={10}>10</option>
+                    <option value={20}>20</option>
+                    <option value={30}>30</option>
+                    <option value={50}>50</option>
+                    <option value={100}>100</option>
+                </select>条</div>
             </div>;
             return control;
         }
@@ -719,10 +723,11 @@ var DataGrid=React.createClass({
                  style={{width:this.props.width,height:gridHeight}}  >
                 <div className="wasabi-table-pagination" ref="toppagination"
                      style={{display:(this.props.pagePosition=="top"||this.props.pagePosition=="both")?this.props.pagination?"block":"none":"none"}}>
-                    {this.renderTotal()}
                     <div style={{display:(this.props.pagination?"block":(this.state.data instanceof Array &&this.state.data.length>0)?"block":"none")}}>
                         {this.renderPagination("top")}
                     </div>
+                    {this.renderTotal()}
+
                 </div>
 
                 <div className="table-container">
@@ -756,10 +761,11 @@ var DataGrid=React.createClass({
                     </div></div>
                 <div className="wasabi-table-pagination" ref="bottompagination"
                      style={{display:(this.props.pagination?"block":(this.props.pagePosition=="bottom"||this.props.pagePosition=="both")?"block":"none")}}>
-                    {this.renderTotal()}
                     <div style={{display:(this.props.pagination?"block":(this.state.data instanceof Array &&this.state.data.length>0)?"block":"none")}}>
                         {this.renderPagination()}
                     </div>
+                    {this.renderTotal()}
+
                 </div>
                 <div className="wasabi-table-loading" style={{display:this.state.loading==true?"block":"none"}}></div>
                 <div className="wasabi-load-icon"  style={{display:this.state.loading==true?"block":"none"}}></div>

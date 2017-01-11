@@ -108,13 +108,8 @@ let DatePicker=React.createClass({
         }
     },
     componentWillReceiveProps:function(nextProps) {
-        var text=nextProps.text;
-        if(this.props.type.indexOf("date")>-1||this.props.type.indexOf("time")>-1) {//如果时间与日期相关组件，text就是value
-            if((!text||text=="")&&nextProps.value&&nextProps.value!="")
-            {
-                text=nextProps.value;
-            }
-        }
+        var text=nextProps.text?nextProps.text:nextProps.value;
+
         this.setState({
             hide:nextProps.hide,
             value: nextProps.value,
@@ -369,7 +364,7 @@ let DatePicker=React.createClass({
 
       var text=  this.setText();
         return (
-            <div className={componentClassName+this.state.validateClass}  ref="picker">
+            <div className={componentClassName+this.state.validateClass}  ref="picker" style={ this.props.controlStyle}>
                 <Label name={this.props.label} ref="label" hide={this.state.hide} required={this.state.required}></Label>
                 <div className={ "wasabi-form-group-body"} style={{width:!this.props.label?"100%":null}}>
                     <div className="combobox" style={{display:this.props.hide==true?"none":"block"}}>

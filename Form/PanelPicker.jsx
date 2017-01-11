@@ -185,7 +185,7 @@ var PanelPicker = React.createClass({
         }//文本框的属性
         var children = React.cloneElement(this.props.children,{onSelect:this.onSelect})
         return (
-            <div className={componentClassName+this.state.validateClass}  ref="picker">
+            <div className={componentClassName+this.state.validateClass}  ref="picker" style={ this.props.controlStyle}>
                 <Label name={this.props.label} ref="label" hide={this.state.hide} required={this.state.required}></Label>
                 <div className={ "wasabi-form-group-body"} style={{width:!this.props.label?"100%":null}}>
                     <div className="combobox" style={{display:this.props.hide==true?"none":"block"}}
