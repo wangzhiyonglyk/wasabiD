@@ -282,7 +282,8 @@ var Text=React.createClass({
         var size=this.props.onlyline==true?"onlyline":this.props.size;//组件大小
         var componentClassName=  "wasabi-form-group "+size;//组件的基本样式
         var style =this.setStyle("input");//设置样式
-        var controlStyle=this.props.controlStyle;
+        var controlStyle=this.props.controlStyle?this.props.controlStyle:{};
+        controlStyle.display = this.state.hide == true ? "none" : "block";
         let inputProps=
         {
             readOnly:this.state.readonly==true?"readonly":null,
@@ -319,7 +320,7 @@ var Text=React.createClass({
 
 
 
-        return (<div className={componentClassName+this.state.validateClass} onPaste={this.onPaste} style={ this.props.controlStyle}>
+        return (<div className={componentClassName+this.state.validateClass} onPaste={this.onPaste} style={ controlStyle}>
                 <Label name={this.props.label} ref="label" hide={this.state.hide} required={this.state.required}></Label>
                 <div className={ "wasabi-form-group-body"} style={{width:!this.props.label?"100%":null}}>
                     {control}

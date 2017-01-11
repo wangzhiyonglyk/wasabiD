@@ -111,6 +111,8 @@ let SwitchButton = React.createClass({
         var size=this.props.onlyline==true?"onlyline":this.props.size;//组件大小
         var componentClassName=  "wasabi-form-group "+size+" "+(this.props.className?this.props.className:"");//组件的基本样式
         var style =this.setStyle("input");//设置样式
+        var controlStyle=this.props.controlStyle?this.props.controlStyle:{};
+        controlStyle.display = this.state.hide == true ? "none" : "block";
         var className = "syncbtn ";
         if(this.state.value==1){
             className+="checktrue";
@@ -124,7 +126,7 @@ let SwitchButton = React.createClass({
         }
 
         return (
-        <div className={componentClassName+this.state.validateClass}  style={ this.props.controlStyle}>
+        <div className={componentClassName+this.state.validateClass}  style={ controlStyle}>
             <Label name={this.props.label} ref="label" hide={this.state.hide} required={this.state.required}></Label>
             <div className={ "wasabi-form-group-body"} style={{width:!this.props.label?"100%":null}}>
                 <div className={className} onClick={this.handleClick}>
