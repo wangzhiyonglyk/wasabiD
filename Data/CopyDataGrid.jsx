@@ -23,7 +23,7 @@ var DataGridExtend=require("../Mixins/DataGridExtend.js");
 var pasteExtend=require("../Mixins/pasteExtend.js");
 var ClickAway=require("../Unit/ClickAway.js");
 var showUpdate=require("../Mixins/showUpdate.js");
-
+var regs=require("../Lang/regs.js");
 
 var DataGrid=React.createClass({
     mixins:[shouldComponentUpdate,DataGridHandler,DataGridExtend,pasteExtend,ClickAway,showUpdate],
@@ -704,8 +704,12 @@ var DataGrid=React.createClass({
             className="table";
         }
         let headerControl=this.renderHeader();
-        let gridHeight=this.state.height;
-        let tableHeight=gridHeight?( this.props.pagePosition=="both")?gridHeight-70:gridHeight-35:null;
+        let gridHeight=this.state.height;//
+        let tableHeight="auto";
+        if(regs.number.test(gridHeight))
+        {
+            let tableHeight=gridHeight?( this.props.pagePosition=="both")?gridHeight-70:gridHeight-35:null;
+        }
         var headerMenuCotrol=[];//右键菜单中隐藏的列
         if(this.state.headerMenu.length>0)
         {
