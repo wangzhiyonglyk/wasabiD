@@ -10,7 +10,16 @@ let addRipple={
         if( event.target.children.length>0)
         {
 
-            event.target.removeChild( event.target.children[0]);
+            for(var i=0;i<event.target.children.length;i++)
+            {
+                if( event.target.children[i].className=="ripple")
+                {
+                    event.target.removeChild( event.target.children[i]);
+                    break;
+                }
+
+            }
+
         }
         $ripple=   document.createElement("span");
         $ripple.className="ripple";
