@@ -337,7 +337,7 @@ class MenuTabs extends  React.Component {
                     <li className="right icon-right" onClick={this.rightClickHandler} style={{display:showArrow?"inline-block":"none"}}></li>
                     <li style={{display:(this.props.userComponent||this.props.userHandler)?"inline-block":"none"}}
                         className={(this.props.userComponent?"tabuser-control":this.props.userHandler?"tabuser":"") }
-                        title="用户" onClick={this.userHandler}>{this.props.userComponent}
+                         onClick={this.userHandler}>{this.props.userComponent}
                     </li>
                 </ul>
                 { sectionobj}
