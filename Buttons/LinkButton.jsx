@@ -74,13 +74,26 @@ var LinkButton=React.createClass({
         {
             return ;
         }
-        if(this.props.ripple)
-        {//允许特效，并且不是空主题
-            this.rippleHandler(event);//添加波纹特效
-        }
+        //TODO 添加波纹有问题
+        // if(this.props.ripple)
+        // {//允许特效，并且不是空主题
+        //     this.rippleHandler(event);//添加波纹特效
+        // }
 
         if(this.props.onClick!=null) {
             this.props.onClick(this.props.name, this.props.title, event);
+        }
+    },
+    onMouseOver:function (event) {
+      if(  this.props.onMouseOver)
+      {
+          this.props.onMouseOver(event);
+      }
+    },
+    onMouseOut:function (event) {
+        if(  this.props.onMouseOut)
+        {
+            this.props.onMouseOut(event);
         }
     },
     setDisabled:function (disabled) {
@@ -146,8 +159,8 @@ var LinkButton=React.createClass({
             if (this.props.iconAlign == "right") {
 
                 return (
-                    <a draggable={this.props.draggable} onDragStart={this.dragStartHandler} title={title}
-                       href={this.props.href} onClick={this.clickHandler}
+                    <a ref="link" draggable={this.props.draggable} onDragStart={this.dragStartHandler} title={title}
+                       href={this.props.href} onClick={this.clickHandler} onMouseOut={this.onMouseOut} onMouseOver={this.onMouseOver}
                        className={className} disabled={this.state.disabled} name={this.props.name} style={style}>
                         <div className="wasabi-linkbutton-text right" style={linkTextStyle}>{this.props.title}</div>
                         <i className={" "+this.props.iconCls}
@@ -157,8 +170,8 @@ var LinkButton=React.createClass({
             }
             else if (this.props.iconAlign == "rightTop") {
                 return (
-                    <a draggable={this.props.draggable} onDragStart={this.dragStartHandler} title={title}
-                       href={this.props.href} onClick={this.clickHandler}
+                    <a ref="link"  draggable={this.props.draggable} onDragStart={this.dragStartHandler} title={title}
+                       href={this.props.href} onClick={this.clickHandler} onMouseOut={this.onMouseOut} onMouseOver={this.onMouseOver}
                        className={className} disabled={this.state.disabled} name={this.props.name} style={style} >
                         <div className="wasabi-linkbutton-text" style={linkTextStyle}>{this.props.title}</div>
                         <i className={" "+this.props.iconCls+" icon-rightTop"}
@@ -168,8 +181,8 @@ var LinkButton=React.createClass({
             }
             else if (this.props.iconAlign == "rightBottom"){
                 return (
-                    <a draggable={this.props.draggable}  onDragStart={this.dragStartHandler} title={title}
-                       href={this.props.href} onClick={this.clickHandler}
+                    <a  ref="link" draggable={this.props.draggable}  onDragStart={this.dragStartHandler} title={title}
+                       href={this.props.href} onClick={this.clickHandler} onMouseOut={this.onMouseOut} onMouseOver={this.onMouseOver}
                        className={className} disabled={this.state.disabled} name={this.props.name} style={style} >
                         <div className="wasabi-linkbutton-text" style={linkTextStyle}>{this.props.title}</div>
                         <i className={" "+this.props.iconCls+" icon-rightBottom"}
@@ -179,8 +192,8 @@ var LinkButton=React.createClass({
             else {
                 return (
 
-                    <a draggable={this.props.draggable} onDragStart={this.dragStartHandler} title={title}
-                       href={this.props.href} onClick={this.clickHandler} className={className}
+                    <a  ref="link" draggable={this.props.draggable} onDragStart={this.dragStartHandler} title={title}
+                       href={this.props.href} onClick={this.clickHandler} onMouseOut={this.onMouseOut} onMouseOver={this.onMouseOver} className={className}
                        disabled={this.state.disabled}  name={this.props.name}  style={style}>
                         <i className={" "+this.props.iconCls}
                            style={{display:(this.props.iconCls==null||this.props.iconCls=="")?"none":"inline-block"}}></i>
