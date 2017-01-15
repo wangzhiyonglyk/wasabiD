@@ -4,41 +4,37 @@
 
 let React=require("react");
 require("../sass/Navigation/Track.scss");
-let Track=React.createClass({
-    propTypes:
-    {
+class Track extends  React.Component {
+
+    constructor(props){
+        super(props);
+        this.  state = {
+            model:this.props.model,
+            expressName:this.props.expressName,
+            expressId:this.props.expressId,
+        }
+    }
+   static propTypes= {
         model:React.PropTypes.array,//跟踪信息
         expressName:React.PropTypes.string,//快递公司名称
         exrepssId:React.PropTypes.oneOfType([React.PropTypes.number,React.PropTypes.string]),//快递单号
 
 
-    },
-    getDefaultProps:function()
-    {
-        return {
+    }
+    static  defaultProps= {
             model:null,
             expressName:null,
             expressId:null,
-        }
-    },
-    getInitialState:function()
-    {
-        return {
-            model:this.props.model,
-            expressName:this.props.expressName,
-            expressId:this.props.expressId,
-        }
-    },
-    componentWillReceiveProps:function(nextProps)
-    {
+
+    }
+    componentWillReceiveProps(nextProps) {
         this.setState({
             model:nextProps.model,
             expressName:nextProps.expressName,
             expressId:nextProps.expressId,
         })
-    },
-    render:function()
-    {
+    }
+    render() {
         if(this.state.model instanceof  Array)
         {
             return(
@@ -59,5 +55,5 @@ let Track=React.createClass({
             return null;
         }
     }
-});
-module .exports=Track;
+}
+export  default Track;

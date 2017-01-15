@@ -5,8 +5,7 @@ var React =require("react");
 var addRipple=require("../Mixins/addRipple.js");
 var MenuTab=React.createClass({
         mixins:[addRipple],
-        propTypes:
-            {
+        propTypes: {
                 index:React.PropTypes.number.isRequired,//在父组件中的序号，用于关闭
                 title:React.PropTypes.string.isRequired,//标题
                 iconCls:React.PropTypes.string,//图标
@@ -17,8 +16,7 @@ var MenuTab=React.createClass({
                 hide:React.PropTypes.bool,//是否隐藏,由于过多导致的这个属性
 
             },
-        getDefaultProps:function()
-        {
+        getDefaultProps:function() {
             return {
                 active:false,
                 iconCls:null,
@@ -42,8 +40,7 @@ var MenuTab=React.createClass({
                 this.props.clickHandler(this.props.index);
             }
         },
-        closeHandler:function(event)
-        {
+        closeHandler:function(event) {
             if(this.props.closeHandler) {
                 this.props.closeHandler(this.props.index);
             }
@@ -63,4 +60,4 @@ var MenuTab=React.createClass({
         }
     }
 );
-module .exports=MenuTab;
+export  default  MenuTab;

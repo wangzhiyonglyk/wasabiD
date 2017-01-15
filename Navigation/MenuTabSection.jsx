@@ -2,44 +2,35 @@
 //date:2016-04-05后开始独立改造
 //标签页
 var React =require("react");
-var TabSection=React.createClass(
-    {
-        propTypes:
-            {
-                url:React.PropTypes.string,
-                active:React.PropTypes.bool
-            },
-
-        getDefaultProps:function()
-        {
-            return {
-                active:false
-            }
-        },
-        getInitialState:function()
-        {
-            var  height=document.documentElement.clientHeight-40;
-            return{
-                bodyHeight:height
-            }
-        },
-        // componentWillReceiveProps(nextProps) {
-        //     this.setState(nextProps);
-        // },
-        componentDidMount:function()
-        {
-
-        },
-
-        render: function () {
-            if(this.props.url.indexOf("pendingOrder")>-1)
-            {
-                console.log("pendingOrder");
-            }
-            return (  <section ref="tabsection" style={{height:this.state.bodyHeight}} className={this.props.active==true?"checkedsection":"tabsection"}>
-                <iframe src={this.props.url} style={{height:this.state.bodyHeight}} ></iframe>
-            </section>);
+class TabSection extends  React.Component {
+    constructor(props) {
+        super(props);
+        var height = document.documentElement.clientHeight - 40;
+        this.state = {
+            bodyHeight: height,
+            active:this.props.active,
         }
     }
-);
-module .exports=TabSection;
+
+    static  propTypes =
+        {
+            url: React.PropTypes.string,
+            active: React.PropTypes.bool
+        }
+
+    static  defaultProps = {
+        active: false
+    }
+
+    render() {
+        if (this.props.url.indexOf("pendingOrder") > -1) {
+            console.log("pendingOrder");
+        }
+        return (<section ref="tabsection" style={{height: this.state.bodyHeight}}
+                         className={this.state.active == true ? "checkedsection" : "tabsection"}>
+            <iframe src={this.props.url} style={{height: this.state.bodyHeight}}></iframe>
+        </section>);
+    }
+}
+
+export  default TabSection;

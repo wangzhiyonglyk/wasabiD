@@ -5,57 +5,67 @@
 var React=require("react");
 var LinkButton=require("../Buttons/LinkButton.jsx");
 require("../sass/Layout/Drop.scss");
-var Drop=React.createClass({
-    propTypes: {
-        onDrop:React.PropTypes.func.isRequired,//元素停靠事件
-
-    },
-    getInitialState:function() {
-        return {
+class Drop extends  React.Component {
+    constructor(props) {
+        super(props);
+        this.dragOverHandler = this.dragOverHandler.bind(this);
+        this.dragEnterHandler = this.dragEnterHandler.bind(this);
+        this.dragLeaveHandler = this.dragLeaveHandler.bind(this);
+        this.dropHandler = this.dropHandler.bind(this);
+        this.state = {
             dropClass: "drop"
         }
-    },
-    dragOverHandler:function(event) {//在ondragover中一定要执行preventDefault()，否则ondrop事件不会被触发
+    }
+
+    static  propTypes = {
+        onDrop: React.PropTypes.func.isRequired,//元素停靠事件
+
+    }
+
+    dragOverHandler(event) {//在ondragover中一定要执行preventDefault()，否则ondrop事件不会被触发
         event.preventDefault();
-        return  true;
-    },
-    dragEnterHandler:function() {
+        return true;
+    }
+
+    dragEnterHandler() {
         this.setState({
-            dropClass:"drop dragEnter"//停靠的背景色
+            dropClass: "drop dragEnter"//停靠的背景色
         })
-    },
-    dragLeaveHandler:function()
-    {
+    }
+
+    dragLeaveHandler() {
         this.setState({
-            dropClass:"drop"//
+            dropClass: "drop"//
         })
-    },
-    dropHandler:function() {
+    }
+
+    dropHandler() {
         this.setState({
-            dropClass:"drop"
+            dropClass: "drop"
         })
-        var eleProps=(window.localStorage.getItem("wasabidrageleProps"));
-        if(eleProps)
-        {
-            eleProps=JSON.parse(eleProps);
+        var eleProps = (window.localStorage.getItem("wasabidrageleProps"));
+        if (eleProps) {
+            eleProps = JSON.parse(eleProps);
         }
         this.props.onDrop(eleProps);
         window.localStorage.removeItem("wasabidrageleProps")
-    },
-    render:function() {
+    }
+
+    render() {
         var props =
-        {
-            style: this.props.style,
-        }
+            {
+                style: this.props.style,
+            }
         return (
-            <div className={this.props.className+" "+this.state.dropClass} {...props} onDrop={this.dropHandler}
-                 onDragEnter={this.dragEnterHandler} onDragOver={this.dragOverHandler} onDragLeave={this.dragLeaveHandler}>
+            <div className={this.props.className + " " + this.state.dropClass} {...props} onDrop={this.dropHandler}
+                 onDragEnter={this.dragEnterHandler} onDragOver={this.dragOverHandler}
+                 onDragLeave={this.dragLeaveHandler}>
                 {
                     this.props.children
                 }
             </div>
         )
     }
-})
+}
 
-module .exports=Drop;
+export  default Drop;
