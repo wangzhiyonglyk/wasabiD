@@ -135,7 +135,7 @@ let DataGridExtend= {
             /*
              如果没有设定列表的高度,则要自适应页面的高度,增强布局效果
              */
-            if (!this.state.height) {//如果没有设定高度
+            if (!this.state.height&&(this.state.url||this.state.data.constructor ==Array &&this.state.data.length>0)) {//如果没有设定高度
                 let blankHeight = this.clientHeight - this.refs.grid.getBoundingClientRect().top - 5;//当前页面的空白高度
                 this.setState({
                     height: blankHeight
