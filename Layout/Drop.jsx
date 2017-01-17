@@ -68,4 +68,4 @@ class Drop extends  React.Component {
     }
 }
 
-export  default Drop;
+module .exports= Drop;
