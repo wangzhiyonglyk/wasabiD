@@ -794,7 +794,7 @@ var DataGrid=React.createClass({
         let tableHeight="auto";
         if(regs.number.test(gridHeight))
         {
-            let tableHeight=gridHeight?( this.props.pagePosition=="both")?gridHeight-70:gridHeight-35:null;
+             tableHeight=gridHeight?( this.props.pagePosition=="both")?gridHeight-70:gridHeight-35:null;
         }
 
         var headerMenuCotrol=[];//右键菜单中隐藏的列
