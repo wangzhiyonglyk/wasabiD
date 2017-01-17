@@ -161,6 +161,7 @@ let PageModelMixins= {
         unit.fetch.get(fetchModel);
     },
     initModelSuccess:function(result) {//获取数据模型成功
+        result.data=(result.rows&&!result.data)?result.rows:result.data;
        if(result.data!=null&&result.data instanceof Array) {
            if(this.props.overrideModel)
            {//用户进行一步处理数据模型,有返回值
@@ -179,7 +180,7 @@ let PageModelMixins= {
            let headers=[];//列表头的数据模型
            for(let index=0;index<result.data.length;index++) {
                var modelOject = new FormModel(result.data[index].name, result.data[index].label);
-               modelOject = {...result.data[index]};//解构
+               modelOject = Object.assign(result.data[index],modelOject);//合并属性
                if (modelOject.filterAble == true) {//此字段可用于筛选
                    //因为要除去验证属性,所以要重新定义
                    var filterModel=unit.clone(modelOject);
@@ -192,7 +193,7 @@ let PageModelMixins= {
                if (modelOject.gridAble == true) {//此字段可用于列表
                    var headerModel = new HeaderModel(modelOject.name, modelOject.label);//得到默认表头
                    if (modelOject.headerModel) {//用户定义了其他设置
-                       headerModel = {...modelOject.headerModel};//解构
+                       headerModel = Object.assign( modelOject.headerModel,headerModel);//解构
 
                    }
                    headers.push(headerModel)//加入列表表头模型
@@ -205,6 +206,12 @@ let PageModelMixins= {
                model:model,
                filterModel:filters,
                headers:headers,
+               getUrl:this.getUrl(),//生成实例url地址
+               addUrl: this.addUrl(),//生成新增url地址
+               deleteUrl:this.deleteUrl(),//生成删除url地址
+               updateUrl: this.updateUrl(),//生成更新url
+               queryUrl: this.queryUrl(),//生成不分页url
+               pageUrl: this.pageUrl(),//分页的url
 
            })
 

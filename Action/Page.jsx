@@ -52,12 +52,12 @@ let Page=React.createClass({
         getInitialState: function () {
             return {
                 modelUrl:this.modelUrl(),//生成单表数据模型的url地址,
-                getUrl:this.getUrl(),//生成实例url地址
-                addUrl: this.addUrl(),//生成新增url地址
-                deleteUrl:this.deleteUrl(),//生成删除url地址
-                updateUrl: this.updateUrl(),//生成更新url
-                queryUrl: this.queryUrl(),//生成不分页url
-                pageUrl: this.pageUrl(),//分页的url
+                getUrl:null,//生成实例url地址
+                addUrl: null,//生成新增url地址
+                deleteUrl:null,//生成删除url地址
+                updateUrl: null,//生成更新url
+                queryUrl: null,//生成不分页url
+                pageUrl: null,//分页的url
                 filterModel: [],//筛选数据模型
                 model: [],//表单模型,
                 disabled: false,//表单是否只读
