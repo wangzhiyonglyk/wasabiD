@@ -8,6 +8,8 @@ var React =require("react");
 var Tab=require("./MenuTab.jsx");
 var TabSection=require("./MenuTabSection.jsx");
 var LinkButton=require("../Buttons/LinkButton.jsx");
+var unit=require("../libs/unit.js");
+
 class MenuTabs extends  React.Component {
     constructor(props) {
         super(props);
@@ -344,4 +346,4 @@ class MenuTabs extends  React.Component {
 
     }
 };
-export  default  MenuTabs;
+module.exports=MenuTabs;
