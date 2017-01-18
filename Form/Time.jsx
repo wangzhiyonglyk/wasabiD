@@ -1,7 +1,7 @@
 /*
-create by wangzy
-date:2016-06-12
-desc:时间选择组件
+ create by wangzy
+ date:2016-06-12
+ desc:时间选择组件
  */
 require("../Sass/Form/DateTime.scss");
 let React=require("react");
@@ -15,21 +15,21 @@ let Time=React.createClass({
     },
     getDefaultProps:function() {
         var date=new Date();
-      return {
-          hour:date.getHours(),
-          minute:date.getMinutes(),
-          second:date.getSeconds(),
-      }
+        return {
+            hour:date.getHours(),
+            minute:date.getMinutes(),
+            second:date.getSeconds(),
+        }
     },
     getInitialState:function() {
-    return this.setInitValue(this.props);
+        return this.setInitValue(this.props);
     },
     componentWillReceiveProps:function(nextProps) {
-    /*
+        /*
 
-    */
-      var result= this.setInitValue(nextProps);
-      result.height=this.state.height;//高度仍用旧值，因为选择时回传父组件，还不需要消失
+         */
+        var result= this.setInitValue(nextProps);
+        result.height=this.state.height;//高度仍用旧值，因为选择时回传父组件，还不需要消失
         this.setState(result);
         //滚动到指定位置
         this.refs.hour.scrollTop=result.hour*24;
@@ -37,7 +37,7 @@ let Time=React.createClass({
         this.refs.second.scrollTop=result.second*24;
     },
     componentDidMount:function () {
-         //滚动到指定位置
+        //滚动到指定位置
         this.refs.hour.scrollTop=this.state.hour*24;
         this.refs.minute.scrollTop=this.state.minute*24;
         this.refs.second.scrollTop=this.state.second*24;
@@ -47,9 +47,9 @@ let Time=React.createClass({
     {
         var date=new Date();
 
-        var hour=props.hour?props.hour:date.getHours();
-        var minute=props.hour?props.minute:date.getMinutes();
-        var second=props.hour?props.second:date.getSeconds();
+        var hour=props.hour!=null&&props.hour!=undefined?props.hour:date.getHours();
+        var minute=props.minute!=null&&props.minute!=undefined?props.minute:date.getMinutes();
+        var second=props.second!=null&&props.second!=undefined?props.second:date.getSeconds();
         return {
             hour:(hour<10)?"0"+hour:hour,
             minute:(minute<10)?"0"+minute:minute,
@@ -59,7 +59,6 @@ let Time=React.createClass({
 
     },
     hourHandler:function(value,tran) {
-
         let lastScrollTop=value*24;
         this.scrollHandler(this.refs.hour,this.refs.hour.scrollTop,lastScrollTop,tran);
         this.refs.hour.style.backgroundColor="red";
@@ -97,7 +96,7 @@ let Time=React.createClass({
 
     },
     scrollHandler:function(obj,scrollTop,lastScrollTop,tran) {
-          obj.scrollTop=scrollTop;
+        obj.scrollTop=scrollTop;
         if(scrollTop<lastScrollTop)
         {
             setTimeout(()=>
@@ -137,7 +136,7 @@ let Time=React.createClass({
         {
             var currentHour=(index<10)?"0"+index:index;
             hourControl.push(<li  onClick={this.hourHandler.bind(this,currentHour,70)} key={"hour"+currentHour}
-                                 className={(this.state.hour==currentHour)?"wasabi-time-picker-panel-select-option-selected":null}>{currentHour}</li>);
+                                  className={(this.state.hour==currentHour)?"wasabi-time-picker-panel-select-option-selected":null}>{currentHour}</li>);
         }
         for(let index=0;index<5;index++)
         {
@@ -150,8 +149,8 @@ let Time=React.createClass({
         for(let index=0;index<60;index++)
         {
             var currentMinute=(index<10)?"0"+index:index;
-                minuteControl.push(<li   key={"minute"+currentMinute} onClick={this.minuteHandler.bind(this,currentMinute,70)}
-                                        className={(this.state.minute==currentMinute)?"wasabi-time-picker-panel-select-option-selected":null}>{currentMinute}</li>);
+            minuteControl.push(<li   key={"minute"+currentMinute} onClick={this.minuteHandler.bind(this,currentMinute,70)}
+                                     className={(this.state.minute==currentMinute)?"wasabi-time-picker-panel-select-option-selected":null}>{currentMinute}</li>);
         }
         for(let index=0;index<5;index++)
         {
@@ -191,23 +190,23 @@ let Time=React.createClass({
     render:function() {
 
 
-      return <div className="wasabi-time-picker-panel-inner" onMouseOut={this.mouseOutHandler}>
-          <div className="wasabi-time-picker-panel-input-wrap">
-              <input className="wasabi-time-picker-panel-input wasabi-form-control "
-                     onClick={this.showHandler} onChange={this.changeHandler} value={this.state.hour+":"+this.state.minute+":"+this.state.second} placeholder="请选择时间"></input>
+        return <div className="wasabi-time-picker-panel-inner" onMouseOut={this.mouseOutHandler}>
+            <div className="wasabi-time-picker-panel-input-wrap">
+                <input className="wasabi-time-picker-panel-input wasabi-form-control "
+                       onClick={this.showHandler} onChange={this.changeHandler} value={this.state.hour+":"+this.state.minute+":"+this.state.second} placeholder="请选择时间"></input>
 
-          </div>
+            </div>
             <div className="wasabi-time-picker-panel-combobox"  style={{height:this.state.height}}>
-        <div ref="hour" key="hour" className="wasabi-time-picker-panel-select" >
-            <ul key="hour" >{this.renderHour()} </ul>
-            </div>
+                <div ref="hour" key="hour" className="wasabi-time-picker-panel-select" >
+                    <ul key="hour" >{this.renderHour()} </ul>
+                </div>
                 <div ref="minute" key="minute" className="wasabi-time-picker-panel-select" >
-            <ul key="minute">{this.rendMinute()}</ul>
-                    </div>
+                    <ul key="minute">{this.rendMinute()}</ul>
+                </div>
                 <div ref="second" key="second" className="wasabi-time-picker-panel-select" >
-            <ul key="second">{this.rendSecond()}</ul>
-            </div>
-</div></div>
+                    <ul key="second">{this.rendSecond()}</ul>
+                </div>
+            </div></div>
     }
 })
 module.exports=Time;

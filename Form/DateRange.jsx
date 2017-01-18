@@ -18,6 +18,7 @@ let DateRange=React.createClass({
         onSelect:React.PropTypes.func,//确定事件
         attachTime:React.PropTypes.bool,//j是否附加时间格式
         time:React.PropTypes.string,
+        timeEnd:React.PropTypes.string,
     },
     getDefaultProps:function () {
         return{
@@ -27,7 +28,8 @@ let DateRange=React.createClass({
             onSelect:null,//
 
             attachTime:true,
-            time:"00:00:00"
+            time:"00:00:00",
+            timeEnd:"23:59:59"
         }
     },
     getInitialState:function() {
@@ -277,7 +279,7 @@ let DateRange=React.createClass({
                    if(this.props.attachTime)
                    {
                        firstDate+=" "+this.props.time;
-                       secondDate+=" "+this.props.time;
+                       secondDate+=" "+this.props.timeEnd;
                    }
                    this.props.onSelect(firstDate + "," + secondDate, firstDate + "," + secondDate, this.props.name);
                }

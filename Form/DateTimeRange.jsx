@@ -1,7 +1,7 @@
 /*
-create by wangzy
-date:2016-06-12
-desc:日期范围选择控件
+ create by wangzy
+ date:2016-06-12
+ desc:日期范围选择控件
  */
 let React=require("react");
 let Lang=require("../Lang/language.js");
@@ -20,11 +20,11 @@ let DateTimeRange=React.createClass({
         onSelect:React.PropTypes.func,//确定事件
     },
     getInitialState:function() {
-      return this.setDefaultState(this.props);
+        return this.setDefaultState(this.props);
     },
     componentWillReceiveProps:function(nextProps) {
 
-      var newstate= this.setDefaultState(nextProps);
+        var newstate= this.setDefaultState(nextProps);
         this.setState(newstate);
 
     },
@@ -90,13 +90,13 @@ let DateTimeRange=React.createClass({
         }
     },
     firstMonthHandler:function(year,month) {
-          this.setState({
-              first_year:year,
-              first_month:month,
-              first_day:null,
-              first_min:null,
-              first_max:null,
-          })
+        this.setState({
+            first_year:year,
+            first_month:month,
+            first_day:null,
+            first_min:null,
+            first_max:null,
+        })
     },
     secondMonthHandler:function(year,month) {
         this.setState({
@@ -107,16 +107,7 @@ let DateTimeRange=React.createClass({
             second_max:null,
         })
     },
-    firstTimeHandler:function(value) {
-       this.setState({
-           first_time:value
-       })
-    },
-    secondTimeHandler:function(value) {
-        this.setState({
-            second_time:value
-        })
-    },
+
     firstHandler:function(value) {//开始日期选择事件
         if(value&&value.indexOf(" ")>-1)
         {//有时间
@@ -135,7 +126,7 @@ let DateTimeRange=React.createClass({
                 //比最小值大
                 max_day=value.split("-")[2]*1;
             }
-           else
+            else
             {//比最小值小，调换
                 max_day=min_day;
                 min_day=value.split("-")[2]*1;
@@ -153,7 +144,7 @@ let DateTimeRange=React.createClass({
                 second_min=second_max=null;
             }
             else {
-              //第一个日期之前没有选择过不属于重新选择
+                //第一个日期之前没有选择过不属于重新选择
                 if(second_min) {//第二个日期框有选择
                     second_min=1;//设置第二个日期中的开始日期为1
                     max_day=31;//设置第一个日期中的结束日期为最大
@@ -166,17 +157,17 @@ let DateTimeRange=React.createClass({
             second_min=null;
         }
         /*判断与后面一个的复合情况*/
-            this.setState({
-                first_year:value.split("-")[0]*1,
-                first_month:value.split("-")[1]*1,
-                first_day:value.split("-")[2]*1,
-                first_min:min_day,
-                first_max:max_day,
-                second_min:second_min,
-                second_max:second_max,
-                first_time:this.refs.begin.getValue(),
-                second_time:this.refs.end.getValue(),
-            });
+        this.setState({
+            first_year:value.split("-")[0]*1,
+            first_month:value.split("-")[1]*1,
+            first_day:value.split("-")[2]*1,
+            first_min:min_day,
+            first_max:max_day,
+            second_min:second_min,
+            second_max:second_max,
+            first_time:this.refs.begin.getValue(),
+            second_time:this.refs.end.getValue(),
+        });
     },
     secondHandler:function(value) {//结束日期选择事
         if(value&&value.indexOf(" ")>-1)
@@ -224,17 +215,17 @@ let DateTimeRange=React.createClass({
             first_min=null;
             first_max=null;
         }
-         this.setState({
-                    second_year:value.split("-")[0]*1,
-                    second_month:value.split("-")[1]*1,
-                    second_day:value.split("-")[2]*1,
-                    second_min:min_day,
-                    second_max:max_day,
-                    first_min:first_min,
-                    first_max:first_max,
-                      first_time:this.refs.begin.getValue(),
-                    second_time:this.refs.end.getValue(),
-         });
+        this.setState({
+            second_year:value.split("-")[0]*1,
+            second_month:value.split("-")[1]*1,
+            second_day:value.split("-")[2]*1,
+            second_min:min_day,
+            second_max:max_day,
+            first_min:first_min,
+            first_max:first_max,
+            first_time:this.refs.begin.getValue(),
+            second_time:this.refs.end.getValue(),
+        });
     },
     onSelectHandler:function() {
         var firstDate, secondDate;
@@ -253,12 +244,12 @@ let DateTimeRange=React.createClass({
         }
         if (firstDate && secondDate) {
 
-                if (this.props.onSelect != null) {
-                    var first_time = " "+(this.state.first_time?this.state.first_time:this.refs.begin.getValue());
-                    let second_time = " "+(this.state.second_time?this.state.second_time:this.refs.end.getValue());
-                    this.props.onSelect(firstDate + first_time + "," + secondDate + second_time, firstDate + first_time + "," + secondDate + second_time, this.props.name);
+            if (this.props.onSelect != null) {
+                var first_time = " "+(this.state.first_time?this.state.first_time:this.refs.begin.getValue());
+                let second_time = " "+(this.state.second_time?this.state.second_time:this.refs.end.getValue());
+                this.props.onSelect(firstDate + first_time + "," + secondDate + second_time, firstDate + first_time + "," + secondDate + second_time, this.props.name);
 
-                }
+            }
         }
     },
     beginTimeHandler:function (time) {
@@ -289,30 +280,30 @@ let DateTimeRange=React.createClass({
             secondMinute=this.state.second_time.split(":")[1]*1;
             secondSecond=this.state.second_time.split(":")[2]*1;
         }
-         return (<div>
-             <div className="ok">
-                 <div style={{float:"left",marginLeft:5,marginTop:5}} >
-                     <Time name="begin" type="time" key="begin" onSelect={this.beginTimeHandler} ref="begin"
-                           hour={firstHour} minute={firstMinute} second={firstSecond}></Time>
-                 </div>
-                 <div  style={{float:"left",marginLeft:68,marginTop:5,height:32}}>
-                     <Time name="end" type="time" key="end" ref="end" onSelect={this.endTimeHandler}  hour={secondHour} minute={secondMinute} second={secondSecond}></Time>
-                     </div>
-                 <Button title="确定" name="ok" ripple={false} theme="green" onClick={this.onSelectHandler}></Button>
-                 <Button title="取消" name="ok" ripple={false} theme="cancel" onClick={this.cancelHandler}></Button>
-             </div>
+        return (<div>
+            <div className="ok">
+                <div style={{float:"left",marginLeft:5,marginTop:5}} >
+                    <Time name="begin" type="time" key="begin" onSelect={this.beginTimeHandler} ref="begin"
+                          hour={firstHour} minute={firstMinute} second={firstSecond}></Time>
+                </div>
+                <div  style={{float:"left",marginLeft:68,marginTop:5,height:32}}>
+                    <Time name="end" type="time" key="end" ref="end" onSelect={this.endTimeHandler}  hour={secondHour} minute={secondMinute} second={secondSecond}></Time>
+                </div>
+                <Button title="确定" name="ok" ripple={false} theme="green" onClick={this.onSelectHandler}></Button>
+                <Button title="取消" name="ok" ripple={false} theme="cancel" onClick={this.cancelHandler}></Button>
+            </div>
             <DateD   isRange={true}  year={this.state.first_year} month={this.state.first_month} day={this.state.first_day}
-                        min={this.state.first_min} max={this.state.first_max}
-                        onSelect={this.firstHandler}
-                        updateYearAndMonth={this.firstMonthHandler}
+                     min={this.state.first_min} max={this.state.first_max}
+                     onSelect={this.firstHandler}
+                     updateYearAndMonth={this.firstMonthHandler}
             ></DateD>
-             <DateD  isRange={true}   year={this.state.second_year} month={this.state.second_month} day={this.state.second_day}
-                        min={this.state.second_min} max={this.state.second_max}
-                        onSelect={this.secondHandler }
-                        updateYearAndMonth={this.secondMonthHandler}
-             ></DateD>
+            <DateD  isRange={true}   year={this.state.second_year} month={this.state.second_month} day={this.state.second_day}
+                    min={this.state.second_min} max={this.state.second_max}
+                    onSelect={this.secondHandler }
+                    updateYearAndMonth={this.secondMonthHandler}
+            ></DateD>
 
-         </div>)
+        </div>)
     },
 });
 module.exports=DateTimeRange;
