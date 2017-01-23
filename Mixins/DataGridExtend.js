@@ -101,7 +101,7 @@ let DataGridExtend= {
     detailViewHandler: function (detail) {
         var colSpan = this.state.headers.length;
 
-        var key = this.getKey(this.state.focusIndex);
+        var key = this.getKey(this.focusIndex);
         if (this.props.selectAble == true) {
             colSpan++;
         }
