@@ -115,6 +115,12 @@ var PanelPicker = React.createClass({
 
         this.registerClickAway(this.hidePicker, this.refs.picker);//注册全局单击事件
     },
+    componentDidUpdate:function () {
+      if(this.showClick&&this.props.showHandler) {
+          this.showClick=false;
+          this.props.showHandler(this.state.show);
+      }
+    },
     changeHandler:function(event) {
 
     },
@@ -131,6 +137,7 @@ var PanelPicker = React.createClass({
             this.setState({
                 show: type==1?!this.state.show:true
             })
+          this.showClick=true;//点击了显示
         }
         this.bindClickAway();//绑定全局单击事件
     },
