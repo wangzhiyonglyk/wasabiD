@@ -66,6 +66,8 @@ var Text=React.createClass({
         onChange:React.PropTypes.func,//值改变事件
         validateUrl:React.PropTypes.string,//后台验证的url
 
+        onBlur:React.PropTypes.func,//失去焦点事件
+
     },
     getDefaultProps:function() {
         return{
@@ -131,7 +133,8 @@ var Text=React.createClass({
 
     },
     componentDidMount:function() {
-        this.validateInput=true;//设置初始化值
+        this.validateInput=true;//设置初始化值，输入有效
+        this.onblur=false;
     },
     componentDidUpdate:function() {
         this.validateInput=true;//设置初始化值
@@ -139,11 +142,15 @@ var Text=React.createClass({
         {
             this.refs.input.select();
         }
+        if(this.onblur)
+        {
+            this.onblur=false;
+            this.props.onBlur();
+        }
     },
     changeHandler:function(event) {
+        if (this.validateInput==true) {//输入有效的时候
 
-        if (this.validateInput==true) {
-            var istrue=true;
             if((this.props.type=="integer"||this.props.type=="number")) {
                 //数字,或者正数时
                 if(event.target.value=="-"||((!this.state.value||this.state.value.toString().indexOf(".")<0)&&event.target.value.length>0&&event.target.value.toString().lastIndexOf(".")==event.target.value.length-1))
@@ -155,17 +162,12 @@ var Text=React.createClass({
                     });
                     return;
                 }
-                else
-                {
-                    // istrue = this.validate(event.target.value,event.target);
-                }
+
 
 
 
             }
-            else {//
-                // istrue = this.validate(event.target.value,event.target);
-            }
+
 
 
             this.setState({
@@ -224,15 +226,20 @@ var Text=React.createClass({
         }
     },
     blurHandler:function(event) {
-
         if(this.props.validateUrl) {//后台验证
-           this.validateHandler(event.target.value);
+            this.validateHandler(event.target.value);
         }
         else {//普通验证
             this.validate(this.state.value);
         }
 
         this.refs.label.hideHelp();//隐藏帮助信息
+
+        if(this.props.onBlur)
+        {
+            this.onblur=true
+
+        }
 
     },
     clickHandler:function(event) {//单击事件
@@ -252,7 +259,7 @@ var Text=React.createClass({
     },
 
     getValue:function () {//获取值
-      return this.state.value;
+        return this.state.value;
     },
 
     validateHandler:function (value) {//后台请求验证
@@ -285,16 +292,16 @@ var Text=React.createClass({
         var controlStyle=this.props.controlStyle?this.props.controlStyle:{};
         controlStyle.display = this.state.hide == true ? "none" : "block";
         let inputProps=
-        {
-            readOnly:this.state.readonly==true?"readonly":null,
-            style:style,
-            name:this.props.name,
-            placeholder:(this.props.placeholder===""||this.props.placeholder==null)?this.state.required?"必填项":"":this.props.placeholder,
-            className:"wasabi-form-control  "+(this.props.className!=null?this.props.className:""),
-            rows:this.props.rows,
-            title:this.props.title,
+            {
+                readOnly:this.state.readonly==true?"readonly":null,
+                style:style,
+                name:this.props.name,
+                placeholder:(this.props.placeholder===""||this.props.placeholder==null)?this.state.required?"必填项":"":this.props.placeholder,
+                className:"wasabi-form-control  "+(this.props.className!=null?this.props.className:""),
+                rows:this.props.rows,
+                title:this.props.title,
 
-        }//文本框的属性
+            }//文本框的属性
         var control=null;
         if(this.props.type!="textarea")
         {
