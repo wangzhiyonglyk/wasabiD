@@ -23,7 +23,7 @@ exports.Transfer = require('./Data/Transfer.jsx');//穿梭框组件
 exports.MenuTree = require('./Data/MenuTree.jsx');//菜单树组件
 
 /*****************表单集组件******************/
-exports.SearchBar = require('./Form/searchBar.jsx');//表单查询组件
+exports.SearchBar = require('./Form/SearchBar.jsx');//表单查询组件
 exports.Form = require('./Form/Form.jsx');//表单提交组件
 
 /*****************表单组件******************/
@@ -59,7 +59,14 @@ exports.SearchBox = require('./Form/SearchBox.jsx');//筛选框
 
 
 /*****************布局组件******************/
+
 exports.Drop = require('./Layout/Drop.jsx');//停靠组件
+exports.Layout = require('./Layout/Layout.jsx');//布局组件
+exports.Center = require('./Layout/Center.jsx');//布局组件-中间
+exports.North = require('./Layout/North.jsx');//布局组件-头部
+exports.South = require('./Layout/South.jsx');//布局组件-底部
+exports.West = require('./Layout/West.jsx');//布局组件-左侧
+exports.East = require('./Layout/East.jsx');//布局组件-右侧
 
 exports.Modal = require('./Layout/Modal.jsx');//模态层组件
 exports.Panel = require('./Layout/Panel.jsx');//面板组件

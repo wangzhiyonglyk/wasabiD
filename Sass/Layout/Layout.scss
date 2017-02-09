@@ -1,0 +1,41 @@
+/*create by wangzy
+date:2017-01-09
+desc:圣杯布局样式
+*/
+.wasabi-layout{
+  position: relative;
+  overflow: visible;
+  border: 1px solid #e3e4e5;
+}
+.wasabi-layout-north{
+  height: 200px;
+  width: 100%;
+}
+.wasabi-layout-south{
+  height: 200px;
+  width: 100%;
+}
+.wasabi-layout-west
+{
+  height: 100%;
+  width: 150px;
+}
+.wasabi-layout-east{
+  height: 100%;
+  width: 150px;
+}
+.wasabi-layout-title{
+  height: 40px;
+  width: 100%;
+  border-bottom: 1px solid #e3e4e5;
+  background-color: #eff0f1;
+}
+.wasabi-layout-nav{
+  height: calc(100% - 40);
+  width: 100%;
+
+}
+.wasabi-layout-center{
+  width: calc(100% - 300);
+  height: calc(100% - 40);
+}
