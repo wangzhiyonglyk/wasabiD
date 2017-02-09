@@ -418,9 +418,9 @@ var Form=React.createClass({
         {//不处理
 
         }
-        if(this.state.model.length<columns) {//如果数据小于列数
-            columns = this.state.model.length;
-        }
+        // if(this.state.model.length<columns) {//如果数据小于列数
+        //     columns = this.state.model.length;
+        // }
         if(columns>0) {//需要处理列的排版
             switch (columns) {
                 case 1:
