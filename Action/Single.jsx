@@ -9,10 +9,10 @@ let Form =require("../Form/Form.jsx");
 let Toolbar =require("../Buttons/Toolbar.jsx");
 let DataGrid =require("../Data/DataGrid.jsx");
 let SlidePanel =require("../Layout/SlidePanel.jsx");
- let PageHandlerMixins=require("./Mixins/PageHandlerMixins.jsx");
- let PageModelMixins=require("./Mixins/PageModelMixins.jsx");
-let Page=React.createClass({
-        mixins: [PageHandlerMixins, PageModelMixins],
+ let SingleHandlerMixins=require("./Mixins/SingleHandlerMixins.jsx");
+ let SingleModelMixins=require("./Mixins/SingleModelMixins.jsx");
+let Single=React.createClass({
+        mixins: [SingleHandlerMixins, SingleModelMixins],
         propTypes: {
             title: React.PropTypes.string.isRequired,//页面的标题
             controller: React.PropTypes.string.isRequired,//控制器名称
@@ -91,4 +91,4 @@ let Page=React.createClass({
 
         }
     })
-module .exports=Page;
+module .exports=Single;

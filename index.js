@@ -88,7 +88,7 @@ exports.Track = require('./Navigation/Track.jsx');//物流跟踪
 
 /*****************功能组件******************/
 exports.Import = require('./Action/Import.jsx');//excel导入组件
-exports.Page = require('./Action/Page.jsx');//单页面组件
+exports.Page = require('./Action/Single.jsx');//单页面组件
 
 
 
