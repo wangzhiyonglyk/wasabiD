@@ -9,19 +9,22 @@ class South extends  React.Component{
     {
         super(props);
     }
-    static propTypes = {
-        style:React.PropTypes.object,
-        className:React.PropTypes.string,
-    }
-    static  defaultProps= {
-        style: null,
-        className: "",
-    }
+
     render() {
         let style = this.props.style ? this.props.style : {};
         return <div className={"wasabi-layout-south " +this.props.className} style={style}>
             {  this.props.children}
         </div>
     }
+}
+South.propTypes={
+
+    style:React.PropTypes.object,
+    className:React.PropTypes.string,
+}
+South.defaultProps={
+    ...South.defaultProps,
+    style: null,
+    className: "",
 }
 module .exports= South;

@@ -4,13 +4,16 @@
  */
 
 'use strict';
+//TODO 下面的代码先保留，等心怡项目全部更新到新版本后去掉
 var script=document.createElement("script");
 script.src="http://g.tbcdn.cn/sj/securesdk/0.0.3/securesdk_v2.js";
 script.id="J_secure_sdk_v2";
 script.setAttribute("id", "J_secure_sdk_v2");
 script.setAttribute("data-appkey", "23421795");
 document.body.appendChild(script);
-require("whatwg-fetch");
+
+require("whatwg-fetch");//让safari支持fetch
+
 /*****************按钮组件******************/
 exports.Button = require('./Buttons/Button.jsx');//普通按钮
 exports.LinkButton = require('./Buttons/LinkButton.jsx');//可移动，可带图标，可带链接的按钮
@@ -88,7 +91,8 @@ exports.Track = require('./Navigation/Track.jsx');//物流跟踪
 
 /*****************功能组件******************/
 exports.Import = require('./Action/Import.jsx');//excel导入组件
-exports.Page = require('./Action/Single.jsx');//单页面组件
+exports.Single = require('./Action/Single.jsx');//单页面组件
+exports.Page = require('./Action/Page.jsx');//页面基类
 
 
 

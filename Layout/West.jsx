@@ -9,17 +9,6 @@ class West extends  React.Component{
         super(props);
 
     }
-    static propTypes = {
-        style:React.PropTypes.object,
-        className:React.PropTypes.string,
-        title:React.PropTypes.string,
-    }
-    static  defaultProps= {
-
-        style:null,
-        className:"",
-        title:"East",
-    }
     render() {
         let style = this.props.style ? this.props.style : {};
         return <div className={"wasabi-layout-west "} style={style}>
@@ -27,5 +16,17 @@ class West extends  React.Component{
             <div className={"wasabi-layout-nav"}>{  this.props.children}</div>
         </div>
     }
+}
+West.propTypes={
+    style:React.PropTypes.object,
+    className:React.PropTypes.string,
+    title:React.PropTypes.string,
+}
+West.defaultProps={
+    ...West.defaultProps,
+
+    style:null,
+    className:"",
+    title:"East",
 }
 module .exports= West;

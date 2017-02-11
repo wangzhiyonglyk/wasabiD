@@ -9,19 +9,20 @@ class Center extends  React.Component{
     {
         super(props);
     }
-    static propTypes = {
-        style:React.PropTypes.object,
-        className:React.PropTypes.string,
-    }
-    static  defaultProps= {
-        style: null,
-        className: "",
-    }
     render() {
         let style = this.props.style ? this.props.style : {};
         return <div className={"wasabi-layout-center " +this.props.className} style={style}>
             {  this.props.children}
         </div>
     }
+}
+Center.defaultProps={
+    ...Center.defaultProps,
+    style: null,
+    className: "",
+}
+Center.propTypes={
+    style:React.PropTypes.object,
+    className:React.PropTypes.string,
 }
 module .exports= Center;

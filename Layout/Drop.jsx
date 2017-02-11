@@ -16,12 +16,6 @@ class Drop extends  React.Component {
             dropClass: "drop"
         }
     }
-
-    static  propTypes = {
-        onDrop: React.PropTypes.func.isRequired,//元素停靠事件
-
-    }
-
     dragOverHandler(event) {//在ondragover中一定要执行preventDefault()，否则ondrop事件不会被触发
         event.preventDefault();
         return true;
@@ -67,5 +61,7 @@ class Drop extends  React.Component {
         )
     }
 }
-
+Drop.propTypes={
+    onDrop: React.PropTypes.func.isRequired,//元素停靠事件
+}
 module .exports= Drop;

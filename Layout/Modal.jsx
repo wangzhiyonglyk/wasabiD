@@ -29,27 +29,6 @@ class Modal extends  React.Component {
         this.OKHandler = this.OKHandler.bind(this);
         this.cancelHandler = this.cancelHandler.bind(this);
     }
-
-    static propTypes = {
-        width: React.PropTypes.number,
-        height: React.PropTypes.number,
-        resize: React.PropTypes.bool,
-        closedHandler: React.PropTypes.func,
-        showOK: React.PropTypes.bool,
-        showCancel: React.PropTypes.bool,
-        OKHandler: React.PropTypes.func,
-        cancelHandler: React.PropTypes.func,
-    }
-    static  defaultProps = {
-        width: 730,//宽度
-        height: 650,//高度
-        resize: false,//是否可以改变大小
-        modal: true,//默认没有遮罩层
-        showOK: false,//是否显示确定按钮
-        showCancel: false,//是否显示取消按钮
-        OKHandler: null,//确定按钮的事件,
-    }
-
     componentWillReceiveProps(nextProps) {
         this.setState({
                 width: nextProps.width,
@@ -181,6 +160,28 @@ class Modal extends  React.Component {
 
 
     }
+}
+
+Modal.propTypes={
+    width: React.PropTypes.number,
+    height: React.PropTypes.number,
+    resize: React.PropTypes.bool,
+    closedHandler: React.PropTypes.func,
+    showOK: React.PropTypes.bool,
+    showCancel: React.PropTypes.bool,
+    OKHandler: React.PropTypes.func,
+    cancelHandler: React.PropTypes.func,
+}
+
+Modal.defaultProps={
+    ...Modal.defaultProps,
+    width: 730,//宽度
+    height: 650,//高度
+    resize: false,//是否可以改变大小
+    modal: true,//默认没有遮罩层
+    showOK: false,//是否显示确定按钮
+    showCancel: false,//是否显示取消按钮
+    OKHandler: null,//确定按钮的事件,
 }
 
 

@@ -24,4 +24,14 @@ class North extends  React.Component{
         </div>
     }
 }
+North.propTypes={
+
+    style:React.PropTypes.object,
+    className:React.PropTypes.string,
+}
+North.defaultProps={
+    ...North.defaultProps,
+    style: null,
+    className: "",
+}
 module .exports= North;

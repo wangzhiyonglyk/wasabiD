@@ -369,7 +369,7 @@ let DatePicker=React.createClass({
             <div className={componentClassName+this.state.validateClass}  ref="picker" style={ controlStyle}>
                 <Label name={this.props.label} ref="label" hide={this.state.hide} required={this.state.required}></Label>
                 <div className={ "wasabi-form-group-body"} style={{width:!this.props.label?"100%":null}}>
-                    <div className="combobox" style={{display:this.props.hide==true?"none":"block"}}>
+                    <div className="combobox" style={{display:this.props.hide==true?"none":"block",width:style.width}}>
                         <i className={"picker-clear"} onClick={this.clearHandler} style={{display:this.state.readonly?"none":(this.state.value==""||!this.state.value)?"none":"inline"}}></i>
                         <i className={"pickericon  " +(this.state.show?" rotate":"")} onBlur={this.onBlur} onClick={this.showPicker.bind(this,1)}></i>
                         <input type="text" {...inputProps} value={text} onClick={this.showPicker.bind(this,2)} onChange={this.changeHandler}/>
