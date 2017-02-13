@@ -62,7 +62,9 @@ let Select=React.createClass({
         data:React.PropTypes.array,//自定义数据源
         extraData:React.PropTypes.array,//额外的数据,对url有效
         onSelect: React.PropTypes.func,//选中后的事件，回传，value,与text,data
-
+        addAbled:React.PropTypes.bool,//是否允许自动添加
+        addHandler:React.PropTypes.func,//添加后的回调
+        onBeforeSelect:React.PropTypes.func,//选择之前的事件
 
 
 
@@ -101,6 +103,8 @@ let Select=React.createClass({
             extraData:null,
             onSelect:null,
             writable:false,
+            addAbled:false,
+            addHandler:null,
 
         };
     },
@@ -209,6 +213,7 @@ let Select=React.createClass({
         }
     },
 
+
     loadData:function(url,params) {
         if(url!=null&&url!="")
         {
@@ -296,63 +301,68 @@ let Select=React.createClass({
     },
 
     onSelect:function(value,text,rowData) {//选中事件
-        this.isChange=true;//代表自身发生了改变,防止父组件没有绑定value,text的状态值,而导致无法选择的结果
-        this.rowData=rowData;//临时保存起来
-        var newvalue = "";
-        var newtext = "";
-        if(value==undefined)
-        {
-            console.error("绑定的valueField没有")
-        }
-        if(text==undefined)
-        {
-            console.error("绑定的textField没有");
-        }
-        if(this.state.multiple) {
+        if((this.props.onBeforeSelect&&value!=this.state.value&&this.props.onBeforeSelect(value,text,rowData))||!this.props.onBeforeSelect)
+        {//选择之前的确定事件返回true,或者没有
 
-            var oldvalue =[];
-            var oldtext =[];
-            if(this.state.value)
+            this.isChange=true;//代表自身发生了改变,防止父组件没有绑定value,text的状态值,而导致无法选择的结果
+            this.rowData=rowData;//临时保存起来
+            var newvalue = "";
+            var newtext = "";
+            if(value==undefined)
             {
-                oldvalue=this.state.value.toString().split(",");
-                oldtext=this.state.text.toString().split(",");
+                console.error("绑定的valueField没有")
             }
-            if (oldvalue.indexOf(value.toString()) > -1) {//取消选中
-               oldvalue.splice(oldvalue.indexOf(value.toString()),1);
-                oldtext.splice(oldvalue.indexOf(value.toString()),1);
-                newvalue=oldvalue.join(",");
-                newtext=oldtext.join(",");
+            if(text==undefined)
+            {
+                console.error("绑定的textField没有");
             }
-            else {//选中
+            if(this.state.multiple) {
+
+                var oldvalue =[];
+                var oldtext =[];
                 if(this.state.value)
                 {
-                    newvalue = this.state.value + "," + value;
-                    newtext = this.state.text + "," + text;
+                    oldvalue=this.state.value.toString().split(",");
+                    oldtext=this.state.text.toString().split(",");
                 }
-                else
-                {
-                    newvalue = value;
-                    newtext =  text;
+                if (oldvalue.indexOf(value.toString()) > -1) {//取消选中
+                    oldvalue.splice(oldvalue.indexOf(value.toString()),1);
+                    oldtext.splice(oldvalue.indexOf(value.toString()),1);
+                    newvalue=oldvalue.join(",");
+                    newtext=oldtext.join(",");
                 }
+                else {//选中
+                    if(this.state.value)
+                    {
+                        newvalue = this.state.value + "," + value;
+                        newtext = this.state.text + "," + text;
+                    }
+                    else
+                    {
+                        newvalue = value;
+                        newtext =  text;
+                    }
 
+                }
+                this.setState({
+                    value:newvalue,
+                    text:newtext,
+                });
             }
-            this.setState({
-                value:newvalue,
-                text:newtext,
-            });
+            else
+            {
+                var newvalue = value;
+                var newtext = text;
+                this.setState({
+                    show:false,
+                    value:newvalue,
+                    text:newtext,
+                    filterValue:null,
+                });
+            }
+            this.validate(newvalue);//
         }
-        else
-        {
-            var newvalue = value;
-            var newtext = text;
-            this.setState({
-                show:false,
-                value:newvalue,
-                text:newtext,
-                filterValue:null,
-            });
-        }
-        this.validate(newvalue);//
+
 
     },
     getComponentData:function() {//只读属性，获取当前下拉的数据源
@@ -367,37 +377,44 @@ let Select=React.createClass({
 
         this.refs.label.hideHelp();//隐藏帮助信息
     },
-    filterChangeHandler:function(event) {//筛选查询
-        let filterData=[]; let notfilterdData=[];
-        this.state.data.map((item,index)=>{
-            if(event.target.value!=""&&item.text.toLowerCase().indexOf(event.target.value.toLowerCase())>-1)
+    keyUpHandler:function(event) {
+        if(this.props.addAbled&&event.keyCode==13) {
+            var filter=this.state.data.filter((item,index)=>{
+                return item.text==event.target.value;
+            })
+            if(filter.length==0)
             {
-                filterData.unshift({name:item,index:item.text.toLowerCase().indexOf(event.target.value.toLowerCase())});
-            }
-            else
-            {
-                notfilterdData.push((item));
-            }
-        })
-        //冒泡排序
-        for(var i=0;i<filterData.length-1;i++){
-            for(var j=0;j<filterData.length-i-1;j++){
-                if(filterData[j].index>filterData[j+1].index){
-                    var swap=filterData[j];
-                    filterData[j]=filterData[j+1];
-                    filterData[j+1]=swap;
-                }
-            }
-        }
-        let newFitlerData=[];
-        for(var i=0;i<filterData.length;i++) {
-          newFitlerData.push(filterData[i].name);
-        }
-        this.setState({
-            data:newFitlerData.concat(notfilterdData),
-            filterValue:event.target.value,
 
-        })
+
+                this.state.data.push({
+                    value:event.target.value,
+                    text:event.target.value,
+                })
+                this.setState({
+                    data:this.state.data,
+                })
+                if(this.props.addHandler){
+                    this.props.addHandler(this.state.data);
+                }
+            };
+
+        }
+    },
+
+    filterChangeHandler:function(event) {//筛选查询
+        if( event.target.value&&this.state.data.length>0)
+        {
+            var reg= new RegExp(event.target.value,"i");
+            var filterData=[];
+            this.state.data.map((item,index)=>{
+                item.text.search(reg)!=-1?filterData.unshift(item):filterData.push(item);});
+            this.setState({
+                data:filterData ,
+                filterValue:event.target.value,
+
+            })
+
+        }
 
     },
     clearHandler:function() {//清除数据
@@ -459,7 +476,7 @@ let Select=React.createClass({
                     <div className={"nice-select "}  style={style}    >
                         <i className={"picker-clear"} onClick={this.clearHandler} style={{display:this.state.readonly?"none":(this.state.value==""||!this.state.value)?"none":"inline"}}></i>
                         <i className={"icon "+(this.state.show?"rotate":"")} onClick={this.showOptions.bind(this,1)}></i>
-                        <input type="text" {...inputProps}  value={this.state.filterValue!=null?this.state.filterValue:this.state.text} onClick={this.showOptions.bind(this,2)} onBlur={this.onBlur}    onChange={this.filterChangeHandler}  />
+                        <input type="text" {...inputProps} title={this.props.addAbled?"输入搜索，回车添加":"输入搜索"}  onKeyUp={this.keyUpHandler} value={this.state.filterValue!=null?this.state.filterValue:this.state.text} onClick={this.showOptions.bind(this,2)} onBlur={this.onBlur}    onChange={this.filterChangeHandler}  />
 
                         {
                             control

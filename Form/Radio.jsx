@@ -250,20 +250,18 @@ let Radio=React.createClass({
 
     },
     onSelect:function(value,text,data) {//选中事件
-        if(this.state.readonly)
-        {
-            return;
-        }
-        this.setState({
-            value:value,
-            text:text,
-        });
-        this.validate(value);
-        if( this.props.onChange) {
-            this.props.onChange(value,text,this.props.name,data);
-        }
-        if( this.props.onSelect!=null) {
-            this.props.onSelect(value,text,this.props.name,data);
+        if(!this.state.readonly&&(this.props.onBeforeSelect&&value!=this.state.value&&this.props.onBeforeSelect(value,text,data)||!this.props.onBeforeSelect)) {
+            this.setState({
+                value: value,
+                text: text,
+            });
+            this.validate(value);
+            if (this.props.onChange) {
+                this.props.onChange(value, text, this.props.name, data);
+            }
+            if (this.props.onSelect != null) {
+                this.props.onSelect(value, text, this.props.name, data);
+            }
         }
     },
     render:function() {
