@@ -10,13 +10,7 @@ let FetchModel=require("../../Model/FetchModel.js");
 let PageHandlerMixins={
     getHandler:function(id,disabled){//获取一个实例模型
         var getUrl=this.state.getUrl;
-        if(getUrl.indexOf("?")>0) {//已经带了参数
-
-            getUrl=getUrl+"&id="+id;
-        }
-        else {
-            getUrl=getUrl+"?id="+id;
-        }
+        getUrl += (getUrl.indexOf("?") > 0 ? "&" : "?")+"&id="+id;
         let fetchModel = new FetchModel(getUrl, this.getSuccess.bind(disabled), null, this.fetchErrorHandler);
         unit.fetch.get(fetchModel);
     },
@@ -49,15 +43,7 @@ let PageHandlerMixins={
     deleteHandler:function(id){//删除事件
         Message.confirm("确定删除这条记录吗?",()=>{
             var deleteUrl=this.state.deleteUrl;
-            if(deleteUrl.indexOf("?")>0)
-            {//已经带了参数
-
-                deleteUrl=deleteUrl+"&id="+id;
-            }
-            else
-            {
-                deleteUrl=deleteUrl+"?id="+id;
-            }
+            deleteUrl += (deleteUrl.indexOf("?") > 0 ? "&" : "?")+"&id="+id;
             let fetchModel = new FetchModel(deleteUrl, this.deleteSuccess, null, this.fetchErrorHandler);
             unit.fetch.get(fetchModel);
         });

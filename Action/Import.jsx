@@ -262,7 +262,7 @@ let  Import=React.createClass({
                                 uploadDisabled:true,//不可以再导入
                                 giveupdisabled:true,//不可以终止
                                 filename:"",//清空文件名
-                                showfail:this.failNum>0?true:false,//是否显示下载失败信息
+                                showfail:this.failNum > 0 //是否显示下载失败信息
                             })
                             this.clearFile();//清空文件选择,方便下一次选择
 

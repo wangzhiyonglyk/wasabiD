@@ -96,11 +96,7 @@ let  Button  = React.createClass({
 
     },
     shouldComponentUpdate: function(nextProps, nextState) {
-        if(this.delay==2)
-        {
-            return false;
-        }
-        return true;
+        return this.delay!=2;
     }
     ,clickHandler: function (event) {
 

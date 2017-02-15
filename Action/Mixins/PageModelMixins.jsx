@@ -11,142 +11,39 @@ let FormModel =require("../../Model/FormModel.js");
 let HeaderModel =require("../../Model/HeaderModel.js");
 let unit=require("../../libs/unit.js");
 let PageModelMixins= {
+    /**
+    *整合url
+    *@param {String} url 传内的链接地址
+    *@param {String} action 动作
+    *@return {string}
+    */
+    _dealUrl:function(url,action){
+        let _url = url || this.props.corsUrl+"/" + this.props.controller + action;
+        if(this.props.tocket){
+            _url += (this.props.tocket.indexOf("?") > -1 ? "":"?") + this.props.tocket;
+        }
+        return _url;
+    },
     modelUrl:function(){//获取模型的url
-        var url = "";
-        if (this.props.modelUrl && this.props.modelUrl !== "") {
-            url = this.props.modelUrl;
-
-        } else {
-            var url = this.props.corsUrl+"/" + this.props.controller + "/GetModel";
-        }
-        if (this.props.tocket) {
-            if (this.props.tocket.indexOf("?") > -1) {//已经带有问号
-                url += this.props.tocket;
-            }
-            else {
-                url += "?" + this.props.tocket;
-            }
-
-        }
-        return url;
+        return  this._dealUrl(this.props.modelUrl,"/GetModel");
     },
     getUrl:function(){//获取实例的url
-        var url = "";
-        if (this.props.getUrl && this.props.getUrl !== "") {
-            url = this.props.getUrl;
-
-        } else {
-            var url = this.props.corsUrl +"/" + this.props.controller + "/Get";
-        }
-        if (this.props.tocket) {
-            if (this.props.tocket.indexOf("?") > -1) {//已经带有问号
-                url += this.props.tocket;
-            }
-            else {
-                url += "?" + this.props.tocket;
-            }
-
-        }
-        return url;
+        return this._dealUrl(this.props.getUrl,"/Get");
     },
     addUrl: function () {//新增时年请求地址
-        var url = "";
-        if (this.props.addUrl && this.props.addUrl !== "") {
-            url = this.props.addUrl;
-
-        } else {
-            var url = this.props.corsUrl +"/" + this.props.controller + "/Add";
-        }
-        if (this.props.tocket) {
-            if (this.props.tocket.indexOf("?") > -1) {//已经带有问号
-                url += this.props.tocket;
-            }
-            else {
-                url += "?" + this.props.tocket;
-            }
-
-        }
-        return url;
-
+        return this._dealUrl(this.props.addUrl,"/Add");
     },
     deleteUrl: function () {//新增时年请求地址
-        var url = "";
-        if (this.props.deleteUrl && this.props.deleteUrl !== "") {
-            url = this.props.deleteUrl;
-
-        } else {
-            var url = this.props.corsUrl +"/" + this.props.controller + "/Delete";
-        }
-        if (this.props.tocket) {
-            if (this.props.tocket.indexOf("?") > -1) {//已经带有问号
-                url += this.props.tocket;
-            }
-            else {
-                url += "?" + this.props.tocket;
-            }
-
-        }
-        return url;
-
+        return this._dealUrl(this.props.deleteUrl,"/Delete");
     },
     updateUrl: function () {//新增时年请求地址
-        var url = "";
-        if (this.props.updateUrl && this.props.updateUrl !== "") {
-            url = this.props.updateUrl;
-
-        } else {
-            var url = this.props.corsUrl +"/" + this.props.controller + "/Update";
-        }
-        if (this.props.tocket) {
-            if (this.props.tocket.indexOf("?") > -1) {//已经带有问号
-                url += this.props.tocket;
-            }
-            else {
-                url += "?" + this.props.tocket;
-            }
-
-        }
-        return url;
-
+        return this._dealUrl(this.props.deleteUrl,"/Update");
     },
     queryUrl:function() {//不分页查询(也可以理解为按条件查询)
-        var url = "";
-        if (this.props.queryUrl && this.props.queryUrl !== "") {
-            url = this.props.queryUrl;
-
-        } else {
-            var url = this.props.corsUrl +"/" + this.props.controller + "/Query";
-        }
-        if (this.props.tocket) {
-            if (this.props.tocket.indexOf("?") > -1) {//已经带有问号
-                url += this.props.tocket;
-            }
-            else {
-                url += "?" + this.props.tocket;
-            }
-
-        }
-        return url;
+        return this._dealUrl(this.props.queryUrl,"/Query");
     },
     pageUrl: function () {//分页时的请求地址
-        var url = "";
-        if (this.props.pageUrl && this.props.pageUrl !== "") {
-            url = this.props.pageUrl;
-
-        } else {
-            var url = this.props.corsUrl +"/" + this.props.controller + "/Page";
-        }
-        if (this.props.tocket) {
-            if (this.props.tocket.indexOf("?") > -1) {//已经带有问号
-                url += this.props.tocket;
-            }
-            else {
-                url += "?" + this.props.tocket;
-            }
-
-        }
-        return url;
-
+        return this._dealUrl(this.props.pageUrl,"/Page");
     },
     submitButton:function(disabled) {//提交按钮对象
         let btn =new ButtonModel("btnSubmit","提交");
