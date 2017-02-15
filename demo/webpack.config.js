@@ -1,13 +1,8 @@
-
 /**
  * Created by wangzy
- * date 2016-01-28
+ * date 2017-02-08
  * desc:打包入口
  */
-    //var path=require("path");
-//var node_modules = path.resolve(__dirname, 'node_modules');
-//var pathToReact = path.resolve(node_modules, 'react/dist/react.min.js');
-//var pathToReactOOM = path.resolve(node_modules, 'react-dom/dist/react-dom.min.js');
 var webpack = require('webpack');
 var commonsPlugin = new webpack.optimize.CommonsChunkPlugin('common.js');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
@@ -17,11 +12,8 @@ module.exports = {
     ],//获取打包css
     //页面入口文件配置
     entry: {
-        /*******************************登录页，主页,我的桌面 ******************************/
-
-
+        index: './src/index.js',//主页
     },
-
     //入口文件输出配置
     output: {
         path: './build/js',
@@ -48,7 +40,6 @@ module.exports = {
     },
     //其它解决方案配置
     resolve: {
-
         extensions: ['',  '.js',".jsx" ,'.json', '.scss'],
         alias: {
             //'react': pathToReact,
