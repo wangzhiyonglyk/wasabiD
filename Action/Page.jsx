@@ -66,7 +66,6 @@ Page.propTypes={
     className:React.PropTypes.string,
 
 }
-
 Page.defaultProps={
     ...Page.defaultProps,
     width:"100%",
