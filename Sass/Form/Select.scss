@@ -9,11 +9,7 @@ desc:下拉框样式
   position: relative;
 
 }
-.nice-select ul{
-  padding:0px;
-  margin: 0px;;
-  min-width: 120px;
-}
+
 .nice-select .icon {
 
   display: block;
@@ -68,12 +64,16 @@ desc:下拉框样式
   overflow: hidden;
   background-color: #fff;
   max-height: 270px;
+  min-height: 100px;
   overflow-y: auto;
   border: 1px solid #999;
   border-top: 0;
   box-shadow: 0 3px 5px #999;
   z-index:3;
-  top:34px;
+  top:34px ;
+  padding:0px;
+  margin: 0px;;
+  min-width: 120px;
 }
 .nice-select ul li {
   height: 30px;

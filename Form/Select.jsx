@@ -282,6 +282,7 @@ let Select=React.createClass({
         Message. error(message);
     },
     showOptions:function(type) {//显示下拉选项
+        console.log("show")
         if (this.state.readonly) {
             return;
         }
@@ -294,6 +295,7 @@ let Select=React.createClass({
         this.bindClickAway();//绑定全局单击事件
     },
     hideOptions:function (event) {
+        console.log("hide");
         this.setState({
             show: false
         });
@@ -301,6 +303,7 @@ let Select=React.createClass({
     },
 
     onSelect:function(value,text,rowData) {//选中事件
+        console.log("test");
         if((this.props.onBeforeSelect&&value!=this.state.value&&this.props.onBeforeSelect(value,text,rowData))||!this.props.onBeforeSelect)
         {//选择之前的确定事件返回true,或者没有
 
@@ -369,14 +372,10 @@ let Select=React.createClass({
         return this.state.data;
     },
     onBlur:function () {
-        if(this.state.filterValue!=null) {
-            this.setState({
-                filterValue: null
-            })
-        }
 
         this.refs.label.hideHelp();//隐藏帮助信息
     },
+
     keyUpHandler:function(event) {
         if(this.props.addAbled&&event.keyCode==13) {
             var filter=this.state.data.filter((item,index)=>{
@@ -400,28 +399,13 @@ let Select=React.createClass({
 
         }
     },
-
     filterChangeHandler:function(event) {//筛选查询
-        if( event.target.value&&this.state.data.length>0)
-        {
-            var reg= new RegExp(event.target.value,"i");
-            var filterData=[];
-            this.state.data.map((item,index)=>{
-                item.text.search(reg)!=-1?filterData.unshift(item):filterData.push(item);});
-            this.setState({
-                data:filterData ,
-                filterValue:event.target.value,
+        this.setState({
+            filterValue:event.target.value,
+            show:true,
+        })
+        this.refs.ul.scrollTop=0;//回到顶部
 
-            })
-            this.refs.ul.scrollTop=0;//回到顶部
-
-        }
-        else
-        {
-            this.setState({
-                filterValue:event.target.value,
-            })
-        }
 
     },
     clearHandler:function() {//清除数据
@@ -459,17 +443,24 @@ let Select=React.createClass({
             control = <ul style={{display:this.state.show==true?"block":"none"}}  ref="ul" >
                 {
                     this.state.data.map((child, i)=> {
-                        var checked = false;
-                        if ((this.state.value != null && this.state.value != undefined && this.state.value != ""&&child.value!="") && (("," + this.state.value.toString()).indexOf("," + child.value) > -1)) {
-                            checked = true;
+                        var reg= new RegExp(this.state.filterValue,"i");
+                        if(this.state.filterValue&&child.text.search(reg)==-1){
+                            return ;
                         }
-                        else if (this.state.value == "" && child.value == "") {
-                            checked = true;
+                        else {
+                            //TODO 这里要用正则，先保留
+                            var checked = false;
+                            if ((this.state.value != null && this.state.value != undefined && this.state.value != "" && child.value != "") && (("," + this.state.value.toString()).indexOf("," + child.value) > -1)) {
+                                checked = true;
+                            }
+                            else if (this.state.value == "" && child.value == "") {
+                                checked = true;
+                            }
+                            return (
+                                <li key={"li" + i} className={checked == true ? "active" : ""}
+                                    onClick={this.onSelect.bind(this, child.value, child.text, child)}>{child.text}</li>
+                            )
                         }
-                        return (
-                            <li key={"li"+i} className={checked==true?"active":""}
-                                onClick={this.onSelect.bind(this, child.value, child.text,child)}>{child.text}</li>
-                        )
                     })
 
                 }
@@ -477,7 +468,7 @@ let Select=React.createClass({
         }
 
         return (
-            <div className={componentClassName+this.state.validateClass}  ref="select" style={ controlStyle} >
+            <div className={componentClassName+this.state.validateClass}  ref="select" style={ controlStyle}  >
                 <Label name={this.props.label} ref="label" hide={this.state.hide} required={this.state.required}></Label>
                 <div className={ "wasabi-form-group-body"} >
                     <div className={"nice-select "}  style={style}    >
