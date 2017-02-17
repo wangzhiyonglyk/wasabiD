@@ -21,26 +21,29 @@ let CalendarHeader = React.createClass({
             day:nextProps.day,
         })
     },
-    handleLeftClick:function(){
-        var newMonth = parseInt(this.state.month) - 1;
-        var year = this.state.year;
-        if(newMonth < 1){
-            year --;
-            newMonth = 12;
+    /*
+    * 处理月份变化
+    *@param {Number} month 月份变化数1或-1
+    *@return
+    * */
+    _dealMonthClick:function(month){
+        let m = parseInt(this.state.month,10) + month;
+        if( m < 1 ){
+            this.state.year --;
+            m = 12;
+        }else if( m > 12 ){
+            this.state.year ++;
+            m = 1;
         }
-        this.props.updateFilter(year,newMonth); // 执行父组件回调函数，改变父组件状态值
+        this.state.month = m;
+        this.setState(this.state);
+        this.props.updateFilter(this.state.year,m);// 执行父组件回调函数，改变父组件状态值
+    },
+    handleLeftClick:function(){
+        this._dealMonthClick(-1);
     },
     handleRightClick:function(){
-        var newMonth = parseInt(this.state.month) + 1;
-        var year = this.state.year;
-        if( newMonth > 12 ){
-            year ++;
-            newMonth = 1;
-        }
-        this.state.month = newMonth;
-        this.state.year=year;
-        this.setState(this.state);
-        this.props.updateFilter(year,newMonth);// 执行父组件回调函数，改变父组件状态值
+        this._dealMonthClick(1);
     },
     changeYear:function () {
         if(this.props.changeYear)

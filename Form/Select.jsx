@@ -413,7 +413,14 @@ let Select=React.createClass({
                 filterValue:event.target.value,
 
             })
+            this.refs.ul.scrollTop=0;//回到顶部
 
+        }
+        else
+        {
+            this.setState({
+                filterValue:event.target.value,
+            })
         }
 
     },
@@ -449,7 +456,7 @@ let Select=React.createClass({
         }//文本框的属性
         var control=null;
         if(this.state.data&&this.state.data.length>0) {
-            control = <ul style={{display:this.state.show==true?"block":"none"}}  >
+            control = <ul style={{display:this.state.show==true?"block":"none"}}  ref="ul" >
                 {
                     this.state.data.map((child, i)=> {
                         var checked = false;

@@ -46,23 +46,15 @@ let CalendarBody = React.createClass({
             max:nextProps.max,
             changeYear:nextProps.changeYear,
             changeMonth:nextProps.changeMonth,
-
         })
     },
     getMonthDays:function(){
-        //根据月份获取当前天数
-        var year = this.state.year,
-            month = this.state.month;
-        var temp = new Date(year,month,0);
-        return temp.getDate();
+        //根据月份获取当月总天数
+        return new Date(this.state.year,this.state.month,0).getDate();
     },
     getFirstDayWeek:function(){
         //获取当月第一天是星期几
-        var year = this.state.year,
-          month = this.state.month;
-        var dt = new Date(year+'/'+month+'/1');
-        var Weekdays = dt.getDay();
-        return Weekdays;
+        return new Date(this.state.year,this.state.month - 1,1).getDay();
     },
     dayHandler:function(day) {
         this.setState({
@@ -86,30 +78,17 @@ let CalendarBody = React.createClass({
         }
     },
     yearOKHandler:function (event) {
-      if(event.keyCode==13)
-      {//回车确定
-          if(event.target.value*1<1900||event.target.value*1>9999){
-              Message.error("不是有效年份");
-              return ;
-      }
-      else {
-              this.changeYearHandler(event.target.value);
-          }
-
-      }
+        if (event.keyCode == 13) {
+            this.yearonBlur(event);//共用函数
+        }
     },
     yearonBlur:function (event) {
-        if(event.target.value*1<1900||event.target.value*1>9999){
-            Message.error("不是有效年份");
-            return ;
-        }
-        else {
-            this.changeYearHandler(event.target.value);
-        }
-
+        let year = event.target.value << 0;//转成数字
+        year < 1900 || year > 9999 ? Message.error("不是有效年份") : this.changeYearHandler(event.target.value);
     },
 
     render:function(){
+        //TODO 以下代码有待优化
         var arry1 = [],arry2 = [];
         var getDays = this.getMonthDays(), FirstDayWeek = this.getFirstDayWeek();
         for(var i = 0 ;i < FirstDayWeek; i++ ){
