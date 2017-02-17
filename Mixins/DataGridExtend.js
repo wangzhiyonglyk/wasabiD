@@ -117,7 +117,11 @@ let DataGridExtend= {
 
     //调整高宽
     setWidthAndHeight: function () {//重新计算列表的高度,及固定的表头每一列的宽度
-        if (this.refs.grid.parentElement.className == "wasabi-detail") {//如果列表是在详情列表中不处理
+        var parent=this.refs.grid.parentElement;
+        while(parent&&parent.className!="wasabi-detail"&&parent.nodeName.toLowerCase()!="body") {
+            parent = parent.parentElement;
+        }
+        if (parent.className == "wasabi-detail") {//如果列表是在详情列表中不处理
         }
         else { //主列表
             if (this.refs.realTable.getBoundingClientRect().width == 0) {//TODO 暂时不清楚为什么会0的情况
