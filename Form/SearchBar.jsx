@@ -37,8 +37,9 @@ var SearchBar=React.createClass({
             this.availWidth=window.screen.availWidth;
         }
         else {
-            //没有滚动条
+            //没有滚动条  现在每个页面留有左右20像素的边距 
             this.availWidth=window.screen.availWidth-50;//防止后期出现滚动条,而产生样式变形,先减去滚动条宽度
+
         }
 
         return{
