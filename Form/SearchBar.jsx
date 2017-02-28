@@ -38,7 +38,7 @@ var SearchBar=React.createClass({
         }
         else {
             //没有滚动条
-            this.availWidth=window.screen.availWidth-10;//防止后期出现滚动条,而产生样式变形,先减去滚动条宽度
+            this.availWidth=window.screen.availWidth-50;//防止后期出现滚动条,而产生样式变形,先减去滚动条宽度
         }
 
         return{
@@ -240,9 +240,9 @@ var SearchBar=React.createClass({
         }
 
         let columns=0;//每一行的列数
-
         //表单实际宽度
         let  actualWidth=this.props.width?this.props.width:this.availWidth;//总宽度
+
         let leftWidth=actualWidth-130;//左侧表单宽度
 
         let columnClass="";//列样式
@@ -292,7 +292,6 @@ var SearchBar=React.createClass({
                 break;
 
         }
-
         style.width=actualWidth;//设置表单的宽度
 
         this.state.dropType=="wasabi-button wasabi-searchbar-down"?style.height=54:style.height=null;//判断高度

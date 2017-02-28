@@ -1,29 +1,91 @@
 {
-  "name": "wasabiD",
-  "version": "0.7.90",
+  "_args": [
+    [
+      {
+        "raw": "wasabiD@^0.7.43",
+        "scope": null,
+        "escapedName": "wasabiD",
+        "name": "wasabiD",
+        "rawSpec": "^0.7.43",
+        "spec": ">=0.7.43 <0.8.0",
+        "type": "range"
+      },
+      "/Users/ALOG/Desktop/OMS"
+    ]
+  ],
+  "_cnpm_publish_time": 1487325353226,
+  "_from": "wasabiD@>=0.7.43 <0.8.0",
+  "_id": "wasabiD@0.7.90",
+  "_inCache": true,
+  "_location": "/wasabiD",
+  "_nodeVersion": "6.2.0",
+  "_npmOperationalInternal": {
+    "host": "packages-12-west.internal.npmjs.com",
+    "tmp": "tmp/wasabiD-0.7.90.tgz_1487325352971_0.3861839142628014"
+  },
+  "_npmUser": {
+    "name": "wangzhiyonglyk",
+    "email": "wangzhiyonglyk@163.com"
+  },
+  "_npmVersion": "3.8.9",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "wasabiD@^0.7.43",
+    "scope": null,
+    "escapedName": "wasabiD",
+    "name": "wasabiD",
+    "rawSpec": "^0.7.43",
+    "spec": ">=0.7.43 <0.8.0",
+    "type": "range"
+  },
+  "_requiredBy": [
+    "#DEV:/",
+    "#USER"
+  ],
+  "_resolved": "https://registry.npm.taobao.org/wasabiD/download/wasabiD-0.7.90.tgz",
+  "_shasum": "5af20228c11486b00c0e5b8a3d8e946150cea352",
+  "_shrinkwrap": null,
+  "_spec": "wasabiD@^0.7.43",
+  "_where": "/Users/ALOG/Desktop/OMS",
+  "author": {
+    "name": "wangzhiyong"
+  },
+  "bugs": {
+    "url": "https://github.com/wangzhiyonglyk/wasabi/issues"
+  },
+  "dependencies": {},
   "description": "wasabi design——心怡科技物流PC前端框架",
-  "main": "index.js",
+  "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "shasum": "5af20228c11486b00c0e5b8a3d8e946150cea352",
+    "size": 1480730,
+    "noattachment": false,
+    "tarball": "http://registry.npm.taobao.org/wasabiD/download/wasabiD-0.7.90.tgz"
+  },
+  "gitHead": "aa43e08fbfce8b054f26accdec22eb88ac5cc582",
+  "homepage": "https://github.com/wangzhiyonglyk/wasabiD#readme",
   "keywords": [
     "react",
     "wasabi",
     "alog"
   ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/wangzhiyonglyk/wasabiD.git"
-  },
-  "author": {
-    "name": "wangzhiyong"
-  },
+  "license": "ISC",
+  "main": "index.js",
   "maintainers": [
     {
       "name": "wangzhiyonglyk",
       "email": "wangzhiyonglyk@163.com"
     }
   ],
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/wangzhiyonglyk/wasabi/issues"
-  }
-
+  "name": "wasabiD",
+  "optionalDependencies": {},
+  "publish_time": 1487325353226,
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wangzhiyonglyk/wasabiD.git"
+  },
+  "scripts": {},
+  "version": "0.7.90"
 }
