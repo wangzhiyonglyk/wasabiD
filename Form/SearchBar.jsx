@@ -34,11 +34,11 @@ var SearchBar=React.createClass({
         //初始化时就获取可用宽度,如果每次更新获取,会产生晃动
         if(window.screen.availWidth<document.documentElement.clientWidth)
         {//屏幕可用宽度小,有滚动条
-            this.availWidth=window.screen.availWidth;
+            this.availWidth=window.screen.availWidth-50;
         }
         else {
-            //没有滚动条  现在每个页面留有左右20像素的边距 
-            this.availWidth=window.screen.availWidth-50;//防止后期出现滚动条,而产生样式变形,先减去滚动条宽度
+            //没有滚动条  现在每个页面留有左右20像素的边距
+            this.availWidth=window.screen.availWidth-40;//防止后期出现滚动条,而产生样式变形,先减去滚动条宽度
 
         }
 
