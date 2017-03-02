@@ -126,17 +126,30 @@ baseUtil.dateformat = function (date, format) {
 
     var isToday = false;
 
-    if (date.toLocaleDateString() == new Date().toLocaleDateString()) {
-        isToday = true;
-        date = new Date();
-    }
+    
+    //上一个人写的 
+    // if (date.toLocaleDateString() == new Date().toLocaleDateString()) {
+    //     isToday = true;
+    //     date = new Date();
+    // }
+    //
+    // var o = {
+    //     "M+": date.getMonth() + 1, //month
+    //     "d+": date.getDate(), //day
+    //     "h+": isToday ? date.getHours() : 23, //hour
+    //     "m+": isToday ? date.getMinutes() : 59, //minute
+    //     "s+": isToday ? date.getSeconds() : 59, //second
+    //     "q+": Math.floor((date.getMonth() + 3) / 3), //quarter
+    //     "S": date.getMilliseconds() //millisecond
+    // };
 
+    
     var o = {
         "M+": date.getMonth() + 1, //month
         "d+": date.getDate(), //day
-        "h+": isToday ? date.getHours() : 23, //hour
-        "m+": isToday ? date.getMinutes() : 59, //minute
-        "s+": isToday ? date.getSeconds() : 59, //second
+        "h+": date.getHours(), //hour
+        "m+": date.getMinutes(), //minute
+        "s+": date.getSeconds(), //second
         "q+": Math.floor((date.getMonth() + 3) / 3), //quarter
         "S": date.getMilliseconds() //millisecond
     };

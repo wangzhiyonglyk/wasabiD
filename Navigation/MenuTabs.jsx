@@ -44,7 +44,6 @@ class MenuTabs extends  React.Component {
             rightIndex:rightIndex,//可见的最后一个下标
             availWidth:resultWidth.availWidth,//可以宽度
             availNum: resultWidth.availNum,//可用个数
-
         }
     }
 
@@ -54,6 +53,7 @@ class MenuTabs extends  React.Component {
         homeUrl: React.PropTypes.string,//主页的链接地址
         userHandler: React.PropTypes.func,//用户个人中心按钮的单击事件
         userComponent:React.PropTypes.any,//用户自定义的组件
+        menuComponent:React.PropTypes.any,//用户自定义菜单栏组件
         tabNumChangeHandler: React.PropTypes.func,//标签页数据发生改变事件
 
     }
@@ -63,7 +63,8 @@ class MenuTabs extends  React.Component {
         homeUrl: null,
         userHandler: null,
         userComponent: null,//用户自定义组件
-        cellWidth: 151,//单元格默认宽度
+        menuComponent:null,
+        cellWidth: 121,//单元格默认宽度
         tabNumChangeHandler:null,//标签页数据发生改变事件
     }
 
@@ -82,7 +83,7 @@ class MenuTabs extends  React.Component {
         else if (this.props.userHandler) {//是否有用户按钮
             detractWidth += 40;
         }
-        var availWidth=document.body.getBoundingClientRect().width - detractWidth;
+        var availWidth=document.body.getBoundingClientRect().width - 200;
         var availNum = parseInt((availWidth) / this.props.cellWidth);
         return {
             availWidth: availWidth,//可用宽度
@@ -318,28 +319,33 @@ class MenuTabs extends  React.Component {
         }
 
         if (this.props.homeUrl ) {//如果有主页的话
+            tabobj.unshift(<Tab key={"tab"}  title={"首页"} index={-1}
+                                active={(this.state.homeActive)?true:false} clickHandler={this.homeHandler}
+                             closeHandler={tabCloseHandler} ></Tab>);
             sectionobj.unshift(<TabSection key={"homesection"} url={this.props.homeUrl}
                                            active={(this.state.homeActive)?true:false}></TabSection>)
         }
-
+        
         return (
             <div className="wasabi-nav-container">
                 <ul className=" wasabi-nav-tabs" ref="menutab">
-                    <li className={"tabmenu "+(this.state.menuVisible?"close":"")} style={{display:(this.props.menuHandler?"inline-block":"none")}} onClick={this.menuHandler}></li>
+                    <li className="tabmenu"></li>
                     <li className={"tabhome "+((this.state.homeActive)?"active":"")} style={{display:(this.props.homeUrl?"inline-block":"none")}} title="首页" onClick={this.homeHandler}>
-                        <div className="split"></div></li>
-
-                    <li className="left icon-left" onClick={this.leftClickHandler} style={{display:showArrow?"inline-block":"none"}}></li>
-                    <li className="content" style={{width:(showArrow?this.state.availWidth-80:this.state.availWidth)}}>
-                        <ul style={{left:this.state.left}}>  {tabobj}</ul>
+                        首页
                     </li>
-
-                    <li className="right icon-right" onClick={this.rightClickHandler} style={{display:showArrow?"inline-block":"none"}}></li>
+                    <li className="content" style={{width:document.documentElement.clientWidth-520}}>
+                        {this.props.menuComponent}
+                    </li>
                     <li style={{display:(this.props.userComponent||this.props.userHandler)?"inline-block":"none"}}
                         className={(this.props.userComponent?"tabuser-control":this.props.userHandler?"tabuser":"") }
                          onClick={this.userHandler}>{this.props.userComponent}
                     </li>
                 </ul>
+                <div className="tabWrap">
+                    <div className="left icon-left" onClick={this.leftClickHandler} style={{display:showArrow?"inline-block":"none"}}></div>
+                    <ul style={{left:this.state.left}}>  {tabobj}</ul>
+                    <div className="right icon-right" onClick={this.rightClickHandler} style={{display:showArrow?"inline-block":"none"}}></div>
+                </div>
                 { sectionobj}
 
             </div>);

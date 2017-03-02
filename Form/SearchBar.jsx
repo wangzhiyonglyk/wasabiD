@@ -34,11 +34,12 @@ var SearchBar=React.createClass({
         //初始化时就获取可用宽度,如果每次更新获取,会产生晃动
         if(window.screen.availWidth<document.documentElement.clientWidth)
         {//屏幕可用宽度小,有滚动条
-            this.availWidth=window.screen.availWidth;
+            this.availWidth=window.screen.availWidth-50;
         }
         else {
-            //没有滚动条
-            this.availWidth=window.screen.availWidth-10;//防止后期出现滚动条,而产生样式变形,先减去滚动条宽度
+            //没有滚动条  现在每个页面留有左右20像素的边距
+            this.availWidth=window.screen.availWidth-40;//防止后期出现滚动条,而产生样式变形,先减去滚动条宽度
+
         }
 
         return{
@@ -240,9 +241,9 @@ var SearchBar=React.createClass({
         }
 
         let columns=0;//每一行的列数
-
         //表单实际宽度
         let  actualWidth=this.props.width?this.props.width:this.availWidth;//总宽度
+
         let leftWidth=actualWidth-130;//左侧表单宽度
 
         let columnClass="";//列样式
@@ -292,7 +293,6 @@ var SearchBar=React.createClass({
                 break;
 
         }
-
         style.width=actualWidth;//设置表单的宽度
 
         this.state.dropType=="wasabi-button wasabi-searchbar-down"?style.height=54:style.height=null;//判断高度

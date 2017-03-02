@@ -54,9 +54,9 @@ var MenuTab=React.createClass({
                 <li className ={this.state.active?"active":""} style={{display:this.state.hide?"none":"inline-block"}}  title="双击可以关闭">
                     <a onDoubleClick={this.closeHandler}  onClick={this.clickHandler} >
                         <div className={"icon "+this.props.iconCls} style={{width:(this.props.iconCls==null?5:null)}}></div>
-                        <div className="closeicon icon-close" onClick={ this.closeHandler}></div>
+                        <div className={this.props.title=="首页"?"":"closeicon icon-close"} onClick={ this.closeHandler}></div>
 
-                        <div className="text" >{this.props.title}</div>
+                        <div className="text" title={this.props.title} >{this.props.title}</div>
                         <div className="split"></div>
                     </a></li>
             )

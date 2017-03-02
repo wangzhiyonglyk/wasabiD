@@ -7,18 +7,18 @@ var TabSection=React.createClass(
         propTypes:
             {
                 url:React.PropTypes.string,
-                active:React.PropTypes.bool
+                active:React.PropTypes.bool,
             },
 
         getDefaultProps:function()
         {
             return {
-                active:false
+                active:false,
             }
         },
         getInitialState:function()
         {
-            var  height=document.documentElement.clientHeight-40;
+            var  height=document.documentElement.clientHeight-80;
             return{
                 bodyHeight:height
             }
