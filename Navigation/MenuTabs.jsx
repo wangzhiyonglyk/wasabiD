@@ -44,14 +44,13 @@ class MenuTabs extends  React.Component {
             rightIndex:rightIndex,//可见的最后一个下标
             availWidth:resultWidth.availWidth,//可以宽度
             availNum: resultWidth.availNum,//可用个数
-
         }
     }
-
     static    propTypes = {
         tabs: React.PropTypes.array,//标签页数据
         menuHandler: React.PropTypes.func,//菜单按钮的单击事件
         homeUrl: React.PropTypes.string,//主页的链接地址
+        homeTitle:React.PropTypes.string,//主页的标题
         userHandler: React.PropTypes.func,//用户个人中心按钮的单击事件
         userComponent:React.PropTypes.any,//用户自定义的组件
         tabNumChangeHandler: React.PropTypes.func,//标签页数据发生改变事件
@@ -61,13 +60,12 @@ class MenuTabs extends  React.Component {
         tabs: null,
         menuHandler: null,
         homeUrl: null,
+        homeTitle:"我的桌面",//我的桌面
         userHandler: null,
         userComponent: null,//用户自定义组件
-        cellWidth: 151,//单元格默认宽度
+        cellWidth: 121,//单元格默认宽度
         tabNumChangeHandler:null,//标签页数据发生改变事件
     }
-
-
     setDeWidth() {//设置可以用宽度与可用个数
         var detractWidth = 0;//被减去的宽度,
         if (this.props.menuHandler) {//是否有菜单按钮
@@ -90,108 +88,36 @@ class MenuTabs extends  React.Component {
         }
     }
     componentWillReceiveProps(nextProps) {
-
-        var leftIndex=this.state.leftIndex;
-        var rightIndex=this.state.rightIndex;
-        if(nextProps.tabs instanceof  Array) {
-            if(nextProps.tabs.length<=this.state.availNum){//没有超过不管
-
-                leftIndex=0;
-                rightIndex=nextProps.tabs.length-1;
-            }
-            else{
-                if(nextProps.tabs.length>this.oldTabsLength){//追加了
-
-                    leftIndex=nextProps.tabs.length-this.state.availNum;
-                    rightIndex=nextProps.tabs.length-1;
-                }
-                else if(nextProps.tabs.length<this.oldTabsLength) {//减少了
-
-                    if(rightIndex<nextProps.tabs.length-1)
-                    {//不用处理，仍然可以显示
-
-                    }
-                    else
-                    {//左侧处理，右侧显示最后一个
-
-                        leftIndex=this.state.leftIndex-(this.oldTabsLength-nextProps.tabs.length);
-                        rightIndex=nextProps.tabs.length-1;
-                    }
-
-                }
-            }
-        }
-
-
         this.setState({
             tabs:( nextProps.tabs),
-            leftIndex:leftIndex,
-            rightIndex:rightIndex,
             homeActive: (nextProps.tabs&&nextProps.tabs.length>0)?false:true,//判断主页是否激活
             menuVisible: nextProps.menuVisible,//菜单按钮是否打开
         })
     }
-
     menuHandler() {//显示/隐藏菜单的事件
         this.setState({
             menuVisible: !this.state.menuVisible
         })
         this.props.menuHandler(!this.state.menuVisible);//回调父组件
     }
-    userHandler(){
-        if(this.props.userComponent)
-        {//如果自定义了组件，不处理
-
-        }
-        else
-        {
-            if(this.props.userHandler)
-            {
-                this.props.userHandler();//回调父组件
-            }
-        }
-
+    userHandler() {//用户中心单击事件
+        this.props.userComponent?this.props.userHandler?this.props.userHandler():void(0):void(0);//如果自定义了组件，不处理
     }
-
     homeHandler(){//主页的单击事件
-        var newTabs = this.state.tabs;
-        //当前激动的tab下标保存
-        for (var i = 0; i < newTabs.length; i++) {
-
-            newTabs[i].active = false;
-
-        }
         this.setState({
-            homeActive:true,
-            tabs:newTabs
+            homeActive:true,//激活主页
+            tabs:this.state.tabs.map((item,index)=>{item.active=false;return item;})
         })
-
     }
-
-
-
     tabClickHandler(index) {
-
         //页签单击事件
-        var newTabs = this.state.tabs;
-        //当前激动的tab下标保存
-        for (var i = 0; i < newTabs.length; i++) {
-            if (i == index) {
-                newTabs[index].active = true;
-            }
-            else {
-                newTabs[i].active = false;
-            }
-        }
         this.setState({
-            tabs: newTabs,
+            tabs: this.state.tabs.map((item,itemIndex)=>{return index==itemIndex?(()=>{item.active=true;return item;})():(()=>{item.active=false;return item;})()}),
             homeActive:false,
         });
     }
-
     tabCloseHandler(index) {
 
-        this.oldTabsLength=this.state.tabs.length;//保留旧的
         var newTabs =this.state.tabs;
         var parentuuid = newTabs[index].parentuuid;
         var parentIndex = null;//父页面的下标
@@ -223,32 +149,9 @@ class MenuTabs extends  React.Component {
         }
         newTabs.splice(index, 1);//删除
 
-        var leftIndex=this.state.leftIndex;
-        var rightIndex=this.state.rightIndex;
-
-
-        if(newTabs.length<=this.state.availNum){//没有超过不管
-            leftIndex=0;
-            rightIndex=newTabs.length-1;
-        }
-        else{
-            if(rightIndex<newTabs.length)
-            {//不用处理，仍然可以显示,注意这里的
-
-            }
-            else
-            {//左侧处理，右侧显示最后一个
-                leftIndex=leftIndex-1;
-                rightIndex=newTabs.length-1;
-            }
-
-
-        }
-
         this.setState({
             tabs: newTabs,
-            leftIndex:leftIndex,
-            rightIndex:rightIndex,
+
             homeActive:newTabs.length==0?true:false
         })
         if (this.props.tabNumChangeHandler) {
@@ -283,15 +186,6 @@ class MenuTabs extends  React.Component {
     render() {
         var tabobj = [];
         var sectionobj = [];
-        var tabclickHandler = this.tabClickHandler;
-        var tabCloseHandler = this.tabCloseHandler;
-        var showArrow=false;//是否显示箭头
-
-        if(this.state.tabs instanceof  Array) {
-            if (this.state.tabs.length > this.state.availNum) {//大于可用个数
-                showArrow = true;
-            }
-
             this.state.tabs.map((child, index) => {
                 if (child.active == true) {//保存当前激活标签uuid，用于子标签中打开新标签时设置其父标签
                     window.localStorage.setItem("alog_currentTabUUID", child.uuid);//保存当前激活节点，用于新建tab
@@ -306,18 +200,17 @@ class MenuTabs extends  React.Component {
 
                 }
                 tabobj.push(<Tab key={"tab" + index}  onContextMenu={this.headerContextMenuHandler} index={index}  title={child.title} iconCls={child.iconCls}
-                                 active={child.active} clickHandler={tabclickHandler}
-                                 closeHandler={tabCloseHandler} hide={(index>=this.state.leftIndex&&index<=this.state.rightIndex)?false:true} ></Tab>);
+                                 active={child.active} clickHandler={this.tabclickHandler}
+                                 closeHandler={this.tabCloseHandler} hide={(index>=this.state.leftIndex&&index<=this.state.rightIndex)?false:true} ></Tab>);
                 sectionobj.push(<TabSection key={"tabsection" + index} url={child.url}
                                             active={(this.state.homeActive) ? false : child.active}
                                             content={child.content}></TabSection>);
             });
-        }
-        else {
-
-        }
 
         if (this.props.homeUrl ) {//如果有主页的话
+            tabobj.unshift(<Tab key={"tab"}  title={this.props.homeTitle} index={-1}
+                                active={(this.state.homeActive)?true:false} clickHandler={this.homeHandler}
+                             closeHandler={this.tabCloseHandler} ></Tab>);
             sectionobj.unshift(<TabSection key={"homesection"} url={this.props.homeUrl}
                                            active={(this.state.homeActive)?true:false}></TabSection>)
         }
@@ -326,18 +219,17 @@ class MenuTabs extends  React.Component {
             <div className="wasabi-nav-container">
                 <ul className=" wasabi-nav-tabs" ref="menutab">
                     <li className={"tabmenu "+(this.state.menuVisible?"close":"")} style={{display:(this.props.menuHandler?"inline-block":"none")}} onClick={this.menuHandler}></li>
-                    <li className={"tabhome "+((this.state.homeActive)?"active":"")} style={{display:(this.props.homeUrl?"inline-block":"none")}} title="首页" onClick={this.homeHandler}>
+                    <li className={"tabhome "+((this.state.homeActive)?"active":"")} style={{display:(this.props.homeUrl?"inline-block":"none")}}  onClick={this.homeHandler}>
                         <div className="split"></div></li>
 
-                    <li className="left icon-left" onClick={this.leftClickHandler} style={{display:showArrow?"inline-block":"none"}}></li>
-                    <li className="content" style={{width:(showArrow?this.state.availWidth-80:this.state.availWidth)}}>
-                        <ul style={{left:this.state.left}}>  {tabobj}</ul>
-                    </li>
 
-                    <li className="right icon-right" onClick={this.rightClickHandler} style={{display:showArrow?"inline-block":"none"}}></li>
+                    <li className="content" style={{width:this.state.availWidth}}>
+                        <ul > {tabobj}</ul>
+                        <div className="scrollbar"></div>
+                    </li>
                     <li style={{display:(this.props.userComponent||this.props.userHandler)?"inline-block":"none"}}
                         className={(this.props.userComponent?"tabuser-control":this.props.userHandler?"tabuser":"") }
-                         onClick={this.userHandler}>{this.props.userComponent}
+                        onClick={this.userHandler}>{this.props.userComponent}
                     </li>
                 </ul>
                 { sectionobj}
