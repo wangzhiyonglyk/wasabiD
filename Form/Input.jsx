@@ -47,8 +47,6 @@ var Input=React.createClass({
             "gridpicker",//列表选择
             "treepicker",//下拉树选择
             "panelpicker",//面板选择
-            "button",//普通按钮
-            "linkbutton",//链接按钮
             "muti"//多行文本
         ]),//输入框的类型
         name:React.PropTypes.string.isRequired,//字段名
@@ -273,7 +271,7 @@ var Input=React.createClass({
         {//空占位组件
             control=<None ref="input" {...props } ></None>
         }
-       else  if(type=="radio")
+        else  if(type=="radio")
         {//单选按钮组
             control=<Radio ref="input" {...props } onSelect={this.onSelect}></Radio>
         }
@@ -302,11 +300,11 @@ var Input=React.createClass({
         if(this.props.type=="button")
         {
 
-           return <div className={componentClassName} style={style}>   <Button {...this.props} title={this.props.label} onClick={this.buttonClick}></Button></div>
+            return <div className={componentClassName} style={style}>   <Button {...this.props} title={this.props.label} onClick={this.buttonClick}></Button></div>
         }
         else if(this.props.type=="linkbutton") {
             return <div className={componentClassName} style={style}><LinkButton {...this.props} title={this.props.label}
-                                                                   onClick={this.buttonClick}></LinkButton></div>
+                                                                                 onClick={this.buttonClick}></LinkButton></div>
         }
         else
         {
