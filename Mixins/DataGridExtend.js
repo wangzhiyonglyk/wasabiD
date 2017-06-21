@@ -473,47 +473,7 @@ let DataGridExtend= {
         })
 
     },
-    headerFilterHandler:function (remoteHeaders) {
-        if(remoteHeaders&&remoteHeaders instanceof  Array) {
-            let newHeaders=[];
-            remoteHeaders.map((header,index)=>{
-                try {
-                    if(header.name&&header.label&&(header.hide!=null&&header.hide!=undefined)) {
-                        let filterResult = this.state.headers.filter((filterHeader, filterIndex) => {
-                            return header.name == filterHeader.name;
-                        });
-                        if (filterResult.length > 0) {//说明该列的显示方式已经定义过了，则使用旧的
 
-                            newHeaders.push(filterResult[0]);//
-                        }
-                        else {//说明没有，则添加
-                            newHeaders.push(header);//
-
-                        }
-                    }
-                    else
-                    {
-                        throw new Error("返回的headerData 数据格式不对:{name:'',label:'',hide:true}");
-                    }
-                }
-                catch(e) {
-                    throw new Error(e.message);
-                }
-
-            })
-            return {
-                remoteHeaders:remoteHeaders,
-                 headers:newHeaders
-            }
-        }
-        else
-        {
-            return {
-                remoteHeaders:remoteHeaders,
-                headers:this.state.headers
-            }
-        }
-    },
 
     //表格内部修改的监听事件
     rowEditHandler:function (columnIndex,value, text, name, data) {  //表格内部修改的监听事件

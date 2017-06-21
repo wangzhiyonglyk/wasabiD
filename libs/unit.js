@@ -334,7 +334,7 @@ baseUtil.fetch = {
         ).then((res)=>{
             if(res.ok){
                 try {
-                    res.json().then((result)=>{
+                    res.json().then((result)=>{      
                         result= this.formatResult(result);//如果是心怡科技旧系统,数据转为标准格式
                         if(result.success){
                             fetchmodel.success&&fetchmodel.success(result);

@@ -18,7 +18,7 @@ let Single=React.createClass({
             controller: React.PropTypes.string.isRequired,//控制器名称
             key:React.PropTypes.string,//主键名称
             corsUrl: React.PropTypes.string,//跨域地址
-            tocket: React.PropTypes.string,//每次请求时附加的身份等参数
+        
             params: React.PropTypes.object,//默认的筛选条件
             modelUrl:React.PropTypes.string,//数据模型地址url
             getUrl:React.PropTypes.string,//实例地址url
@@ -36,7 +36,6 @@ let Single=React.createClass({
                 controller: null,
                 key:"id",
                 corsUrl: "/",//默认当前域名下
-                tocket: "",//附加的参数为空
                 params:null,//默认条件为空
                 modelUrl:null,
                 getUrl:null,
@@ -51,6 +50,8 @@ let Single=React.createClass({
         },
         getInitialState: function () {
             return {
+                panelTitle:"",//面板标题
+                opType:"",//当前操作类型
                 modelUrl:this.modelUrl(),//生成单表数据模型的url地址,
                 getUrl:null,//生成实例url地址
                 addUrl: null,//生成新增url地址
@@ -61,7 +62,7 @@ let Single=React.createClass({
                 filterModel: [],//筛选数据模型
                 model: [],//表单模型,
                 disabled: false,//表单是否只读
-                btttons: [],//操作按钮模型
+                buttons: [],//操作按钮模型
                 headers: [],//列表表头
                 submitButton:this.submitButton(false),//提交按钮对象
                 params: this.props.params,//列表筛选条件
@@ -78,12 +79,12 @@ let Single=React.createClass({
                     <SearchBar ref="searchbar" model={this.state.filterModel}
                                filterHandler={this.filterHandler}></SearchBar></div>
                 <div
-                    style={{display:(this.state.buttons==null ||(this.state.btttons instanceof Array&&this.state.btttons.length==0))?"none":"block"}}>
+                    style={{display:(this.state.buttons==null ||(this.state.buttons instanceof Array&&this.state.buttons.length==0))?"none":"block"}}>
                     <Toolbar ref="toolbar" buttons={this.state.buttons} buttonClick={this.btnHandler}></Toolbar>
                 </div>
                 <DataGrid ref="datagrid" url={this.state.pageUrl} params={this.state.params}
                           headers={this.state.headers}></DataGrid>
-                <SlidePanel ref="slide" title={this.props.title} buttons={[ this.state.submitButton]} buttonClick={this.submitHandler}>
+                <SlidePanel ref="slide" title={this.state.panelTitle} buttons={[ this.state.submitButton]} buttonClick={this.submitHandler}>
                     <Form ref="form" model={this.state.model} submitHide={true} closeHide={true}
                           disabled={this.state.disabled}></Form>
                 </SlidePanel>

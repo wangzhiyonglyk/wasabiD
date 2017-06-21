@@ -4,7 +4,7 @@
  */
 class ButtonModel
 {
-    constructor(name,title,theme="none")
+    constructor(name,title,theme="default")
     {
         this.name=name;
         this.title=title;

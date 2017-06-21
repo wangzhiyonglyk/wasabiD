@@ -12,6 +12,9 @@ class SlidePanel extends  React.Component{
     constructor(props) {
         super(props);
         this.state={
+            title:this.props.title,
+            buttons:this.props.buttons,
+            buttonClick:this.props.buttonClick,
             panelwidth:0,//总宽度
             containerwidth:0,//容器宽度
             leftwidth:0,//左侧滑块宽度
@@ -34,6 +37,10 @@ class SlidePanel extends  React.Component{
         buttons:[],
         buttonClick:null,
         url:null
+    }
+    componentWillReceiveProps(nextProps)
+    {
+        this.setState({...nextProps});
     }
 
      open() {//打开事件，用于外部调用
@@ -66,8 +73,8 @@ class SlidePanel extends  React.Component{
 
     }
     buttonClick(name,title) {
-        if (this.props.buttonClick != null) {
-            this.props.buttonClick(name, title);
+        if (this.state.buttonClick != null) {
+            this.state.buttonClick(name, title);
         }
     }
     render() {
@@ -76,7 +83,7 @@ class SlidePanel extends  React.Component{
                 <div className="slide-container" style={{width:this.state.containerwidth}}>
 
                         <div className="slide-header">
-                            <div className="title">{this.props.title}</div>
+                            <div className="title">{this.state.title}</div>
 
 
                         </div>
@@ -88,7 +95,7 @@ class SlidePanel extends  React.Component{
                         </div>
                     <div className="slide-footer">
 
-                            <div className="slide-toolbar"><Toolbar buttons={this.props.buttons} buttonClick={this.buttonClick}></Toolbar></div>
+                            <div className="slide-toolbar"><Toolbar buttons={this.state.buttons} buttonClick={this.buttonClick}></Toolbar></div>
                         <div className="slide-close">
                             <Button name="close" title="关闭" onClick={this.slideHandler}></Button>
                         </div>
