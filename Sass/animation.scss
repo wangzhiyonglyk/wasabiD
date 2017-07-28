@@ -1,10 +1,4 @@
 
-ul{
-  list-style: none;
-  margin: 0px;
-  padding: 0px;
-}
-
 /*
 自定义文本显示方式
 */
@@ -15,13 +9,32 @@ ul{
   white-space: nowrap;
   text-overflow: ellipsis;
   display: inline;
-  float:left;
 }
 
 /*
 用于清除浮动时父容器的高度问题
 */
-.clear{ clear:both}
+.clearfix { 
+
+  *zoom: 1; 
+
+} 
+.clearfix:before, 
+.clearfix:after { 
+  display: table; 
+  line-height: 0; 
+
+  content: ""; 
+
+} 
+
+ 
+
+.clearfix:after { 
+
+  clear: both; 
+
+} 
 
 
 /*
