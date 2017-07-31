@@ -144,7 +144,7 @@ let Button = React.createClass({
         }
         return (
 
-            <button {...props} onClick={this.clickHandler} type="button">{this.state.title}</button>
+            <button {...props} className="" onClick={this.clickHandler} type="button">{this.state.title}</button>
         )
     }
 
