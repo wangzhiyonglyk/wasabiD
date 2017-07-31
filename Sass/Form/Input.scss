@@ -81,21 +81,22 @@ label
 普通input
 */
 .wasabi-form-control {
-  display: block;
-  width:100%;
-  padding: 6px;
-  font-size: 12px;
-  font-weight: normal!important;
-  line-height: 34px;
-  height: 34px;
-  background-color: #fff;
-  background-image: none;
-  border: 1px solid #d7dde2;
-  -webkit-transition: border-color ease-in-out .6s, box-shadow ease-in-out .6s;
-  transition: border-color ease-in-out .6s, box-shadow ease-in-out .6s;
-  outline: none;
-  overflow: hidden;
-  resize: none;
+       display: block;
+    width: 100%;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
 }
 .wasabi-form-control[disabled], .wasabi-form-control[readonly]{
   background-color: #eee;
@@ -104,7 +105,7 @@ label
 }
 .wasabi-form-control:focus {
   border-color: #25d7b9;
-
+    box-shadow: none;
 }
 
 .combobox
@@ -124,7 +125,7 @@ label
 input验证失败
 */
 .wasabi-has-error .wasabi-form-control{
-  border-color: #de2c3b;
+  border-color: #ed5565;
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
 
 }
@@ -132,32 +133,33 @@ input验证失败
 input验证失败
 */
 .wasabi-has-error .checkbox-label{
-  border-color: #de2c3b!important;
+  border-color: #ed5565!important;
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
 
 }
 
 .wasabi-has-error .wasabi-radio-btn{
-  border-color: #de2c3b;
+  border-color: #ed5565;
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
 
 }
 /*
-input验证通过,暂时没用
+input验证通过
 */
 .wasabi-has-success .wasabi-form-control {
-  border-color: #3c763d;
+  border-color: #1ab394;
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+  
 }
 
 .wasabi-has-success input[type="checkbox"]{
-  border-color: #3c763d;
+  border-color: #1ab394;
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
 
 }
 
 .wasabi-has-success input[type="radio"]{
-  border-color: #3c763d;
+  border-color: #1ab394;
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
 
 }
@@ -180,7 +182,7 @@ input验证通过,暂时没用
   position: absolute;
   width: 120px;
   height: 20px;
-  background: #de2c3b;
+  background: #ed5565;
   color: #ffffff;
   border-radius: 2px;
   white-space: nowrap;
