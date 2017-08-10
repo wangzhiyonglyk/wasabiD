@@ -2,7 +2,6 @@
 按钮样式
 */
 @import url("../base.scss");
-
 .wasabi-button
 {
       display: inline-block;
@@ -20,6 +19,7 @@
     user-select: none;
     background-image: none;
     border: 1px solid transparent;
+    position: relative;
   
 }
 .wasabi-button.size-large{

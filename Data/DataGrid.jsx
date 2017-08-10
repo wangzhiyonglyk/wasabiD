@@ -280,7 +280,7 @@ var DataGrid = React.createClass({
             if (this.props.singleSelect == true) {
                 headers.push(
                     <th key="headercheckbox" className="check-column" name="check-column" style={{ width: 35 }} >
-                        <div className="wasabi-table-cell" name="check-column" ></div>
+                        <div className="wasabi-grid-cell" name="check-column" ></div>
                     </th>
 
                 );
@@ -288,7 +288,7 @@ var DataGrid = React.createClass({
             else {
                 headers.push(
                     <th key="headercheckbox" className="check-column" name="check-column" style={{ width: 35 }} >
-                        <div className="wasabi-table-cell" name="check-column"><CheckBox {...props} ></CheckBox></div>
+                        <div className="wasabi-grid-cell" name="check-column"><CheckBox {...props} ></CheckBox></div>
                     </th>
                 );
             }
@@ -336,7 +336,7 @@ var DataGrid = React.createClass({
                             onMouseMove={this.headerMouseMoveHandler}
                             onContextMenu={this.headerContextMenuHandler}
                             onMouseDown={this.headerMouseDownHandler}>
-                            <div className="wasabi-table-cell" name={header.label} style={{
+                            <div className="wasabi-grid-cell" name={header.label} style={{
                                 width: (header.width ? header.width : null),
                                 textAlign: (header.align ? header.align : "left")
                             }}><span>{header.label}</span>{menuControl}{savecontrol}</div>
@@ -374,14 +374,14 @@ var DataGrid = React.createClass({
                 if (this.props.singleSelect == true) {
                     tds.push(
                         <td key={"bodycheckbox" + rowIndex.toString()} className="check-column" style={{ width: 35 }}>
-                            <div className="wasabi-table-cell" > <Radio {...props} ></Radio></div></td>
+                            <div className="wasabi-grid-cell" > <Radio {...props} ></Radio></div></td>
                     );
 
                 }
                 else {
                     tds.push(
                         <td key={"bodycheckbox" + rowIndex.toString()} className="check-column" style={{ width: 35 }}>
-                            <div className="wasabi-table-cell"  ><CheckBox {...props} ></CheckBox></div></td>
+                            <div className="wasabi-grid-cell"  ><CheckBox {...props} ></CheckBox></div></td>
                     );
                 }
             }
@@ -425,7 +425,7 @@ var DataGrid = React.createClass({
                     tds.push(<td onClick={this.onClick.bind(this, rowIndex, rowData)}
                         onDoubleClick={this.onDoubleClick.bind(this, rowIndex, rowData)}
                         key={"col" + rowIndex.toString() + "-" + columnIndex.toString()}
-                    ><div className="wasabi-table-cell" style={{ width: (header.width ? header.width : null), textAlign: (header.align ? header.align : "left") }}>
+                    ><div className="wasabi-grid-cell" style={{ width: (header.width ? header.width : null), textAlign: (header.align ? header.align : "left") }}>
                             <Input {...header.editor.options} type={header.editor.type} value={currentValue} text={currentText} onChange={this.rowEditHandler.bind(this, columnIndex)}
                                 onSelect={this.rowEditHandler.bind(this, columnIndex)} label={""}></Input>
                         </div></td>);
@@ -441,7 +441,7 @@ var DataGrid = React.createClass({
 
                         tds.push(<td onClick={this.detailHandler.bind(this, rowIndex, rowData)}
                             key={"col" + rowIndex.toString() + "-" + columnIndex.toString()}>
-                            <div className="wasabi-table-cell" style={{ width: (header.width ? header.width : null), textAlign: (header.align ? header.align : "left") }}>
+                            <div className="wasabi-grid-cell" style={{ width: (header.width ? header.width : null), textAlign: (header.align ? header.align : "left") }}>
                                 <div style={{ float: "left" }}> {content}</div><LinkButton iconCls={iconCls} color="#666666" tip="查看详情"></LinkButton>
                             </div>
                         </td>);
@@ -450,7 +450,7 @@ var DataGrid = React.createClass({
                         tds.push(<td onClick={this.onClick.bind(this, rowIndex, rowData)}
                             onDoubleClick={this.onDoubleClick.bind(this, rowIndex, rowData)}
                             key={"col" + rowIndex.toString() + "-" + columnIndex.toString()}
-                        ><div className="wasabi-table-cell" style={{ width: (header.width ? header.width : null), textAlign: (header.align ? header.align : "left") }}>{content}</div></td>);
+                        ><div className="wasabi-grid-cell" style={{ width: (header.width ? header.width : null), textAlign: (header.align ? header.align : "left") }}>{content}</div></td>);
                     }
                 }
 
@@ -529,54 +529,8 @@ var DataGrid = React.createClass({
         }
 
     },
+ 
     renderPagination: function (type) {//显示分页控件
-        var paginationCom = null;
-        if (this.props.pagination) {
-
-            var pageTotal = (parseInt(this.state.total / this.state.pageSize));//共多少页
-            if ((this.state.total % this.state.pageSize) > 0) {
-                pageTotal++;//求余后得到最终总页数
-            }
-            if (pageTotal == 0) {//数据为空，直接返回
-                return null;
-            }
-
-            if (pageTotal > 3) {//大于3页，
-                let pageComponent = [];//分页组件
-                //简化显示方式，否则在grid嵌套时，而数据过多时无法显示完整
-                paginationCom = <div className="pull-right pagination">
-                    <ul className="pagination" style={{ marginTop: type == "top" ? 0 : 4, marginBottom: type == "top" ? 4 : 0 }}>
-                        <li key={"lipre"} className="page-pre"><a href="javascript:void(0)" onClick={this.prePaginationHandler}>{"<"}</a></li>
-
-                        <li key="linext" className="page-next"><a href="javascript:void(0)" onClick={this.nextPaginationHandler} >{">"}</a></li>
-                    </ul>
-                </div>;
-            }
-            else {
-                //小于3页直接显示
-                let pagearr = [];
-                for (let i = 0; i < pageTotal; i++) {
-                    var control = <li key={"li" + i} className={"page-number " + ((this.state.pageIndex * 1) == (i + 1) ? "active" : "")}>
-                        <a href="javascript:void(0)" onClick={this.paginationHandler.bind(this, (i + 1))}>{(i + 1)}</a></li>;
-                    pagearr.push(control);
-                }
-                paginationCom = (
-                    <div className="pull-right">
-                        <ul className="pagination" >
-                            {
-                                pagearr
-                            }
-                        </ul>
-                    </div>
-                )
-
-            }
-
-        }
-        return paginationCom;
-
-    },
-    renderPaginationTwo: function (type) {//显示分页控件
         var paginationCom = null;
         if (this.props.pagination) {
 
@@ -660,7 +614,7 @@ var DataGrid = React.createClass({
     renderFooter: function () {//渲染页脚
         var tds = [];
         this.footerActualData = [];//,页脚的实际统计数据，用于返回
-        if (this.state.footer instanceof Array) {
+        if (this.state.footer instanceof Array&&this.state.footer.length>0) {
             //分页的情况下
             if (this.props.selectAble) {
                 tds.push(
@@ -743,15 +697,15 @@ var DataGrid = React.createClass({
             })
         }
         return (
-            <div className="wasabi-table" ref="grid"
+            <div className="wasabi-grid" ref="grid"
                 onPaste={this.onPaste}
                 onMouseDown={this.gridMouseDownHandler}
                 onContextMenu={this.gridContextMenuHandler}
                 style={{ width: this.props.width, height: gridHeight }}  >
-                <div className="wasabi-table-pagination" ref="toppagination"
+                <div className="wasabi-grid-pagination" ref="toppagination"
                     style={{ display: (this.props.pagePosition == "top" || this.props.pagePosition == "both") ? this.props.pagination ? "block" : "none" : "none" }}>
                     <div style={{ display: (this.props.pagination ? "block" : (this.state.data instanceof Array && this.state.data.length > 0) ? "block" : "none") }}>
-                        {this.renderPaginationTwo("top")}
+                        {this.renderPagination("top")}
                     </div>
                     {this.renderTotal()}
 
@@ -780,31 +734,34 @@ var DataGrid = React.createClass({
                                 {
                                     this.renderBody()
                                 }
-                                {
+                              
+                            </tbody>
+                             <tfoot>
+                                  {
                                     this.renderFooter()
                                 }
-                            </tbody>
+                             </tfoot>
                         </table>
                     </div></div>
-                <div className="wasabi-table-pagination" ref="bottompagination"
+                <div className="wasabi-grid-pagination" ref="bottompagination"
                     style={{ display: (this.props.pagination ? "block" : (this.props.pagePosition == "bottom" || this.props.pagePosition == "both") ? "block" : "none") }}>
                     <div style={{ display: (this.props.pagination ? "block" : (this.state.data instanceof Array && this.state.data.length > 0) ? "block" : "none") }}>
-                        {this.renderPaginationTwo()}
+                        {this.renderPagination()}
                     </div>
                     {this.renderTotal()}
 
                 </div>
-                <div className="wasabi-table-loading" style={{ display: this.state.loading == true ? "block" : "none" }}></div>
+                <div className="wasabi-grid-loading" style={{ display: this.state.loading == true ? "block" : "none" }}></div>
                 <div className="wasabi-load-icon" style={{ display: this.state.loading == true ? "block" : "none" }}></div>
-                <div onMouseUp={this.divideMouseUpHandler} ref="tabledivide" className="wasabi-table-divide" style={{ top: (this.props.pagePosition == "top" || this.props.pagePosition == "both") ? 35 : 0 }}></div>
+                <div onMouseUp={this.divideMouseUpHandler} ref="tabledivide" className="wasabi-grid-divide" style={{ top: (this.props.pagePosition == "top" || this.props.pagePosition == "both") ? 35 : 0 }}></div>
                 <div className="wasabi-header-menu-container" ref="headermenu">
                     <ul className="wasabi-header-menu">
                         <li key="first"><a href="javascript:void(0);" className="header-menu-item" onMouseDown={this.menuHideHandler} >隐藏此列</a></li>
                         {headerMenuCotrol}
                     </ul>
                 </div>
-                <div className="wasabi-table-panel" style={{ height: this.state.panelShow ? 350 : 0, border: this.state.panelShow ? null : "none" }}>
-                    <div className="wasabi-table-panel-body"> {this.state.menuPanel}</div>
+                <div className="wasabi-grid-panel" style={{ height: this.state.panelShow ? 350 : 0, border: this.state.panelShow ? null : "none" }}>
+                    <div className="wasabi-grid-panel-body"> {this.state.menuPanel}</div>
                 </div>
             </div>);
     }

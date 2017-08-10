@@ -1,35 +1,35 @@
 /**
-列表样式。create by wangzy
+列表样式
  */
 @import url("../base.scss");
-.wasabi-table {
+.wasabi-grid {
   width: 100%;
   position: relative;
   overflow: hidden;
 
 }
 /*
-表格内部一组件的样式
+列表内部一组件的样式
 */
-.wasabi-table .wasabi-form-group
+.wasabi-grid .wasabi-form-group
 {
   padding:0px;
   min-height:0px;
 }
-.wasabi-table .wasabi-checkul
+.wasabi-grid .wasabi-checkul
 {
   margin: 0px;
   padding: 0px;
   height: 12px;
 }
-.wasabi-table .wasabi-checkul li
+.wasabi-grid .wasabi-checkul li
 {
   margin:0px;
   padding:0px;
   height: 12px;
   width: 12px;
 }
-.wasabi-table .wasabi-checkul .checkbox + label {
+.wasabi-grid .wasabi-checkul .checkbox + label {
   top: 0px;
   left: 0px;
   margin: 0px;
@@ -38,7 +38,7 @@
    /*
    表格容器
    */
- .wasabi-table .table-container {
+ .wasabi-grid .table-container {
    width: 100%;
    position: relative;
    overflow: hidden;
@@ -46,7 +46,7 @@
 /*
 固定表头容器
 */
-.wasabi-table .table-fixed
+.wasabi-grid .table-fixed
 {
   margin-bottom: 0px;
   width: 100%;
@@ -59,9 +59,9 @@
 
 
 /*
-表格容器
+真实表格容器
 */
-.wasabi-table .table-realTable {
+.wasabi-grid .table-realTable {
   width: 100%;
   overflow: auto;
   margin-bottom: 1px;
@@ -69,40 +69,42 @@
 /*
 表格基本样式
 */
-.wasabi-table .table {
-  border: 1px solid #e3e4e5;
-  border-spacing: 0;
-  border-collapse: collapse;
-  width: 100%;
-
+.wasabi-grid .table {
+    clear: both;
+    margin-top: 6px ;
+    margin-bottom: 6px ;
+    max-width: none;
+    border: 1px solid #EBEBEB;
+    width: 100%;
+    border-spacing: 0;
+    border-collapse: collapse;
+    background-color: transparent;
+    box-sizing: border-box;
 }
-
-.wasabi-table .table > thead > tr > th
-{
-  background-color: #eff0f1;
-
+.table td,.table th
+{    border: 1px solid #e7e7e7;
+    line-height: 1.42857;
+   padding: 8px;
+    vertical-align: middle;
+    box-sizing: border-box;
 }
-.wasabi-table .table > thead > tr > th,
-.wasabi-table .table > tbody > tr > td {
-  border-right: 1px solid #e3e4e5;
-  border-bottom: 1px solid #e3e4e5;
-  padding: 0px;
+  // 增加视觉效果
+.table>thead>tr>th {
+     border-bottom: 1px solid #DDD;
+     font-size: 13px;
 }
-//.wasabi-table .table > thead > tr > th:last-child
-//{
-//  border-right: 0px;
-//}
-//.wasabi-table .table >  tbody > tr > td:last-child
-//{
-//  border-right: 0px;
-//}
 
 /*
 没有边框的时候
 */
 
-.wasabi-table .table.table-no-bordered > tbody > tr > td {
-  border-right: 1px solid transparent;
+ .table.table-no-bordered td, {
+   border: none;
+   border-top: 1px solid #e7e7e7;
+}
+ .table.table-no-bordered th {
+   border: none;
+   border-bottom: 1px solid #DDD;
 }
 
 
@@ -112,31 +114,28 @@
 背景颜色
 */
 
-.wasabi-table .table > tbody > tr.even {
-  background-color: #f5f6f7;
+.wasabi-grid .table > tbody > tr:nth-of-type(odd) {
+    background-color: #f9f9f9;
 }
-.wasabi-table .table > tbody > tr.selected {
-  background-color: #d1ecf3; }
+.wasabi-grid .table > tbody > tr.selected {
+  background-color: #d1ecf3;
+ }
 
-.wasabi-table .table > tbody > tr:hover {
-  background-color: #dcf9f8;
+.wasabi-grid .table > tbody > tr:hover {
+    background-color: #f5f5f5;
 }
-.wasabi-table .table > tbody > tr.selected:hover {
+.wasabi-grid .table > tbody > tr.selected:hover {
   background-color: #d1ecf3;
 }
 /*
 单元格样式
 */
-.wasabi-table .wasabi-table-cell{
-  padding-top: 14px;
-  padding-bottom: 14px;
-  padding-left: 10px;
-  padding-right: 10px;
+.wasabi-grid .wasabi-grid-cell{
   display: inline-block;
   width: 100%;
   overflow: visible;
 }
-.wasabi-table .wasabi-table-cell .wasabi-form-group{
+.wasabi-grid .wasabi-grid-cell .wasabi-form-group{
   width: 100%;
 }
 
@@ -147,21 +146,21 @@
 排序样式
 */
 
-.wasabi-table thead th.both {
+.wasabi-grid thead th.both {
   cursor: pointer;
   background-position:95% 50%;
   background-repeat: no-repeat;
   background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAQAAADYWf5HAAAAkElEQVQoz7X QMQ5AQBCF4dWQSJxC5wwax1Cq1e7BAdxD5SL+Tq/QCM1oNiJidwox0355mXnG/DrEtIQ6azioNZQxI0ykPhTQIwhCR+BmBYtlK7kLJYwWCcJA9M4qdrZrd8pPjZWPtOqdRQy320YSV17OatFC4euts6z39GYMKRPCTKY9UnPQ6P+GtMRfGtPnBCiqhAeJPmkqAAAAAElFTkSuQmCC');
 }
 
-.wasabi-table thead th.asc {
+.wasabi-grid thead th.asc {
   cursor: pointer;
   background-position:95% 50%;
   background-repeat: no-repeat;
   background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAYAAAByUDbMAAAAZ0lEQVQ4y2NgGLKgquEuFxBPAGI2ahhWCsS/gDibUoO0gPgxEP8H4ttArEyuQYxAPBdqEAxPBImTY5gjEL9DM+wTENuQahAvEO9DMwiGdwAxOymGJQLxTyD+jgWDxCMZRsEoGAVoAADeemwtPcZI2wAAAABJRU5ErkJggg==');
 }
 
-.wasabi-table thead th.desc {
+.wasabi-grid thead th.desc {
   cursor: pointer;
   background-position:95% 50%;
   background-repeat: no-repeat;
@@ -175,98 +174,18 @@
 /*
 借用了bootstrap的pagination
 */
-.pull-right {
-  height: 35px;
-  float: right;
-  margin-right: 15px;
-}
-.pagination {
-  display: inline-block;
-  padding-left: 0;
-  margin: 0px;
-  border-radius: 4px;
-  margin-left: 12px;
-}
-.pagination > li {
-  display: inline;
-}
-.pagination > li > a,
-.pagination > li > span {
-  position: relative;
-  float: left;
-  padding: 6px 12px;
-  line-height: 1.42857143;
-  text-decoration: none;
-  background-color: #f5f6f7;
-  border: 1px solid #e3e4e5;
-  margin-left: -1px;
-}
 
-.pagination > li > a:hover,
-.pagination > li > span:hover,
-.pagination > li > a:focus,
-.pagination > li > span:focus {
-
-  color: #2ec9c2;
-  background-color: #ffffff;
-  cursor: default;
-}
-.pagination > .active > a,
-.pagination > .active > span,
-.pagination > .active > a:hover,
-.pagination > .active > span:hover,
-.pagination > .active > a:focus,
-.pagination > .active > span:focus {
-
-  color: #2ec9c2;
-  background-color: #ffffff;
-  cursor: default;
-}
-.wasabi-table-pagination
+.wasabi-grid-pagination
 {
   display: block;
   padding-top: 0px;
   height: 35px;
 }
-.wasabi-table-pagination .pagination-detail {
-  padding-left:20px;
-  float:right;
-  padding-top: 10px;
-
-}
-
-.wasabi-table-pagination div.pagination .pagination {
-  margin: 0;
-}
-
-.wasabi-table-pagination .pagination a {
-  padding: 6px 12px;
-  line-height: 1.428571429;
-}
-
-.wasabi-table-pagination .pagination-info {
-
-  margin-right: 5px;
-}
-
-.wasabi-table-pagination .btn-group {
-  position: relative;
-  display: inline-block;
-  vertical-align: middle;
-}
-
-.wasabi-table-pagination .dropup .dropdown-menu {
-  margin-bottom: 0;
-}
-
-.wasabi-table-pagination .page-list {
-  display: inline-block;
-}
 
 /*
 正在加载
 */
-.wasabi-table .wasabi-table-loading {
+.wasabi-grid .wasabi-grid-loading {
   position: absolute;
   float: left;
   top: 0px;
@@ -280,7 +199,7 @@
 }
 
 
-.wasabi-table  .wasabi-load-icon
+.wasabi-grid  .wasabi-load-icon
 {
 
   position: absolute;
@@ -292,7 +211,9 @@
   width:16px;
   height: 16px;
 }
-.wasabi-table .wasabi-table-divide
+
+/*拖动时的分隔线*/
+.wasabi-grid .wasabi-grid-divide
 {
   position: absolute;
   height: 100%;
@@ -304,7 +225,8 @@
   background-color: #dedede;
 
 }
-.wasabi-table .wasabi-header-menu-container {
+/*表头菜单容器*/
+.wasabi-grid .wasabi-header-menu-container {
   z-index: 2;
   position: absolute;
   display: none;
@@ -312,7 +234,7 @@
   width: 120px;
   top: 0px;
   left: 0px;
-
+/*表头菜单*/
   .wasabi-header-menu {
     float: left;
     min-width: 160px;
@@ -346,7 +268,8 @@
   }
 
 }
-.wasabi-table .wasabi-table-panel {
+// 表头面板容器
+.wasabi-grid .wasabi-grid-panel {
   position: absolute;
   width: 600px;
   top: 48px;
@@ -358,7 +281,7 @@
   box-shadow: 0px 3px 40px 0px rgba(0, 0, 0, 0.4);
   transition: height 0.5s;
   overflow: hidden;
-  .wasabi-table-panel-body {
+  .wasabi-grid-panel-body {
     width: 100%;
     height: 100%;
 

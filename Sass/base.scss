@@ -11,12 +11,16 @@ date:2017-07-28 对整体样式风格修改 实现hplus主题
  * 引用Bootstrap v3.3.7 对基本样式的设置，定制时只勾选的grid
  */
 html {
-  font-family: sans-serif;
+   font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
 }
 body {
-  margin: 0;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #333;
+    background-color: #fff;
 }
 article,
 aside,
