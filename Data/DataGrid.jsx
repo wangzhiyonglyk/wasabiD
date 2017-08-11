@@ -8,25 +8,25 @@
  */
 require("../Sass/Data/DataGrid.scss");
 require("../Sass/Data/DataGridDetail.scss");
-var React = require("react");
-var unit = require("../libs/unit.js");
-var FetchModel = require("../Model/FetchModel.js");
-var Button = require("../Buttons/Button.jsx");
-var LinkButton = require("../Buttons/LinkButton.jsx");
-var CheckBox = require("../Form/CheckBox.jsx");
-var Input = require("../Form/Input.jsx");
-var Radio = require("../Form/Radio.jsx");
-var Message = require("../Unit/Message.jsx");
-var Transfer = require("./Transfer.jsx");
-var shouldComponentUpdate = require("../Mixins/shouldComponentUpdate.js");
-var DataGridHandler = require("../Mixins/DataGridHandler.js");
-var DataGridExtend = require("../Mixins/DataGridExtend.js");
-var pasteExtend = require("../Mixins/pasteExtend.js");
-var ClickAway = require("../Unit/ClickAway.js");
-var showUpdate = require("../Mixins/showUpdate.js");
-var regs = require("../Lang/regs.js");
+let React = require("react");
+let unit = require("../libs/unit.js");
+let FetchModel = require("../Model/FetchModel.js");
+let Button = require("../Buttons/Button.jsx");
+let LinkButton = require("../Buttons/LinkButton.jsx");
+let CheckBox = require("../Form/CheckBox.jsx");
+let Input = require("../Form/Input.jsx");
+let Radio = require("../Form/Radio.jsx");
+let Message = require("../Unit/Message.jsx");
+let Transfer = require("./Transfer.jsx");
+let shouldComponentUpdate = require("../Mixins/shouldComponentUpdate.js");
+let DataGridHandler = require("../Mixins/DataGridHandler.js");
+let DataGridExtend = require("../Mixins/DataGridExtend.js");
+let pasteExtend = require("../Mixins/pasteExtend.js");
+let ClickAway = require("../Unit/ClickAway.js");
+let showUpdate = require("../Mixins/showUpdate.js");
+let regs = require("../Lang/regs.js");
 
-var DataGrid = React.createClass({
+let DataGrid = React.createClass({
     mixins: [shouldComponentUpdate, DataGridHandler, DataGridExtend, pasteExtend, ClickAway, showUpdate],
     propTypes: {
         width: React.PropTypes.oneOfType([
@@ -62,7 +62,6 @@ var DataGrid = React.createClass({
         data: React.PropTypes.array,//当前页数据（json）
 
         url: React.PropTypes.string,//ajax地址
-
         backSource: React.PropTypes.string,//ajax的返回的数据源中哪个属性作为数据源(旧版本)
         dataSource: React.PropTypes.string,//ajax的返回的数据源中哪个属性作为数据源(新版本)
         footerSource: React.PropTypes.string,//页脚数据源,
@@ -74,22 +73,16 @@ var DataGrid = React.createClass({
         onChecked: React.PropTypes.func,//监听表格中某一行被选中/取消
         updateHandler: React.PropTypes.func,//手动更新事件，父组件一定要有返回值,返回详情组件
         detailHandler: React.PropTypes.func,//展示详情的函数，父组件一定要有返回值,返回详情组件
-
-
-        pagePosition: React.PropTypes.oneOf([
+         pagePosition: React.PropTypes.oneOf([
             "top",
             "bottom",
             "both"
         ]),//分页栏的位置
-
-        pasteUrl: React.PropTypes.string,//粘贴后的url
-        pasteParamsHandler: React.PropTypes.func,//对粘贴后的数据进行处理,形成参数并且返回
-        menu: React.PropTypes.bool,//是否显示菜单按钮
-        menuPanel: React.PropTypes.any,//菜单面板
+        control: React.PropTypes.bool,//是否显示菜单按钮
+        controlPanel: React.PropTypes.any,//菜单面板
         headerUrl: React.PropTypes.string,//自定义列地址
-
         updateUrl: React.PropTypes.string,//列更新的地址
-
+        pasteSuccess:React.PropTypes.func,//粘贴成功事件
 
     },
     getDefaultProps: function () {
@@ -100,7 +93,7 @@ var DataGrid = React.createClass({
             singleSelect: false,
             detailAble: false,
             focusAble: true,
-            borderAble: false,
+            borderAble: true,
             clearChecked: true,//是否清空选择的
             selectChecked: false,
             pagination: true,
@@ -113,35 +106,30 @@ var DataGrid = React.createClass({
             total: 0,
             data: [],
             url: null,//
-            backSource: "rows",//
-            dataSource: "rows",//
+            backSource: "data",//
+            dataSource: "data",//
             totalSource: "total",//
             params: null,
             footer: null,//页脚
             onClick: null,
             onDoubleClick: null,
-
             onChecked: null,
             updateHandler: null,
             detailHandler: null,
-
             footerSource: "footer",//页脚数据源
-
             pagePosition: "bottom",//默认分页在底部
-
-            pasteUrl: null,
-            pasteParamsHandler: null,
-            menu: false,
-            menuPanel: null,
+            control: false,
+            controlPanel: null,
             headerUrl: null,
             editAble: false,//是否允许编辑
             updateUrl: null,
+            pasteSuccess:null
 
         }
     },
     getInitialState: function () {
         this.clientHeight = document.documentElement.clientHeight;//先得到高度,防止后期页面发生晃动
-        var data = [];
+        let data = [];
         if (this.props.data instanceof Array) {
             data = this.props.data;
         }
@@ -164,8 +152,8 @@ var DataGrid = React.createClass({
             height: this.props.height,//如果没有设置高度还要从当前页面中计算出来空白高度,以适应布局
             headerMenu: [],//被隐藏的列
             panelShow: false,//列表的操作面板
-            menu: this.props.menu,
-            menuPanel: this.props.menuPanel,
+            control: this.props.control,
+            controlPanel: this.props.controlPanel,
             headerUrl: this.props.headerUrl,
             updateUrl: this.props.updateUrl,
             editAble: this.props.editAble,
@@ -240,7 +228,7 @@ var DataGrid = React.createClass({
                         sortOrder: nextProps.sortOrder,
                         loading: false,
                         headers: nextProps.headers,//表头可能会更新
-                        menuPanel: nextProps.menuPanel,
+                        controlPanel: nextProps.controlPanel,
                     })
                 }
             }
@@ -256,90 +244,59 @@ var DataGrid = React.createClass({
             this.updateHandler(this.state.url, this.state.pageSize, this.state.pageIndex, this.state.sortName, this.state.sortOrder)
         }
         this.registerClickAway(this.hideMenuHandler, this.refs.grid);//注册全局单击事件
+       
     },
     componentDidUpdate: function () {
-        this.setWidthAndHeight();//重新计算列表的高度,固定的表头每一列的宽度
+        this.resizeTableWidthHandler();//固定的表头每一列的宽度
     },
     renderHeader: function () {//渲染表头
-        if (this.state.headers instanceof Array) {
-
-        }
-        else {
+        if (!(this.state.headers instanceof Array)) {
             return null;
         }
         let headers = [];
-
         if (this.props.selectAble) {
-            let props = {
-                value: this.checkCurrentPageCheckedAll() == true ? "yes" : null,
+            let thCheckProps = {//设置checkbox的属性
+                value: this.checkCurrentPageCheckedAll() == true ? "yes" : null,//判断当前页是否选中
                 data: [{ value: "yes", text: "" }],
                 onSelect: this.checkedAllHandler,
                 name: "all",
             }
-            //使用label,因为多个列可能绑定一个字段
-            if (this.props.singleSelect == true) {
-                headers.push(
-                    <th key="headercheckbox" className="check-column" name="check-column" style={{ width: 35 }} >
-                        <div className="wasabi-grid-cell" name="check-column" ></div>
-                    </th>
-
-                );
-            }
-            else {
-                headers.push(
-                    <th key="headercheckbox" className="check-column" name="check-column" style={{ width: 35 }} >
-                        <div className="wasabi-grid-cell" name="check-column"><CheckBox {...props} ></CheckBox></div>
-                    </th>
-                );
-            }
-
+            headers.push(
+                <th key="headercheckbox" name="check-column" style={{ width: 35 }} >
+                    <div className="wasabi-grid-cell" name="check-column">{this.props.singleSelect ? null : <CheckBox {...thCheckProps} ></CheckBox>}</div>
+                </th>
+            );
         }
         this.state.headers.map((header, index) => {
-
             if (!header || header.hide == true) {
                 //隐藏则不显示
                 return;
             } else {
+                //使用label,因为多个列可能绑定一个字段
                 if (this.state.headerMenu.length > 0 && this.state.headerMenu.indexOf(header.label) > -1) {//父组件更新状态值，发现某一行处理被隐藏中，则不显示
                     return;
                 }
                 else {
-                    let sortOrder = "";
-                    var props = {};//设置单击事件
-                    if (header.sortAble == true) {
-                        sortOrder = " both";
-                        if (this.state.sortName == header.name) {
-                            //是当前排序字段
-                            sortOrder += " " + this.state.sortOrder;
-                            props.onClick = (header.sortAble == true ? this.onSort.bind(this, header.name, this.state.sortOrder == "asc" ? "desc" : "asc") : null);
-                        }
-                        else {
-                            props.onClick = (header.sortAble == true ? this.onSort.bind(this, header.name, "asc") : null);
-                        }
-                    }
-                    //使用label作为元素name属性，是因为可能有多个列对应同一个字段
-                    var menuControl = null;//打开操作面板的菜单图标
-                    var savecontrol = null;//保存按钮
-                    if (this.state.menu && index == 0) {//在第一列显示
-                        menuControl = <LinkButton key="menu" style={{ color: "#666666", fontSize: 12, position: "absolute" }} iconCls={"icon-catalog"} name="menu" tip="菜单" onClick={this.panelShow} />
-
-                    }
-                    if (this.state.editIndex != null && index == 0) {//0是有效值
-                        savecontrol = <LinkButton key="save" style={{ color: "#666666", fontSize: 12, position: "absolute" }} iconCls={"icon-submit"} name="save" tip="保存" onClick={this.remoteUpdateRow.bind(this, null)} />
-                    }
-
-
+                    let sortOrder = header.sortAble == true?this.state.sortName == header.name?this.state.sortOrder:"both":"";//排序样式
+                    let props = {};//设置单击事件
+                     props.onClick=header.sortAble == true?this.state.sortName == header.name?this.onSort.bind(this, header.name, this.state.sortOrder == "asc" ? "desc" : "asc"): this.onSort.bind(this, header.name, "asc"):null;
+                    
+                    //打开操作面板的图标
+                    let panelIcon =(this.state.control && index == 0)?<LinkButton key="control" style={{  fontSize: 12, position: "absolute" }} iconCls={"icon-catalog"} name="control" tip="菜单" onClick={this.panelShow} />:null;
+                    //表格处理编辑时的保存按钮
+                    let saveIcon = (this.state.editIndex != null && index == 0)? <LinkButton key="save" style={{  fontSize: 12, position: "absolute" }} iconCls={"icon-submit"} name="save" tip="保存" onClick={this.remoteUpdateRow.bind(this, null)} />:null;           
                     headers.push(
+                        // 绑定右键菜单事件 
+                        //使用label作为元素name属性，是因为可能有多个列对应同一个字段
                         <th key={"header" + index.toString()} name={header.label} {...props}
                             className={"" + sortOrder}
-                            style={{ textAlign: (header.align ? header.align : "left") }}
-                            onMouseMove={this.headerMouseMoveHandler}
+                            style={{ textAlign: header.align }}
                             onContextMenu={this.headerContextMenuHandler}
-                            onMouseDown={this.headerMouseDownHandler}>
+                        >
                             <div className="wasabi-grid-cell" name={header.label} style={{
                                 width: (header.width ? header.width : null),
-                                textAlign: (header.align ? header.align : "left")
-                            }}><span>{header.label}</span>{menuControl}{savecontrol}</div>
+                                textAlign: header.align
+                            }}><span>{header.label}</span>{panelIcon}{saveIcon}</div>
                         </th>)
 
 
@@ -351,7 +308,7 @@ var DataGrid = React.createClass({
         return headers;
     },
     renderBody: function () {//渲染表体
-        var trobj = [];
+        let trobj = [];
         if (this.state.data instanceof Array && this.state.headers instanceof Array) {
 
         }
@@ -370,7 +327,6 @@ var DataGrid = React.createClass({
                     onSelect: this.onChecked.bind(this, rowIndex),
                     name: key,
                 }
-
                 if (this.props.singleSelect == true) {
                     tds.push(
                         <td key={"bodycheckbox" + rowIndex.toString()} className="check-column" style={{ width: 35 }}>
@@ -425,7 +381,7 @@ var DataGrid = React.createClass({
                     tds.push(<td onClick={this.onClick.bind(this, rowIndex, rowData)}
                         onDoubleClick={this.onDoubleClick.bind(this, rowIndex, rowData)}
                         key={"col" + rowIndex.toString() + "-" + columnIndex.toString()}
-                    ><div className="wasabi-grid-cell" style={{ width: (header.width ? header.width : null), textAlign: (header.align ? header.align : "left") }}>
+                    ><div className="wasabi-grid-cell" style={{ width: (header.width ? header.width : null), textAlign: (header.align ) }}>
                             <Input {...header.editor.options} type={header.editor.type} value={currentValue} text={currentText} onChange={this.rowEditHandler.bind(this, columnIndex)}
                                 onSelect={this.rowEditHandler.bind(this, columnIndex)} label={""}></Input>
                         </div></td>);
@@ -434,15 +390,16 @@ var DataGrid = React.createClass({
                     if (columnIndex == 0 && this.props.detailAble) {
 
                         //在第一列显示详情
-                        var iconCls = "icon-down";//详情列的图标
+                        let iconCls = "icon-down";//详情列的图标
                         if (this.state.detailIndex == key) {
                             iconCls = "icon-up";//详情列-展开
                         }
 
                         tds.push(<td onClick={this.detailHandler.bind(this, rowIndex, rowData)}
                             key={"col" + rowIndex.toString() + "-" + columnIndex.toString()}>
-                            <div className="wasabi-grid-cell" style={{ width: (header.width ? header.width : null), textAlign: (header.align ? header.align : "left") }}>
-                                <div style={{ float: "left" }}> {content}</div><LinkButton iconCls={iconCls} color="#666666" tip="查看详情"></LinkButton>
+                            <div className="wasabi-grid-cell" style={{ width: (header.width ? header.width : null), textAlign: (header.align) }}>
+                                <div style={{ float: "left" }}> {content}</div><LinkButton iconCls={iconCls} 
+                                 tip="查看详情"></LinkButton>
                             </div>
                         </td>);
                     }
@@ -450,7 +407,7 @@ var DataGrid = React.createClass({
                         tds.push(<td onClick={this.onClick.bind(this, rowIndex, rowData)}
                             onDoubleClick={this.onDoubleClick.bind(this, rowIndex, rowData)}
                             key={"col" + rowIndex.toString() + "-" + columnIndex.toString()}
-                        ><div className="wasabi-grid-cell" style={{ width: (header.width ? header.width : null), textAlign: (header.align ? header.align : "left") }}>{content}</div></td>);
+                        ><div className="wasabi-grid-cell" style={{ width: (header.width ? header.width : null), textAlign: (header.align ) }}>{content}</div></td>);
                     }
                 }
 
@@ -463,7 +420,7 @@ var DataGrid = React.createClass({
             if ((rowIndex * 1) == this.focusIndex && this.props.focusAble) {
                 trClassName = "selected";
             }
-            trobj.push(<tr className={trClassName} key={"row" + rowIndex.toString()} onMouseDown={this.onMouseDown.bind(this, rowIndex)}>{tds}</tr>);
+            trobj.push(<tr className={trClassName} key={"row" + rowIndex.toString()} onMouseDown={this.onTRMouseDown.bind(this, rowIndex)}>{tds}</tr>);
 
             if (this.state.detailIndex == key) {
 
@@ -483,58 +440,42 @@ var DataGrid = React.createClass({
         });
     },
     renderTotal: function () {//渲染总记录数，当前记录的下标
-        if (this.state.headers && this.state.headers.length > 0) {
-            var beginOrderNumber = 0; var endOrderNumber = 0;//数据开始序号与结束序
-            var total = this.state.total;//总记录数
-            var pageTotal = (parseInt(this.state.total / this.state.pageSize));//共多少页
-            if ((this.state.total % this.state.pageSize) > 0) {
-                pageTotal++;//求余后得到最终总页数
-            }
-            if (pageTotal == 0) {//数据为空，直接返回
-                return null;
-            }
-
-            var control;//记录数组件
-            if (this.state.data instanceof Array) {
-                if (this.state.data.length > 0) {
-                    if (this.props.pagination) {
-                        beginOrderNumber = this.state.pageSize * (this.state.pageIndex - 1) + 1;
-                        endOrderNumber = this.state.pageSize * (this.state.pageIndex - 1) + this.state.data.length;
-                    }
-                    else {
-                        endOrderNumber = this.state.data.length;
-                        total = this.state.data.length;
-                    }
-
+        if (this.state.headers && this.state.headers.length > 0) {//设计了header
+            let beginOrderNumber = 0; let endOrderNumber = 0;//数据开始序号与结束序号
+            let total = this.state.total;//总记录数
+            let pageTotal = (parseInt(this.state.total / this.state.pageSize));//共多少页
+            pageTotal = (this.state.total % this.state.pageSize) > 0 ? pageTotal + 1 : pageTotal;//求余后得到最终总页数
+            if (this.state.data instanceof Array && this.state.data.length > 0) {//计算开始序号与结束序号
+                if (this.props.pagination) {//有分页,计算当前页序号
+                    beginOrderNumber = this.state.pageSize * (this.state.pageIndex - 1) + 1;
+                    endOrderNumber = this.state.pageSize * (this.state.pageIndex - 1) + this.state.data.length;
                 }
-
+                else {//无分页
+                    endOrderNumber = this.state.data.length;
+                }
             }
-            var totalControl = <span className="pagination-info">第{this.state.pageIndex}/{pageTotal}页,共{total}行记录</span>;
-            if (this.props.pagination == false) {
-                totalControl = <span className="pagination-info">共{total}行记录</span>;
-            }
-            control = <div key="pagination-detail" className="pagination-detail">{totalControl}
-                <div style={{ display: this.props.pagination ? "inline-block" : "none" }}>每页<select className="page-select" value={this.state.pageSize} onChange={this.pageSizeHandler}>
+            return <div key="pagination-info" className=" pagination-info col-sm-6">显示 {beginOrderNumber} 至 {endOrderNumber} 项 共 {total} 项记录
+                <div style={{ display: this.props.pagination ? "inline-block" : "none" }}> 每页  <select className="pagination-select" value={this.state.pageSize} onChange={this.pageSizeHandler}>
                     <option value={10}>10</option>
                     <option value={20}>20</option>
                     <option value={30}>30</option>
                     <option value={50}>50</option>
                     <option value={100}>100</option>
-                </select>条</div>
+                </select>  条</div>
             </div>;
-            return control;
+
         }
         else {
             return null;
         }
 
     },
- 
-    renderPagination: function (type) {//显示分页控件
-        var paginationCom = null;
+
+    renderPagination: function () {//显示分页控件
+        let paginationComponent = null;
         if (this.props.pagination) {
 
-            var pageAll = (parseInt(this.state.total / this.state.pageSize));//共多少页
+            let pageAll = (parseInt(this.state.total / this.state.pageSize));//共多少页
             if ((this.state.total % this.state.pageSize) > 0) {
                 pageAll++;//求余后得到最终总页数
             }
@@ -546,9 +487,9 @@ var DataGrid = React.createClass({
                 let pageComponent = [];//分页组件
                 let firstIndex = 0;//第一个显示哪一页
                 let lastIndex = 0;//最后一个显示哪一页
-                let predisabledli = <li key="predis" className="page-last-separator disabled"><a href="javascript:void(0)">...</a></li>;//多余的分页标记
-                let lastdisabledli = <li key="lastdis" className="page-last-separator disabled"><a href="javascript:void(0)">...</a></li>;//多余的分页标记
-                if (this.state.pageIndex >= 4 && this.state.pageIndex <= pageAll - 3) {//处于中间位置的页号
+                let predisabledli = <li key="predis" className="paginate_button disabled"><a href="javascript:void(0)">...</a></li>;//多余的分页标记
+                let lastdisabledli = <li key="lastdis" className="paginate_button disabled"><a href="javascript:void(0)">...</a></li>;//多余的分页标记
+                if (this.state.pageIndex >= 4 && this.state.pageIndex <= pageAll - 3) {//当前页号处于中间位置
                     firstIndex = this.state.pageIndex - 2;
                     lastIndex = this.state.pageIndex + 2;
                 }
@@ -568,21 +509,22 @@ var DataGrid = React.createClass({
                     }
                 }
                 for (let i = firstIndex; i <= lastIndex; i++) {
-                    pageComponent.push(<li key={"li" + i} className={"page-number " + ((this.state.pageIndex * 1) == (i) ? "active" : "")}><a
+                    pageComponent.push(<li key={"li" + i} className={"paginate_button " + ((this.state.pageIndex * 1) == (i) ? "active" : "")}><a
                         href="javascript:void(0)" onClick={this.paginationHandler.bind(this, (i))}>{(i)}</a></li>);
                 }
                 pageComponent.unshift(predisabledli); pageComponent.push(lastdisabledli);
-                paginationCom = <div className="pull-right pagination">
-                    <ul className="pagination" style={{ marginTop: type == "top" ? 0 : 3, marginBottom: type == "top" ? 3 : 0 }}>
-                        <li key={"lipre"} className="page-pre"><a href="javascript:void(0)" onClick={this.prePaginationHandler} >‹</a></li>
-                        <li key={"lifirst"} className={"page-number " + ((this.state.pageIndex * 1) == (1) ? "active" : "")}><a
+
+                paginationComponent = <div className="pagination-number col-sm-6">
+                    <ul className="pagination">
+                        <li key={"lipre"} className="paginate_button "><a href="javascript:void(0)" onClick={this.prePaginationHandler} >‹</a></li>
+                        <li key={"lifirst"} className={"paginate_button  " + ((this.state.pageIndex * 1) == (1) ? "active" : "")}><a
                             href="javascript:void(0)" onClick={this.paginationHandler.bind(this, (1))}>{(1)}</a></li>
                         {
                             pageComponent
                         }
 
-                        <li key="lilast" className={"page-number " + ((this.state.pageIndex * 1) == (pageAll) ? "active" : "")}><a href="javascript:void(0)" onClick={this.paginationHandler.bind(this, (pageAll))}>{(pageAll)}</a></li>
-                        <li key="linext" className="page-next"><a href="javascript:void(0)" onClick={this.nextPaginationHandler} >›</a></li>
+                        <li key="lilast" className={"paginate_button " + ((this.state.pageIndex * 1) == (pageAll) ? "active" : "")}><a href="javascript:void(0)" onClick={this.paginationHandler.bind(this, (pageAll))}>{(pageAll)}</a></li>
+                        <li key="linext" className="paginate_button"><a href="javascript:void(0)" onClick={this.nextPaginationHandler} >›</a></li>
                     </ul>
                 </div>;
             }
@@ -591,13 +533,13 @@ var DataGrid = React.createClass({
 
                 let pagearr = [];
                 for (let i = 0; i < pageAll; i++) {
-                    var control = <li key={"li" + i} className={"page-number " + ((this.state.pageIndex * 1) == (i + 1) ? "active" : "")}>
+                    let control = <li key={"li" + i} className={"paginate_button " + ((this.state.pageIndex * 1) == (pageAll) ? "active" : "")}>
                         <a href="javascript:void(0)" onClick={this.paginationHandler.bind(this, (i + 1))}>{(i + 1)}</a></li>;
                     pagearr.push(control);
                 }
-                paginationCom = (
-                    <div className="pull-right">
-                        <ul className="pagination" style={{ marginTop: type == "top" ? 0 : 3, marginBottom: type == "top" ? 3 : 0 }}>
+                paginationComponent = (
+                    <div className="pagination-number col-sm-6">
+                        <ul className="pagination">
                             {
                                 pagearr
                             }
@@ -608,13 +550,13 @@ var DataGrid = React.createClass({
             }
 
         }
-        return paginationCom;
+        return paginationComponent;
 
     },
     renderFooter: function () {//渲染页脚
-        var tds = [];
+        let tds = [];
         this.footerActualData = [];//,页脚的实际统计数据，用于返回
-        if (this.state.footer instanceof Array&&this.state.footer.length>0) {
+        if (this.state.footer instanceof Array && this.state.footer.length > 0) {
             //分页的情况下
             if (this.props.selectAble) {
                 tds.push(
@@ -629,12 +571,12 @@ var DataGrid = React.createClass({
                     return;
                 }
 
-                var footerchild = this.state.footer.filter(function (d) {
+                let footerchild = this.state.footer.filter(function (d) {
                     return d.name == header.name;
                 })
                 if (footerchild && footerchild.length > 0) {
                     if (footerchild[0].value != null && footerchild[0].value != undefined) {//如果有值
-                        var obj = {}; obj[header.name] = footerchild[0].value;
+                        let obj = {}; obj[header.name] = footerchild[0].value;
                         this.footerActualData.push(obj);
                         tds.push(<td key={headerindex + header.name}>{footerchild[0].value}</td>)
                     }
@@ -642,7 +584,7 @@ var DataGrid = React.createClass({
                         //表明从本页数据统计
                         switch (footerchild[0].type) {
                             case "sum":
-                                var obj = {}; obj[header.name] = this.sumHandler(footerchild[0]);
+                                let obj = {}; obj[header.name] = this.sumHandler(footerchild[0]);
                                 this.footerActualData.push(obj);
                                 if (obj[header.name] != null) {
                                     tds.push(<td key={header.name} >{"总计：" + obj[header.name]}</td>);
@@ -652,7 +594,7 @@ var DataGrid = React.createClass({
                                 }
                                 break;
                             case "avg":
-                                var obj1 = {}; obj1[header.name] = this.avgHandler(footerchild[0]);
+                                let obj1 = {}; obj1[header.name] = this.avgHandler(footerchild[0]);
                                 this.footerActualData.push(obj1);
                                 if (obj[header.name] != null) {
                                     tds.push(<td key={headerindex + header.name} >{"平均值：" + obj1[header.name]}</td>);
@@ -677,44 +619,37 @@ var DataGrid = React.createClass({
 
 
     },
-    render: function () {
-        let className = "table table-no-bordered";
-        if (this.props.borderAble === true) {//无边框
-            className = "table";
-        }
-        let headerControl = this.renderHeader();
-        let gridHeight = this.state.height;//
-        let tableHeight = "auto";
-        if (regs.number.test(gridHeight)) {
-            tableHeight = gridHeight ? (this.props.pagePosition == "both") ? gridHeight - 70 : gridHeight - 35 : null;
-        }
-
-        var headerMenuCotrol = [];//右键菜单中隐藏的列
+    renderHeaderMenu() {//渲染表头右键菜单
+        let headerMenuCotrol = [];//右键菜单中隐藏的列
         if (this.state.headerMenu.length > 0) {
             this.state.headerMenu.map((item, index) => {
                 headerMenuCotrol.push(
-                    <li key={index}><a href="javascript:void(0);" className="header-menu-item" onMouseDown={this.menuHeaderShowHandler.bind(this, index, item)} >{"显示[" + item + "]"}</a></li>)
+                    <li key={index}><a href="javascript:void(0);" className="header-menu-item" onMouseDown={this.menuShowHandler.bind(this, index, item)} >{"显示[" + item + "]"}</a></li>)
             })
         }
+        return headerMenuCotrol;
+    },
+    render: function () {
+        let className = this.props.borderAble ? "table " : "table table-no-bordered";
+        let headerControl = this.renderHeader();//渲染两次，所以定义一个变量
         return (
+             /* excel粘贴事件 注册鼠标按下事件，从而隐藏菜单*/
             <div className="wasabi-grid" ref="grid"
-                onPaste={this.onPaste}
+                onPaste={this.onPaste}         
                 onMouseDown={this.gridMouseDownHandler}
-                onContextMenu={this.gridContextMenuHandler}
-                style={{ width: this.props.width, height: gridHeight }}  >
-                <div className="wasabi-grid-pagination" ref="toppagination"
-                    style={{ display: (this.props.pagePosition == "top" || this.props.pagePosition == "both") ? this.props.pagination ? "block" : "none" : "none" }}>
-                    <div style={{ display: (this.props.pagination ? "block" : (this.state.data instanceof Array && this.state.data.length > 0) ? "block" : "none") }}>
-                        {this.renderPagination("top")}
-                    </div>
+                style={{ width: this.props.width }}  >
+                {/* 头部分页 */}
+                <div className="wasabi-pagination row" ref="toppagination"
+                    style={{ display: (this.props.pagePosition == "top" || this.props.pagePosition == "both") ? "block" : "none" }}>
                     {this.renderTotal()}
+                    {this.renderPagination()}
 
                 </div>
-
+                {/* 表格容器 */}
                 <div className="table-container">
+                    {/* 固定表头 */}
                     <div className="table-fixed" ref="fixedTableContainer">
-                        <table className={className} key="fixedTable" ref="fixedTable"
-                            onMouseMove={this.fixedTableMouseMoveHandler} onMouseUp={this.fixedTableMouseUpHandler}>
+                        <table className={className} key="fixedTable" ref="fixedTable">
                             <thead>
                                 <tr>
                                     {headerControl}
@@ -722,7 +657,8 @@ var DataGrid = React.createClass({
                             </thead>
                         </table>
                     </div>
-                    <div className="table-realTable" ref="realTableContainer" style={{ height: tableHeight }}
+                    {/* 真实表格  监听滚动事件以便固定表头一起滚动*/}
+                    <div className="table-realTable" ref="realTableContainer" style={{ height: this.state.height }}
                         onScroll={this.tableBodyScrollHandler}>
                         <table className={className} key="realTable" ref="realTable">
                             <thead >
@@ -734,32 +670,32 @@ var DataGrid = React.createClass({
                                 {
                                     this.renderBody()
                                 }
-                              
+
                             </tbody>
-                             <tfoot>
-                                  {
+                            <tfoot>
+                                {
                                     this.renderFooter()
                                 }
-                             </tfoot>
+                            </tfoot>
                         </table>
                     </div></div>
-                <div className="wasabi-grid-pagination" ref="bottompagination"
-                    style={{ display: (this.props.pagination ? "block" : (this.props.pagePosition == "bottom" || this.props.pagePosition == "both") ? "block" : "none") }}>
-                    <div style={{ display: (this.props.pagination ? "block" : (this.state.data instanceof Array && this.state.data.length > 0) ? "block" : "none") }}>
-                        {this.renderPagination()}
-                    </div>
+                {/* 底部分页 */}
+                <div className="wasabi-pagination row" ref="bottompagination"
+                    style={{ display: (this.props.pagePosition == "bottom" || this.props.pagePosition == "both") ? "block" : "none" }}>
                     {this.renderTotal()}
-
+                    {this.renderPagination()}
                 </div>
+
                 <div className="wasabi-grid-loading" style={{ display: this.state.loading == true ? "block" : "none" }}></div>
                 <div className="wasabi-load-icon" style={{ display: this.state.loading == true ? "block" : "none" }}></div>
-                <div onMouseUp={this.divideMouseUpHandler} ref="tabledivide" className="wasabi-grid-divide" style={{ top: (this.props.pagePosition == "top" || this.props.pagePosition == "both") ? 35 : 0 }}></div>
+                {/* 菜单 没有使用单击事件,用户有可能继续使用鼠标右键*/}
                 <div className="wasabi-header-menu-container" ref="headermenu">
                     <ul className="wasabi-header-menu">
                         <li key="first"><a href="javascript:void(0);" className="header-menu-item" onMouseDown={this.menuHideHandler} >隐藏此列</a></li>
-                        {headerMenuCotrol}
+                        {this.renderHeaderMenu()}
                     </ul>
                 </div>
+                {/* 表格空白面板用于进行自定义操作 */}
                 <div className="wasabi-grid-panel" style={{ height: this.state.panelShow ? 350 : 0, border: this.state.panelShow ? null : "none" }}>
                     <div className="wasabi-grid-panel-body"> {this.state.menuPanel}</div>
                 </div>

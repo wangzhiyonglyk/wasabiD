@@ -11,7 +11,7 @@ let DatePicker=require("./DatePicker.jsx");
 let Picker=require("./Picker.jsx");
 let Select=require("./Select.jsx");
 let MutiText=require("./MutiText.jsx");
-let GridPicker=require("./GridPicker.jsx");
+
 let TreePicker=require("./TreePicker.jsx");
 let PanelPicker=require("./PanelPicker.jsx");
 var shouldComponentUpdate=require("../Mixins/shouldComponentUpdate.js");
@@ -26,7 +26,7 @@ let ComboBox=React.createClass({
                 "daterange",//日期范围选择
                 "datetimerange",//日期时间范围选择
                 "picker",//级联选择组件
-                "gridpicker",//列表选择
+               
                 "treepicker",//下拉树选择
                 "panelpicker",//面板选择
                 "muti"//多行添加
@@ -259,16 +259,7 @@ let ComboBox=React.createClass({
         props.readonly=this.state.readonly;
         props.params=this.state.params;
         return <DatePicker ref="combobox" {...props}  onSelect={this.onSelect}></DatePicker>
-    },
-    renderGridPicker:function() {
-        var props={...this.props};
-        props.value=this.state.value;
-        props.text=this.state.text;
-        props.data=this.state.data;
-        props.readonly=this.state.readonly;
-        props.params=this.state.params;
-        return <GridPicker ref="combobox" {...props}  onSelect={this.onSelect}></GridPicker>;
-    },
+    }, 
     renderTreePicker:function() {
         var props={...this.props};
         props.value=this.state.value;

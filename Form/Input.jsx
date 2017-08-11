@@ -44,7 +44,6 @@ var Input=React.createClass({
             "checkbox",//复选框
             "switch",//开关
             "picker",//级联选择组件
-            "gridpicker",//列表选择
             "treepicker",//下拉树选择
             "panelpicker",//面板选择
             "muti"//多行文本
@@ -284,7 +283,7 @@ var Input=React.createClass({
             control=<SwitchButton ref="input"  {...props} onSelect={this.onSelect}></SwitchButton>
         }
 
-        else if(type=="muti"||type=="select"||type=="datetime"||type=="time"||type=="date" ||type=="daterange"||type=="datetimerange"||type=="picker"||type=="treepicker"||type=="gridpicker"||type=="panelpicker")
+        else if(type=="muti"||type=="select"||type=="datetime"||type=="time"||type=="date" ||type=="daterange"||type=="datetimerange"||type=="picker"||type=="treepicker"||type=="panelpicker")
         {//下拉组件
             control=<ComboBox ref="input" {...props }  onSelect={this.onSelect}></ComboBox>
         }

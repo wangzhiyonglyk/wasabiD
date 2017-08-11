@@ -8,7 +8,7 @@ var FetchModel=require("../Model/FetchModel.js");
 var Message=require("../Unit/Message.jsx");
 let DataGridHandler={
 
-    //列表常用处理函数
+    //列表自用处理函数
     paginationHandler:function(pageIndex) {//分页处理函数
         if(pageIndex==this.state.pageIndex) {//当前页,不处理
             return ;
@@ -344,7 +344,7 @@ let DataGridHandler={
             this.props.onChecked(data);//用于返回
         }
     },
-    onMouseDown:function(index,event) {//一定要用鼠标按下事件,不保存在状态值中
+    onTRMouseDown:function(index,event) {//行事件，一定要用鼠标按下事件,不保存在状态值中
         if(this.props.focusAble) {
             let node = event.target;
             while (node.nodeName.toLowerCase() != "tr" && node.nodeName.toLowerCase() != "body") {

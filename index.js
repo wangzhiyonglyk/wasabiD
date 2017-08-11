@@ -4,13 +4,6 @@
  */
 
 'use strict';
-//TODO 下面的代码先保留，等心怡项目全部更新到新版本后去掉
-var script=document.createElement("script");
-script.src="http://g.tbcdn.cn/sj/securesdk/0.0.3/securesdk_v2.js";
-script.id="J_secure_sdk_v2";
-script.setAttribute("id", "J_secure_sdk_v2");
-script.setAttribute("data-appkey", "23421795");
-document.body.appendChild(script);
 
 require("whatwg-fetch");//让safari支持fetch
 
@@ -23,7 +16,7 @@ exports.Toolbar = require('./Buttons/Toolbar.jsx');//LinkButton按钮集合组�
 exports.DataGrid = require('./Data/DataGrid.jsx');//数据列表组件
 exports.Tree = require('./Data/Tree.jsx');//树的组件
 exports.Transfer = require('./Data/Transfer.jsx');//穿梭框组件
-exports.MenuTree = require('./Data/MenuTree.jsx');//菜单树组件
+
 
 /*****************表单集组件******************/
 exports.SearchBar = require('./Form/SearchBar.jsx');//表单查询组件
@@ -51,10 +44,8 @@ exports.DateTimeRange = require('./Form/DateTimeRange.jsx');//日期时间范围
 exports.MutiText = require('./Form/MutiText.jsx');//多行添加组件
 exports.Select = require('./Form/Select.jsx');//普通下拉选择组件
 exports.Picker = require('./Form/Picker.jsx');//级联选择组件
-exports.GridPicker = require('./Form/GridPicker.jsx');//下拉列表选择组件
 exports.TreePicker = require('./Form/TreePicker.jsx');//下拉树选择组件
 exports.PanelPicker = require('./Form/PanelPicker.jsx');//级联选择组件
-
 exports.DatePicker = require('./Form/DatePicker.jsx');//通用下拉日期组件
 exports.ComboBox = require('./Form/ComboBox.jsx');//通用下拉框组件
 exports.SearchBox = require('./Form/SearchBox.jsx');//筛选框
