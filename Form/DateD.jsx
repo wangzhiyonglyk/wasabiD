@@ -69,6 +69,15 @@ let DateD = React.createClass({
         }
 
     },
+     setValue(value)    {
+      this.setState({
+          value:value,
+      })
+    },
+    getValue()  {
+        return this.state.value;
+
+    },
     updateYearAndMonth: function(filterYear,filterMonth) {
         this.setState({
             year: filterYear,
@@ -184,7 +193,7 @@ let DateD = React.createClass({
            max:null,
        })
     },
-
+   
     render:function(){
         return(
             <div className="wasabi-datetime"  >

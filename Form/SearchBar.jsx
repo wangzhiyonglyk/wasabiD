@@ -13,7 +13,7 @@ var SearchBar=React.createClass({
         model:React.PropTypes.array.isRequired,
         searchTitle:React.PropTypes.string,
         searchHide:React.PropTypes.bool,
-        filterHandler:React.PropTypes.func.isRequired,
+        onSubmit:React.PropTypes.func.isRequired,
         expandHandler:React.PropTypes.func,
         width:React.PropTypes.number,
 
@@ -23,7 +23,7 @@ var SearchBar=React.createClass({
             model: [],//表单数据模型
             searchTitle:"查询",//查询按钮的标题
             searchHide:false,//是否隐藏按钮
-            filterHandler: null,//提交成功后的回调事件
+            onSubmit: null,//提交成功后的回调事件
             className:"",
             expandHandler:null,//展开与折叠事件
             width:null,
@@ -39,12 +39,12 @@ var SearchBar=React.createClass({
         else {
             //没有滚动条  现在每个页面留有左右20像素的边距
             this.availWidth=window.screen.availWidth-40;//防止后期出现滚动条,而产生样式变形,先减去滚动条宽度
-
         }
 
         return{
             model:(this.props.model),
-            dropType:"wasabi-button wasabi-searchbar-down"//折叠按钮样式
+            dropType:"wasabi-button wasabi-searchbar-down",//折叠按钮样式
+            columns:this.props.columns,
         }
     },
     componentWillReceiveProps:function(nextProps) {
@@ -123,55 +123,28 @@ var SearchBar=React.createClass({
         }
         return data;
     },
-    getTextData:function() {
-        var textData={};//各个字段对应的文本值
-        for(let v in this.refs)
+  
+       setData:function(data) {//设置值,data是对象
+        this.isChange=false;
+        if(!data)
         {
-            if(this.refs[v].props.name.indexOf(",")>-1) {//含有多个字段
-                var nameSplit=this.refs[v].props.name.split(",");
-                if(this.refs[v].state.value&&this.refs[v].state.value!="")
-                {
-
-                    var textSplit=this.refs[v].state.text.split(",");//文本值
-                    for(let index =0;index<nameSplit.length;index++)
-                    {
-                        if(index<textSplit.length)
-                        {
-                            textData[nameSplit[index]]=textSplit[index];
-                        }
-                    }
-
-                }  else {
-                    for(let index =0;index<nameSplit.length;index++)
-                    {
-                        textData[nameSplit[index]]="";
-
-                    }
-                }
-            }
-            else
-            {
-                textData[this.refs[v].props.name]=this.refs[v].state.text;
-
-
-            }
-
+            return ;
         }
-        return textData;
+       for(let v in this.refs)
+        {
+            if(data[v.props.name])
+            {
+               v.setValue(data[v.props.name]);
+            }
+        }         
     },
     onSubmit:function() {
         //筛选查询开始
         var data={};//各个字段对应的值
         var textData={};//各个字段对应的文本值
-        let isva=true;
+       
         for(let v in this.refs) {
-            if(isva) {
-                //验证成功，则继续验证
-                isva = this.refs[v].validate();
-            }else
-            {//不成功则继续验证但不再回执
-                this.refs[v].validate();
-            }
+          
             if(this.refs[v].props.name.indexOf(",")>-1)
             {//含有多个字段
                 var nameSplit=this.refs[v].props.name.split(",");
@@ -205,9 +178,7 @@ var SearchBar=React.createClass({
             }
 
         }
-        if(isva) {
-            this.props.filterHandler(data,textData);
-        }
+        this.props.onSubmit(data,textData);    
     },
     getComponentData:function(name) {//只读属性，获取对应的字段的数据源
         return JSON.parse( window.localStorage.getItem(name+"data"));
@@ -269,7 +240,7 @@ var SearchBar=React.createClass({
 
             }
         }
-        if(this.state.model.length<columns) {//如果数据小于列数
+        if(this.state.model.length<columns) {//如果数据小于列数,否则查询按钮会位置发生改变
             columns = this.state.model.length;
             if(columns<=2)
             {//如果只有两列的话,重新定义宽度
@@ -316,32 +287,21 @@ var SearchBar=React.createClass({
         }
         var result=this.setColumns();//得计算列的结果
         let props={
-            className:"wasabi-searchbar "+result. columnClass+" "+this.props.className,
+            className:"wasabi-searchbar clearfix "+result. columnClass+" "+this.props.className,
             style:result.style
         };
         let orderIndex=0;//表单组件在表单的序号,
-        return (<div {...props}>
+        return (
+                <div {...props}>
                 <div  className="leftform" style={{width:result.leftWidth}}  >
                     {
-                        this.state.model.map((child,index) =>{
-                            let position=orderIndex%result.columns;//求余,计算在表单中列位置
-                            if(position==0)
-                            {
-                                position="left";
-                            }
-                            else if(position==result.columns-1)
-                            {
-                                position="right";
-                            }
-                            else {
-                                position="default";
-                            }
-                            var size=child.onlyline==true?"onlyline":child.size;//组件大小
-                            if(size=="default")
+                        this.state.model.map((child,index)=>{   
+                                 var size=child.size;//组件大小
+                            if(size=="one")
                             {
                                 orderIndex++;
                             }
-                            else if(size=="large"||size=="two")
+                            else if(size=="two")
                             {
 
                                 if(result.columns==1)
@@ -365,7 +325,7 @@ var SearchBar=React.createClass({
                                 }
 
                             }
-                            else if(size=="onlyline")
+                            else if (size == "four"||size == "onlyline") 
                             {
                                 orderIndex+=result.columns;
                             }
@@ -381,13 +341,11 @@ var SearchBar=React.createClass({
                                            backFormHandler={this.changeHandler}
                                     ></Input></div>
                             );
+                            })        
                         })
+                       
                     }
-                    <div className="clear">
-                        {
-                            //解决子级用css float浮动 而父级div没高度不能自适应高度
-                        }
-                    </div>
+                
                 </div>
                 <div className="rightbutton" >
                     <button className={this.state.dropType} style={{float:"left",display:(result.columns<this.state.model.length)?"inline":"none"}} onClick={this.expandHandler}  ></button>

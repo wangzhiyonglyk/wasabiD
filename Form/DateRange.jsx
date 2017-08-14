@@ -121,6 +121,15 @@ let DateRange=React.createClass({
             second_max:second_max,
         }
     },
+      setValue(value)    {
+      this.setState({
+          value:value,
+      })
+    },
+    getValue()  {
+        return this.state.value;
+
+    },
     firstMonthHandler:function(year,month) {
           this.setState({
               first_year:year,
@@ -290,6 +299,7 @@ let DateRange=React.createClass({
     cancelHandler:function() {
         this.props.onSelect(null,null,this.props.name);
     },
+  
     render:function() {
          return (<div>
              <div className="ok">

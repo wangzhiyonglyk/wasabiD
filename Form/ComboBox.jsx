@@ -1,6 +1,6 @@
 /**
  * Created by zhiyongwang on 2016-04-26
- * desc:通用下拉框组件
+ * desc:下拉框容器
  *
  */
 require("../Sass/Form/ComboBox.scss");
@@ -15,127 +15,19 @@ let MutiText=require("./MutiText.jsx");
 let TreePicker=require("./TreePicker.jsx");
 let PanelPicker=require("./PanelPicker.jsx");
 var shouldComponentUpdate=require("../Mixins/shouldComponentUpdate.js");
+import props from "./config/props.js";
+import config from "./config/comboboxConfig.js";
+import defaultProps from  "./config/defaultProps.js";
 let ComboBox=React.createClass({
     mixins:[shouldComponentUpdate],
-    PropTypes:{
-        type:React.PropTypes.oneOf[
-            "select",//普通下拉
-                "date",//日期选择
-                "time",//时间选择
-                "datetime",//时间选择
-                "daterange",//日期范围选择
-                "datetimerange",//日期时间范围选择
-                "picker",//级联选择组件
-               
-                "treepicker",//下拉树选择
-                "panelpicker",//面板选择
-                "muti"//多行添加
-            ],//类型
-        name:React.PropTypes.string.isRequired,//字段名
-        label:React.PropTypes.oneOfType([React.PropTypes.string,React.PropTypes.element,React.PropTypes.node]),//字段文字说明属性
-        width:React.PropTypes.number,//宽度
-        height:React.PropTypes.number,//高度
-        value:React.PropTypes.oneOfType([React.PropTypes.number,React.PropTypes.string]),//默认值,
-        text:React.PropTypes.oneOfType([React.PropTypes.number,React.PropTypes.string]),//默认文本值
-        placeholder:React.PropTypes.string,//输入框预留文字
-        readonly:React.PropTypes.bool,//是否只读
-        required:React.PropTypes.bool,//是否必填
-        onlyline:React.PropTypes.bool,//是否只占一行
-        hide:React.PropTypes.bool,//是否隐藏
-        regexp:React.PropTypes.string,//正则表达式
-        invalidTip:React.PropTypes.string,//无效时的提示字符
-        style:React.PropTypes.object,//自定义style
-        className:React.PropTypes.string,//自定义class
-        size:React.PropTypes.oneOf([
-            "none",
-            "default",
-            "large",//兼容性值,与two相同
-            "two",
-            "three",
-            "onlyline"
-        ]),//组件表单的大小
-        position:React.PropTypes.oneOf([
-            "left",
-            "default",
-            "right"
-        ]),//组件在表单一行中的位置
-
-        //其他属性
-        min:React.PropTypes.number,//最少选择几个
-        max:React.PropTypes.number,//最多选择几个
-        onClick: React.PropTypes.func,//自定义单击事件，这样就可以将普通下拉框组合其他组件
-        //其他属性
-        valueField: React.PropTypes.string,//数据字段值名称
-        textField:React.PropTypes.string,//数据字段文本名称
-        url:React.PropTypes.string,//ajax的后台地址
-        params:React.PropTypes.object,//查询参数
-        dataSource:React.PropTypes.string,//ajax的返回的数据源中哪个属性作为数据源,为null时直接后台返回的数据作为数据源
-        data:React.PropTypes.array,//自定义数据源
-        extraData:React.PropTypes.array,//额外的数据,对url有效
-        onSelect: React.PropTypes.func,//选中后的事件，回传，value,与text,data
-
-        //其他属性
-        secondUrl:React.PropTypes.string,//第二层节点的后台地址,
-        secondParams:React.PropTypes.object,//第二层节点的后台参数
-        secondParamsKey:React.PropTypes.string,//第二层节点的后台参数中传递一级节点value值的参数名称
-        thirdUrl:React.PropTypes.string,//第三层节点的后台地址，
-        thirdParams:React.PropTypes.object,//第三层节点的后台参数
-        thirdParamsKey:React.PropTypes.string,//第三层节点的后台参数中传递二级节点value值的参数名称
-        hotTitle:React.PropTypes.string,//热门选择标题
-        hotData:React.PropTypes.array,//热门选择的数据
-    },
+    PropTypes: Object.assign({type:React.PropTypes.oneOf(config)},props),
     getDefaultProps:function() {
-        return{
-            name:"",
-            label:null,
-            width:null,
-            height:null,
-            value:"",
-            text:"",
-            placeholder:"",
-            readonly:false,
-            required:false,
-            onlyline:false,
-            hide:false,
-            regexp:null,
-            invalidTip:null,
-            style:null,
-            className:null,
-            size:"default",
-            position:"default",
-            //其他属性
-            min:null,
-            max:null,
-            onClick:null,
-            //其他属性
-            multiple:false,
-            valueField:"value",
-            textField:"text",
-            url:null,
-            params:null,
-            dataSource:"data",
-            data:null,
-            extraData:null,
-            onSelect:null,
-            //其他属性
-            secondUrl:null,
-            secondParams:null,
-            secondParamsKey:null,
-            thirdUrl:null,
-            thirdParams:null,
-            thirdParamsKey:null,
-            hotTitle:"热门选择",
-            hotData:null,
-        };
+        return defaultProps;
     },
-    getInitialState:function() {
-        var text=this.props.text;
-        if(this.props.type.indexOf("date")>-1||this.props.type.indexOf("time")>-1) {
-            text = this.props.value;
-        }
+    getInitialState:function() {   
         return {
             value:this.props.value,
-            text: text,
+            text: this.props.text,
             hide:this.props.hide,
             readonly:this.props.readonly,
             required:this.props.required,
@@ -146,24 +38,8 @@ let ComboBox=React.createClass({
         }
     },
     componentWillReceiveProps:function(nextProps) {
-        var text=nextProps.text;
-        if(this.props.type.indexOf("date")>-1||this.props.type.indexOf("time")>-1) {//如果时间与日期相关组件，text就是value
-            if((!text||text=="")&&nextProps.value&&nextProps.value!="")
-            {
-                text=nextProps.value;
-            }
-        }
         this.setState({
-            value: nextProps.value,
-            text:text,
-            readonly: nextProps.readonly,
-            required:nextProps.required,
-            data:nextProps.data,
-            params:nextProps.params,
-            url:nextProps.url,
-            hide:nextProps.hide,
-
-
+            ...nextProps
         })
     },
     splitDate:function(splitdate) {//拆分日期格式
@@ -183,24 +59,19 @@ let ComboBox=React.createClass({
 
     },
 
-    onSelect:function(value,text,name,rowData) {//选中事件
-        this.setState({
-            value:value,
-            text:text,
-        });
-        if( this.props.onSelect!=null)
-        {
-            this.props.onSelect(value,text,this.props.name,rowData);
-        }
+    validate:function() {//用于Form调用验证
+        return this.refs.combobox.validate();
+    },
+    getValue:function()
+    {//用于调用获取值
+        return this.refs.combobox.state.value;
+    },
+    setValue(value){//用于调用设置值
+         this.refs.combobox.setValue(value);
     },
     changeHandler:function(event) {
     },
-    getComponentData:function() {//只读属性，获取对应的字段的数据源
-        return this.state.data;
-    },
-    validate:function() {
-        return this.refs.combobox.validate();
-    },
+
     renderMuti:function(){//普通下拉框
 
         var props={...this.props};

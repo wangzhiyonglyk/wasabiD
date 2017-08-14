@@ -10,61 +10,13 @@ let React = require('react');
 let setStyle=require("../Mixins/setStyle.js");
 var shouldComponentUpdate=require("../Mixins/shouldComponentUpdate.js");
 var Label=require("../Unit/Label.jsx");
+import props from "./config/props.js";
+import defaultProps from "./config/defaultProps.js";
 let SwitchButton = React.createClass({
     mixins:[setStyle,shouldComponentUpdate],
-    propTypes:{
-        name:React.PropTypes.string.isRequired,//字段名
-        label:React.PropTypes.oneOfType([React.PropTypes.string,React.PropTypes.element,React.PropTypes.node]),//字段文字说明属性
-        width:React.PropTypes.number,//宽度
-        height:React.PropTypes.number,//高度
-        value:React.PropTypes.oneOfType([React.PropTypes.number,React.PropTypes.string]),//默认值,
-        text:React.PropTypes.oneOfType([React.PropTypes.number,React.PropTypes.string]),//默认文本值
-        placeholder:React.PropTypes.string,//输入框预留文字
-        readonly:React.PropTypes.bool,//是否只读
-        required:React.PropTypes.bool,//是否必填
-        onlyline:React.PropTypes.bool,//是否只占一行
-        hide:React.PropTypes.bool,//是否隐藏
-        regexp:React.PropTypes.string,//正则表达式
-        invalidTip:React.PropTypes.string,//无效时的提示字符
-        style:React.PropTypes.object,//自定义style
-        className:React.PropTypes.string,//自定义class
-        size:React.PropTypes.oneOf([
-            "none",
-            "default",
-            "large",//兼容性值,与two相同
-            "two",
-            "three",
-            "onlyline"
-        ]),//组件表单的大小
-        position:React.PropTypes.oneOf([
-            "left",
-            "default",
-            "right"
-        ]),//组件在表单一行中的位置
-        onSelect:React.PropTypes.func,//单击事件，专门用于表单
-
-    },
+    propTypes:props,
     getDefaultProp:function() {
-        return {   type:"text",
-            name:"",
-            label:null,
-            width:null,
-            height:null,
-            value:0,
-            text:"false",
-            placeholder:"",
-            readonly:false,
-            required:false,
-            onlyline:false,
-            hide:false,
-            regexp:null,
-            invalidTip:null,
-            style:null,
-            className:null,
-            size:"default",
-            position:"default",
-
-        }
+     return defaultProps;
     },
     getInitialState:function(){
         return {
@@ -86,6 +38,14 @@ let SwitchButton = React.createClass({
     validate:function()
     {
       return true;
+    },
+      getValue:function () {//获取值
+        return this.state.value;
+    },
+    setValue:function(value){//设置值
+        this.setState({
+            value:value,
+        })
     },
     handleClick:function(){
         if(this.state.readonly)

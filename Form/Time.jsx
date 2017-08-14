@@ -1,7 +1,7 @@
 /*
  create by wangzy
  date:2016-06-12
- desc:时间选择组件
+ desc:时间选择组件 TODO 需要重新改造
  */
 require("../Sass/Form/DateTime.scss");
 let React=require("react");
@@ -42,6 +42,14 @@ let Time=React.createClass({
         this.refs.minute.scrollTop=this.state.minute*24;
         this.refs.second.scrollTop=this.state.second*24;
 
+    },
+      getValue:function () {//获取值
+        return this.state.value;
+    },
+    setValue:function(value){//设置值 
+        this.setState({
+            value:value,
+        })
     },
     setInitValue:function(props)
     {

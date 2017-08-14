@@ -28,6 +28,15 @@ let DateTimeRange=React.createClass({
         this.setState(newstate);
 
     },
+      setValue(value)    {
+      this.setState({
+          value:value,
+      })
+    },
+    getValue()  {
+        return this.state.value;
+
+    },
     setDefaultState(props){
         //先设置默认值的，再判断用户是否有输入值
         var regs=/^(\d{4})-(\d{2})-(\d{2})$/;

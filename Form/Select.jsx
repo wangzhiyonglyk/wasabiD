@@ -255,8 +255,6 @@ let Select = React.createClass({
                 newData.unshift(obj);
             }
         }
-        window.localStorage.setItem(this.props.name + 'data', JSON.stringify(newData));//用于后期获取所有数据
-
         this.setState({
             data: newData,
             value: this.state.value,
@@ -288,8 +286,7 @@ let Select = React.createClass({
         this.unbindClickAway();//卸载全局单击事件
     },
 
-    onSelect: function (value, text, rowData) {//选中事件
-        console.log("test");
+    onSelect: function (value, text, rowData) {//选中事件  
         if ((this.props.onBeforeSelect && value != this.state.value && this.props.onBeforeSelect(value, text, rowData)) || !this.props.onBeforeSelect) {//选择之前的确定事件返回true,或者没有
 
             this.isChange = true;//代表自身发生了改变,防止父组件没有绑定value,text的状态值,而导致无法选择的结果

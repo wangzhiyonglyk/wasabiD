@@ -1,5 +1,7 @@
 /**
  * Created by wangzy on 16/6/17.
+ * edit by wangzhiyong 
+ * date:2017-08-14 进行大改版
  * desc:框架入口
  */
 
@@ -55,12 +57,12 @@ exports.SearchBox = require('./Form/SearchBox.jsx');//筛选框
 /*****************布局组件******************/
 
 exports.Drop = require('./Layout/Drop.jsx');//停靠组件
-exports.Layout = require('./Layout/Layout.jsx');//布局组件
-exports.Center = require('./Layout/Center.jsx');//布局组件-中间
-exports.North = require('./Layout/North.jsx');//布局组件-头部
-exports.South = require('./Layout/South.jsx');//布局组件-底部
-exports.West = require('./Layout/West.jsx');//布局组件-左侧
-exports.East = require('./Layout/East.jsx');//布局组件-右侧
+// exports.Layout = require('./Layout/Layout.jsx');//布局组件
+// exports.Center = require('./Layout/Center.jsx');//布局组件-中间
+// exports.North = require('./Layout/North.jsx');//布局组件-头部
+// exports.South = require('./Layout/South.jsx');//布局组件-底部
+// exports.West = require('./Layout/West.jsx');//布局组件-左侧
+// exports.East = require('./Layout/East.jsx');//布局组件-右侧
 
 exports.Modal = require('./Layout/Modal.jsx');//模态层组件
 exports.Panel = require('./Layout/Panel.jsx');//面板组件

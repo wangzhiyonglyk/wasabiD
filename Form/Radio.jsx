@@ -14,82 +14,13 @@ var showUpdate=require("../Mixins/showUpdate.js");
 var shouldComponentUpdate=require("../Mixins/shouldComponentUpdate.js");
 var Label=require("../Unit/Label.jsx");
 var Message=require("../Unit/Message.jsx");
+import props from "./config/props.js";
+import defaultProps from "./config/defaultProps.js";
 let Radio=React.createClass({
     mixins:[setStyle,validate,showUpdate,shouldComponentUpdate],
-    PropTypes:{
-        name:React.PropTypes.string.isRequired,//字段名
-        label:React.PropTypes.oneOfType([React.PropTypes.string,React.PropTypes.element,React.PropTypes.node]),//字段文字说明属性
-        title:React.PropTypes.string,//提示信息
-        width:React.PropTypes.number,//宽度
-        height:React.PropTypes.number,//高度
-        value:React.PropTypes.oneOfType([React.PropTypes.number,React.PropTypes.string]),//默认值,
-        text:React.PropTypes.oneOfType([React.PropTypes.number,React.PropTypes.string]),//默认文本值
-        placeholder:React.PropTypes.string,//输入框预留文字
-        readonly:React.PropTypes.bool,//是否只读
-        required:React.PropTypes.bool,//是否必填
-        onlyline:React.PropTypes.bool,//是否只占一行
-        hide:React.PropTypes.bool,//是否隐藏
-        regexp:React.PropTypes.string,//正则表达式
-        invalidTip:React.PropTypes.string,//无效时的提示字符
-        style:React.PropTypes.object,//自定义style
-        className:React.PropTypes.string,//自定义class
-        size:React.PropTypes.oneOf([
-            "none",
-            "default",
-            "large",//兼容性值,与two相同
-            "two",
-            "three",
-            "onlyline"
-        ]),//组件表单的大小
-        position:React.PropTypes.oneOf([
-            "left",
-            "default",
-            "right"
-        ]),//组件在表单一行中的位置
-
-        //其他属性
-        valueField: React.PropTypes.string,//数据字段值名称
-        textField:React.PropTypes.string,//数据字段文本名称
-        url:React.PropTypes.string,//ajax的后台地址
-        params:React.PropTypes.object,//查询参数
-        dataSource:React.PropTypes.string,//ajax的返回的数据源中哪个属性作为数据源,为null时直接后台返回的数据作为数据源
-        data:React.PropTypes.array,//自定义数据源
-        extraData:React.PropTypes.array,//额外的数据,对url有效
-        onSelect: React.PropTypes.func,//选中后的事件，回传，value,与text,data
-
-    },
+    PropTypes:props,
     getDefaultProps:function() {
-        return{
-            name:"",
-            label:null,
-            title:null,
-            width:null,
-            height:null,
-            value:"",
-            text:"",
-            placeholder:"",
-            readonly:false,
-            required:false,
-            onlyline:false,
-            hide:false,
-            regexp:null,
-            invalidTip:null,
-            style:null,
-            className:null,
-            size:"default",
-            position:"default",
-
-
-            //其他属性
-            valueField:"value",
-            textField:"text",
-            url:null,
-            params:null,
-            dataSource:"data",
-            data:null,
-            extraData:null,
-            onSelect:null,
-        };
+        return defaultProps;
     },
     getInitialState:function() {
         var newData=[];var text=this.props.text;
@@ -178,7 +109,27 @@ let Radio=React.createClass({
     componentWillMount:function() {//如果指定url,先查询数据再绑定
         this.loadData(this.props.url,this.state.params);//查询数据
     },
+        setValue(value) {
+        let text = "";
+        for (let i = 0; i < this.state.data.length; i++) {
+            if (this.state.data[i].value == value) {
+                text = item;
+                break;
+            }
+        }
 
+        if (text) {
+            this.setState({
+                value: value,
+                text: text
+            })
+        }
+
+    },
+    getValue() {
+        return this.state.value;
+
+    },
     loadData:function(url,params) {
         if(url!=null&&url!="")
         {

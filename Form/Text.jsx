@@ -2,8 +2,6 @@
 //date:2016-08-02
 //desc 将输入框从Input中独立出来
 let React=require("react");
-
-
 var validation=require("../Lang/validation.js");
 let setStyle=require("../Mixins/setStyle.js");
 var validate=require("../Mixins/validate.js");
@@ -12,94 +10,19 @@ var Label=require("../Unit/Label.jsx");
 var Message=require("../Unit/Message.jsx");
 var FetchModel=require("../Model/FetchModel.js");
 var unit=require("../libs/unit.js");
-
+import props from "./config/props.js";
+import config from "./config/textConfig.js"
+import defaultProps from  "./config/defaultProps.js";
 var Text=React.createClass({
     mixins:[setStyle,validate,shouldComponentUpdate],
-    propTypes: {
-        type:React.PropTypes.oneOf([
-            "text",//普通输入框
-            "textarea",//多行文本
-            "password",//密码
-            "email",//邮箱
-            "url",//网址
-            "mobile",//手机
-            "idcard",//身份证
-            "alpha",//英文字母
-            "alphanum",//英文字母与数字
-            "integer",//整型数据
-            "number",//数字
-        ]),//文本框输入的类型
-        name:React.PropTypes.string.isRequired,//字段名
-        label:React.PropTypes.oneOfType([React.PropTypes.string,React.PropTypes.element,React.PropTypes.node]),//字段文字说明属性
-        width:React.PropTypes.number,//宽度
-        height:React.PropTypes.number,//高度
-        value:React.PropTypes.oneOfType([React.PropTypes.number,React.PropTypes.string]),//默认值,
-        text:React.PropTypes.oneOfType([React.PropTypes.number,React.PropTypes.string]),//默认文本值
-        placeholder:React.PropTypes.string,//输入框预留文字
-        readonly:React.PropTypes.bool,//是否只读
-        required:React.PropTypes.bool,//是否必填
-        onlyline:React.PropTypes.bool,//是否只占一行
-        hide:React.PropTypes.bool,//是否隐藏
-        regexp:React.PropTypes.string,//正则表达式
-        invalidTip:React.PropTypes.string,//无效时的提示字符
-        style:React.PropTypes.object,//自定义style
-        className:React.PropTypes.string,//自定义class
-        size:React.PropTypes.oneOf([
-            "none",
-            "default",
-            "large",//兼容性值,与two相同
-            "two",
-            "three",
-            "onlyline"
-        ]),//组件表单的大小
-        position:React.PropTypes.oneOf([
-            "left",
-            "default",
-            "right"
-        ]),//组件在表单一行中的位置
-
-        //其他属性
-        rows:React.PropTypes.number,//行数
-        min:React.PropTypes.number,//最小值,最小长度,
-        max:React.PropTypes.number,//最大值,最大长度
-        onClick:React.PropTypes.func,//单击事件
-        onChange:React.PropTypes.func,//值改变事件
-        validateUrl:React.PropTypes.string,//后台验证的url
-
-        onBlur:React.PropTypes.func,//失去焦点事件
-
-    },
+     propTypes: Object.assign({type:React.PropTypes.oneOf(config)},props),
     getDefaultProps:function() {
-        return{
-            type:"text",
-            name:"",
-            label:null,
-            width:null,
-            height:null,
-            value:"",
-            text:"",
-            placeholder:"",
-            readonly:false,
-            required:false,
-            onlyline:false,
-            hide:false,
-            regexp:null,
-            invalidTip:null,
-            style:null,
-            className:null,
-            size:"default",
-            position:"default",
-
-            //其他属性
-            row:5,
-            min:null,
-            max:null,
-            onClick:null,
-            onChange:null,
-            validateUrl:null,
-
-
-        }
+        return defaultProps;
+    },
+    componentWillReceiveProps:function(nextProps) {
+         this.setState({
+            ...nextProps
+        })
     },
     getInitialState:function() {
         return{
@@ -148,7 +71,7 @@ var Text=React.createClass({
             this.props.onBlur();
         }
     },
-    changeHandler:function(event) {
+    onChange:function(event) {
         if (this.validateInput==true) {//输入有效的时候
 
             if((this.props.type=="integer"||this.props.type=="number")) {
@@ -257,11 +180,14 @@ var Text=React.createClass({
             this.props.onClick(this.props.name,this.state.value,model);
         }
     },
-
     getValue:function () {//获取值
         return this.state.value;
     },
-
+    setValue:function(value){//设置值
+        this.setState({
+            value:value,
+        })
+    },
     validateHandler:function (value) {//后台请求验证
         this.setState({
             validateState:"validing",//正在验证
@@ -286,8 +212,7 @@ var Text=React.createClass({
         if(this.props.type=="password") {
             inputType = "password";
         }
-        var size=this.props.onlyline==true?"onlyline":this.props.size;//组件大小
-        var componentClassName=  "wasabi-form-group "+size;//组件的基本样式
+        var componentClassName=  "wasabi-form-group "+this.props.size;//组件的基本样式
         var style =this.setStyle("input");//设置样式
         var controlStyle=this.props.controlStyle?this.props.controlStyle:{};
         controlStyle.display = this.state.hide == true ? "none" : "block";
@@ -306,7 +231,7 @@ var Text=React.createClass({
         if(this.props.type!="textarea")
         {
             control = <input  ref="input" type={inputType}   {...inputProps} onClick={this.clickHandler}
-                              onChange={this.changeHandler} onKeyDown={this.keyDownHandler}
+                              onChange={this.onChange} onKeyDown={this.keyDownHandler}
                               onKeyUp={this.keyUpHandler} onFocus={this.focusHandler}
                               onBlur={this.blurHandler}
                               value={this.state.value}></input>;
@@ -319,7 +244,7 @@ var Text=React.createClass({
                 value="";
             }
             control = <textarea ref="input"  {...inputProps} onClick={this.clickHandler}
-                                onChange={this.changeHandler} onKeyDown={this.keyDownHandler}
+                                onChange={this.onChange} onKeyDown={this.keyDownHandler}
                                 onKeyUp={this.keyUpHandler} onFocus={this.focusHandler}
                                 onBlur={this.blurHandler}
                                 value={value}></textarea>;

@@ -11,72 +11,13 @@ var Label=require("../Unit/Label.jsx");
 var Button=require("../Buttons/Button.jsx");
 var pasteExtend=require("../Mixins/pasteExtend.js");
 var ClickAway=require("../Unit/ClickAway.js");
+import props from "./config/props.js";
+import defaultProps from "./config/defaultProps.js";
 var MutiText=React.createClass({
     mixins:[setStyle,validate,shouldComponentUpdate,ClickAway],
-    propTypes: {
-        name:React.PropTypes.string.isRequired,//字段名
-        label:React.PropTypes.oneOfType([React.PropTypes.string,React.PropTypes.element,React.PropTypes.node]),//字段文字说明属性
-        title:React.PropTypes.string,//提示信息
-        width:React.PropTypes.number,//宽度
-        height:React.PropTypes.number,//高度
-        value:React.PropTypes.oneOfType([React.PropTypes.number,React.PropTypes.string]),//默认值,
-        text:React.PropTypes.oneOfType([React.PropTypes.number,React.PropTypes.string]),//默认文本值
-        placeholder:React.PropTypes.string,//输入框预留文字
-        readonly:React.PropTypes.bool,//是否只读
-        required:React.PropTypes.bool,//是否必填
-        onlyline:React.PropTypes.bool,//是否只占一行
-        hide:React.PropTypes.bool,//是否隐藏
-        regexp:React.PropTypes.string,//正则表达式
-        invalidTip:React.PropTypes.string,//无效时的提示字符
-        style:React.PropTypes.object,//自定义style
-        className:React.PropTypes.string,//自定义class
-        size:React.PropTypes.oneOf([
-            "none",
-            "default",
-            "large",//兼容性值,与two相同
-            "two",
-            "three",
-            "onlyline"
-        ]),//组件表单的大小
-        position:React.PropTypes.oneOf([
-            "left",
-            "default",
-            "right"
-        ]),//组件在表单一行中的位置
-
-        //其他属性
-        rows:React.PropTypes.number,//行数
-        min:React.PropTypes.number,//最小值,最小长度,
-        max:React.PropTypes.number,//最大值,最大长度
-        onClick:React.PropTypes.func,//单击事件
-        onChange:React.PropTypes.func,//值改变事件
-
-    },
+    propTypes:props,
     getDefaultProps:function() {
-        return{
-            type:"text",
-            name:"",
-            label:null,
-            title:null,
-            width:null,
-            height:null,
-            value:"",
-            text:"",
-            placeholder:"",
-            readonly:false,
-            required:false,
-            onlyline:false,
-            hide:false,
-            regexp:null,
-            invalidTip:null,
-            style:null,
-            className:null,
-            size:"default",
-            position:"default",
-
-
-
-        }
+        return defaultProps;
     },
     getInitialState:function() {
         return{
@@ -116,6 +57,15 @@ var MutiText=React.createClass({
         });
 
     },
+      setValue(value)    {
+      this.setState({
+          value:value,
+      })
+    },
+    getValue()  {
+        return this.state.value;
+
+    },
     componentDidMount:function(){
 
         this.registerClickAway(this.hidePicker, this.refs.picker);//注册全局单击事件
@@ -129,8 +79,7 @@ var MutiText=React.createClass({
             areaValue:event.target.value,
         })
     },
-    onlineChangeHandler:function(event)
-    {
+    onlineChangeHandler:function(event) {//对应onChange事件
         this.setState({
             value:event.target.value,
             text:event.target.value,
