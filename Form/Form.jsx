@@ -271,7 +271,7 @@ var Form = React.createClass({
     render: function () {
         let result = this.setColumns();//得计算列的结果
         let formSubmitVisible = true;//按钮行是否可见
-        if (this.state.disabled || (this.props.submitHide)) {
+        if (this.state.disabled || (this.props.submitHide)||!this.props.onSubmit) {
             formSubmitVisible = false;
         }
         else {
