@@ -212,32 +212,6 @@ width:250px;
   left:-60px;
 }
 
-/*下拉面板*/
-.combobox .panelpicker
-{
-  width:410px;
-  height:527px;
-  padding:0px;
-  margin: 0px;;
-  display: none;
-  position: absolute;
-  z-index:2;
-  top:34px;
-  background: white;
-
-}
-.combobox .panelpicker.default
-{
-  left: 0px;
-}
-.combobox .panelpicker.left
-{
-  left:0px;
-}
-.combobox .panelpicker.right
-{
-  left:-170px;
-}
 
 .combobox .ok
 {

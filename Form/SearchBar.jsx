@@ -8,7 +8,6 @@ var Button = require("../Buttons/Button.jsx");
 var unit = require("../libs/unit.js");
 var SearchBar = React.createClass({
     propTypes: {
-        model: React.PropTypes.array.isRequired,
         searchTitle: React.PropTypes.string,
         searchHide: React.PropTypes.bool,
         onSubmit: React.PropTypes.func.isRequired,
@@ -18,7 +17,6 @@ var SearchBar = React.createClass({
     },
     getDefaultProps: function () {
         return {
-            model: [],//表单数据模型
             searchTitle: "查询",//查询按钮的标题
             searchHide: false,//是否隐藏按钮
             onSubmit: null,//提交成功后的回调事件
@@ -37,9 +35,7 @@ var SearchBar = React.createClass({
             //没有滚动条  现在每个页面留有左右20像素的边距
             this.availWidth = window.screen.availWidth - 40;//防止后期出现滚动条,而产生样式变形,先减去滚动条宽度
         }
-
         return {
-            model: (this.props.model),
             dropType: "wasabi-button wasabi-searchbar-down",//折叠按钮样式
             columns: this.props.columns,
         }
@@ -47,41 +43,38 @@ var SearchBar = React.createClass({
     componentWillReceiveProps: function (nextProps) {
         //屏幕可用宽度,
         this.setState({
-            model: (nextProps.model),
             style: nextProps.style,
             className: nextProps.className,
 
         });
 
     },
-
-
     getData: function () {
         var data = {}
-        for (let v in this.refs) {
-            if (this.refs[v].props.type == "button") {
-                continue;//如果按钮则跳过
-            }
-            if (this.refs[v].props.name.indexOf(",") > -1) {//含有多个字段
-                var nameSplit = this.refs[v].props.name.split(",");
-                if (this.refs[v].state.value && this.refs[v].state.value != "") {
-                    var valueSplit = this.refs[v].state.value.split(",");
-                    for (let index = 0; index < nameSplit.length; index++) {
-                        if (index < valueSplit.length) {
-                            data[nameSplit[index]] = valueSplit[index];
+        for (let v in this.refs) {      
+            if (this.refs[v].props.name&&this.refs[v].getValue) {//说明是表单控件
+                if (this.refs[v].props.name.indexOf(",") > -1) {//含有多个字段
+                    var nameSplit = this.refs[v].props.name.split(",");
+                    if (this.refs[v].state.value && this.refs[v].state.value != "") {
+                        var valueSplit = this.refs[v].state.value.split(",");
+                        for (let index = 0; index < nameSplit.length; index++) {
+                            if (index < valueSplit.length) {
+                                data[nameSplit[index]] = valueSplit[index];
+                            }
+                        }
+
+                    }
+                    else {
+                        for (let index = 0; index < nameSplit.length; index++) {
+                            data[nameSplit[index]] = null;
                         }
                     }
-
                 }
                 else {
-                    for (let index = 0; index < nameSplit.length; index++) {
-                        data[nameSplit[index]] = null;
-                    }
+                    data[this.refs[v].props.name] = this.refs[v].getValue();
                 }
             }
-            else {
-                data[this.refs[v].props.name] = this.refs[v].state.value;
-            }
+
 
         }
         return data;
@@ -94,7 +87,7 @@ var SearchBar = React.createClass({
         }
         for (let v in this.refs) {
             if (data[this.refs[v].props.name]) {
-                this.refs[v].setValue(data[this.refs[v].props.name]);
+                this.refs[v].setValue&&this.refs[v].setValue(data[this.refs[v].props.name]);
             }
         }
     },
@@ -102,46 +95,48 @@ var SearchBar = React.createClass({
         for (let v in this.refs) {
             for (let v in this.refs) {
                 if (data[this.refs[v].props.name]) {
-                    this.refs[v].setValue("");
+                   this.refs[v].setValue&& this.refs[v].setValue("");
                 }
             }
         }
     },
     onSubmit: function () {
-        //筛选查询开始
-        var data = {};//各个字段对应的值
-        var textData = {};//各个字段对应的文本值
+        //提交 数据
+        var data = {};//各个字段对应的值 
+        for (let v in this.refs) {      
+           if (this.refs[v].props.name && this.refs[v].getValue) {//说明是表单控件
+                if (this.refs[v].props.name.indexOf(",") > -1) {//含有多个字段
+                    var nameSplit = this.refs[v].props.name.split(",");
+                    let value = this.refs[v].getValue();
+                    if (value) {
+                        var valueSplit = value.split(",");
+                        for (let index = 0; index < valueSplit.length; index++)//有可能分离的值比字段少
+                        {
+                            if (index < valueSplit.length) {
+                                data[nameSplit[index]] = valueSplit[index];
 
-        for (let v in this.refs) {
+                            }
+                        }
 
-            if (this.refs[v].props.name.indexOf(",") > -1) {//含有多个字段
-                var nameSplit = this.refs[v].props.name.split(",");
-                if (this.refs[v].state.value && this.refs[v].state.value != "") {
-                    var valueSplit = this.refs[v].state.value.split(",");
-                    var textSplit = this.refs[v].state.text.split(",");//文本值
-                    for (let index = 0; index < nameSplit.length; index++) {
-                        if (index < valueSplit.length) {
-                            data[nameSplit[index]] = valueSplit[index];
-                            textData[nameSplit[index]] = textSplit[index];
+                    }
+                    else {
+                        for (let index = 0; index < nameSplit.length; index++) {
+                            data[nameSplit[index]] = null;
+
                         }
                     }
-
                 }
                 else {
-                    for (let index = 0; index < nameSplit.length; index++) {
-                        data[nameSplit[index]] = null;
-                        textData[nameSplit[index]] = "";
-                    }
+                    data[this.refs[v].props.name] = this.refs[v].getValue();
                 }
             }
-            else {
-                data[this.refs[v].props.name] = this.refs[v].state.value;
-                textData[this.refs[v].props.name] = this.refs[v].state.text;
-
-            }
-
         }
-        this.props.onSubmit(data, textData);
+            if (this.props.onSubmit != null) {
+                this.props.onSubmit(data);
+            }
+            else {
+                return data;
+            }      
     },
 
     expandHandler: function () {
@@ -161,16 +156,12 @@ var SearchBar = React.createClass({
         if (this.props.expandHandler != null) {
             this.props.expandHandler(expand);
         }
-
-
     },
-    setColumns: function () {//计算列数及样式
+    setColumns: function () {//计算列数及样式 TODO 此处要重新设计
         var style = {};//表单栏样式
         if (this.props.style) {
             style = this.props.style;
         }
-
-
         //表单实际宽度
         let actualWidth = this.props.width ? this.props.width : style.width ? style.width : this.availWidth;//总宽度
         let leftWidth = actualWidth - 130;//左侧表单宽度
@@ -193,15 +184,14 @@ var SearchBar = React.createClass({
                 columns = 4;
             }
         }
-        if ((this.state.model.length + this.props.children.length) < columns) {//如果数据小于列数,否则查询按钮会位置发生改变
-            columns = this.state.model.length;
+        if ((this.props.children.length) < columns) {//如果数据小于列数,否则查询按钮会位置发生改变
+            columns = this.props.children.length;
             if (columns == 1) {//如果只有两列的话,重新定义宽度
                 actualWidth = 400;
             }
             else if (columns == 2) {
                 actualWidth = 700;
             }
-
             else if (columns == 3) {
                 actualWidth = 1024;
             }
@@ -233,7 +223,6 @@ var SearchBar = React.createClass({
         }
         return result;
     },
-
     render: function () {
         var result = this.setColumns();//得计算列的结果
         let props = {
@@ -245,58 +234,14 @@ var SearchBar = React.createClass({
             <div {...props}>
                 <div className="leftform" style={{ width: result.leftWidth }}  >
                     {
-                        this.state.model.map((child, index) => {
-                            var size = child.size;//组件大小
-                            if (size == "one") {
-                                orderIndex++;
-                            }
-                            else if (size == "two") {
-
-                                if (result.columns == 1) {
-                                    orderIndex++;//每行只有一列,算一列
-                                }
-                                else {
-                                    orderIndex += 2;//算两列
-                                }
-
-                            }
-                            else if (size == "three") {
-
-                                if (result.columns == 1 || result.columns == 2) {
-                                    orderIndex++;//每行只有一列或者两列,算一列
-                                }
-                                else {
-                                    orderIndex += 3;//算三列
-                                }
-
-                            }
-                            else if (size == "four" || size == "onlyline") {
-                                orderIndex += result.columns;
-                            }
-                            //因为orderIndex代表的是下一个序号,所以要小于等于来判断是否隐藏
-
-                            return (<div className="wasabi-searchbar-item" key={(orderIndex)}
-                                style={{ display: (this.state.dropType == "wasabi-button wasabi-searchbar-down" ? (((orderIndex) <= result.columns) ? "inline" : "none") : "inline") }}>
-                                <Input ref={child.name}
-                                    key={child.name + index.toString()}
-                                    {...child}
-                                    readonly={this.state.disabled == true ? true : child.readonly}
-                                    backFormHandler={this.changeHandler}
-                                ></Input></div>
-                            );
-
-                        })
-
-                    }
-                    {
                         React.Children.map(this.props.children, (child, index) => {
                             return React.cloneElement(child, { key: index, ref: index })
                         })
                     }
                 </div>
                 <div className="rightbutton" style={{ display: this.props.searchHide == true ? "none" : this.props.onSubmit ? null : "none" }} >
-                    <button className={this.state.dropType} style={{ float: "left", display: (result.columns < (this.state.model.length + this.props.children.length)) ? "inline" : "none" }} onClick={this.expandHandler}  ></button>
-                    <Button onClick={this.onSubmit.bind(this, "submit")} theme="primary" style={{ float: "right", marginTop: ((result.columns < this.state.model.length) ? -22 : 0), display: this.props.searchHide == true ? "none" : null }} title={this.props.searchTitle}   >
+                    <button className={this.state.dropType} style={{ float: "left", display: (result.columns < (this.props.children.length)) ? "inline" : "none" }} onClick={this.expandHandler}  ></button>
+                    <Button onClick={this.onSubmit.bind(this, "submit")} theme="primary" style={{ float: "right", marginTop: ((result.columns < this.props.children.length) ? -22 : 0), display: this.props.searchHide == true ? "none" : null }} title={this.props.searchTitle}   >
                         {this.props.searchTitle}
                     </Button>
                 </div>

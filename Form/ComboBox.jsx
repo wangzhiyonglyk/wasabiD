@@ -13,7 +13,6 @@ let Select=require("./Select.jsx");
 let MutiText=require("./MutiText.jsx");
 
 let TreePicker=require("./TreePicker.jsx");
-let PanelPicker=require("./PanelPicker.jsx");
 import props from "./config/props.js";
 import config from "./config/comboboxConfig.js";
 import defaultProps from  "./config/defaultProps.js";
@@ -138,17 +137,7 @@ let ComboBox=React.createClass({
         props.params=this.state.params;
         return <TreePicker ref="combobox" {...props}  onSelect={this.onSelect}></TreePicker>;
     },
-    renderPanelPicker:function() {
-        var props={...this.props};
-        var props={...this.props};
-        props.value=this.state.value;
-        props.text=this.state.text;
-        props.hide=this.state.hide;
-        props.data=this.state.data;
-        props.readonly=this.state.readonly;
 
-        return <PanelPicker ref="combobox" {...props} onSelect={this.onSelect}></PanelPicker>;
-    },
     render:function() {
 
         let control = null;

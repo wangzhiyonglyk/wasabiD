@@ -65,7 +65,7 @@ let Input = React.createClass({
             control = <SwitchButton ref="input"  {...props} onSelect={this.onSelect}></SwitchButton>
         }
 
-        else if (type == "muti" || type == "select" || type == "datetime" || type == "time" || type == "date" || type == "daterange" || type == "datetimerange" || type == "picker" || type == "treepicker" || type == "panelpicker") {//下拉组件
+        else if (type == "muti" || type == "select" || type == "datetime" || type == "time" || type == "date" || type == "daterange" || type == "datetimerange" || type == "picker" || type == "treepicker" ) {//下拉组件
             control = <ComboBox ref="input" {...props } onSelect={this.onSelect}></ComboBox>
         }
 

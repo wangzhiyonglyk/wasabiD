@@ -47,7 +47,6 @@ exports.MutiText = require('./Form/MutiText.jsx');//多行添加组件
 exports.Select = require('./Form/Select.jsx');//普通下拉选择组件
 exports.Picker = require('./Form/Picker.jsx');//级联选择组件
 exports.TreePicker = require('./Form/TreePicker.jsx');//下拉树选择组件
-exports.PanelPicker = require('./Form/PanelPicker.jsx');//级联选择组件
 exports.DatePicker = require('./Form/DatePicker.jsx');//通用下拉日期组件
 exports.ComboBox = require('./Form/ComboBox.jsx');//通用下拉框组件
 exports.SearchBox = require('./Form/SearchBox.jsx');//筛选框

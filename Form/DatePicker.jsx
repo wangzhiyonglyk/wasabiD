@@ -294,8 +294,9 @@ let DatePicker=React.createClass({
                 controlDropClassName = "range";
                 break;
         }
-        var size = this.props.onlyline == true ? "onlyline" : this.props.size;//组件大小
-        var componentClassName = "wasabi-form-group " + size ;//组件的基本样式
+      
+        
+        var componentClassName = "wasabi-form-group "  ;//组件的基本样式
         var style = this.setStyle("input");//设置样式
         var controlStyle=this.props.controlStyle?this.props.controlStyle:{};
         controlStyle.display = this.state.hide == true ? "none" : "block";
@@ -319,7 +320,7 @@ let DatePicker=React.createClass({
                         <i className={"picker-clear"} onClick={this.clearHandler} style={{display:this.state.readonly?"none":(this.state.value==""||!this.state.value)?"none":"inline"}}></i>
                         <i className={"pickericon  " +(this.state.show?" rotate":"")} onBlur={this.onBlur} onClick={this.showPicker.bind(this,1)}></i>
                         <input type="text" {...inputProps} value={text} onClick={this.showPicker.bind(this,2)} onChange={this.changeHandler}/>
-                        <div className={"dropcontainter "+controlDropClassName+" "+size+" "+this.props.position}
+                        <div className={"dropcontainter "+controlDropClassName+" "}
                              style={{display:this.state.show==true?"block":"none"}} >
                             {
                                 control
@@ -327,7 +328,7 @@ let DatePicker=React.createClass({
 
                         </div>
                     </div>
-                    <small className={"wasabi-help-block "+this.props.position}
+                    <small className={"wasabi-help-block "}
                            style={{display:(this.state.helpTip&&this.state.helpTip!="")?this.state.helpShow:"none"}}><div className="text">{this.state.helpTip}</div></small>
                 </div>
             </div>

@@ -247,8 +247,8 @@ let CheckBox = React.createClass({
         }
     },
     render: function () {
-        var size = this.props.onlyline == true ? "onlyline" : this.props.size;//组件大小
-        var componentClassName = "wasabi-form-group " + size + " " + (this.props.className ? this.props.className : "");//组件的基本样式
+       
+        var componentClassName = "wasabi-form-group " + (this.props.className ? this.props.className : "");//组件的基本样式
         var style = this.setStyle("input");//设置样式
         var controlStyle = this.props.controlStyle ? this.props.controlStyle : {};
         controlStyle.display = this.state.hide == true ? "none" : "block";
@@ -283,7 +283,7 @@ let CheckBox = React.createClass({
                             control
                         }
                     </ul>
-                    <small className={"wasabi-help-block " + this.props.position} style={{ display: (this.state.helpTip && this.state.helpTip != "") ? this.state.helpShow : "none" }}><div className="text">{this.state.helpTip}</div></small>
+                    <small className={"wasabi-help-block " } style={{ display: (this.state.helpTip && this.state.helpTip != "") ? this.state.helpShow : "none" }}><div className="text">{this.state.helpTip}</div></small>
                 </div>
             </div>
 

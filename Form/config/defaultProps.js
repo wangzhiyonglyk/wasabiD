@@ -23,7 +23,7 @@ export default {
             style:null,
             controlStyle:null,
             className:"",
-            size:"one",
+           
               //其他属性 text
             rows:5,
             cols:1,

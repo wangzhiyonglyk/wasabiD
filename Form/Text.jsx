@@ -10,7 +10,7 @@ var Message=require("../Unit/Message.jsx");
 var FetchModel=require("../Model/FetchModel.js");
 var unit=require("../libs/unit.js");
 import props from "./config/props.js";
-import config from "./config/textConfig.js"
+import config from "./config/textConfig.js";
 import defaultProps from  "./config/defaultProps.js";
 var Text=React.createClass({
     mixins:[setStyle,validate],
@@ -211,7 +211,7 @@ var Text=React.createClass({
         if(this.props.type=="password") {
             inputType = "password";
         }
-        var componentClassName=  "wasabi-form-group "+this.props.size;//组件的基本样式
+        var componentClassName=  "wasabi-form-group ";//组件的基本样式
         var style =this.setStyle("input");//设置样式
         var controlStyle=this.props.controlStyle?this.props.controlStyle:{};
         controlStyle.display = this.state.hide == true ? "none" : "block";
@@ -256,7 +256,7 @@ var Text=React.createClass({
                 <div className={ "wasabi-form-group-body"} style={{width:!this.props.label?"100%":null}}>
                     {control}
                     <i className={this.state.validateState} style={{display:(this.state.validateState?"block":"none")}} ></i>
-                    <small className={"wasabi-help-block "+this.props.position} style={{display:(this.state.helpTip&&this.state.helpTip!="")?this.state.helpShow:"none"}}>
+                    <small className={"wasabi-help-block "} style={{display:(this.state.helpTip&&this.state.helpTip!="")?this.state.helpShow:"none"}}>
                         <div className="text">{this.state.helpTip}</div></small>
                 </div>
             </div>

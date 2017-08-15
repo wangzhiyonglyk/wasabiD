@@ -21,18 +21,7 @@ export default {
         style:React.PropTypes.object,//自定义style
         controlStyle:React.PropTypes.object,//自定义外层样式
         className:React.PropTypes.string,//自定义class
-        size:React.PropTypes.oneOf([  
-            "one",
-            "two",
-            "three",
-            "four"
-        ]),//组件表单的大小
-        position:React.PropTypes.oneOf([
-            "left",
-            "default",
-            "right"
-        ]),//组件在表单一行中的位置
-
+    
         //其他属性 text
         rows:React.PropTypes.number,//textarea
         cols:React.PropTypes.number,//textarea

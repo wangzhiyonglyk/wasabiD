@@ -92,7 +92,7 @@ let SwitchButton = React.createClass({
                 <div className={className} onClick={this.handleClick}>
                     <div className={"slideblock "}></div>
                 </div>
-                <small className={"wasabi-help-block "+this.props.position} style={{display:(this.state.helpTip&&this.state.helpTip!="")?this.state.helpShow:"none"}}><div className="text">{this.state.helpTip}</div></small>
+                <small className={"wasabi-help-block "} style={{display:(this.state.helpTip&&this.state.helpTip!="")?this.state.helpShow:"none"}}><div className="text">{this.state.helpTip}</div></small>
             </div>
         </div>
 

@@ -152,8 +152,9 @@ let TreePicker=React.createClass({
     },
     render:function() {
 
-        var size=this.props.onlyline==true?"onlyline":this.props.size;//组件大小
-        var componentClassName=  "wasabi-form-group "+size;//组件的基本样式
+       
+        
+        var componentClassName=  "wasabi-form-group ";//组件的基本样式
         var style =this.setStyle("input");//设置样式
         var controlStyle=this.props.controlStyle?this.props.controlStyle:{};
         controlStyle.display = this.state.hide == true ? "none" : "block";
@@ -176,7 +177,7 @@ let TreePicker=React.createClass({
                     <i className={"picker-clear "} onClick={this.clearHandler} style={{display:this.state.readonly?"none":(this.state.value==""||!this.state.value)?"none":"inline"}}></i>
                     <i className={"pickericon  " +(this.state.show?"rotate":"")} onClick={this.showPicker.bind(this,1)}></i>
                     <input type="text" {...inputProps}  value={this.state.text} onBlur={this.onBlur}   onClick={this.showPicker.bind(this,2)} onChange={this.changeHandler}     />
-                    <div className={"dropcontainter treepicker  "+this.props.position} style={{height:this.props.height,display:this.state.show==true?"block":"none"}}  >
+                    <div className={"dropcontainter treepicker  "} style={{height:this.props.height,display:this.state.show==true?"block":"none"}}  >
                         <Tree
                             name={this.props.name}  value={this.state.value} text={this.state.text}
                             valueField={this.props.valueField} textField={this.props.textField} dataSource={this.props.dataSource}
@@ -185,7 +186,7 @@ let TreePicker=React.createClass({
                     </div>
                 </div>
 
-                <small className={"wasabi-help-block "+this.props.position} style={{display:(this.state.helpTip&&this.state.helpTip!="")?this.state.helpShow:"none"}}>{this.state.helpTip}</small>
+                <small className={"wasabi-help-block "} style={{display:(this.state.helpTip&&this.state.helpTip!="")?this.state.helpShow:"none"}}>{this.state.helpTip}</small>
             </div>
         </div>
 

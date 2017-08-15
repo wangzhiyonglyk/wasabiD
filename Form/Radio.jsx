@@ -262,7 +262,7 @@ let Radio=React.createClass({
                             control
                         }
                     </ul>
-                    <small className={"wasabi-help-block "+this.props.position}
+                    <small className={"wasabi-help-block "}
                            style={{display:(this.state.helpTip&&this.state.helpTip!="")?this.state.helpShow:"none"}}><div className="text">{this.state.helpTip}</div></small>
                 </div>
             </div>
