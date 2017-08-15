@@ -8,9 +8,7 @@ let Lang=require("../Lang/language.js");
 let DateD=require("./DateD.jsx");
 let Time=require("./Time.jsx");
 let Button=require("../Buttons/Button.jsx");
-var shouldComponentUpdate=require("../Mixins/shouldComponentUpdate.js");
 let DateTimeRange=React.createClass({
-    mixins:[shouldComponentUpdate],
     PropTypes:{
         name:React.PropTypes.string,//名称
         firstDate:React.PropTypes.string,//第一个日期

@@ -14,12 +14,10 @@ let MutiText=require("./MutiText.jsx");
 
 let TreePicker=require("./TreePicker.jsx");
 let PanelPicker=require("./PanelPicker.jsx");
-var shouldComponentUpdate=require("../Mixins/shouldComponentUpdate.js");
 import props from "./config/props.js";
 import config from "./config/comboboxConfig.js";
 import defaultProps from  "./config/defaultProps.js";
 let ComboBox=React.createClass({
-    mixins:[shouldComponentUpdate],
     PropTypes: Object.assign({type:React.PropTypes.oneOf(config)},props),
     getDefaultProps:function() {
         return defaultProps;

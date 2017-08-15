@@ -16,14 +16,14 @@ var validation=require("../Lang/validation.js");
 var regs=require("../Lang/regs.js");
 let setStyle=require("../Mixins/setStyle.js");
 var validate=require("../Mixins/validate.js");
-var shouldComponentUpdate=require("../Mixins/shouldComponentUpdate.js");
+
 var Label=require("../Unit/Label.jsx");
 var ClickAway=require("../Unit/ClickAway.js");
 import props from "./config/props.js";
 import config from "./config/dateConfig.js"
 import defaultProps from  "./config/defaultProps.js";
 let DatePicker=React.createClass({
-    mixins:[setStyle,validate,shouldComponentUpdate,ClickAway],
+    mixins:[setStyle,validate,ClickAway],
     propTypes: Object.assign({type:React.PropTypes.oneOf(config)},props),
     getDefaultProps:function() {
         return defaultProps;

@@ -10,13 +10,13 @@ var validation = require("../Lang/validation.js");
 let setStyle = require("../Mixins/setStyle.js");
 var validate = require("../Mixins/validate.js");
 var showUpdate = require("../Mixins/showUpdate.js");
-var shouldComponentUpdate = require("../Mixins/shouldComponentUpdate.js");
+
 var Label = require("../Unit/Label.jsx");
 var Message = require("../Unit/Message.jsx");
 import props from "./config/props.js";
 import defaultProps from "./config/defaultProps.js";
 let CheckBox = React.createClass({
-    mixins: [setStyle, validate, showUpdate, shouldComponentUpdate],
+    mixins: [setStyle, validate, showUpdate],
     propTypes: props,
     getDefaultProps: function () {
         return defaultProps;

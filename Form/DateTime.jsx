@@ -8,10 +8,7 @@ let Time=require("./Time.jsx");
 let Button=require("../Buttons/Button.jsx");
 let CalendarHeader=require("./CalendarHeader.jsx");
 let CalendarBody=require("./CalendarBody.jsx");
-var shouldComponentUpdate=require("../Mixins/shouldComponentUpdate.js");
-
 let DateTime = React.createClass({
-    mixins:[shouldComponentUpdate],
     PropTypes:{
         name:React.PropTypes.string,//字段名称，对应于表单
         year: React.PropTypes.number,//年

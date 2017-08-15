@@ -18,12 +18,11 @@ let Button = require("../Buttons/Button.jsx");
 let LinkButton = require("../Buttons/LinkButton.jsx");
 let setStyle = require("../Mixins/setStyle.js");
 let unit = require("../libs/unit.js");
-let shouldComponentUpdate = require("../Mixins/shouldComponentUpdate.js");
 import props from "./config/props.js";
 import config from "./config/inputConfig.js"
 import defaultProps from "./config/defaultProps.js";
 let Input = React.createClass({
-    mixins: [setStyle, shouldComponentUpdate],
+    mixins: [setStyle],
     propTypes: Object.assign({ type: React.PropTypes.oneOf(config) }, props),
     getDefaultProps: function () {
         return defaultProps;
@@ -75,9 +74,7 @@ let Input = React.createClass({
         return control;
     },
     render: function () {
-        let size = this.props.size;
-        let componentClassName = "wasabi-form-group " + this.props.size + " " + this.props.className;//组件的基本样式
-        let style = this.props.style;
+    
         if (this.props.type == "text" || this.props.type == "email"
             || this.props.type == "url" || this.props.type == "number"
             || this.props.type == "integer" || this.props.type == "alpha"

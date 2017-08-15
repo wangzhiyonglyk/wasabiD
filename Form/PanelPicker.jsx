@@ -5,11 +5,10 @@ var React = require("react");
 var validation=require("../Lang/validation.js");
 let setStyle=require("../Mixins/setStyle.js");
 var validate=require("../Mixins/validate.js");
-var shouldComponentUpdate=require("../Mixins/shouldComponentUpdate.js");
 var Label=require("../Unit/Label.jsx");
 var ClickAway=require("../Unit/ClickAway.js");
 var PanelPicker = React.createClass({
-    mixins:[setStyle,validate,shouldComponentUpdate,ClickAway],
+    mixins:[setStyle,validate,ClickAway],
     PropTypes:{
         type:React.PropTypes.oneOf[
             "date",//日期选择

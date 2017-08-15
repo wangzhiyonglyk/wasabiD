@@ -6,7 +6,6 @@ let React=require("react");
 var validation=require("../Lang/validation.js");
 let setStyle=require("../Mixins/setStyle.js");
 var validate=require("../Mixins/validate.js");
-var shouldComponentUpdate=require("../Mixins/shouldComponentUpdate.js");
 var Label=require("../Unit/Label.jsx");
 var Button=require("../Buttons/Button.jsx");
 var pasteExtend=require("../Mixins/pasteExtend.js");
@@ -14,7 +13,7 @@ var ClickAway=require("../Unit/ClickAway.js");
 import props from "./config/props.js";
 import defaultProps from "./config/defaultProps.js";
 var MutiText=React.createClass({
-    mixins:[setStyle,validate,shouldComponentUpdate,ClickAway],
+    mixins:[setStyle,validate,ClickAway],
     propTypes:props,
     getDefaultProps:function() {
         return defaultProps;

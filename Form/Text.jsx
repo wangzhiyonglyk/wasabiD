@@ -5,7 +5,6 @@ let React=require("react");
 var validation=require("../Lang/validation.js");
 let setStyle=require("../Mixins/setStyle.js");
 var validate=require("../Mixins/validate.js");
-var shouldComponentUpdate=require("../Mixins/shouldComponentUpdate.js");
 var Label=require("../Unit/Label.jsx");
 var Message=require("../Unit/Message.jsx");
 var FetchModel=require("../Model/FetchModel.js");
@@ -14,7 +13,7 @@ import props from "./config/props.js";
 import config from "./config/textConfig.js"
 import defaultProps from  "./config/defaultProps.js";
 var Text=React.createClass({
-    mixins:[setStyle,validate,shouldComponentUpdate],
+    mixins:[setStyle,validate],
      propTypes: Object.assign({type:React.PropTypes.oneOf(config)},props),
     getDefaultProps:function() {
         return defaultProps;

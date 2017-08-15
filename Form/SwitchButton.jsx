@@ -8,12 +8,12 @@
 require('../Sass/Form/SwitchButton.scss');
 let React = require('react');
 let setStyle=require("../Mixins/setStyle.js");
-var shouldComponentUpdate=require("../Mixins/shouldComponentUpdate.js");
+
 var Label=require("../Unit/Label.jsx");
 import props from "./config/props.js";
 import defaultProps from "./config/defaultProps.js";
 let SwitchButton = React.createClass({
-    mixins:[setStyle,shouldComponentUpdate],
+    mixins:[setStyle],
     propTypes:props,
     getDefaultProp:function() {
      return defaultProps;

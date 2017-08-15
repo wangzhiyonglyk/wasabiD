@@ -22,7 +22,6 @@ let Button = React.createClass({
                 "info",
                 "warning",
                 "danger",
-                "green",
                 "cancel"
             ]),
         size: React

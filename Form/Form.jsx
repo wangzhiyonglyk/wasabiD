@@ -6,9 +6,7 @@ var React = require("react");
 var Input = require("./Input.jsx");
 var Button = require("../Buttons/Button.jsx");
 var unit = require("../libs/unit.js");
-var shouldComponentUpdate = require("../Mixins/shouldComponentUpdate.js");
 var Form = React.createClass({
-    mixins: [shouldComponentUpdate],
     propTypes: {
         model: React.PropTypes.array.isRequired,//表单数据模型
         width: React.PropTypes.number,///宽度

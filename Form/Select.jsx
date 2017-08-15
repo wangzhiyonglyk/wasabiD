@@ -11,12 +11,11 @@ var validation = require("../Lang/validation.js");
 let setStyle = require("../Mixins/setStyle.js");
 var validate = require("../Mixins/validate.js");
 var showUpdate = require("../Mixins/showUpdate.js");
-var shouldComponentUpdate = require("../Mixins/shouldComponentUpdate.js");
 var Label = require("../Unit/Label.jsx");
 var Message = require("../Unit/Message.jsx");
 var ClickAway = require("../Unit/ClickAway.js");
 let Select = React.createClass({
-    mixins: [setStyle, validate, showUpdate, shouldComponentUpdate, ClickAway],
+    mixins: [setStyle, validate, showUpdate, ClickAway],
     PropTypes: {
         name: React.PropTypes.string.isRequired,//字段名
         label: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.element, React.PropTypes.node]),//字段文字说明属性

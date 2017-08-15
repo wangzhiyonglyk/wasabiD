@@ -14,14 +14,13 @@ var validation=require("../Lang/validation.js");
 let setStyle=require("../Mixins/setStyle.js");
 var validate=require("../Mixins/validate.js");
 var showUpdate=require("../Mixins/showUpdate.js");
-var shouldComponentUpdate=require("../Mixins/shouldComponentUpdate.js");
 var Label=require("../Unit/Label.jsx");
 var Message=require("../Unit/Message.jsx");
 var ClickAway=require("../Unit/ClickAway.js");
 import props from "./config/props.js";
 import defaultProps from "./config/defaultProps.js";
 let  Picker =  React.createClass({
-    mixins:[setStyle,validate,showUpdate,shouldComponentUpdate,ClickAway],
+    mixins:[setStyle,validate,showUpdate,ClickAway],
     propTypes:props,
     getDefaultProps :function(){
         return defaultProps;

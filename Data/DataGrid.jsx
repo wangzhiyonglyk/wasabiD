@@ -18,7 +18,7 @@ let Input = require("../Form/Input.jsx");
 let Radio = require("../Form/Radio.jsx");
 let Message = require("../Unit/Message.jsx");
 let Transfer = require("./Transfer.jsx");
-let shouldComponentUpdate = require("../Mixins/shouldComponentUpdate.js");
+
 let DataGridHandler = require("../Mixins/DataGridHandler.js");
 let DataGridExtend = require("../Mixins/DataGridExtend.js");
 let pasteExtend = require("../Mixins/pasteExtend.js");
@@ -27,7 +27,7 @@ let showUpdate = require("../Mixins/showUpdate.js");
 let regs = require("../Lang/regs.js");
 
 let DataGrid = React.createClass({
-    mixins: [shouldComponentUpdate, DataGridHandler, DataGridExtend, pasteExtend, ClickAway, showUpdate],
+    mixins: [DataGridHandler, DataGridExtend, pasteExtend, ClickAway, showUpdate],
     propTypes: {
         width: React.PropTypes.oneOfType([
             React.PropTypes.number,
