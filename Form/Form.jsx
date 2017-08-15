@@ -49,7 +49,6 @@ var Form = React.createClass({
 
     },
     getInitialState: function () {
-        this.isChange = false;
         //初始化时就获取可用宽度,如果每次更新获取,会产生晃动
         if (window.screen.availWidth < document.documentElement.clientWidth) {//屏幕可用宽度小,有滚动条
             this.availWidth = window.screen.availWidth;
@@ -67,36 +66,13 @@ var Form = React.createClass({
         }
     },
     componentWillReceiveProps: function (nextProps) {
-        this.showUpdate = false;//清除自身标记
         this.setState({
             model: (nextProps.model instanceof Array) ? nextProps.model : [],
             disabled: nextProps.disabled,
             columns: nextProps.columns,
         })
     },
-    componentDidUpdate: function () {
-        if (this.isChange && this.showUpdate) {
-            this.showUpdate = false;
-            if (this.props.changeHandler) {//用于父组件监听是否表单是否有修改，用于立即更新父组件中的按钮的权限之类的,
-                this.props.changeHandler();
-            }
-        }
-        else {
 
-        }
-
-    },
-    getState: function () {//只读方法，用于父组件其他方法里来获取表单是否发生改变
-        if (this.isChange) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    },
-    clearDirtyData: function () {//清除组件的表单脏数据状态
-        this.isChange = false;
-    },
     getData: function () {//获取当前表单的数据，没有验证
         var data = {};
         for (let v in this.refs) {
@@ -130,13 +106,22 @@ var Form = React.createClass({
         }
     },
     setData: function (data) {//设置值,data是对象
-        this.isChange = false;
+      
         if (!data) {
             return;
         }
         for (let v in this.refs) {
-            if (data[v.props.name]) {
+            if (data[ this.refs[v].props.name]) {
                 this.refs[v].setValue(data[this.refs[v].props.name]);
+            }
+        }
+    },
+     clearData: function () {
+        for (let v in this.refs) {
+            for (let v in this.refs) {
+                if (data[this.refs[v].props.name]) {
+                    this.refs[v].setValue("");
+                }
             }
         }
     },
@@ -147,17 +132,7 @@ var Form = React.createClass({
         }
         return isva;
     },
-    clearData: function () {//清空数据
-        this.isChange = false;//清除脏数据状态
-        var newModel = this.state.model;
-        for (let i = 0; i < newModel.length; i++) {
-            newModel[i].value = null;
-            newModel[i].text = null;
-        }
-        this.setState({
-            model: newModel
-        })
-    },
+    
     onSubmit: function () {
         //提交 数据
         var data = {};//各个字段对应的值
@@ -200,11 +175,7 @@ var Form = React.createClass({
 
         }
     },
-    closeHandler: function () {//关闭事件
-        if (this.props.closeHandler != null) {
-            this.props.closeHandler();
-        }
-    },
+
     setColumns: function () {//计算列数及样式
         var style = {};//表单栏样式
         if (this.props.style) {

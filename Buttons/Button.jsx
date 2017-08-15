@@ -42,7 +42,7 @@ let Button = React.createClass({
         return {
             title: null,
             tip: null,
-            theme: "default",
+            theme: "primary",
             size: "default",
             className: "",
             onClick: null,
