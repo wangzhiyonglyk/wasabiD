@@ -11,14 +11,21 @@ var Form = React.createClass({
         style: React.PropTypes.object,//样式
         className: React.PropTypes.string,//自定义样式
         disabled: React.PropTypes.bool,//是否只读
+         submitTitle: React.PropTypes.string,
+         submitHide: React.PropTypes.bool,
+          submitTheme:React.PropTypes.string,
         onSubmit: React.PropTypes.func,//提交成功后的回调事件
     },
     getDefaultProps: function () {
         return {
-            style: {},
+             style:{},
             className: "",
-            disabled: false,
-            onSubmit: null,
+            disabled:false,
+            submitTitle: "查询",//查询按钮的标题
+            submitHide: false,//是否隐藏按钮
+            submitTheme:"primary",//主题
+            onSubmit: null,//提交成功后的回调事 
+            
 
         }
     },
@@ -139,7 +146,12 @@ var Form = React.createClass({
         }
     },
 
-
+  setDisabled:function(disabled)
+  {
+      this.setState({
+          disabled:disabled//等于刷新了
+      })
+  },
     render: function () {
         return (
             <div className={"wasabi-form  clearfix " +  " " + this.props.className} style={this.props.style}>
@@ -147,12 +159,12 @@ var Form = React.createClass({
 
                     {
                         React.Children.map(this.props.children, (child, index) => {
-                            return React.cloneElement(child, { key: index, ref: index })
+                            return React.cloneElement(child, { disabled:this.state.disabled,key: index, ref: index })
                         })
                     }
                 </div>
                 <div className="form-submit clearfix" style={{ display: (this.onSubmit ? "block" : "none") }}>
-                    <Button theme={"primary"} onClick={this.onSubmit} title={"提交"} disabled={this.state.disabled}  >
+                    <Button theme={this.props.submitTheme} onClick={this.onSubmit} title={this.props.submitTitle} hide={this.props.submitHide} disabled={this.state.disabled}  >
                     </Button>
 
                 </div>

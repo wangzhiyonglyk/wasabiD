@@ -8,21 +8,25 @@ var Button = require("../Buttons/Button.jsx");
 var unit = require("../libs/unit.js");
 var SearchBar = React.createClass({
     propTypes: {
-        searchTitle: React.PropTypes.string,
-        searchHide: React.PropTypes.bool,
+          style: React.PropTypes.object,//样式
+        className: React.PropTypes.string,//自定义样式
+        submitTitle: React.PropTypes.string,
+        submitHide: React.PropTypes.bool,
+        submitTheme:React.PropTypes.string,
         onSubmit: React.PropTypes.func.isRequired,
         expandHandler: React.PropTypes.func,
-        width: React.PropTypes.number,
 
     },
     getDefaultProps: function () {
         return {
-            searchTitle: "查询",//查询按钮的标题
-            searchHide: false,//是否隐藏按钮
-            onSubmit: null,//提交成功后的回调事件
+            style:{},
             className: "",
+            submitTitle: "查询",//查询按钮的标题
+            submitHide: false,//是否隐藏按钮
+            submitTheme:"primary",//主题
+            onSubmit: null,//提交成功后的回调事 
             expandHandler: null,//展开与折叠事件
-            width: null,
+           
         }
 
     },
@@ -163,7 +167,7 @@ var SearchBar = React.createClass({
             style = this.props.style;
         }
         //表单实际宽度
-        let actualWidth = this.props.width ? this.props.width : style.width ? style.width : this.availWidth;//总宽度
+        let actualWidth =  style.width ? style.width : this.availWidth;//总宽度
         let leftWidth = actualWidth - 130;//左侧表单宽度
         let columnClass = "";//列样式
         let columns = 0;//每一行的列数
@@ -239,10 +243,9 @@ var SearchBar = React.createClass({
                         })
                     }
                 </div>
-                <div className="rightbutton" style={{ display: this.props.searchHide == true ? "none" : this.props.onSubmit ? null : "none" }} >
+                <div className="rightbutton" style={{ display: this.props.submitHide == true ? "none" : this.props.onSubmit ? null : "none" }} >
                     <button className={this.state.dropType} style={{ float: "left", display: (result.columns < (this.props.children.length)) ? "inline" : "none" }} onClick={this.expandHandler}  ></button>
-                    <Button onClick={this.onSubmit.bind(this, "submit")} theme="primary" style={{ float: "right", marginTop: ((result.columns < this.props.children.length) ? -22 : 0), display: this.props.searchHide == true ? "none" : null }} title={this.props.searchTitle}   >
-                        {this.props.searchTitle}
+                    <Button onClick={this.onSubmit.bind(this, "submit")} theme={this.props.submitTheme} style={{ float: "right", marginTop: ((result.columns < this.props.children.length) ? -22 : 0), display: this.props.submitHide == true ? "none" : null }} title={this.props.submitTitle}   >
                     </Button>
                 </div>
 

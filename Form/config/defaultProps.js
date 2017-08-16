@@ -9,8 +9,7 @@ export default {
             name:"",
             label:null,
             title:null,
-            width:null,
-            height:null,
+         
             value:"",
             text:"",
             placeholder:"",

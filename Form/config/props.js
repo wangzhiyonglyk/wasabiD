@@ -8,8 +8,7 @@ export default {
       name:React.PropTypes.string.isRequired,//字段名
         label:React.PropTypes.oneOfType([React.PropTypes.number,React.PropTypes.string,React.PropTypes.element,React.PropTypes.node]),//字段文字说明属性
         title:React.PropTypes.string,//提示信息
-        width:React.PropTypes.number,//宽度
-        height:React.PropTypes.number,//高度
+        
         value:React.PropTypes.oneOfType([React.PropTypes.number,React.PropTypes.string]),//默认值,
         text:React.PropTypes.oneOfType([React.PropTypes.number,React.PropTypes.string]),//默认文本值
         placeholder:React.PropTypes.oneOfType([React.PropTypes.number,React.PropTypes.string]),//输入框预留文字
