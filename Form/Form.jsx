@@ -163,7 +163,7 @@ var Form = React.createClass({
                         })
                     }
                 </div>
-                <div className="form-submit clearfix" style={{ display: (this.onSubmit ? "block" : "none") }}>
+                <div className="form-submit clearfix" style={{ display: (this.props.onSubmit ? "block" : "none") }}>
                     <Button theme={this.props.submitTheme} onClick={this.onSubmit} title={this.props.submitTitle} hide={this.props.submitHide} disabled={this.state.disabled}  >
                     </Button>
 
