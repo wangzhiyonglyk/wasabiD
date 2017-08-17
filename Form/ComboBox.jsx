@@ -56,70 +56,31 @@ let ComboBox=React.createClass({
     renderMuti:function(){//普通下拉框
 
         var props={...this.props};
-        props.value=this.state.value;
-        props.text=this.state.text;
-        props.hide=this.state.hide;
-        props.data=this.state.data;
-        props.readonly=this.state.readonly;
-        props.params=this.state.params;
-        props.url=this.state.url;
-        props.data=this.state.data;
-        return <MutiText ref="combobox" {...props}  onSelect={this.onSelect}></MutiText>
+       
+        return <MutiText ref="combobox" {...props}  ></MutiText>
     },
     renderSelect:function(){//普通下拉框
 
         var props={...this.props};
-        props.value=this.state.value;
-        props.text=this.state.text;
-        props.hide=this.state.hide;
-        props.data=this.state.data;
-        props.readonly=this.state.readonly;
-        props.params=this.state.params;
-        props.url=this.state.url;
-        props.data=this.state.data;
-        return <Select ref="combobox" {...props}  onSelect={this.onSelect}></Select>
+       
+        return <Select ref="combobox" {...this.props}  ></Select>
     },
     renderPicker:function(){//下拉面板
-        var props={...this.props};
-        props.value=this.state.value;
-        props.text=this.state.text;
-        props.hide=this.state.hide;
-        props.data=this.state.data;
-        props.readonly=this.state.readonly;
-        props.required=this.state.required;
-        props.params=this.state.params;
-        props.url=this.state.url;
-        return    <Picker ref="combobox" {...props} onSelect={this.onSelect}></Picker>
+     
+        return    <Picker ref="combobox"{...this.props}></Picker>
     },
     renderTime:function() {
-        var props={...this.props};
-        var props={...this.props};
-        props.value=this.state.value;
-        props.text=this.state.text;
-        props.hide=this.state.hide;
-        props.data=this.state.data;
-        props.readonly=this.state.readonly;
+       
 
-        return <Time ref="combobox" {...props} onSelect={this.onSelect}></Time>
+        return <Time ref="combobox" {...this.props}></Time>
     },
     renderDatePicker:function() {
-        var props={...this.props};
-        var props={...this.props};
-        props.value=this.state.value;
-        props.text=this.state.text;
-        props.hide=this.state.hide;
-        props.readonly=this.state.readonly;
-        props.params=this.state.params;
-        return <DatePicker ref="combobox" {...props}  onSelect={this.onSelect}></DatePicker>
+    
+        return <DatePicker ref="combobox" {...this.props}></DatePicker>
     }, 
     renderTreePicker:function() {
-        var props={...this.props};
-        props.value=this.state.value;
-        props.text=this.state.text;
-        props.data=this.state.data;
-        props.readonly=this.state.readonly;
-        props.params=this.state.params;
-        return <TreePicker ref="combobox" {...props}  onSelect={this.onSelect}></TreePicker>;
+       
+        return <TreePicker ref="combobox" {...this.props}></TreePicker>;
     },
 
     render:function() {
