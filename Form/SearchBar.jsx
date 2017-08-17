@@ -13,7 +13,7 @@ var SearchBar = React.createClass({
         submitTitle: React.PropTypes.string,
         submitHide: React.PropTypes.bool,
         submitTheme:React.PropTypes.string,
-        onSubmit: React.PropTypes.func.isRequired,
+        onSubmit: React.PropTypes.func,
         expandHandler: React.PropTypes.func,
 
     },
