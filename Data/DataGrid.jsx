@@ -244,7 +244,7 @@ let DataGrid = React.createClass({
             this.updateHandler(this.state.url, this.state.pageSize, this.state.pageIndex, this.state.sortName, this.state.sortOrder)
         }
         this.registerClickAway(this.hideMenuHandler, this.refs.grid);//注册全局单击事件
-       
+        this.resizeTableWidthHandler();//固定的表头每一列的宽度
     },
     componentDidUpdate: function () {
         this.resizeTableWidthHandler();//固定的表头每一列的宽度
@@ -343,6 +343,7 @@ let DataGrid = React.createClass({
             }
 
             //生成数据列
+        
             this.state.headers.map((header, columnIndex) => {
                 if (!header || header.hide) {
                     return;
@@ -352,11 +353,14 @@ let DataGrid = React.createClass({
                 }
 
                 let content = header.content;
+
                 if (typeof content === 'string') {//指定的列
                     content = this.substitute(content, rowData);
                 } else if (typeof content === 'function') {//函数
                     try {
+                        
                         content = content(rowData, rowIndex);
+                       
                     }
                     catch (e) {
                         content = "";
@@ -366,7 +370,7 @@ let DataGrid = React.createClass({
                     content = rowData[header.name];
                 }
 
-
+                   
                 if (this.state.editIndex != null && this.state.editIndex == rowIndex && header.editor) {
                     let currentValue = rowData[header.name];
                     let currentText = rowData[header.name];

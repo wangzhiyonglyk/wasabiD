@@ -97,11 +97,7 @@ var SearchBar = React.createClass({
     },
     clearData: function () {
         for (let v in this.refs) {
-            for (let v in this.refs) {
-                if (data[this.refs[v].props.name]) {
-                   this.refs[v].setValue&& this.refs[v].setValue("");
-                }
-            }
+            this.refs[v].setValue && this.refs[v].setValue("");
         }
     },
     onSubmit: function () {
