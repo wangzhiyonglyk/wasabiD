@@ -117,7 +117,7 @@ let MessageView= React.createClass({
                 {(this.props.msg==null||this.props.msg=="")?"友情提示?":this.props.msg}
             </div>
             <div className="buttons">
-                <Button theme="green" name="ok" title="确定" onClick={this.cancelHandler}></Button>
+                <Button  name="ok" title="确定" onClick={this.cancelHandler}></Button>
             </div>
         </div>
     },
@@ -127,7 +127,7 @@ let MessageView= React.createClass({
                 {(this.props.msg==null||this.props.msg=="")?"确定删除这条信息吗?":this.props.msg}
             </div>
             <div className="buttons">
-                <Button theme="green" name="ok" title="确定" onClick={this.OKHandler}></Button>
+                <Button  name="ok" title="确定" onClick={this.OKHandler}></Button>
                 <Button theme="cancel" name="cancel" title="取消"  onClick={this.cancelHandler}></Button>
             </div>
         </div>

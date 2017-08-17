@@ -18,8 +18,7 @@ import config from "./config/comboboxConfig.js";
 import defaultProps from  "./config/defaultProps.js";
 let ComboBox=React.createClass({
     PropTypes: Object.assign({type:React.PropTypes.oneOf(config)},props),
-    getDefaultProps:function() {
-        defaultProps.type="select";
+    getDefaultProps:function() {     
         return defaultProps;
     },
 
