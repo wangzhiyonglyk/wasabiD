@@ -121,9 +121,12 @@ let DateRange=React.createClass({
         }
     },
       setValue(value)    {
-      this.setState({
-          value:value,
-      })
+        if(this.validate(value))
+            {
+                this.setState({
+                    value:value
+                })
+            }
     },
     getValue()  {
         return this.state.value;

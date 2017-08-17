@@ -123,7 +123,27 @@ let Select = React.createClass({
         }
     },
 
+    setValue(value) {
+        let text = "";
+        for (let i = 0; i < this.state.data.length; i++) {
+            if (this.state.data[i].value == value) {
+                text = item;
+                break;
+            }
+        }
 
+        if (text) {
+            this.setState({
+                value: value,
+                text: text
+            })
+        }
+
+    },
+    getValue() {
+        return this.state.value;
+
+    },
     loadData: function (url, params) {
         if (url != null && url != "") {
             if (params == null) {

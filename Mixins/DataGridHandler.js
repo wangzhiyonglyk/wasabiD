@@ -442,36 +442,21 @@ let DataGridHandler={
         if(!url) {//如果为空,则使用旧的
             url=this.state.url;//得到旧的url
         }
-        if(!params||params=="reload")
-        {//说明是刷新(reload字符,是因为从刷新按钮过来的
-
-
-            params=this.state.params;
-        }
-        else {//说明是重新查询
-            this.isReloadType=true;//标记一下,说明用户使用的是ref方式查询数据
-
-        }
         if(!url)
         {//没有传url
-
             if(this.props.updateHandler)
             {//用户自定义了更新事件
                 this.props.updateHandler(this.state.pageSize,this.state.pageIndex,this.state.sortName,this.state.sortOrder);
             }
-
         }
         else {//传了url
-
             if( this.showUpdate(params,this.state.para))
             {//参数发生改变,从第一页查起
                 this.updateHandler(url,this.state.pageSize, 1, this.state.sortName, this.state.sortOrder,params);
-
             }
             else
             {//从当前页查起
                 this.updateHandler(url,this.state.pageSize, this.state.pageIndex, this.state.sortName, this.state.sortOrder,params);
-
             }
 
         }

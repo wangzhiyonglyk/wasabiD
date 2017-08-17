@@ -19,26 +19,10 @@ import defaultProps from  "./config/defaultProps.js";
 let ComboBox=React.createClass({
     PropTypes: Object.assign({type:React.PropTypes.oneOf(config)},props),
     getDefaultProps:function() {
+        defaultProps.type="select";
         return defaultProps;
     },
-    getInitialState:function() {   
-        return {
-            value:this.props.value,
-            text: this.props.text,
-            hide:this.props.hide,
-            readonly:this.props.readonly,
-            required:this.props.required,
-            data:this.props.data,
-            params:this.props.params,
-            url:this.props.url,
 
-        }
-    },
-    componentWillReceiveProps:function(nextProps) {
-        this.setState({
-            ...nextProps
-        })
-    },
     splitDate:function(splitdate) {//拆分日期格式
         var regs=/^(\d{4})-(\d{2})-(\d{2})$/;
         if(splitdate&&splitdate!=""&&regs.test(splitdate))
@@ -61,7 +45,7 @@ let ComboBox=React.createClass({
     },
     getValue:function()
     {//用于调用获取值
-        return this.refs.combobox.state.value;
+        return this.refs.combobox.getValue();
     },
     setValue(value){//用于调用设置值
          this.refs.combobox.setValue(value);

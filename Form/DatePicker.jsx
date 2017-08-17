@@ -16,9 +16,9 @@ var validation=require("../Lang/validation.js");
 var regs=require("../Lang/regs.js");
 let setStyle=require("../Mixins/setStyle.js");
 var validate=require("../Mixins/validate.js");
-
-var Label=require("../Unit/Label.jsx");
 var ClickAway=require("../Unit/ClickAway.js");
+var Label=require("../Unit/Label.jsx");
+
 import props from "./config/props.js";
 import config from "./config/dateConfig.js"
 import defaultProps from  "./config/defaultProps.js";
@@ -26,6 +26,7 @@ let DatePicker=React.createClass({
     mixins:[setStyle,validate,ClickAway],
     propTypes: Object.assign({type:React.PropTypes.oneOf(config)},props),
     getDefaultProps:function() {
+        defaultProps.type="date";
         return defaultProps;
     },
     getInitialState:function() {
@@ -179,6 +180,18 @@ let DatePicker=React.createClass({
         }
     },
     changeHandler:function(event) {
+    },
+    getValue(){
+return this.state.value;
+    },
+    setValue:function(value)
+    {
+     if(this.validate(value))
+        {
+            this.setState({
+                value:value
+            })
+        }
     },
     _getText:function () {
         var text=this.state.text;

@@ -27,18 +27,6 @@ let Input = React.createClass({
     getDefaultProps: function () {
         return defaultProps;
     },
-    getInitialState()
-    {
-        return {
-
-        }
-    },
-    componentWillReceiveProps: function (nextProps) {
-        
-        this.setState({
-            ...nextProps
-        })
-    },
     validate: function (value) {//用于Form调用验证
         return this.refs.input.validate();
     },

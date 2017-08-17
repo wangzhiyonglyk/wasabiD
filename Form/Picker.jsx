@@ -3,6 +3,7 @@
  date:2016-05-23
  desc:级联选择组件
  采用了es6语法
+ edit 2017-08-17n TODO
  */
 let React=require("react");
 require("../Sass/Form/picker.scss");
@@ -134,7 +135,7 @@ let  Picker =  React.createClass({
         return this.state.value;
 
     },
-    
+  
     loadProvinceSuccess:function(data) {//一级节点的数据加载成功
         let provinceData=[];//一级节点数据
         var realData=data;

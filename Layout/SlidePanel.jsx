@@ -33,7 +33,7 @@ class SlidePanel extends  React.Component{
     }
     static defaultProps={
         title:"",
-        width:document.body.clientWidth,
+        width:window.screen.availWidth,
         buttons:[],
         buttonClick:null,
         url:null

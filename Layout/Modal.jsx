@@ -92,7 +92,7 @@ class Modal extends  React.Component {
         if (this.props.OKHandler != null) {
             this.props.OKHandler();
         }
-        this.close();//关闭
+    
     }
 
     cancelHandler() {

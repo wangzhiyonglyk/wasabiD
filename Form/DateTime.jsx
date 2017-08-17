@@ -24,6 +24,7 @@ let DateTime = React.createClass({
     },
     getDefaultProps:function() {
         return{
+            type:"datetime",
             year:null,
             month:null,
             day:null,
@@ -74,14 +75,18 @@ let DateTime = React.createClass({
 
     },
       setValue(value)    {
-      this.setState({
-          value:value,
-      })
+        if(this.validate(value))
+            {
+                this.setState({
+                    value:value
+                })
+            }
     },
     getValue()  {
         return this.state.value;
 
     },
+   
     updateYearAndMonth: function(filterYear,filterMonth) {
         this.setState({
             year: filterYear,

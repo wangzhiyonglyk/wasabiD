@@ -18,13 +18,13 @@ var Toolbar = React.createClass({
             ]),
             style:React.PropTypes.object,
             className:React.PropTypes.string,
-        buttonClick: React.PropTypes.func.isRequired
+        onClick: React.PropTypes.func.isRequired
     },
     getDefaultProps: function () {
         return {buttons: [], type: "button",style:{}, className: ""}
     },
-    buttonClick: function (name, title, event) {
-        this.props.buttonClick(name, title, event); //执行父组件的事件
+    onClick: function (name, title, event) {
+        this.props.onClick(name, title, event); //执行父组件的事件
     },
     render: function () {
         let props = {
@@ -36,11 +36,11 @@ var Toolbar = React.createClass({
             this.props.buttons.map((child) => {
                     if (this.props.type == "button") {
                         buttonlist.push(
-                            <Button key={child.name} {...child} onClick={this.buttonClick}></Button>
+                            <Button key={child.name} {...child} onClick={this.onClick}></Button>
                         );
                     } else {
                         buttonlist.push(
-                            <LinkButton key={child.name} {...child} onClick={this.buttonClick}></LinkButton>
+                            <LinkButton key={child.name} {...child} onClick={this.onClick}></LinkButton>
                         );
                     }
 

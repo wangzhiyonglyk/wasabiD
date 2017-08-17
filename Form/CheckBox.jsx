@@ -19,7 +19,8 @@ let CheckBox = React.createClass({
     mixins: [setStyle, validate, showUpdate],
     propTypes: props,
     getDefaultProps: function () {
-        return defaultProps;
+         defaultProps.type="checkbox";
+         return defaultProps;
     },
     getInitialState: function () {
         var newData = []; var text = this.props.text;
@@ -130,6 +131,7 @@ let CheckBox = React.createClass({
         return this.state.value;
 
     },
+   
     componentWillMount: function () {//如果指定url,先查询数据再绑定
         this.loadData(this.props.url, this.state.params);//查询数据
     },
