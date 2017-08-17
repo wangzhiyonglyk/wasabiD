@@ -159,7 +159,7 @@ var Form = React.createClass({
 
                     {
                         React.Children.map(this.props.children, (child, index) => {
-                            return React.cloneElement(child, { disabled:this.state.disabled,key: index, ref: index })
+                            return React.cloneElement(child, { readonly:this.state.disabled,key: index, ref: index })
                         })
                     }
                 </div>

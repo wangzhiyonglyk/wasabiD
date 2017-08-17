@@ -27,7 +27,14 @@ let Input = React.createClass({
     getDefaultProps: function () {
         return defaultProps;
     },
+    getInitialState()
+    {
+        return {
+
+        }
+    },
     componentWillReceiveProps: function (nextProps) {
+        
         this.setState({
             ...nextProps
         })
@@ -50,8 +57,7 @@ let Input = React.createClass({
     renderUnInput: function (type) {//非输入框组件
         let control;//组件
         let props = { ...this.props }////原有的属性
-        props.value = this.state.value;//注意绑定
-        props.text = this.state.text;//
+       
         if (type == "none") {//空占位组件
             control = <None ref="input" {...props } ></None>
         }

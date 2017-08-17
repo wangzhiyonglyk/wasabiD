@@ -27,7 +27,7 @@ desc:表单输入框样式
   padding-top: 0px;
   padding-left: 5px;
   cursor: default;
-  margin-top: -20px;
+  margin-top: -12px;
   margin-left: 20px;
   max-width: 130px;
   overflow: hidden;
@@ -45,8 +45,8 @@ desc:表单输入框样式
   visibility: hidden;
 }
 .wasabi-checkul .checkbox + label {
-  width:12px;
-  height:12px;
+  width:16px;
+  height:16px;
   border: 1px solid #afb3b8;
   display: inline-block;
   margin-right: 3px;
@@ -88,7 +88,6 @@ desc:表单输入框样式
   width: 18px;
   height: 18px;
   display: inline-block;
-  float: left;
   margin: -1px 5px 0 0;
   cursor: pointer;
   position: relative;
@@ -128,9 +127,9 @@ desc:表单输入框样式
 }
 .wasabi-checkul .radiotext
 {
-  float:right;
-  padding-top:2px;
-  padding-left:2px;
+  float: right;
+  padding-left: 2px;
+  margin-top: -1px;
   cursor: default;
 
 }

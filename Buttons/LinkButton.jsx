@@ -13,7 +13,7 @@ var LinkButton=React.createClass({
     propTypes: {
         name:React.PropTypes.string,//名称
         title:React.PropTypes.string,//标题
-
+        
         width:React.PropTypes.number,//宽度
         height:React.PropTypes.number,//高度
         iconCls:React.PropTypes.string,//图片

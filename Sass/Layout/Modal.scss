@@ -88,6 +88,7 @@ desc:模态窗口样式
   overflow: auto;
   width: 100%;
   position: relative;
+  text-align: left;
 }
 .wasabi-modal-container .wasabi-modal{
   text-align: right;
@@ -99,13 +100,13 @@ desc:模态窗口样式
 }
 .wasabi-modal-footer{
   width: 100%;
-  height: 60px;
-  line-height: 60px;
   background-color: #fafafa;
   border-top: 1px solid #ebebeb;
   position: absolute;
   left: 0;
   bottom: 0;
+  height: 40px;
+
 }
 
 

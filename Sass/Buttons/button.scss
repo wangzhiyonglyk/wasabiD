@@ -21,6 +21,7 @@
     border: 1px solid transparent;
     position: relative;
     outline: none;
+    margin:5px;
   
 }
 .wasabi-button.size-large{
@@ -148,7 +149,7 @@
   
 .wasabi-button.cancel
 {
-  min-width:80px;
+
   color:#606568;
   background: linear-gradient(#ffffff ,#f0f2f4);
   border: 1px solid #dbdee1;

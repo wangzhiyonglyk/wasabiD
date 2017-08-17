@@ -16,15 +16,15 @@ var Toolbar = React.createClass({
                 "button",
                 "link"
             ]),
+            style:React.PropTypes.object,
+            className:React.PropTypes.string,
         buttonClick: React.PropTypes.func.isRequired
     },
     getDefaultProps: function () {
-        return {buttons: [], type: "button", className: ""}
+        return {buttons: [], type: "button",style:{}, className: ""}
     },
     buttonClick: function (name, title, event) {
-        this
-            .props
-            .buttonClick(name, title, event); //执行父组件的事件
+        this.props.buttonClick(name, title, event); //执行父组件的事件
     },
     render: function () {
         let props = {
@@ -33,10 +33,7 @@ var Toolbar = React.createClass({
         };
         var buttonlist = [];
         if (this.props.buttons != null) {
-            this
-                .props
-                .buttons
-                .map((child) => {
+            this.props.buttons.map((child) => {
                     if (this.props.type == "button") {
                         buttonlist.push(
                             <Button key={child.name} {...child} onClick={this.buttonClick}></Button>
