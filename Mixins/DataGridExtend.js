@@ -22,13 +22,13 @@ let DataGridExtend= {
             }
         }
         if (this.props.onClick != null) {
-            this.props.onClick(rowIndex,rowData);//注意参数换了位置,因为早期版本就是这样子
+            this.props.onClick(rowData,rowIndex);//注意参数换了位置,因为早期版本就是这样子
         }
 
     },
     onDoubleClick: function (rowIndex,rowData ) {
         if (this.props.onDoubleClick != null) {//如果自定义了,
-            this.props.onDoubleClick(rowIndex,rowData );
+            this.props.onDoubleClick(rowData,rowIndex );
 
         }
         else if(this.state.editAble) {//没有自定义,允许编辑表格

@@ -21,7 +21,7 @@ var Form = React.createClass({
              style:{},
             className: "",
             disabled:false,
-            submitTitle: "查询",//查询按钮的标题
+            submitTitle: "提交",//查询按钮的标题
             submitHide: false,//是否隐藏按钮
             submitTheme:"primary",//主题
             onSubmit: null,//提交成功后的回调事 
