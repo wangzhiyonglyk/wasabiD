@@ -50,8 +50,8 @@ let Validate = {
 
                             }
                         }
-                      
-                        if (!isvalidate) {//无效再验证
+                     
+                        if (isvalidate) {//有效再验证
                             //判断大小，长度等
                             if (typeof this.state.min == "number") {
                                 switch (this.props.type) {
@@ -95,7 +95,7 @@ let Validate = {
                                         break;
                                 }
                             }
-                            if (typeof this.state.min == "number") {
+                            if (isvalidate&&typeof this.state.max == "number") {
                                 {
                                     switch (this.props.type) {
                                         case "text":

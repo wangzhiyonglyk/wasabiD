@@ -3,19 +3,22 @@
 //desc:模态窗口
 require("../Sass/Layout/Modal.scss");
 require("../Sass/Buttons/button.scss");
-var React =require("react");
-var Button=require("../Buttons/Button.jsx");
-var Resize=require("./Resize.jsx");
+let React =require("react");
+let Button=require("../Buttons/Button.jsx");
+let Resize=require("./Resize.jsx");
 class Modal extends  React.Component {
     constructor(props) {
         super(props);
+        let width=(this.props.style&&this.props.style.width)?this.props.style.width:400;
+        let height=(this.props.style&&this.props.style.height)?this.props.style.height:400;
+        
         this.state = {
+            width:width,
+            height:height,
             visible: false,
-            width: this.props.width,
-            height: this.props.height,
-            left: (document.body.clientWidth - this.props.width) / 2,
+            left: (document.body.clientWidth - width) / 2,
             top: 50,
-            oldLeft: (document.body.clientWidth - this.props.width) / 2,
+            oldLeft: (document.body.clientWidth - width) / 2,
             oldTop: 50,
             moveX: null,
             moveY: null,
@@ -30,17 +33,17 @@ class Modal extends  React.Component {
         this.cancelHandler = this.cancelHandler.bind(this);
     }
     componentWillReceiveProps(nextProps) {
+        let width=(nextProps.style&&nextProps.style.width)?nextProps.style.width:this.state.width;
+        let height=(nextProps.style&&tnextProps.style.height)?nextProps.style.height:this.state.height;
+        
         this.setState({
-                width: nextProps.width,
-                height: nextProps.height
+               ...nextProps,
+               width:width,
+               height:height,
             }
         );
 
     }
-
-    componentDidMount() {
-    }
-
     close() {//关闭事件
         this.setState({visible: false});
         if (this.props.closedHandler != null) {
@@ -108,8 +111,8 @@ class Modal extends  React.Component {
         if (this.state.visible == true) {
             activename = "wasabi-modal-container active";
         }
-        var width = this.state.width;
-        var height = this.state.height;
+        let width = this.state.width;
+        let height = this.state.height;
         let left = this.state.left;
         let top = this.state.top;
         let control;
@@ -163,8 +166,7 @@ class Modal extends  React.Component {
 }
 
 Modal.propTypes={
-    width: React.PropTypes.number,
-    height: React.PropTypes.number,
+    
     resize: React.PropTypes.bool,
     closedHandler: React.PropTypes.func,
     showOK: React.PropTypes.bool,

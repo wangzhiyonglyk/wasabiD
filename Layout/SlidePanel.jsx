@@ -11,7 +11,10 @@ var Button=require("../Buttons/Button.jsx");
 class SlidePanel extends  React.Component{
     constructor(props) {
         super(props);
+        let width=(this.props.style&&this.props.style.width)?this.props.style.width:window.screen.availWidth;
+       
         this.state={
+            width:width,
             title:this.props.title,
             buttons:this.props.buttons,
             buttonClick:this.props.buttonClick,
@@ -27,20 +30,22 @@ class SlidePanel extends  React.Component{
     }
     static propTypes= {
         title: React.PropTypes.string,//标题
-        width:React.PropTypes.number,//自定义宽度
         buttons: React.PropTypes.array,//自定义按钮
         buttonClick: React.PropTypes.func,//按钮的单击事件,
     }
     static defaultProps={
         title:"",
-        width:window.screen.availWidth,
         buttons:[],
         buttonClick:null,
         url:null
     }
     componentWillReceiveProps(nextProps)
     {
-        this.setState({...nextProps});
+        let width=(nextProps.style&&nextProps.style.width)?nextProps.style.width:this.state.width;
+        
+        this.setState({...nextProps,
+            width:width
+        });
     }
 
      open() {//打开事件，用于外部调用
@@ -53,7 +58,7 @@ class SlidePanel extends  React.Component{
         if(this.state.panelwidth!=0)
         {//关闭时，外面宽度等过渡效果完成后再设置
             this.setState({
-                containerwidth: this.state.containerwidth == 0 ? this.props.width - 34 : 0,
+                containerwidth: this.state.containerwidth == 0 ? this.state.width - 34 : 0,
                 overlayOpacity:this.state.overlayOpacity==0?0.5:0
             });
             setTimeout(()=>{
@@ -65,9 +70,9 @@ class SlidePanel extends  React.Component{
        else
         {//打开时，立即将外面宽度设置
             this.setState({
-                containerwidth: this.state.containerwidth == 0 ? this.props.width - 34 : 0,
+                containerwidth: this.state.containerwidth == 0 ? this.state.width - 34 : 0,
                 overlayOpacity:this.state.overlayOpacity==0?0.5:0,
-                panelwidth:this.props.width
+                panelwidth:this.state.width
             });
         }
 
@@ -78,7 +83,9 @@ class SlidePanel extends  React.Component{
         }
     }
     render() {
-            return <div className={"wasabi-slidepanel "}  style={{width:this.state.panelwidth}}>
+        let style=this.props.style?this.props.style:{};
+        style.width=this.state.panelwidth;
+            return <div className={"wasabi-slidepanel "}  style={style}>
                 <div className="slide-overlay" style={{width:this.state.panelwidth,opacity:this.state.overlayOpacity}}></div>
                 <div className="slide-container" style={{width:this.state.containerwidth}}>
 
