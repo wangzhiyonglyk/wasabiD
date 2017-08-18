@@ -16,13 +16,13 @@ let Text = require("./Text.jsx");
 let None = require("./None.jsx");
 let Button = require("../Buttons/Button.jsx");
 let LinkButton = require("../Buttons/LinkButton.jsx");
-let setStyle = require("../Mixins/setStyle.js");
+
 let unit = require("../libs/unit.js");
 import props from "./config/props.js";
 import config from "./config/inputConfig.js"
 import defaultProps from "./config/defaultProps.js";
 let Input = React.createClass({
-    mixins: [setStyle],
+
     propTypes: Object.assign({ type: React.PropTypes.oneOf(config) }, props),
     getDefaultProps: function () {
         return defaultProps;

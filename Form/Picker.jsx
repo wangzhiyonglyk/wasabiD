@@ -12,7 +12,7 @@ let unit=require("../libs/unit.js");
 let FetchModel=require("../Model/FetchModel.js");
 let PickerModel=require("../Model/PickerModel.js");
 var validation=require("../Lang/validation.js");
-let setStyle=require("../Mixins/setStyle.js");
+
 var validate=require("../Mixins/validate.js");
 var showUpdate=require("../Mixins/showUpdate.js");
 var Label=require("../Unit/Label.jsx");
@@ -21,7 +21,7 @@ var ClickAway=require("../Unit/ClickAway.js");
 import props from "./config/props.js";
 import defaultProps from "./config/defaultProps.js";
 let  Picker =  React.createClass({
-    mixins:[setStyle,validate,showUpdate,ClickAway],
+    mixins:[validate,showUpdate,ClickAway],
     propTypes:props,
     getDefaultProps :function(){
         return defaultProps;
@@ -34,7 +34,7 @@ let  Picker =  React.createClass({
             value:this.props.value,
             text:this.props.text,
             readonly:this.props.readonly,
-
+            data:this.props.data,
             //其他属性
             params:unit.clone( this.props.params),
             provinceActiveIndex:null,//一级激活节点下标
@@ -179,17 +179,12 @@ let  Picker =  React.createClass({
         this.unbindClickAway();//卸载全局单击事件
     },
     clearHandler:function() {//清除数据
-        if(this.props.onSelect!=null)
-        {
-            this.props.onSelect("","",this.props.name,null);
-        }
-        else
-        {
-            this.setState({
-                value:null,
-                text:null,
-            })
-        }
+        this.setState({
+            value:"",
+            text:"",
+        })
+       this.props.onSelect&& this.props.onSelect("","",this.props.name,null);
+       
     },
     setPickerModel:function(data) {//根据数据生成标准格式
         let realData = [];
@@ -596,16 +591,19 @@ let  Picker =  React.createClass({
         }
 
     },
+    clearHandler:function() {//清除数据
+        this.setState({
+            value:"",
+            text:"",
+        })
+        this.props.onSelect&&this.props.onSelect("","",this.props.name,null);
+    },
     render:function() {
-        var size=this.props.onlyline==true?"onlyline":this.props.size;//组件大小
-        var componentClassName=  "wasabi-form-group "+size;//组件的基本样式
-        var style =this.setStyle("input");//设置样式
-        var controlStyle=this.props.controlStyle?this.props.controlStyle:{};
-        controlStyle.display = this.state.hide == true ? "none" : "block";
-        let inputProps=
+        var componentClassName=  "wasabi-form-group ";//组件的基本样式 
+      let inputProps=
             {
                 readOnly:this.state.readonly==true?"readonly":null,
-                style:style,
+                style:this.props.style,
                 name:this.props.name,
                 placeholder:(this.props.placeholder===""||this.props.placeholder==null)?this.state.required?"必填项":"":this.props.placeholder,
                 className:"wasabi-form-control  "+(this.props.className!=null?this.props.className:""),
@@ -616,10 +614,10 @@ let  Picker =  React.createClass({
 
 
         return (
-            <div className={componentClassName+this.state.validateClass}  ref="picker"  style={ controlStyle}>
-                <Label name={this.props.label} ref="label" hide={this.state.hide} required={this.state.required}></Label>
+            <div className={componentClassName+this.state.validateClass}  ref="picker"  style={{display:this.state.hide==true?"none":"block"}}>
+                <Label name={this.props.label} ref="label" required={this.state.required}></Label>
                 <div className={ "wasabi-form-group-body"} style={{width:!this.props.label?"100%":null}}>
-                    <div className="combobox"  style={{display:this.props.hide==true?"none":"block"}}   >
+                    <div className="combobox"     >
                         <i className={"picker-clear"} onClick={this.clearHandler} style={{display:this.state.readonly?"none":(this.state.value==""||!this.state.value)?"none":"inline"}}></i>
                         <i className={"pickericon " +(this.state.show?"rotate":"")} onClick={this.showPicker.bind(this,1)}></i>
                         <input type="text" {...inputProps} onBlur={this.onBlur} value={this.state.text} onClick={this.showPicker.bind(this,2)}  onChange={this.changeHandler}     />

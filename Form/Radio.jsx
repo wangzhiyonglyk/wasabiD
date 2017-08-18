@@ -8,7 +8,6 @@ let React=require("react");
 let unit=require("../libs/unit.js");
 var FetchModel=require("../Model/FetchModel.js");
 var validation=require("../Lang/validation.js");
-let setStyle=require("../Mixins/setStyle.js");
 var validate=require("../Mixins/validate.js");
 var showUpdate=require("../Mixins/showUpdate.js");
 var Label=require("../Unit/Label.jsx");
@@ -16,7 +15,7 @@ var Message=require("../Unit/Message.jsx");
 import props from "./config/props.js";
 import defaultProps from "./config/defaultProps.js";
 let Radio=React.createClass({
-    mixins:[setStyle,validate,showUpdate],
+    mixins:[validate,showUpdate],
     PropTypes:props,
     getDefaultProps:function() {
         return defaultProps;
@@ -216,16 +215,8 @@ let Radio=React.createClass({
         }
     },
     render:function() {
-        var inputType = "text";
-        if (this.props.type == "password") {
-            inputType = "password";
-        }
-        var size = this.props.onlyline == true ? "onlyline" : this.props.size;//组件大小
-        var componentClassName = "wasabi-form-group " + size + " " + (this.props.className ? this.props.className : "");//组件的基本样式
-        var style = this.setStyle("input");//设置样式
-        var controlStyle=this.props.controlStyle?this.props.controlStyle:{};
-        controlStyle.display = this.state.hide == true ? "none" : "block";
-
+       
+       var componentClassName = "wasabi-form-group " ;//组件的基本样式 
         var control = null;
         let className = "wasabi-radio-btn " + (this.state.readonly ? " readonly" : "");
         if (this.state.data) {
@@ -238,7 +229,7 @@ let Radio=React.createClass({
                 }
                 return (
                     <li key={i}>
-                        <div className={className+((this.state.value==child.value)?" checkedRadio":"")}
+                        <div style={this.props.style} className={className+((this.state.value==child.value)?" checkedRadio":"")}
                              onClick={this.onSelect.bind(this,child.value,child.text,child)}><i>
                             <input type="radio" name={this.props.name}
                                    id={this.props.name+child.value}
@@ -255,7 +246,7 @@ let Radio=React.createClass({
             })
         }
         return (
-            <div className={componentClassName+this.state.validateClass} style={ controlStyle}>
+            <div className={componentClassName+this.state.validateClass} style={{display:this.state.hide==true?"none":"block"}}>
                 <Label name={this.props.label} hide={this.state.hide} required={this.state.required}></Label>
                 <div className={ "wasabi-form-group-body"} style={{width:!this.props.label?"100%":null}}>
                     <ul className="wasabi-checkul">

@@ -15,7 +15,7 @@ desc:日期选择样式
   font-family: 'icomoon' !important;
   font-style: normal;
   display: block;
-  width: 34px;
+  width: 32px;
   height: 34px;
 
   border-left: 1px solid #d7dde2;
@@ -31,11 +31,11 @@ desc:日期选择样式
   transition: top,-webkit-transform 0.6s;
   transition: top,transform 0.6s;
   transition:  top,transform 0.6s,-webkit-transform 0.6s;
-  font-size: 13px;
+  font-size: 15px;
   content: "\E915";
   position: absolute;
-  top: 10px;
-  left: 9px;
+  top: 8px;
+  left: 8px;
   color: #d7dde2;
 }
 .combobox .pickericon.rotate:before{
@@ -74,8 +74,8 @@ desc:日期选择样式
   width: 16px;
   height: 16px;
   position: absolute;
-  right: 40px;
-  top: 8px;
+  right: 36px;
+  top: 6px;
   cursor: pointer;
 
 }
@@ -107,8 +107,8 @@ width:250px;
 
 /*日期*/
 .combobox .date {
-  width:249px;
-  height:244px;
+  width: 250px;
+  height: 246px;
 
 }
 .combobox .date.time {
@@ -120,7 +120,7 @@ width:250px;
 .combobox .range
 {
   width:501px;
-  height:286px;
+  height:290px;
 }
 .combobox .range.default
 {
@@ -221,16 +221,10 @@ width:250px;
   border-top: 1px solid #f0f0f0;
   border-bottom: none;
   text-align: right;
-  float: left;
+  padding-top: 5px;
 
 }
-.combobox .ok .wasabi-button
-{
-  margin-top:5px;
-  margin-bottom: 5px;
-  min-width: 66px;
-  width:66px;
-}
+
 .combobox .mutiText .ok
 {
   text-align: center;

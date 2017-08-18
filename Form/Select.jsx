@@ -8,7 +8,6 @@ let React = require("react");
 let unit = require("../libs/unit.js");
 var FetchModel = require("../Model/FetchModel.js");
 var validation = require("../Lang/validation.js");
-let setStyle = require("../Mixins/setStyle.js");
 var validate = require("../Mixins/validate.js");
 var showUpdate = require("../Mixins/showUpdate.js");
 var Label = require("../Unit/Label.jsx");
@@ -17,7 +16,7 @@ var ClickAway = require("../Unit/ClickAway.js");
 import props from "./config/props.js";
 import defaultProps from  "./config/defaultProps.js";
 let Select = React.createClass({
-    mixins: [setStyle, validate, showUpdate, ClickAway],
+    mixins: [validate, showUpdate, ClickAway],
     PropTypes: props,
     getDefaultProps: function () {
         return defaultProps;
@@ -154,7 +153,7 @@ let Select = React.createClass({
                 var fetchmodel = new FetchModel(url, this.loadSuccess, params, this.loadError);
                 unit.fetch.post(fetchmodel);
             }
-            console.log("select", fetchmodel);
+           
         }
     },
     loadSuccess: function (data) {//数据加载成功
@@ -201,7 +200,7 @@ let Select = React.createClass({
         Message.error(message);
     },
     showOptions: function (type) {//显示下拉选项
-        console.log("show")
+       
         if (this.state.readonly) {
             return;
         }
@@ -214,7 +213,7 @@ let Select = React.createClass({
         this.bindClickAway();//绑定全局单击事件
     },
     hideOptions: function (event) {
-        console.log("hide");
+      
         this.setState({
             show: false
         });
@@ -311,6 +310,7 @@ let Select = React.createClass({
         }
     },
     filterChangeHandler: function (event) {//筛选查询
+        
         this.setState({
             filterValue: event.target.value,
             show: true,
@@ -320,27 +320,20 @@ let Select = React.createClass({
 
     },
     clearHandler: function () {//清除数据
-        if (this.props.onSelect != null) {
-            this.props.onSelect("", "", this.props.name, null);
-        }
-        else {
-            this.setState({
-                value: null,
-                text: null,
-            })
-        }
+       
+        this.setState({
+            value: "",
+            text: "",
+        })
+         this.props.onSelect&& this.props.onSelect("", "", this.props.name, null);      
     },
     render: function () {
-
-        var size = this.props.onlyline == true ? "onlyline" : this.props.size;//组件大小
-        var componentClassName = "wasabi-form-group " + size;//组件的基本样式
-        var style = this.setStyle("input");//设置样式
-        var controlStyle = this.props.controlStyle ? this.props.controlStyle : {};
-        controlStyle.display = this.state.hide == true ? "none" : "block";
+    
+        var componentClassName = "wasabi-form-group ";//组件的基本样式
         let inputProps =
             {
                 readOnly: this.state.readonly == true ? "readonly" : null,
-                style: style,
+                style: this.props.style,
                 name: this.props.name,
                 placeholder: (this.props.placeholder === "" || this.props.placeholder == null) ? this.state.required ? "必填项" : "" : this.props.placeholder,
                 className: "wasabi-form-control  " + (this.props.className != null ? this.props.className : ""),
@@ -377,11 +370,11 @@ let Select = React.createClass({
         }
 
         return (
-            <div className={componentClassName + this.state.validateClass} ref="select" style={ controlStyle}>
-                <Label name={this.props.label} ref="label" hide={this.state.hide}
+            <div className={componentClassName + this.state.validateClass} ref="select" style={{display:this.state.hide==true?"none":"block"}}>
+                <Label name={this.props.label} ref="label" 
                        required={this.state.required}></Label>
                 <div className={ "wasabi-form-group-body"}>
-                    <div className={"nice-select "} style={style}>
+                    <div className={"nice-select "} >
                         <i className={"picker-clear"} onClick={this.clearHandler}
                            style={{display: this.state.readonly ? "none" : (this.state.value == "" || !this.state.value) ? "none" : "inline"}}></i>
                         <i className={"icon " + (this.state.show ? "rotate" : "")}

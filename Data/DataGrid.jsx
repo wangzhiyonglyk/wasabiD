@@ -104,7 +104,7 @@ let DataGrid = React.createClass({
             keyField: "id",
             headers: [],
             total: 0,
-            data: [],
+            data: null,
             url: null,//
             backSource: "data",//
             dataSource: "data",//
@@ -171,7 +171,8 @@ let DataGrid = React.createClass({
          headers可能是后期才传了,见Page组件可知
          所以此处需要详细判断
          */
-        if (nextProps.headers) { //存在着这种情况,后期才传headers,所以要更新一下
+    if (nextProps.headers&&this.showUpdate(nextProps.headers,this.state.headers)) { //存在着这种情况,后期才传headers,所以要更新一下
+    
             this.setState({
                 headers: nextProps.headers,
             })

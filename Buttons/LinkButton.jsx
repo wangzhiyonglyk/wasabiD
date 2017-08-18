@@ -5,11 +5,11 @@ desc:链接按钮
  */
 require("../Sass/Buttons/linkbutton.scss");
 require("../Sass/Buttons/icon.scss");
-let setStyle=require("../Mixins/setStyle.js");
+
 var React=require("react");
 var addRipple=require("../Mixins/addRipple.js");
 var LinkButton=React.createClass({
-    mixins:[setStyle,addRipple],
+    mixins:[addRipple],
     propTypes: {
         name:React.PropTypes.string,//名称
         title:React.PropTypes.string,//标题
@@ -128,7 +128,7 @@ var LinkButton=React.createClass({
         if(!this.props.iconCls) {
             className += " " + "onlytext";//只有文字
         }
-        let style=this.setStyle();//设置按钮样式
+        let style=this.props.style?this.props.style:{};//设置按钮样式
         var linkTextStyle={};//文本样式
         var iconColor=null;//图标颜色，因为图标基本使用了字体
         if(this.props.backgroundColor) {

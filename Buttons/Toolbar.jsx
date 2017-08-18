@@ -18,7 +18,7 @@ var Toolbar = React.createClass({
             ]),
             style:React.PropTypes.object,
             className:React.PropTypes.string,
-        onClick: React.PropTypes.func.isRequired
+        onClick: React.PropTypes.func
     },
     getDefaultProps: function () {
         return {buttons: [], type: "button",style:{}, className: ""}

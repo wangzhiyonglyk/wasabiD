@@ -14,7 +14,7 @@ let DateTimeRange=require("./DateTimeRange.jsx");
 
 var validation=require("../Lang/validation.js");
 var regs=require("../Lang/regs.js");
-let setStyle=require("../Mixins/setStyle.js");
+
 var validate=require("../Mixins/validate.js");
 var ClickAway=require("../Unit/ClickAway.js");
 var Label=require("../Unit/Label.jsx");
@@ -23,10 +23,9 @@ import props from "./config/props.js";
 import config from "./config/dateConfig.js"
 import defaultProps from  "./config/defaultProps.js";
 let DatePicker=React.createClass({
-    mixins:[setStyle,validate,ClickAway],
+    mixins:[validate,ClickAway],
     propTypes: Object.assign({type:React.PropTypes.oneOf(config)},props),
     getDefaultProps:function() {
-        defaultProps.type="date";
         return defaultProps;
     },
     getInitialState:function() {
@@ -85,7 +84,7 @@ let DatePicker=React.createClass({
     splitDate:function(splitdate) {//拆分日期格式
 
 
-        if(splitdate&&splitdate.indexOf(" ")>-1&&regs.datetime(splitdate))
+        if(splitdate&&splitdate.indexOf(" ")>-1&&regs.datetime.test(splitdate))
         {//有时间
 
             splitdate=splitdate.split(" ")[0];
@@ -112,7 +111,7 @@ let DatePicker=React.createClass({
     },
     splitDateTime:function(datetime) {//
 
-        if(datetime&&regs.datetime(datetime)&&datetime.indexOf(" ")>-1)
+        if(datetime&&regs.datetime.test(datetime)&&datetime.indexOf(" ")>-1)
         {//如果不为空
             var splitdate=datetime.split(" ")[0];
             if(splitdate&&splitdate!="")
@@ -161,23 +160,14 @@ let DatePicker=React.createClass({
             text:text,
         });
         this.validate(value);
-        if( this.props.onSelect!=null)
-        {
-            this.props.onSelect(value,text,this.props.name,null);
-        }
+        this.props.onSelect&&this.props.onSelect("","",this.props.name,null);
     },
     clearHandler:function() {//清除数据
-        if(this.props.onSelect!=null)
-        {
-            this.props.onSelect("","",this.props.name,null);
-        }
-        else
-        {
-            this.setState({
-                value:null,
-                text:null,
-            })
-        }
+        this.setState({
+            value:"",
+            text:"",
+        })
+        this.props.onSelect&&this.props.onSelect("","",this.props.name,null);
     },
     changeHandler:function(event) {
     },
@@ -192,6 +182,13 @@ return this.state.value;
                 value:value
             })
         }
+    },
+    clearHandler:function() {//清除数据
+        this.setState({
+            value:"",
+            text:"",
+        })
+        this.props.onSelect&&this.props.onSelect("","",this.props.name,null);
     },
     _getText:function () {
         var text=this.state.text;
@@ -310,13 +307,12 @@ return this.state.value;
       
         
         var componentClassName = "wasabi-form-group "  ;//组件的基本样式
-        var style = this.setStyle("input");//设置样式
-        var controlStyle=this.props.controlStyle?this.props.controlStyle:{};
-        controlStyle.display = this.state.hide == true ? "none" : "block";
+       
+     
         let inputProps =
         {
             readOnly: this.state.readonly == true ? "readonly" : null,
-            style: style,
+            style: this.props.style,
             name: this.props.name,
             placeholder:(this.props.placeholder===""||this.props.placeholder==null)?this.state.required?"必填项":"":this.props.placeholder,
             className:"wasabi-form-control  "+(this.props.className!=null?this.props.className:""),
@@ -326,10 +322,10 @@ return this.state.value;
 
       var text=  this._getText();
         return (
-            <div className={componentClassName+this.state.validateClass}  ref="picker" style={ controlStyle}>
-                <Label name={this.props.label} ref="label" hide={this.state.hide} required={this.state.required}></Label>
+            <div className={componentClassName+this.state.validateClass}  ref="picker" style={{display:this.state.hide==true?"none":"block"}}>
+                <Label name={this.props.label} ref="label" required={this.state.required}></Label>
                 <div className={ "wasabi-form-group-body"} style={{width:!this.props.label?"100%":null}}>
-                    <div className="combobox" style={{display:this.props.hide==true?"none":"block",width:style.width}}>
+                    <div className="combobox" >
                         <i className={"picker-clear"} onClick={this.clearHandler} style={{display:this.state.readonly?"none":(this.state.value==""||!this.state.value)?"none":"inline"}}></i>
                         <i className={"pickericon  " +(this.state.show?" rotate":"")} onBlur={this.onBlur} onClick={this.showPicker.bind(this,1)}></i>
                         <input type="text" {...inputProps} value={text} onClick={this.showPicker.bind(this,2)} onChange={this.changeHandler}/>

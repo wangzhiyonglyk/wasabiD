@@ -3,11 +3,10 @@
 //desc 表单中空的占位组件,方便排版
 //属性与状态值保留,可能以后有用
 let React=require("react");
-let setStyle=require("../Mixins/setStyle.js");
 import props from "./config/props.js";
 import defaultProps from "./config/defaultProps.js";
 var None=React.createClass({
-    mixins:[setStyle],
+
     propTypes:props,
     getDefaultProps:function() {
      return defaultProps;
@@ -44,13 +43,12 @@ var None=React.createClass({
 
 
     render:function() {
-        var controlStyle=this.props.controlStyle?this.props.controlStyle:{};
-        controlStyle.display = this.state.hide == true ? "none" : "block";
-        
-        var componentClassName=  "wasabi-form-group "+" "+(this.props.className?this.props.className:"");//组件的基本样式
-        var style =this.setStyle("input");//设置样式
-        return (<div className={componentClassName+this.state.validateClass} style={ controlStyle} >
-                <div className={ "wasabi-form-group-body"} style={{width:"100%"}}>
+      
+        var componentClassName=  "wasabi-form-group ";//组件的基本样式
+        var style =this.props.style?this.props.style:{};//设置样式
+         if(!style.width){style.width="100"};
+        return (<div className={componentClassName+this.state.validateClass} style={{display:this.state.hide==true?"none":"block"}} >
+                <div className={ "wasabi-form-group-body"} style={style} className={this.props.className}>
                 </div>
             </div>
         )

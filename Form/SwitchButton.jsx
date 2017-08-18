@@ -7,13 +7,10 @@
  */
 require('../Sass/Form/SwitchButton.scss');
 let React = require('react');
-let setStyle=require("../Mixins/setStyle.js");
-
 var Label=require("../Unit/Label.jsx");
 import props from "./config/props.js";
 import defaultProps from "./config/defaultProps.js";
 let SwitchButton = React.createClass({
-    mixins:[setStyle],
     propTypes:props,
     getDefaultProp:function() {
      return defaultProps;
@@ -68,12 +65,9 @@ let SwitchButton = React.createClass({
         if(this.props.type=="password") {
             inputType = "password";
         }
-        var size=this.props.onlyline==true?"onlyline":this.props.size;//组件大小
-        var componentClassName=  "wasabi-form-group "+size+" "+(this.props.className?this.props.className:"");//组件的基本样式
-        var style =this.setStyle("input");//设置样式
-        var controlStyle=this.props.controlStyle?this.props.controlStyle:{};
-        controlStyle.display = this.state.hide == true ? "none" : "block";
-        var className = "syncbtn ";
+        var componentClassName=  "wasabi-form-group ";//组件的基本样式
+       
+        var className = "syncbtn "+this.props.className;
         if(this.state.value==1){
             className+="checktrue";
         }else{
@@ -86,10 +80,10 @@ let SwitchButton = React.createClass({
         }
 
         return (
-        <div className={componentClassName+this.state.validateClass}  style={ controlStyle}>
+        <div className={componentClassName+this.state.validateClass}  style={{display:this.state.hide==true?"none":"block"}}>
             <Label name={this.props.label} ref="label" hide={this.state.hide} required={this.state.required}></Label>
             <div className={ "wasabi-form-group-body"} style={{width:!this.props.label?"100%":null}}>
-                <div className={className} onClick={this.handleClick}>
+                <div style={this.props.style} className={className} onClick={this.handleClick}>
                     <div className={"slideblock "}></div>
                 </div>
                 <small className={"wasabi-help-block "} style={{display:(this.state.helpTip&&this.state.helpTip!="")?this.state.helpShow:"none"}}><div className="text">{this.state.helpTip}</div></small>

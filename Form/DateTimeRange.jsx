@@ -33,9 +33,9 @@ let DateTimeRange=React.createClass({
         var newDate =  new Date();
         var first_year=newDate.getFullYear();
         var first_month=newDate.getMonth()+1;
-        var first_day=null;
-        let first_min=null; let first_max=null;
-        let second_min=null;let second_max=null;
+        var first_day="";
+        let first_min=""; let first_max="";
+        let second_min="";let second_max="";
 
         if(props.firstDate&&regs.test(props.firstDate))
         {//输入了值
@@ -44,7 +44,7 @@ let DateTimeRange=React.createClass({
             first_day=props.firstDate.split("-")[2]*1;
         }
         //设置第二日期的默认值
-        var second_year=first_year;var second_month;var second_day=null;
+        var second_year=first_year;var second_month;var second_day="";
         second_month = parseInt(first_month) + 1;
         if( second_month > 12 ){
             second_year ++;
@@ -92,18 +92,18 @@ let DateTimeRange=React.createClass({
         this.setState({
             first_year:year,
             first_month:month,
-            first_day:null,
-            first_min:null,
-            first_max:null,
+            first_day:"",
+            first_min:"",
+            first_max:"",
         })
     },
     secondMonthHandler:function(year,month) {
         this.setState({
             second_year:year,
             second_month:month,
-            second_day:null,
-            second_min:null,
-            second_max:null,
+            second_day:"",
+            second_min:"",
+            second_max:"",
         })
     },
 
@@ -140,7 +140,7 @@ let DateTimeRange=React.createClass({
         if(min_day==max_day) {//第一个日期只选择了一个
             if(this.state.beign_min!=this.state.first_max)
             {//第一个日期之前已经选择过了属于重新选择，第二个日期清空
-                second_min=second_max=null;
+                second_min=second_max="";
             }
             else {
                 //第一个日期之前没有选择过不属于重新选择
@@ -152,8 +152,8 @@ let DateTimeRange=React.createClass({
 
         }
         else {//第一个日期中的开始日期与日期不相同，第二个日期默认清空
-            second_min=null;
-            second_min=null;
+            second_min="";
+            second_min="";
         }
         /*判断与后面一个的复合情况*/
         this.setState({
@@ -201,7 +201,7 @@ let DateTimeRange=React.createClass({
         if(min_day==max_day) {//第二个日期只选择了一个
             if(this.state.second_min!=this.state.second_max)
             {//第二个日期之前已经选择过了属于重新选择，第一个日期清空
-                first_min=   first_max=null;
+                first_min=   first_max="";
 
             }else {  //第二个日期之前没有选择过不属于重新选择
                 if (first_min) {//第一个日期框有选择
@@ -211,8 +211,8 @@ let DateTimeRange=React.createClass({
             }
         }
         else {//第二个日期中的开始日期与日期不相同，第一个日期默认清空
-            first_min=null;
-            first_max=null;
+            first_min="";
+            first_max="";
         }
         this.setState({
             second_year:value.split("-")[0]*1,
@@ -228,22 +228,22 @@ let DateTimeRange=React.createClass({
     },
     onSelectHandler:function() {
         var firstDate, secondDate;
-        if (this.state.first_min != null) {
+        if (this.state.first_min != "") {
             firstDate = this.state.first_year + "-" + (this.state.first_month.toString().length == 1 ? "0" + this.state.first_month : this.state.first_month) + "-" + (this.state.first_min.toString().length == 1 ? "0" + this.state.first_min : this.state.first_min);
         }
-        else if (this.state.second_min != null) {
+        else if (this.state.second_min != "") {
             firstDate = this.state.second_year + "-" + (this.state.second_month.toString().length == 1 ? "0" + this.state.second_month : this.state.second_month) + "-" + (this.state.second_min.toString().length == 1 ? "0" + this.state.second_min : this.state.second_min);
         }
 
-        if (this.state.second_max != null) {
+        if (this.state.second_max != "") {
             secondDate = this.state.second_year + "-" + (this.state.second_month.toString().length == 1 ? "0" + this.state.second_month : this.state.second_month) + "-" + (this.state.second_max.toString().length == 1 ? "0" + this.state.second_max : this.state.second_max);
         }
-        else if (this.state.first_max != null) {
+        else if (this.state.first_max != "") {
             secondDate = this.state.first_year + "-" + (this.state.first_month.toString().length == 1 ? "0" + this.state.first_month : this.state.first_month) + "-" + (this.state.first_max.toString().length == 1 ? "0" + this.state.first_max : this.state.first_max);
         }
         if (firstDate && secondDate) {
 
-            if (this.props.onSelect != null) {
+            if (this.props.onSelect != "") {
                 var first_time = " "+(this.state.first_time?this.state.first_time:this.refs.begin.getValue());
                 let second_time = " "+(this.state.second_time?this.state.second_time:this.refs.end.getValue());
                 this.props.onSelect(firstDate + first_time + "," + secondDate + second_time, firstDate + first_time + "," + secondDate + second_time, this.props.name);
@@ -262,11 +262,11 @@ let DateTimeRange=React.createClass({
         })
     },
     cancelHandler:function() {
-        this.props.onSelect(null,null,this.props.name);
+        this.props.onSelect("","",this.props.name);
     },
     render:function() {
-        var firstHour=null;var firstMinute=null;var firstSecond=null;
-        var secondHour=null,secondMinute=null,secondSecond=null;
+        var firstHour="";var firstMinute="";var firstSecond="";
+        var secondHour="",secondMinute="",secondSecond="";
         if(this.state.first_time)
         {
             firstHour=this.state.first_time.split(":")[0]*1;
@@ -288,8 +288,8 @@ let DateTimeRange=React.createClass({
                 <div  style={{float:"left",marginLeft:68,marginTop:5,height:32}}>
                     <Time name="end" type="time" key="end" ref="end" onSelect={this.endTimeHandler}  hour={secondHour} minute={secondMinute} second={secondSecond}></Time>
                 </div>
-                <Button title="确定" name="ok" ripple={false} theme="green" onClick={this.onSelectHandler}></Button>
-                <Button title="取消" name="ok" ripple={false} theme="cancel" onClick={this.cancelHandler}></Button>
+                <Button title="确定" name="ok" size="small" theme="primary" onClick={this.onSelectHandler}></Button>
+                <Button title="取消" name="cancel" rsize="small" theme="cancel" onClick={this.cancelHandler}></Button>
             </div>
             <DateD   isRange={true}  year={this.state.first_year} month={this.state.first_month} day={this.state.first_day}
                      min={this.state.first_min} max={this.state.first_max}

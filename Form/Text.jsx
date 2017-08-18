@@ -3,7 +3,6 @@
 //desc 将输入框从Input中独立出来
 let React=require("react");
 var validation=require("../Lang/validation.js");
-let setStyle=require("../Mixins/setStyle.js");
 var validate=require("../Mixins/validate.js");
 var Label=require("../Unit/Label.jsx");
 var Message=require("../Unit/Message.jsx");
@@ -13,7 +12,7 @@ import props from "./config/props.js";
 import config from "./config/textConfig.js";
 import defaultProps from  "./config/defaultProps.js";
 var Text=React.createClass({
-    mixins:[setStyle,validate],
+    mixins:[validate],
      propTypes: Object.assign({type:React.PropTypes.oneOf(config)},props),
     getDefaultProps:function() {
         return defaultProps;
@@ -212,13 +211,11 @@ var Text=React.createClass({
             inputType = "password";
         }
         var componentClassName=  "wasabi-form-group ";//组件的基本样式
-        var style =this.setStyle("input");//设置样式
-        var controlStyle=this.props.controlStyle?this.props.controlStyle:{};
-        controlStyle.display = this.state.hide == true ? "none" : "block";
-        let inputProps=
+       
+            let inputProps=
             {
                 readOnly:this.state.readonly==true?"readonly":null,
-                style:style,
+                style:this.props.style,
                 name:this.props.name,
                 placeholder:(this.props.placeholder===""||this.props.placeholder==null)?this.state.required?"必填项":"":this.props.placeholder,
                 className:"wasabi-form-control  "+(this.props.className!=null?this.props.className:""),
@@ -251,7 +248,7 @@ var Text=React.createClass({
 
 
 
-        return (<div className={componentClassName+this.state.validateClass} onPaste={this.onPaste} style={ controlStyle}>
+        return (<div className={componentClassName+this.state.validateClass} onPaste={this.onPaste} style={{display:this.state.hide==true?"none":"block"}}>
                 <Label name={this.props.label} ref="label" hide={this.state.hide} required={this.state.required}></Label>
                 <div className={ "wasabi-form-group-body"} style={{width:!this.props.label?"100%":null}}>
                     {control}

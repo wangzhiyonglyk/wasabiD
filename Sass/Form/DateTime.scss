@@ -1,6 +1,5 @@
 
 .wasabi-datetime{
-  float:left;
   width:248px;
   height:243px;
   z-index: 2;
@@ -8,6 +7,9 @@
   background-color: white;
   padding-left: 3px;
   padding-right: 3px;
+}
+.range .wasabi-datetime{
+float: left;
 }
 .range .wasabi-datetime:first-child
 {
@@ -25,7 +27,7 @@
 
 .wasabi-datetime-header a:hover
 {
-  color: #25d7b9;
+  color: #1ab394;
 }
 .wasabi-datetime-header .header-text
 {
@@ -99,7 +101,6 @@
   margin-left: 5px;
   margin-right:5px;
   margin-top: 10px;
-  overflow: hidden;
 }
 
 .wasabi-datetime-body .datespan {
@@ -116,7 +117,7 @@
 .wasabi-datetime-month{
   margin-top: 40px;
   display: none;
-},
+}
 .wasabi-datetime-year
 {
   margin-top: 20px;
@@ -128,7 +129,7 @@
 }
 
 .wasabi-datetime-month .datespan:hover,.wasabi-datetime-year .datespan:hover{
- color: #25d7b9;
+ color: #1ab394;
   background-color: rgba(0,0,0,0.05);
 }
 .wasabi-datetime-month .datespan.chosed,.wasabi-datetime-year .datespan.chosed{
@@ -146,7 +147,7 @@
   color: white;
   width:24px;
   height:24px;
-  background-color:#25d7b9;
+  background-color:#1ab394;
   border-radius: 100%;
 }
 .wasabi-datetime-body .datespan  .onlyradius
@@ -154,7 +155,7 @@
   color: white;
   width:24px;
   height:24px;
-  background-color:#25d7b9;
+  background-color:#1ab394;
   border-radius: 100%;
 }
 
@@ -162,12 +163,12 @@
 .wasabi-datetime-body .datespan.chosed
 {
   color: white;
-  background-color: #25d7b9;
+  background-color: #1ab394;
 }
 .wasabi-datetime-body .datespan.begin
 {
   color: white;
-  background-color: #25d7b9;
+  background-color: #1ab394;
 
 }
 .wasabi-datetime-body .datespan.begin .radius
@@ -175,7 +176,7 @@
   color: white;
   width:24px;
   height:24px;
-  background-color:#25d7b9;
+  background-color:#1ab394;
   border-radius: 100%;
 }
 .wasabi-datetime-body .datespan.begin .blank
@@ -189,7 +190,7 @@
 .wasabi-datetime-body .datespan.end
 {
   color: white;
-  background-color: #25d7b9;
+  background-color: #1ab394;
 }
 
 .wasabi-datetime-body .datespan.end .radius
@@ -198,7 +199,7 @@
   width:24px;
   height:24px;
   float:right;
-  background-color:#25d7b9;
+  background-color:#1ab394;
   border-radius: 100%;
 }
 .wasabi-datetime-body .datespan.end .blank
@@ -236,8 +237,8 @@
 }
 
 .wasabi-time-picker-panel-input {
-
-  width: 100px;
+  width: 60px;
+  height: 24px;
 }
 
 .wasabi-time-picker-panel-clear-btn {
@@ -262,6 +263,8 @@
   height: 0px;
   -webkit-transition:height 0.5s;
   transition: height 0.5s;
+  position: absolute;
+  box-shadow: 0 0 20px #888888;
 }
 
 .wasabi-time-picker-panel-select {
@@ -311,7 +314,7 @@
   background-color: white;
 }
 .wasabi-time-picker-panel-select li.timeitem:hover {
-  background-color: #25d7b9;
+  background-color: #1ab394;
 }
 
 li.wasabi-time-picker-panel-select-option-selected {

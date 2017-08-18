@@ -4,7 +4,6 @@
 let React=require("react");
 
 var validation=require("../Lang/validation.js");
-let setStyle=require("../Mixins/setStyle.js");
 var validate=require("../Mixins/validate.js");
 var Label=require("../Unit/Label.jsx");
 var Button=require("../Buttons/Button.jsx");
@@ -13,7 +12,7 @@ var ClickAway=require("../Unit/ClickAway.js");
 import props from "./config/props.js";
 import defaultProps from "./config/defaultProps.js";
 var MutiText=React.createClass({
-    mixins:[setStyle,validate,ClickAway],
+    mixins:[validate,ClickAway],
     propTypes:props,
     getDefaultProps:function() {
         return defaultProps;
@@ -109,15 +108,14 @@ var MutiText=React.createClass({
         this.unbindClickAway();//卸载全局单击事件
     },
     clearHandler:function() {//清除数据
-        if(this.props.onSelect!=null)
-        {
-            this.props.onSelect("","",this.props.name,null);
-        }
         this.setState({
-            value:null,
-            text:null,
+            value:"",
+            text:"",
             areaValue:""
         })
+       
+        this.props.onSelect&&this.props.onSelect("","",this.props.name,null);
+       
     },
     cancelHandler:function() {//取消选择
         this.setState({
@@ -137,16 +135,12 @@ var MutiText=React.createClass({
             this.props.onSelect(this.state.areaValue?this.state.areaValue.replace(/\n/g, ","):null,this.state.areaValue?this.state.areaValue.replace(/\n/g, ","):null,this.props.name);
         }
     },
-    render:function() {
-        var size=this.props.onlyline==true?"onlyline":this.props.size;//组件大小
-        var componentClassName=  "wasabi-form-group "+size;//组件的基本样式
-        var style =this.setStyle("input");//设置样式
-        var controlStyle=this.props.controlStyle?this.props.controlStyle:{};
-        controlStyle.display = this.state.hide == true ? "none" : "block";
+    render:function() {     
+        var componentClassName=  "wasabi-form-group ";//组件的基本样式
         let inputProps=
         {
             readOnly:this.state.readonly==true?"readonly":null,
-            style:style,
+            style:this.props.style,
             name:this.props.name,
             placeholder:(this.props.placeholder===""||this.props.placeholder==null)?this.state.required?"必填项":"":this.props.placeholder,
             className:"wasabi-form-control  "+(this.props.className!=null?this.props.className:"")
@@ -160,7 +154,7 @@ var MutiText=React.createClass({
             areaValue="";
         }
         return (
-            <div className={componentClassName+this.state.validateClass} ref="picker" style={ controlStyle}>
+            <div className={componentClassName+this.state.validateClass} ref="picker" style={{display:this.state.hide==true?"none":"block"}}>
                 <Label name={this.props.label} ref="label" hide={this.state.hide} required={this.state.required}></Label>
                 <div className={ "wasabi-form-group-body"} style={{width:!this.props.label?"100%":null}}>
                     <div className="combobox"  style={{display:this.props.hide==true?"none":"block"}}   >
@@ -169,11 +163,11 @@ var MutiText=React.createClass({
                         <input type="text"  {...inputProps}  value={this.state.text} onBlur={this.onBlur} onChange={this.onlineChangeHandler}      />
                         <div className={"dropcontainter  mutiText "+this.props.position}  style={{display:this.state.show==true?"block":"none"}}  >
                             <div style={{height:30,lineHeight:"30px",color:"#aaaaaa",overflow:"hidden"}}>{this.props.title}</div>
-                       <textarea value={areaValue} ref="input" onChange={this.changeHandler}
+                       <textarea value={areaValue} ref="input" onChange={this.changeHandler} placeholder="回行代表一行"
                                  style={{width:"100%",height:100,border:"1px solid #d7dde2",resize:"none"}}></textarea>
                             <div className="ok" >
-                                <Button title="确定" name="ok"  ripple={false} theme="green" onClick={this.onSelectHandler}></Button>
-                                <Button title="取消" name="ok"  ripple={false}  theme="cancel" onClick={this.cancelHandler}></Button>
+                                <Button title="确定" name="ok"  size="small" theme="primary" onClick={this.onSelectHandler}></Button>
+                                <Button title="取消" name="cancel"  size="small" theme="cancel" onClick={this.cancelHandler}></Button>
                             </div>
                         </div>
                     </div>

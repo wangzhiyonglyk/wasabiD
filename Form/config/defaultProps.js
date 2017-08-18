@@ -19,8 +19,8 @@ export default {
             hide:false,
             regexp:null,
             invalidTip:null,
-            style:null,
-            controlStyle:null,
+            style:{},
+            controlStyle:{},
             className:"",
            
               //其他属性 text

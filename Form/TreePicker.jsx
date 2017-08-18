@@ -9,7 +9,7 @@ let SearchBox=require("./SearchBox.jsx");
 let Tree=require("../Data/Tree.jsx");
 var unit=require("../libs/unit.js");
 var validation=require("../Lang/validation.js");
-let setStyle=require("../Mixins/setStyle.js");
+
 var validate=require("../Mixins/validate.js");
 var showUpdate=require("../Mixins/showUpdate.js");
 
@@ -18,7 +18,7 @@ var ClickAway=require("../Unit/ClickAway.js");
 import props from "./config/props.js";
 import defaultProps from "./config/defaultProps.js";
 let TreePicker=React.createClass({
-    mixins:[setStyle,validate,showUpdate,ClickAway],
+    mixins:[validate,showUpdate,ClickAway],
     propTypes: props,
     getDefaultProps:function() {
         return defaultProps;
@@ -138,42 +138,28 @@ let TreePicker=React.createClass({
 
     },
     clearHandler:function() {//清除数据
-        if(this.props.onSelect!=null)
-        {
-            this.props.onSelect("","",this.props.name,null);
-        }
-        else
-        {
-            this.setState({
-                value:null,
-                text:null,
-            })
-        }
+        this.setState({
+            value: "",
+            text: "",
+        })
+         this.props.onSelect&& this.props.onSelect("", "", this.props.name, null); 
     },
-    render:function() {
-
-       
-        
+    render:function() {             
         var componentClassName=  "wasabi-form-group ";//组件的基本样式
-        var style =this.setStyle("input");//设置样式
-        var controlStyle=this.props.controlStyle?this.props.controlStyle:{};
-        controlStyle.display = this.state.hide == true ? "none" : "block";
-        let inputProps=
+            let inputProps=
             {
                 readOnly:this.state.readonly==true?"readonly":null,
-                style:style,
+                style:this.props.style,
                 name:this.props.name,
                 placeholder:(this.props.placeholder===""||this.props.placeholder==null)?this.state.required?"必填项":"":this.props.placeholder,
                 className:"wasabi-form-control  "+(this.props.className!=null?this.props.className:""),
                 title:this.props.title,
 
             }//文本框的属性
-
-
-        return <div className={componentClassName+this.state.validateClass}  ref="picker" style={ controlStyle}>
-            <Label name={this.props.label} ref="label" hide={this.state.hide} required={this.state.required}></Label>
+        return <div className={componentClassName+this.state.validateClass}  ref="picker" style={{display:this.state.hide==true?"none":"block"}}>
+            <Label name={this.props.label} ref="label"  required={this.state.required}></Label>
             <div className={ "wasabi-form-group-body"} style={{width:!this.props.label?"100%":null}}>
-                <div className="combobox"  style={{display:this.props.hide==true?"none":"block"}}   >
+                <div className="combobox"    >
                     <i className={"picker-clear "} onClick={this.clearHandler} style={{display:this.state.readonly?"none":(this.state.value==""||!this.state.value)?"none":"inline"}}></i>
                     <i className={"pickericon  " +(this.state.show?"rotate":"")} onClick={this.showPicker.bind(this,1)}></i>
                     <input type="text" {...inputProps}  value={this.state.text} onBlur={this.onBlur}   onClick={this.showPicker.bind(this,2)} onChange={this.changeHandler}     />

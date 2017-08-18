@@ -50,6 +50,7 @@ let Validate = {
 
                             }
                         }
+                      
                         if (!isvalidate) {//无效再验证
                             //判断大小，长度等
                             if (typeof this.state.min == "number") {
@@ -153,6 +154,7 @@ let Validate = {
                     }
 
                 }
+                
                 //设置样式
                 if (isvalidate) {
                     this.setState({

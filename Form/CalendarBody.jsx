@@ -22,10 +22,15 @@ let CalendarBody = React.createClass({
         changeYearHandler:React.PropTypes.func,
         changeMonthHandler:React.PropTypes.func,
     },
+    getDefaultProps(){
+return {
+    year:new Date().getFullYear
+}
+    },
     getInitialState:function(){
         return {
             year:this.props.year,
-            tempyear:this.props.tempyear,//临时的，防止输入框改变后对整个组件产生影响
+            tempyear:this.props.year,//临时的，防止输入框改变后对整个组件产生影响
             month:this.props.month,
             day:this.props.day,
             isRange:this.props.isRange,

@@ -8,9 +8,9 @@ let React=require("react");
 let Time=React.createClass({
     propTypes: {
         name:React.PropTypes.string,//表单字段名称
-        hour: React.PropTypes.number,//小时
-        minute: React.PropTypes.number,//分钟
-        second: React.PropTypes.number, //秒
+        hour:React.PropTypes.oneOfType([React.PropTypes.number,React.PropTypes.string]) ,//小时
+        minute: React.PropTypes.oneOfType([React.PropTypes.number,React.PropTypes.string]),//分钟
+        second: React.PropTypes.oneOfType([React.PropTypes.number,React.PropTypes.string]) //秒
 
     },
     getDefaultProps:function() {
@@ -200,7 +200,7 @@ let Time=React.createClass({
 
         return <div className="wasabi-time-picker-panel-inner" onMouseOut={this.mouseOutHandler}>
             <div className="wasabi-time-picker-panel-input-wrap">
-                <input className="wasabi-time-picker-panel-input wasabi-form-control "
+                <input className="wasabi-time-picker-panel-input  "
                        onClick={this.showHandler} onChange={this.changeHandler} value={this.state.hour+":"+this.state.minute+":"+this.state.second} placeholder="请选择时间"></input>
 
             </div>

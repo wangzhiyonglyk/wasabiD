@@ -7,7 +7,6 @@ let React = require("react");
 let unit = require("../libs/unit.js");
 var FetchModel = require("../Model/FetchModel.js");
 var validation = require("../Lang/validation.js");
-let setStyle = require("../Mixins/setStyle.js");
 var validate = require("../Mixins/validate.js");
 var showUpdate = require("../Mixins/showUpdate.js");
 
@@ -16,7 +15,7 @@ var Message = require("../Unit/Message.jsx");
 import props from "./config/props.js";
 import defaultProps from "./config/defaultProps.js";
 let CheckBox = React.createClass({
-    mixins: [setStyle, validate, showUpdate],
+    mixins: [validate, showUpdate],
     propTypes: props,
     getDefaultProps: function () {
          defaultProps.type="checkbox";
@@ -250,10 +249,7 @@ let CheckBox = React.createClass({
     },
     render: function () {
        
-        var componentClassName = "wasabi-form-group " + (this.props.className ? this.props.className : "");//组件的基本样式
-        var style = this.setStyle("input");//设置样式
-        var controlStyle = this.props.controlStyle ? this.props.controlStyle : {};
-        controlStyle.display = this.state.hide == true ? "none" : "block";
+        var componentClassName = "wasabi-form-group " ;//组件的基本样式
         var control = null;
         if (this.state.data instanceof Array) {
             control = this.state.data.map((child, i) => {
@@ -265,10 +261,9 @@ let CheckBox = React.createClass({
                     checked: (checked == true ? "checked" : null),//是否为选中状态
                     readOnly: this.state.readonly == true ? "readonly" : null,
                 }
-                return <li key={i} onClick={this.onSelect.bind(this, child.value, child.text, child)}  >
+                return <li style={this.props.style} className={this.props.className} key={i} onClick={this.onSelect.bind(this, child.value, child.text, child)}  >
                     <input type="checkbox" id={"checkbox" + this.props.name + child.value} value={child.value}
-
-                        onChange={this.changeHandler} className="checkbox"  {...props}></input>
+                         className="checkbox"  {...props}></input>
                     <label className="checkbox-label"  {...props}></label>
                     <div className="checktext" >{child.text}</div>
                 </li >
@@ -277,7 +272,7 @@ let CheckBox = React.createClass({
         }
         return (
 
-            <div className={componentClassName + this.state.validateClass} style={controlStyle}>
+            <div className={componentClassName + this.state.validateClass} >
                 <Label name={this.props.label} hide={this.state.hide} required={this.state.required}></Label>
                 <div className={"wasabi-form-group-body"} style={{ width: !this.props.label ? "100%" : null }}>
                     <ul className="wasabi-checkul">
