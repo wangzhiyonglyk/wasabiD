@@ -157,7 +157,7 @@ let TreePicker=React.createClass({
 
             }//文本框的属性
         return <div className={componentClassName+this.state.validateClass}  ref="picker" style={{display:this.state.hide==true?"none":"block"}}>
-            <Label name={this.props.label} ref="label"  required={this.state.required}></Label>
+            <Label name={this.props.label} ref="label" style={this.props.labelStyle} required={this.state.required}></Label>
             <div className={ "wasabi-form-group-body"} style={{width:!this.props.label?"100%":null}}>
                 <div className="combobox"    >
                     <i className={"picker-clear "} onClick={this.clearHandler} style={{display:this.state.readonly?"none":(this.state.value==""||!this.state.value)?"none":"inline"}}></i>

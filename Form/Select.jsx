@@ -372,7 +372,7 @@ let Select = React.createClass({
         return (
             <div className={componentClassName + this.state.validateClass} ref="select" style={{display:this.state.hide==true?"none":"block"}}>
                 <Label name={this.props.label} ref="label" 
-                       required={this.state.required}></Label>
+                       required={this.state.required} style={this.props.labelStyle}></Label>
                 <div className={ "wasabi-form-group-body"}>
                     <div className={"nice-select "} >
                         <i className={"picker-clear"} onClick={this.clearHandler}

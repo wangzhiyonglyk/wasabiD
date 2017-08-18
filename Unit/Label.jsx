@@ -49,8 +49,11 @@ let Label=React.createClass({
         })
     },
     render(){
+        let style=this.props.style?this.props.style:{};
+        style.display=(this.state.hide?"none":(this.state.name&&this.state.name!="")?"table":"none");
+
         return  <div className={"wasabi-form-group-label "+(this.state.required?"required":"") }
-                     style={{display:(this.state.hide?"none":(this.state.name&&this.state.name!="")?"table":"none")}}>
+                     style={style}>
             <label>{this.state.name}<a className="help" onClick={this.helpHandler} style={{display:(this.props.help?"inline-block":"none")}}>?</a><div className="heip-text" style={{display:(this.state.showHelp?"block":"none")}} >{this.props.help}</div></label>
         </div>
     }

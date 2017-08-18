@@ -249,7 +249,7 @@ var Text=React.createClass({
 
 
         return (<div className={componentClassName+this.state.validateClass} onPaste={this.onPaste} style={{display:this.state.hide==true?"none":"block"}}>
-                <Label name={this.props.label} ref="label" hide={this.state.hide} required={this.state.required}></Label>
+                <Label name={this.props.label} ref="label" hide={this.state.hide} style={this.props.labelStyle} required={this.state.required}></Label>
                 <div className={ "wasabi-form-group-body"} style={{width:!this.props.label?"100%":null}}>
                     {control}
                     <i className={this.state.validateState} style={{display:(this.state.validateState?"block":"none")}} ></i>

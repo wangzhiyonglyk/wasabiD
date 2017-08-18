@@ -18,8 +18,7 @@ var Panel=React.createClass({
             "warning",
             "danger",
         ]),//主题
-        width:React.PropTypes.oneOfType([React.PropTypes.string,React.PropTypes.number]),//宽度
-        height:React.PropTypes.number,//高度
+      
         expand:React.PropTypes.bool,//是否展开
         expandAble:React.PropTypes.bool,//是否允许展开
         title:React.PropTypes.string,//标题
@@ -31,7 +30,6 @@ var Panel=React.createClass({
             theme:"none",
             expand:true,
             expandAble:true,
-            width:document.body.clientWidth,
             title:"",
             height:400,
             backgroundColor:null,
@@ -52,9 +50,7 @@ var Panel=React.createClass({
         this.setState({
             expand: nextProps.expand,
             expandAble:nextProps.expandAble,
-            height:(nextProps.height!=null&&nextProps.height!=undefined)?nextProps.height:this.state.height,
-            width:(nextProps.width!=null&&nextProps.width!=undefined)?nextProps.width:this.state.width,
-            }
+           }
         );
 
     },
@@ -75,19 +71,13 @@ var Panel=React.createClass({
     },
     render:function()
     {
-        var style=null;
-        if(this.props.style)
-        {
-            style=this.props.style;
-            style.width=this.props.width;
-        }
-        else {
-            style={
-                width:this.props.width,
+       let style=this.props.style?this.props.style:{};
+        if(!style.width)
+            {
+                style.width="100%";
             }
-        }
         return (
-            <div className={"wasabi-panel panel-"+this.props.theme} style={style}  >
+            <div className={"wasabi-panel panel-"+this.props.theme+" "+this.props.className} style={style}  >
                 <div className="panel-heading" ><h3 className="panel-title">{this.props.title}</h3>
                     <div className="panel-buttons"><Toolbars buttons={this.props.buttons} buttonClick={this.buttonClick}></Toolbars></div>
                 <div className="panel-icon" style={{display:(this.state.expandAble)?"block":"none"}}><LinkButton tip={this.state.iconTip} iconCls={this.state.iconCls} onClick={this.expandHandler}></LinkButton></div>
