@@ -62,6 +62,7 @@ exports.Header = require('./Layout/Header.jsx');//布局组件-头部
 exports.Footer = require('./Layout/Footer.jsx');//布局组件-底部
 exports.Left = require('./Layout/Left.jsx');//布局组件-左侧
 exports.Right = require('./Layout/Right.jsx');//布局组件-右侧
+exports.Container = require('./Layout/Container.jsx');//布局组件-网格容器
 exports.Row = require('./Layout/Row.jsx');//布局组件-行
 exports.Col = require('./Layout/Col.jsx');//布局组件-列
 

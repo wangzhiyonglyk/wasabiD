@@ -13,17 +13,19 @@ class Center extends  React.Component{
     static defaultProps = {
         title:"center",
         top:null,
+        left:null,
         width:null,
         height:null,
     }
     static propTypes={
         top: React.PropTypes.oneOfType([React.PropTypes.number, React.PropTypes.string]),
+        left :React.PropTypes.oneOfType([React.PropTypes.number, React.PropTypes.string]),
         width: React.PropTypes.oneOfType([React.PropTypes.number, React.PropTypes.string]),
         height: React.PropTypes.oneOfType([React.PropTypes.number, React.PropTypes.string]),
     }
     render() {  
         return <div className={" wasabi-layout-center  layout-panel" }
-       style={{ top:this.props.top, width: (this.props.width?"calc(100% - "+(this.props.width).toString()+"px":null), height: (this.props.height?"calc(100% - "+(this.props.height).toString()+"px":null) }} 
+       style={{ top:this.props.top,left:this.props.left, width: (this.props.width?"calc(100% - "+(this.props.width).toString()+"px":null), height: (this.props.height?"calc(100% - "+(this.props.height).toString()+"px":null) }} 
        >
           {  this.props.children}
         </div>

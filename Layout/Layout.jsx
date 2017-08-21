@@ -23,7 +23,8 @@ class Layout extends React.Component {
         //计算center的高度与宽度
         let centerHeight = 0;
         let centerWidth = 0;
-        let top = null;
+        let top = 0;
+        let left=0;
         React.Children.map(this.props.children, (child, index) => {
             switch (child.props.title) {
                 case "header":
@@ -35,6 +36,7 @@ class Layout extends React.Component {
                     break;
                 case "left":
                     centerWidth += child.props.width ? child.props.width : 100;
+                    left =child.props.width ? child.props.width : 100;
                     break;
                 case "right":
                     centerWidth += child.props.width ? child.props.width : 100;
@@ -46,6 +48,8 @@ class Layout extends React.Component {
             width: centerWidth ? centerWidth : null,
             height: centerHeight ? centerHeight : null,
             top: top,
+            left:left
+           
         }
     }
     render() {
