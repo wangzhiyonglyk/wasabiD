@@ -123,7 +123,7 @@ class Modal extends  React.Component {
                     <Button title="确定" key="ok" theme="primary" onClick={this.OKHandler}
                             style={{width: 60, height: 30}}></Button>
                 )         
-            if (this.props.cancelHandler) {
+            if (this.props.OKHandler) {
                 buttons.push(
                     <Button title="取消" key="cancel" theme="cancel" onClick={this.cancelHandler}
                             style={{width: 60, height: 30, backgroundColor: "gray"}}></Button>

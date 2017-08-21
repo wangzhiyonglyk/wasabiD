@@ -190,10 +190,7 @@ let DataGridExtend= {
         for (let index = 0; index < realTableHeaderth.length; index++) {//遍历，如果原始表头的列的宽度与固定表头对应列不一样,就设置
             //设置th的宽度
             if (realTableHeaderth[index].getBoundingClientRect().width != fixedTableHeaderth[index].getBoundingClientRect().width) {
-                let thwidth = realTableHeaderth[index].getBoundingClientRect().width;
-
-                fixedTableHeaderth[index].style.width = thwidth + "px";
-                realTableHeaderth[index].style.width = thwidth + "px";
+                let thwidth = realTableHeaderth[index].children[0].getBoundingClientRect().width;
                 //设置cell
                 fixedTableHeaderth[index].children[0].style.width = ( thwidth) + "px";
                 realTableHeaderth[index].children[0].style.width = (thwidth) + "px";

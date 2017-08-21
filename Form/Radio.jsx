@@ -116,12 +116,12 @@ let Radio=React.createClass({
             }
         }
 
-        if (text) {
+      
             this.setState({
                 value: value,
                 text: text
             })
-        }
+        
 
     },
     getValue() {

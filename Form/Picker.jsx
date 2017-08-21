@@ -122,13 +122,11 @@ let  Picker =  React.createClass({
                 break;
             }
         }
-
-        if (text) {
             this.setState({
                 value: value,
                 text: text
             })
-        }
+        
 
     },
     getValue() {

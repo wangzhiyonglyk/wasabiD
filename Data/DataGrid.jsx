@@ -40,7 +40,8 @@ let DataGrid = React.createClass({
         selectAble: React.PropTypes.bool,// 是否显示选择，默认值 false
         singleSelect: React.PropTypes.bool,//是否为单选,默认值为 false
         detailAble: React.PropTypes.bool,//是否显示详情,默认值 false
-        focusAble: React.PropTypes.bool,//是否显示焦点行，默认值 false
+        rowNumber: React.PropTypes.bool,//是否显示行号,true
+        focusAble: React.PropTypes.bool,//是否显示焦点行，默认值 true
         editAble: React.PropTypes.bool,//是否允许编辑
         borderAble: React.PropTypes.bool,//是否显示表格边框，默认值 false
 
@@ -73,7 +74,7 @@ let DataGrid = React.createClass({
         onChecked: React.PropTypes.func,//监听表格中某一行被选中/取消
         updateHandler: React.PropTypes.func,//手动更新事件，父组件一定要有返回值,返回详情组件
         detailHandler: React.PropTypes.func,//展示详情的函数，父组件一定要有返回值,返回详情组件
-         pagePosition: React.PropTypes.oneOf([
+        pagePosition: React.PropTypes.oneOf([
             "top",
             "bottom",
             "both"
@@ -82,7 +83,7 @@ let DataGrid = React.createClass({
         controlPanel: React.PropTypes.any,//菜单面板
         headerUrl: React.PropTypes.string,//自定义列地址
         updateUrl: React.PropTypes.string,//列更新的地址
-        pasteSuccess:React.PropTypes.func,//粘贴成功事件
+        pasteSuccess: React.PropTypes.func,//粘贴成功事件
 
     },
     getDefaultProps: function () {
@@ -92,6 +93,7 @@ let DataGrid = React.createClass({
             selectAble: false,
             singleSelect: false,
             detailAble: false,
+            rowNumber: true,
             focusAble: true,
             borderAble: true,
             clearChecked: true,//是否清空选择的
@@ -123,7 +125,7 @@ let DataGrid = React.createClass({
             headerUrl: null,
             editAble: false,//是否允许编辑
             updateUrl: null,
-            pasteSuccess:null
+            pasteSuccess: null
 
         }
     },
@@ -171,8 +173,8 @@ let DataGrid = React.createClass({
          headers可能是后期才传了,见Page组件可知
          所以此处需要详细判断
          */
-    if (nextProps.headers&&this.showUpdate(nextProps.headers,this.state.headers)) { //存在着这种情况,后期才传headers,所以要更新一下
-    
+        if (nextProps.headers && this.showUpdate(nextProps.headers, this.state.headers)) { //存在着这种情况,后期才传headers,所以要更新一下
+
             this.setState({
                 headers: nextProps.headers,
             })
@@ -180,10 +182,10 @@ let DataGrid = React.createClass({
         if (this.state.headerUrl != nextProps.headerUrl) {//有远程加载表头信息
             this.getHeaderDataHandler(nextProps.headerUrl);
         }
-        if (nextProps.url&&this.state.url != nextProps.url) {//url发生改变
+        if (nextProps.url && this.state.url != nextProps.url) {//url发生改变
             this.updateHandler(nextProps.url, this.state.pageSize, 1, this.state.sortName, this.state.sortOrder, nextProps.params);
         }
-       else  if (nextProps.data != null && nextProps.data != undefined && nextProps.data instanceof Array) {
+        else if (nextProps.data != null && nextProps.data != undefined && nextProps.data instanceof Array) {
             this.setState({
                 data: (this.props.pagination == true ? nextProps.data.slice(0, nextProps.pageSize) : nextProps.data),
                 total: nextProps.total,
@@ -216,6 +218,13 @@ let DataGrid = React.createClass({
             return null;
         }
         let headers = [];
+        if (this.props.rowNumber) {
+            headers.push(
+                <th key="headerorder" name="order"  >
+                    <div className="wasabi-grid-cell" style={{ width: 40 }} name="order">序号</div>
+                </th>
+            );
+        }
         if (this.props.selectAble) {
             let thCheckProps = {//设置checkbox的属性
                 value: this.checkCurrentPageCheckedAll() == true ? "yes" : null,//判断当前页是否选中
@@ -224,8 +233,8 @@ let DataGrid = React.createClass({
                 name: "all",
             }
             headers.push(
-                <th key="headercheckbox" name="check-column" style={{ width: 35 }} >
-                    <div className="wasabi-grid-cell" name="check-column">{this.props.singleSelect ? null : <CheckBox {...thCheckProps} ></CheckBox>}</div>
+                <th key="headercheckbox" name="check-column"  >
+                    <div className="wasabi-grid-cell" style={{ width: 20 }} name="check-column">{this.props.singleSelect ? null : <CheckBox {...thCheckProps} ></CheckBox>}</div>
                 </th>
             );
         }
@@ -239,14 +248,14 @@ let DataGrid = React.createClass({
                     return;
                 }
                 else {
-                    let sortOrder = header.sortAble == true?this.state.sortName == header.name?this.state.sortOrder:"both":"";//排序样式
+                    let sortOrder = header.sortAble == true ? this.state.sortName == header.name ? this.state.sortOrder : "both" : "";//排序样式
                     let props = {};//设置单击事件
-                     props.onClick=header.sortAble == true?this.state.sortName == header.name?this.onSort.bind(this, header.name, this.state.sortOrder == "asc" ? "desc" : "asc"): this.onSort.bind(this, header.name, "asc"):null;
-                    
+                    props.onClick = header.sortAble == true ? this.state.sortName == header.name ? this.onSort.bind(this, header.name, this.state.sortOrder == "asc" ? "desc" : "asc") : this.onSort.bind(this, header.name, "asc") : null;
+
                     //打开操作面板的图标
-                    let panelIcon =(this.state.control && index == 0)?<LinkButton key="control" style={{  fontSize: 12, position: "absolute" }} iconCls={"icon-catalog"} name="control" tip="菜单" onClick={this.panelShow} />:null;
+                    let panelIcon = (this.state.control && index == 0) ? <LinkButton key="control" style={{ fontSize: 12, position: "absolute" }} iconCls={"icon-catalog"} name="control" tip="菜单" onClick={this.panelShow} /> : null;
                     //表格处理编辑时的保存按钮
-                    let saveIcon = (this.state.editIndex != null && index == 0)? <LinkButton key="save" style={{  fontSize: 12, position: "absolute" }} iconCls={"icon-submit"} name="save" tip="保存" onClick={this.remoteUpdateRow.bind(this, null)} />:null;           
+                    let saveIcon = (this.state.editIndex != null && index == 0) ? <LinkButton key="save" style={{ fontSize: 12, position: "absolute" }} iconCls={"icon-submit"} name="save" tip="保存" onClick={this.remoteUpdateRow.bind(this, null)} /> : null;
                     headers.push(
                         // 绑定右键菜单事件 
                         //使用label作为元素name属性，是因为可能有多个列对应同一个字段
@@ -271,16 +280,21 @@ let DataGrid = React.createClass({
     },
     renderBody: function () {//渲染表体
         let trobj = [];
-        if (this.state.data instanceof Array && this.state.headers instanceof Array) {
-
-        }
-        else {
+        if (!(this.state.data instanceof Array) || !(this.state.headers instanceof Array)) {
             return;
         }
 
         this.state.data.map((rowData, rowIndex) => {
             let tds = [];//当前的列集合
             let key = this.getKey(rowIndex);//获取这一行的关键值
+
+            //序号列
+            if (this.props.rowNumber) {
+                tds.push(
+                    <td key={"bodyorder" + rowIndex.toString()}  >
+                        <div className="wasabi-grid-cell" style={{ width: 40 }} > {((this.state.pageIndex - 1) * this.state.pageSize + rowIndex+1).toString()}</div></td>
+                );
+            }
             //设置这一行的选择列
             if (this.props.selectAble) {
                 let props = {
@@ -289,23 +303,24 @@ let DataGrid = React.createClass({
                     onSelect: this.onChecked.bind(this, rowIndex),
                     name: key,
                 }
+
                 if (this.props.singleSelect == true) {
                     tds.push(
-                        <td key={"bodycheckbox" + rowIndex.toString()} className="check-column" style={{ width: 35 }}>
-                            <div className="wasabi-grid-cell" > <Radio {...props} ></Radio></div></td>
+                        <td key={"bodycheckbox" + rowIndex.toString()} className="check-column" >
+                            <div className="wasabi-grid-cell" style={{ width: 20 }}> <Radio {...props} ></Radio></div></td>
                     );
 
                 }
                 else {
                     tds.push(
-                        <td key={"bodycheckbox" + rowIndex.toString()} className="check-column" style={{ width: 35 }}>
-                            <div className="wasabi-grid-cell"  ><CheckBox {...props} ></CheckBox></div></td>
+                        <td key={"bodycheckbox" + rowIndex.toString()} className="check-column" >
+                            <div className="wasabi-grid-cell" style={{ width: 20 }} ><CheckBox {...props} ></CheckBox></div></td>
                     );
                 }
             }
 
             //生成数据列
-        
+
             this.state.headers.map((header, columnIndex) => {
                 if (!header || header.hide) {
                     return;
@@ -320,9 +335,9 @@ let DataGrid = React.createClass({
                     content = this.substitute(content, rowData);
                 } else if (typeof content === 'function') {//函数
                     try {
-                        
+
                         content = content(rowData, rowIndex);
-                       
+
                     }
                     catch (e) {
                         content = "";
@@ -332,7 +347,7 @@ let DataGrid = React.createClass({
                     content = rowData[header.name];
                 }
 
-                   
+
                 if (this.state.editIndex != null && this.state.editIndex == rowIndex && header.editor) {
                     let currentValue = rowData[header.name];
                     let currentText = rowData[header.name];
@@ -347,7 +362,7 @@ let DataGrid = React.createClass({
                     tds.push(<td onClick={this.onClick.bind(this, rowIndex, rowData)}
                         onDoubleClick={this.onDoubleClick.bind(this, rowIndex, rowData)}
                         key={"col" + rowIndex.toString() + "-" + columnIndex.toString()}
-                    ><div className="wasabi-grid-cell" style={{ width: (header.width ? header.width : null), textAlign: (header.align ) }}>
+                    ><div className="wasabi-grid-cell" style={{ width: (header.width ? header.width : null), textAlign: (header.align) }}>
                             <Input {...header.editor.options} type={header.editor.type} value={currentValue} text={currentText} onChange={this.rowEditHandler.bind(this, columnIndex)}
                                 onSelect={this.rowEditHandler.bind(this, columnIndex)} label={""}></Input>
                         </div></td>);
@@ -364,8 +379,8 @@ let DataGrid = React.createClass({
                         tds.push(<td onClick={this.detailHandler.bind(this, rowIndex, rowData)}
                             key={"col" + rowIndex.toString() + "-" + columnIndex.toString()}>
                             <div className="wasabi-grid-cell" style={{ width: (header.width ? header.width : null), textAlign: (header.align) }}>
-                                <div style={{ float: "left" }}> {content}</div><LinkButton iconCls={iconCls} 
-                                 tip="查看详情"></LinkButton>
+                                <div style={{ float: "left" }}> {content}</div><LinkButton iconCls={iconCls}
+                                    tip="查看详情"></LinkButton>
                             </div>
                         </td>);
                     }
@@ -373,20 +388,18 @@ let DataGrid = React.createClass({
                         tds.push(<td onClick={this.onClick.bind(this, rowIndex, rowData)}
                             onDoubleClick={this.onDoubleClick.bind(this, rowIndex, rowData)}
                             key={"col" + rowIndex.toString() + "-" + columnIndex.toString()}
-                        ><div className="wasabi-grid-cell" style={{ width: (header.width ? header.width : null), textAlign: (header.align ) }}>{content}</div></td>);
+                        ><div className="wasabi-grid-cell" style={{ width: (header.width ? header.width : null), textAlign: (header.align) }}>{content}</div></td>);
                     }
                 }
 
 
             });
-            let trClassName = null;
-            if ((rowIndex * 1) % 2 == 0) {//不是选中行的时候
-                trClassName = "even";
-            }
+           
+            let trClassName="";
             if ((rowIndex * 1) == this.focusIndex && this.props.focusAble) {
                 trClassName = "selected";
             }
-            trobj.push(<tr className={trClassName} key={"row" + rowIndex.toString()} onMouseDown={this.onTRMouseDown.bind(this, rowIndex)}>{tds}</tr>);
+            trobj.push(<tr  key={"row" + rowIndex.toString()} onMouseDown={this.onTRMouseDown.bind(this, rowIndex)}>{tds}</tr>);
 
             if (this.state.detailIndex == key) {
 
@@ -599,9 +612,9 @@ let DataGrid = React.createClass({
         let className = this.props.borderAble ? "table " : "table table-no-bordered";
         let headerControl = this.renderHeader();//渲染两次，所以定义一个变量
         return (
-             /* excel粘贴事件 注册鼠标按下事件，从而隐藏菜单*/
+            /* excel粘贴事件 注册鼠标按下事件，从而隐藏菜单*/
             <div className="wasabi-grid" ref="grid"
-                onPaste={this.onPaste}         
+                onPaste={this.onPaste}
                 onMouseDown={this.gridMouseDownHandler}
                 style={{ width: this.props.width }}  >
                 {/* 头部分页 */}

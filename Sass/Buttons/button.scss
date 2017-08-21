@@ -53,8 +53,8 @@
   }
   
 .wasabi-button.primary {
-     background-color: #16689E;
-    border-color: #16689E;
+     background-color: #1c84c6;
+    border-color: #1c84c6;
     color: #FFF;
 }
 .wasabi-button.primary.active, .wasabi-button.primary:active, .wasabi-button.primary:focus, .wasabi-button.primary:hover {
@@ -62,9 +62,7 @@
     border-color: #16689E;
     color: #FFF;
 }
-  .wasabi-button.primary.active.focus, .wasabi-button.primary.active:focus, .wasabi-button.primary.active:hover, .wasabi-button.primary:active.focus, .wasabi-button.primary:active:focus, .wasabi-button.primary:active:hover, .open>.dropdown-toggle.wasabi-button.primary.focus, .open>.dropdown-toggle.wasabi-button.primary:focus, .open>.dropdown-toggle.wasabi-button.primary:hover {
-    color: #fff;
-    background-color: #16689E;
+  .wasabi-button.primary.active.focus, .wasabi-button.primary.active:focus, .wasabi-button.primary.active:hover, .wasabi-button.primary:active.focus, .wasabi-button.primary:active:focus, .wasabi-button.primary:active:hover{
     border-color: #16689E;
 }
 .wasabi-button.default{

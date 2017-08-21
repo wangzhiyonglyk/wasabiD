@@ -176,12 +176,11 @@ return this.state.value;
     },
     setValue:function(value)
     {
-     if(this.validate(value))
-        {
+     
             this.setState({
                 value:value
             })
-        }
+        
     },
     clearHandler:function() {//清除数据
         this.setState({

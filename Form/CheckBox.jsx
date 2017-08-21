@@ -118,12 +118,12 @@ let CheckBox = React.createClass({
             }
         }
 
-        if (text) {
+      
             this.setState({
                 value: value,
                 text: text
             })
-        }
+        
 
     },
     getValue() {
@@ -256,11 +256,11 @@ let CheckBox = React.createClass({
                     checked = true;
                 }
                 var props = {
-                    checked: (checked == true ? "checked" : null),//是否为选中状态
+                    checked: checked,//是否为选中状态
                     readOnly: this.state.readonly == true ? "readonly" : null,
                 }
                 return <li style={this.props.style} className={this.props.className} key={i} onClick={this.onSelect.bind(this, child.value, child.text, child)}  >
-                    <input type="checkbox" id={"checkbox" + this.props.name + child.value} value={'test'}
+                    <input type="checkbox" id={"checkbox" + this.props.name + child.value} 
                          className="checkbox"  {...props}></input>
                     <label className="checkbox-label"  {...props}></label>
                     <div className="checktext" >{child.text}</div>
