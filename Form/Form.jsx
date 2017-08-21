@@ -53,7 +53,7 @@ var Form = React.createClass({
             if (this.refs[v].props.name&&this.refs[v].getValue) {//说明是表单控件
                 if (this.refs[v].props.name.indexOf(",") > -1) {//含有多个字段
                     var nameSplit = this.refs[v].props.name.split(",");
-                    if (this.refs[v].state.getValue()) {
+                    if (this.refs[v].getValue()) {
                         var valueSplit = this.refs[v].getValue().split(",");
                         for (let index = 0; index < nameSplit.length; index++) {
                             if (index < valueSplit.length) {
