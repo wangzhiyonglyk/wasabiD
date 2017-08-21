@@ -1,5 +1,7 @@
 
-
+.wasabi-tabs{
+  width:100%;
+}
 .wasabi-tab
 {
   text-decoration: none;
@@ -11,52 +13,48 @@
   margin-right: 5px;
   padding-left: 8px;
   padding-right: 8px;
-  font-weight: bold;
   position: relative;
-overflow: hidden;
+  overflow: hidden;
 }
 
 .wasabi-tab.default {
   border: 1px solid #d9d9d9;
-  background-color: #f9f9f9;
-  border-bottom-color: transparent;
 }
 .wasabi-tab.default.active {
   background: transparent;
-  color: #2db7f5;
+  color: #1c84c6;
 }
 
-  /*
-  此处专门心怡制定
-  */
-.wasabi-tab.green {
+.wasabi-tab.primary {
   font-weight: normal;
-  border: 1px solid #0ec2bc;
-  color:#0ec2bc;
+  border: 1px solid #1c84c6;
+  color:#1c84c6;
 }
 
 
-.wasabi-tab.green.active {
-  background: #0ec2bc;
+.wasabi-tab.primary.active {
+  background: #1c84c6;
   color: #ffffff;
 }
-
-.wasabi-tabs .section.default {
-  border-top: 1px solid #d9d9d9;
-  height:100%;
-}
-
-.wasabi-tabs .section.green {
-  border-top: 1px solid #0ec2bc;
-  height:100%;
-}
-
-
-
-.wasabi-tabs .section>div {
+.wasabi-tabs .section {
   display:none;
+  min-height: 400px;
 }
-.wasabi-tabs .section>.active
+.wasabi-tabs .section.active
 {
   display:block;
 }
+
+.wasabi-tabs .section.default {
+  border: 1px solid #d9d9d9;
+ 
+}
+
+.wasabi-tabs .section.primary {
+  border: 1px solid #1c84c6;
+ 
+}
+
+
+
+

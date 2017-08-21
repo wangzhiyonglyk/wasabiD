@@ -11,17 +11,31 @@ date:2017-07-28 对整体样式风格修改 实现hplus主题
  * 引用Bootstrap v3.3.7 对基本样式的设置，定制时只勾选的grid
  */
 html {
+  height: 100%;
+  width:100%;
+  margin: 0px;
+  padding:0px;
    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
 }
 body {
+  height: 100%;
+  width:100%;
+  margin: 0px;
+  padding:0px;
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
     font-size: 14px;
     line-height: 1.42857143;
     color: #333;
     background-color: #fff;
 }
+
+body>div:first-child{
+  height: 100%;
+  width:100%;
+}
+
 article,
 aside,
 details,
@@ -201,6 +215,8 @@ th {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
+  margin: 0px;
+  padding:0px;
 }
 *:before,
 *:after {
@@ -216,7 +232,7 @@ body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 14px;
   line-height: 1.42857143;
-  color: #333333;
+  color: #666666;
   background-color: #ffffff;
 }
 input,
@@ -228,12 +244,12 @@ textarea {
   line-height: inherit;
 }
 a {
-  color: #1ab394;
+  color:#666666;  
   text-decoration: none;
 }
 a:hover,
 a:focus {
-  color: #047C63;
+  color: #333333;
   text-decoration: none;
 }
 a:focus {

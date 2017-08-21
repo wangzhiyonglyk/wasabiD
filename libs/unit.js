@@ -288,7 +288,7 @@ baseUtil.fetch = {
                                 fetchmodel.error(result.errorCode, result.message,result);
                             } else {
                                 console.log("fetch-error",result.errorCode,result.message);
-                                baseUtil.showError(baseUtil.Error.HandlerError +",错误原因：" + result.message);
+                             
                             }
 
                         }
@@ -296,7 +296,7 @@ baseUtil.fetch = {
                     });
                 }catch (e)
                 {
-                    baseUtil.showError(e.message);
+                    console.log(e.message);
                 }
             }
             else {
@@ -305,7 +305,7 @@ baseUtil.fetch = {
                     fetchmodel.error("002",baseUtil.Error.ServiceError);
                 }else {
 
-                    baseUtil.showError(baseUtil.Error.ServiceError);
+                    console.log(baseUtil.Error.ServiceError);
                 }
             }
 
@@ -315,7 +315,7 @@ baseUtil.fetch = {
                 fetchmodel.error("001",baseUtil.Error.HttpError+e.message);
             }else {
 
-                baseUtil.showError(baseUtil.Error.HttpError+e.message);
+                console.log(baseUtil.Error.HttpError+e.message);
             }
         });
     },
@@ -345,14 +345,14 @@ baseUtil.fetch = {
                                 fetchmodel.error(result.errorCode,result.message,result);
                             }else {
                                 console.log("fetch-error",result.errorCode,result.message);
-                                baseUtil.showError(baseUtil.Error.HandlerError + ",错误原因：" + result.message);
+                               
                             }
                         }
                     });
                 }
                 catch (e)
                 {
-                    baseUtil.showError(e.message);
+                    console.log(e.message);
                 }
             }
             else {
@@ -360,7 +360,7 @@ baseUtil.fetch = {
                 {
                     fetchmodel.error("002",baseUtil.Error.ServiceError);
                 }else {
-                    baseUtil.showError(baseUtil.Error.ServiceError);
+                    console.log(baseUtil.Error.ServiceError);
                 }
             }
         }).catch(function(e){
@@ -368,7 +368,7 @@ baseUtil.fetch = {
             {
                 fetchmodel.error("001",baseUtil.Error.HttpError + e.message);
             }else {
-                baseUtil.showError(baseUtil.Error.HttpError + e.message);
+                console.log(baseUtil.Error.HttpError + e.message);
             }
         });
     },

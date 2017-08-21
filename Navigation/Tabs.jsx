@@ -7,63 +7,60 @@ var addRipple=require("../Mixins/addRipple.js");
 var Tabs=React.createClass({
       mixins:[addRipple],
         propTypes:{
-            tabs:React.PropTypes.array.isRequired,
             theme: React.PropTypes.oneOf([//主题
                 "primary",
                 "default",
-                "green"
-            ])
+               
+            ]),
+            activeIndex:React.PropTypes.number,
         },
         getDefaultProps: function () {
             return {
-                tabs: [],
                 theme:"default",
+                activeIndex:0,
+
             }
         }
         , getInitialState: function () {
-        //这里似乎无法复制，因为content属性是jsx对象，但似乎不影响使用
-        return {
-            tabs: this.props.tabs
-        };
+            
+         return {   activeIndex:this.props.activeIndex}
     },
         componentWillReceiveProps:function (nextProps)
         {
+           
             this.setState({
-                tabs:nextProps.tabs
+                activeIndex:nextProps.activeIndex!=null&&nextProps.activeIndex!=undefined?nextProps.activeIndex:0
             })
         },
         tabClickHandler:function(index,event) {
 
             this.rippleHandler(event);
             //页签单击事件
-            var newTabs = this.state.tabs;
-            for (var i = 0; i < newTabs.length; i++) {
-                if (i == index) {
-                    newTabs[index].active = true;
-                }
-                else {
-                    newTabs[i].active = false;
-                }
-            }
-            this.setState({tabs: newTabs});
+           this.setState({
+               activeIndex:index
+           })
         },
         render: function () {
             return (
-
-                <div className="wasabi-tabs" style={this.props.style}>
+                <div className="wasabi-tabs" >
                     <div  >
                         {
-                            this.state.tabs.map((child,i)=>{
-                                return    <a key={i} href="javascript:void(0);"  onClick={this.tabClickHandler.bind(this,i)} className={"wasabi-tab "+this.props.theme+" "+(child.active==true?"active ":"")} >{child.title}</a>
+                            
+                            React.Children.map(this.props.children, (child, index) => {
+                              
+                                return    <a key={index} href="javascript:void(0);"  onClick={this.tabClickHandler.bind(this,index)} className={"wasabi-tab "+this.props.theme+" "+(this.state.activeIndex==index?"active ":"")} >{child.props.title}</a>
                             })
                         }
                     </div>
-                    <div  className={"section "+this.props.theme} >
-                        {this.state.tabs.map((child, i)=> {
-                            return (<div key={i}  className={(child.active==true?"active":"")}>{child.content}</div>);
+                    { 
+                            React.Children.map(this.props.children, (child, index) => {
+                               
+                            return  <div key={index} style={this.props.style} className={"section  "+this.props.theme+ " "+(index==this.state.activeIndex?"active":"")}  >
+                      {child}
+                       </div>
                         })
                         }
-                    </div>
+                   
                 </div>)
 
         }

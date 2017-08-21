@@ -56,12 +56,15 @@ exports.SearchBox = require('./Form/SearchBox.jsx');//筛选框
 /*****************布局组件******************/
 
 exports.Drop = require('./Layout/Drop.jsx');//停靠组件
-// exports.Layout = require('./Layout/Layout.jsx');//布局组件
-// exports.Center = require('./Layout/Center.jsx');//布局组件-中间
-// exports.North = require('./Layout/North.jsx');//布局组件-头部
-// exports.South = require('./Layout/South.jsx');//布局组件-底部
-// exports.West = require('./Layout/West.jsx');//布局组件-左侧
-// exports.East = require('./Layout/East.jsx');//布局组件-右侧
+exports.Layout = require('./Layout/Layout.jsx');//布局组件
+exports.Center = require('./Layout/Center.jsx');//布局组件-中间
+exports.Header = require('./Layout/Header.jsx');//布局组件-头部
+exports.Footer = require('./Layout/Footer.jsx');//布局组件-底部
+exports.Left = require('./Layout/Left.jsx');//布局组件-左侧
+exports.Right = require('./Layout/Right.jsx');//布局组件-右侧
+exports.Row = require('./Layout/Row.jsx');//布局组件-行
+exports.Col = require('./Layout/Col.jsx');//布局组件-列
+
 
 exports.Modal = require('./Layout/Modal.jsx');//模态层组件
 exports.Panel = require('./Layout/Panel.jsx');//面板组件
@@ -75,11 +78,11 @@ exports.Tooltip_shy = require('./Unit/Tooltip_shy.jsx');//提示信息组件-shy
 exports.Progress = require('./Unit/Progress.jsx');//进步条组件
 
 /*****************导航组件******************/
-exports.MenuTabs = require('./Navigation/MenuTabs.jsx');//菜单tab组件
+exports.Menus = require('./Navigation/Menus.jsx');//菜单组件
+exports.MenuPanel=require('./Navigation/MenuPanel.jsx');//菜单面板组件
 exports.Tabs = require('./Navigation/Tabs.jsx');//页签组件
+exports.TabPanel=require('./Navigation/TabPanel.jsx');//页签面板组件
 exports.Track = require('./Navigation/Track.jsx');//物流跟踪
-
-
 
 /*****************功能组件******************/
 exports.Import = require('./Action/Import.jsx');//excel导入组件

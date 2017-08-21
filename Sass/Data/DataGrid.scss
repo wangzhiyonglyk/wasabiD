@@ -53,7 +53,7 @@
   position: absolute;
   top: 0px;
   left: 0px;
-  z-index: 1;
+
 
 }
 
@@ -82,7 +82,7 @@
     box-sizing: border-box;
 }
 .table td,.table th
-{    border: 1px solid #e7e7e7;
+{    border: 1px solid #ccc;
     line-height: 1.42857;
    padding: 8px;
     vertical-align: middle;
@@ -101,7 +101,7 @@
 
  .table.table-no-bordered td, {
    border: none;
-   border-top: 1px solid #e7e7e7;
+   border-top: 1px solid #ccc;
 }
  .table.table-no-bordered th {
    border: none;

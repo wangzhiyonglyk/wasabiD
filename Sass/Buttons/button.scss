@@ -53,19 +53,19 @@
   }
   
 .wasabi-button.primary {
-     background-color: #1ab394;
-    border-color: #1ab394;
+     background-color: #16689E;
+    border-color: #16689E;
     color: #FFF;
 }
 .wasabi-button.primary.active, .wasabi-button.primary:active, .wasabi-button.primary:focus, .wasabi-button.primary:hover {
-    background-color: #18a689;
-    border-color: #18a689;
+    background-color: #16689E;
+    border-color: #16689E;
     color: #FFF;
 }
   .wasabi-button.primary.active.focus, .wasabi-button.primary.active:focus, .wasabi-button.primary.active:hover, .wasabi-button.primary:active.focus, .wasabi-button.primary:active:focus, .wasabi-button.primary:active:hover, .open>.dropdown-toggle.wasabi-button.primary.focus, .open>.dropdown-toggle.wasabi-button.primary:focus, .open>.dropdown-toggle.wasabi-button.primary:hover {
     color: #fff;
-    background-color: #16987E;
-    border-color: #16987E;
+    background-color: #16689E;
+    border-color: #16689E;
 }
 .wasabi-button.default{
     background-color: #c2c2c2;
@@ -90,14 +90,14 @@
     color: #FFF;
 }
 .wasabi-button.success.active, .wasabi-button.success:active, .wasabi-button.success:focus, .wasabi-button.success:hover {
-    background-color: #1a7bb9;
-    border-color: #1a7bb9;
+    background-color: #18a689;
+    border-color: #16987E;
     color: #FFF;
 }
 .wasabi-button.success.active.focus, .wasabi-button.success.active:focus, .wasabi-button.success.active:hover, .wasabi-button.success:active.focus, .wasabi-button.success:active:focus, .wasabi-button.success:active:hover {
     color: #fff;
-    background-color: #16689E;
-    border-color: #16689E;
+    background-color: #18a689;
+    border-color: #18a689;
 }
 .wasabi-button.info {
     background-color: #23c6c8;

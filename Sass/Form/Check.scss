@@ -46,7 +46,7 @@ desc:表单输入框样式
 }
 .wasabi-checkul .checkbox + label {
   width:16px;
-  height:18px;
+  height:16px;
   border: 1px solid #afb3b8;
   display: inline-block;
   margin-right: 3px;
@@ -61,11 +61,11 @@ desc:表单输入框样式
   cursor: not-allowed;
 }
 .wasabi-checkul .checkbox:hover + label {
-  border: 1px solid #1ab394;
+  border: 1px solid #1c84c6;
 }
 
 .wasabi-checkul .checkbox:checked + label {
-  background-color: #1ab394;
+  background-color: #1c84c6;
   border: 1px solid transparent;
 }
 .wasabi-checkul .checkbox:checked + label:after {
@@ -93,7 +93,7 @@ desc:表单输入框样式
   -webkit-border-radius: 100%;
   -moz-border-radius: 100%;
   border-radius: 100%;
-  border: 2px solid #1ab394;
+  border: 2px solid #1c84c6;
   box-sizing: border-box;
 
 }
@@ -122,7 +122,7 @@ desc:表单输入框样式
   box-sizing: border-box;
 }
 .checkedRadio i {
-  background-color: #1ab394;
+  background-color: #1c84c6;
 }
 .wasabi-checkul .radiotext
 {

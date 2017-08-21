@@ -5,38 +5,52 @@ desc:圣杯布局样式
 
 .wasabi-layout{
   position: relative;
-  overflow: visible;
-  border: 1px solid #e3e4e5;
-}
-.wasabi-layout-north{
-  height: 200px;
-  width: 100%;
-}
-.wasabi-layout-south{
-  height: 200px;
-  width: 100%;
-}
-.wasabi-layout-west
-{
+  margin: 0;
+  padding: 0;
   height: 100%;
-  width: 150px;
-}
-.wasabi-layout-east{
-  height: 100%;
-  width: 150px;
-}
-.wasabi-layout-title{
-  height: 40px;
   width: 100%;
-  border-bottom: 1px solid #e3e4e5;
-  background-color: #eff0f1;
-}
-.wasabi-layout-nav{
-  height: calc(100% - 40);
-  width: 100%;
+  box-sizing: border-box;
+  min-height: 500px;
 
+
+.layout-panel {
+  min-width: 1px;
+  min-height: 1px;
+  position: absolute;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  overflow: auto;
 }
-.wasabi-layout-center{
-  width: calc(100% - 300);
-  height: calc(100% - 40);
+  .wasabi-layout-header{
+    height: 100px;
+    width: 100%;
+    top:0px;
+
+  }
+  .wasabi-layout-footer{
+    height: 100px;
+    width: 100%;
+    bottom: 0px;
+  }
+ 
+  .wasabi-layout-left
+  {
+    width: 100px;
+   height: calc(100% - 200px);
+    left:0px;
+    top:100px;
+  }
+  .wasabi-layout-right{
+    width: 100px;
+    right:0px;
+    height: calc(100% - 200px);
+
+    top:100px;
+  } 
+  .wasabi-layout-center{
+    width: calc(100% - 200px);
+    left :100px;
+    top:100px;
+    height: calc(100% - 200px);
+  }
 }

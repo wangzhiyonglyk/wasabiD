@@ -44,9 +44,11 @@ desc:面板组件样式
   -webkit-transition: height 1s;
   transition:height 1s;
   height:100%;
-  overflow-x: visible;
   padding:0px;
   padding-bottom: 10px;
+  text-align: left;
+  margin: 0;
+  border: 0;
 
 }
 

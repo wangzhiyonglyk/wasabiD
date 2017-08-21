@@ -13,6 +13,7 @@ var SearchBar = React.createClass({
         submitTitle: React.PropTypes.string,
         submitHide: React.PropTypes.bool,
         submitTheme:React.PropTypes.string,
+        submitStyle:React.PropTypes.object,
         onSubmit: React.PropTypes.func,
         expandHandler: React.PropTypes.func,
 
@@ -24,6 +25,7 @@ var SearchBar = React.createClass({
             submitTitle: "查询",//查询按钮的标题
             submitHide: false,//是否隐藏按钮
             submitTheme:"primary",//主题
+            submitStyle:{},//查询按钮的样式
             onSubmit: null,//提交成功后的回调事 
             expandHandler: null,//展开与折叠事件
            
@@ -32,16 +34,8 @@ var SearchBar = React.createClass({
     },
     getInitialState: function () {
         //初始化时就获取可用宽度,如果每次更新获取,会产生晃动
-        if (window.screen.availWidth < document.documentElement.clientWidth) {//屏幕可用宽度小,有滚动条
-            this.availWidth = window.screen.availWidth - 50;
-        }
-        else {
-            //没有滚动条  现在每个页面留有左右20像素的边距
-            this.availWidth = window.screen.availWidth - 40;//防止后期出现滚动条,而产生样式变形,先减去滚动条宽度
-        }
         return {
             dropType: "wasabi-button wasabi-searchbar-down",//折叠按钮样式
-            columns: this.props.columns,
         }
     },
     componentWillReceiveProps: function (nextProps) {
@@ -59,8 +53,8 @@ var SearchBar = React.createClass({
             if (this.refs[v].props.name&&this.refs[v].getValue) {//说明是表单控件
                 if (this.refs[v].props.name.indexOf(",") > -1) {//含有多个字段
                     var nameSplit = this.refs[v].props.name.split(",");
-                    if (this.refs[v].state.value && this.refs[v].state.value != "") {
-                        var valueSplit = this.refs[v].state.value.split(",");
+                    if (this.refs[v].state.getValue()) {
+                        var valueSplit = this.refs[v].getValue().split(",");
                         for (let index = 0; index < nameSplit.length; index++) {
                             if (index < valueSplit.length) {
                                 data[nameSplit[index]] = valueSplit[index];
@@ -78,6 +72,9 @@ var SearchBar = React.createClass({
                     data[this.refs[v].props.name] = this.refs[v].getValue();
                 }
             }
+            else if(this.refs[v].getData){//布局组件或者表单组件
+                data=Object.assign(data,this.refs[v].getData())
+            } 
 
 
         }
@@ -90,14 +87,20 @@ var SearchBar = React.createClass({
             return;
         }
         for (let v in this.refs) {
-            if (data[this.refs[v].props.name]) {
+            if (this.refs[v].props.name&&data[this.refs[v].props.name]) {
                 this.refs[v].setValue&&this.refs[v].setValue(data[this.refs[v].props.name]);
             }
+            else if(this.refs[v].setData)
+                {//表单或者布局组件
+                    this.refs[v].setData(data);
+                }
         }
     },
+
     clearData: function () {
         for (let v in this.refs) {
-            this.refs[v].setValue && this.refs[v].setValue("");
+          this.refs[v].setValue && this.refs[v].setValue("");
+            this.refs[v].clearData && this.refs[v].clearData();
         }
     },
     onSubmit: function () {
@@ -157,91 +160,25 @@ var SearchBar = React.createClass({
             this.props.expandHandler(expand);
         }
     },
-    setColumns: function () {//计算列数及样式 TODO 此处要重新设计
-        var style = {};//表单栏样式
-        if (this.props.style) {
-            style = this.props.style;
-        }
-        //表单实际宽度
-        let actualWidth =  style.width ? style.width : this.availWidth;//总宽度
-        let leftWidth = actualWidth - 130;//左侧表单宽度
-        let columnClass = "";//列样式
-        let columns = 0;//每一行的列数
-        if (this.state.columns) {//如果自定义了,则以自定义为标准
-            columns = this.state.columns;
-        }
-        else {//否则自动计算
-            if (leftWidth <= 610) {//一列
-                columns = 1;
-            }
-            else if (leftWidth >= 611 && leftWidth <= 909) {//两列
-                columns = 2;
-            }
-            else if (leftWidth >= 910 && leftWidth <= 1229) {//三列
-                columns = 3;
-            }
-            else if (leftWidth >= 1230) {//四列
-                columns = 4;
-            }
-        }
-        if ((this.props.children.length) < columns) {//如果数据小于列数,否则查询按钮会位置发生改变
-            columns = this.props.children.length;
-            if (columns == 1) {//如果只有两列的话,重新定义宽度
-                actualWidth = 400;
-            }
-            else if (columns == 2) {
-                actualWidth = 700;
-            }
-            else if (columns == 3) {
-                actualWidth = 1024;
-            }
-            leftWidth = actualWidth - 130;
-        }
-        //最后根据实际情况再处理
-        switch (columns) {
-            case 1:
-                columnClass = "oneline";
-                break;
-            case 2:
-                columnClass = "twoline";
-                break;
-            case 3:
-                columnClass = "threeline";
-                break;
-            case 4:
-                columnClass = "fourline";
-                break;
-
-        }
-        style.width = style.width ? style.width : actualWidth;//设置表单的宽度
-        this.state.dropType == "wasabi-button wasabi-searchbar-down" ? style.height = 54 : style.height = null;//判断高度
-        let result = {
-            style: style,
-            columns: columns,
-            columnClass: columnClass,
-            leftWidth: leftWidth
-        }
-        return result;
-    },
+   
     render: function () {
-        var result = this.setColumns();//得计算列的结果
-        let props = {
-            className: "wasabi-searchbar clearfix " + result.columnClass + " " + this.props.className,
-            style: result.style
-        };
-        let orderIndex = 0;//表单组件在表单的序号,
-        return (
-            <div {...props}>
-                <div className="leftform" style={{ width: result.leftWidth }}  >
+     
+    return (
+            <div  className={"wasabi-searchbar " + this.props.className} >
+                <div className="leftform col-xs-10"  >
                     {
                         React.Children.map(this.props.children, (child, index) => {
+                            if (typeof child.type !== "function") {//非react组件
+                                return child;
+                            } else {
                             return React.cloneElement(child, { key: index, ref: index })
+                            }
                         })
                     }
                 </div>
-                <div className="rightbutton" style={{ display: this.props.submitHide == true ? "none" : this.props.onSubmit ? null : "none" }} >
+                <div className="rightbutton col-xs-2" style={{ display: this.props.submitHide == true ? "none" : this.props.onSubmit ? null : "none" }} >
                     <button className={this.state.dropType} style={{ float: "left", display: (result.columns < (this.props.children.length)) ? "inline" : "none" }} onClick={this.expandHandler}  ></button>
-                    <Button onClick={this.onSubmit.bind(this, "submit")} theme={this.props.submitTheme} style={{ float: "right", marginTop: ((result.columns < this.props.children.length) ? -22 : 0), display: this.props.submitHide == true ? "none" : null }} title={this.props.submitTitle}   >
+                    <Button onClick={this.onSubmit.bind(this, "submit")} theme={this.props.submitTheme} style={submitStyle} title={this.props.submitTitle}   >
                     </Button>
                 </div>
 

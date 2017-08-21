@@ -31,13 +31,10 @@ let Input = React.createClass({
         return this.refs.input.validate();
     },
     getValue: function () {//用于调用获取值
-        return this.refs.input.state.value;
+        return this.refs.input.getValue();
     },
-    setValue: function (value, text) {//用于设置值
-         this.refs.input.setState({
-            value: value,
-            text: text
-        })
+    setValue: function (value) {//用于设置值
+         this.refs.input.setValue(value);
     },
     renderText: function () {//普通文本框
         return <Text ref="input" {...this.props} ></Text>

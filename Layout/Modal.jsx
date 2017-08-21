@@ -34,7 +34,7 @@ class Modal extends  React.Component {
     }
     componentWillReceiveProps(nextProps) {
         let width=(nextProps.style&&nextProps.style.width)?nextProps.style.width:this.state.width;
-        let height=(nextProps.style&&tnextProps.style.height)?nextProps.style.height:this.state.height;
+        let height=(nextProps.style&&nextProps.style.height)?nextProps.style.height:this.state.height;
         
         this.setState({
                ...nextProps,
@@ -118,14 +118,12 @@ class Modal extends  React.Component {
         let control;
         let footer = null;
         let buttons = [];
-        if (this.props.showOK == true || this.props.showCancel == true) {
-            if (this.props.showOK) {
+            if (this.props.OKHandler) {
                 buttons.push(
                     <Button title="确定" key="ok" theme="primary" onClick={this.OKHandler}
                             style={{width: 60, height: 30}}></Button>
-                )
-            }
-            if (this.props.showCancel) {
+                )         
+            if (this.props.cancelHandler) {
                 buttons.push(
                     <Button title="取消" key="cancel" theme="cancel" onClick={this.cancelHandler}
                             style={{width: 60, height: 30, backgroundColor: "gray"}}></Button>
@@ -169,8 +167,6 @@ Modal.propTypes={
     
     resize: React.PropTypes.bool,
     closedHandler: React.PropTypes.func,
-    showOK: React.PropTypes.bool,
-    showCancel: React.PropTypes.bool,
     OKHandler: React.PropTypes.func,
     cancelHandler: React.PropTypes.func,
 }
@@ -180,9 +176,7 @@ Modal.defaultProps={
     width: 400,//宽度
     height: 400,//高度
     resize: false,//是否可以改变大小
-    modal: true,//默认没有遮罩层
-    showOK: false,//是否显示确定按钮
-    showCancel: false,//是否显示取消按钮
+    modal: true,//默认有遮罩层
     OKHandler: null,//确定按钮的事件,
 }
 

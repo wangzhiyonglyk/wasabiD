@@ -195,9 +195,7 @@ let CheckBox = React.createClass({
         })
     },
     changeHandler: function (event) {//一害绑定，但不处理
-        if (this.state.readonly) {
-            event.preventDefault();
-        }
+       
     },
     onSelect: function (value, text, data, e) {//选中事件
         e.preventDefault();//因为有用户借助label属性生成新的checkbox,所以要阻止默认事件
@@ -262,7 +260,7 @@ let CheckBox = React.createClass({
                     readOnly: this.state.readonly == true ? "readonly" : null,
                 }
                 return <li style={this.props.style} className={this.props.className} key={i} onClick={this.onSelect.bind(this, child.value, child.text, child)}  >
-                    <input type="checkbox" id={"checkbox" + this.props.name + child.value} value={child.value}
+                    <input type="checkbox" id={"checkbox" + this.props.name + child.value} value={'test'}
                          className="checkbox"  {...props}></input>
                     <label className="checkbox-label"  {...props}></label>
                     <div className="checktext" >{child.text}</div>
