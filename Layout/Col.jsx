@@ -10,10 +10,14 @@ class Col extends React.Component {
         super(props);
     }
     static propTypes = {
-        columns: React.PropTypes.number,
+        cols: React.PropTypes.number,
+        style: React.PropTypes.object,
+        className: React.PropTypes.string,
     }
     static defaultProps = {
-        cols: 3//默认3列
+        cols: 3,//默认3列
+        style: {},
+        className: ""
     }
     validate () {
         let isva = true;

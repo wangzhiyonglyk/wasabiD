@@ -15,7 +15,6 @@ var SearchBar = React.createClass({
         submitTheme:React.PropTypes.string,
         submitStyle:React.PropTypes.object,
         onSubmit: React.PropTypes.func,
-        expandHandler: React.PropTypes.func,
 
     },
     getDefaultProps: function () {
@@ -26,25 +25,8 @@ var SearchBar = React.createClass({
             submitHide: false,//是否隐藏按钮
             submitTheme:"primary",//主题
             submitStyle:{},//查询按钮的样式
-            onSubmit: null,//提交成功后的回调事 
-            expandHandler: null,//展开与折叠事件
-           
+            onSubmit: null,//提交成功后的回调事           
         }
-
-    },
-    getInitialState: function () {
-        //初始化时就获取可用宽度,如果每次更新获取,会产生晃动
-        return {
-            dropType: "wasabi-button wasabi-searchbar-down",//折叠按钮样式
-        }
-    },
-    componentWillReceiveProps: function (nextProps) {
-        //屏幕可用宽度,
-        this.setState({
-            style: nextProps.style,
-            className: nextProps.className,
-
-        });
 
     },
     getData: function () {
@@ -140,32 +122,12 @@ var SearchBar = React.createClass({
             else {
                 return data;
             }      
-    },
-
-    expandHandler: function () {
-        var expand = false;
-        if (this.state.dropType == "wasabi-button wasabi-searchbar-down") {
-            this.setState({
-                dropType: "wasabi-button wasabi-searchbar-up"
-
-            });
-            expand = true;
-        }
-        else {
-            this.setState({
-                dropType: "wasabi-button wasabi-searchbar-down"
-            });
-        }
-        if (this.props.expandHandler != null) {
-            this.props.expandHandler(expand);
-        }
-    },
-   
+    }, 
     render: function () {
-     
-    return (
-            <div  className={"wasabi-searchbar " + this.props.className} >
-                <div className="leftform col-xs-10"  >
+    
+     return (
+            <div  ref="searchbar" className={"wasabi-searchbar clearfix" + this.props.className} style={this.props.style}  >
+                <div className=" col-xs-9"  ref="form" >
                     {
                         React.Children.map(this.props.children, (child, index) => {
                             if (typeof child.type !== "function") {//非react组件
@@ -176,9 +138,9 @@ var SearchBar = React.createClass({
                         })
                     }
                 </div>
-                <div className="rightbutton col-xs-2" style={{ display: this.props.submitHide == true ? "none" : this.props.onSubmit ? null : "none" }} >
-                    <button className={this.state.dropType} style={{ float: "left", display: (result.columns < (this.props.children.length)) ? "inline" : "none" }} onClick={this.expandHandler}  ></button>
-                    <Button onClick={this.onSubmit.bind(this, "submit")} theme={this.props.submitTheme} style={submitStyle} title={this.props.submitTitle}   >
+                <div className=" col-xs-3" style={{ display: this.props.submitHide == true ? "none" : this.props.onSubmit ? null : "none" }} >
+            
+                    <Button onClick={this.onSubmit.bind(this, "submit")} theme={this.props.submitTheme} style={this.props.submitStyle} title={this.props.submitTitle}   >
                     </Button>
                 </div>
 

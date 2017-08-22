@@ -83,8 +83,7 @@ clearData () {
 }
   render() {
     return <div className={"row " + this.props.className} style={this.props.style}> {
-           React.Children.map(this.props.children, (child, index) => {
-          
+           React.Children.map(this.props.children, (child, index) => {         
             if(typeof child.type !=="function" )
             {//非react组件
               return child;

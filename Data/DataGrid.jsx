@@ -340,6 +340,7 @@ let DataGrid = React.createClass({
 
                     }
                     catch (e) {
+                        console.log("生成自定列出错,原因",e.message);
                         content = "";
                     }
 
