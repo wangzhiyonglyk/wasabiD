@@ -126,8 +126,8 @@ var SearchBar = React.createClass({
     render: function () {
     
      return (
-            <div  ref="searchbar" className={"wasabi-searchbar clearfix" + this.props.className} style={this.props.style}  >
-                <div className=" col-xs-9"  ref="form" >
+            <div   className={"wasabi-searchbar clearfix" + this.props.className} style={this.props.style}  >
+                <div className=" col-xs-9"   >
                     {
                         React.Children.map(this.props.children, (child, index) => {
                             if (typeof child.type !== "function") {//非react组件
