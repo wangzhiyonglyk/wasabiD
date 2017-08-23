@@ -388,12 +388,12 @@ let  Import=React.createClass({
             <div className="import-section">
                 <input type="text" name={this.state.name} className="import-text" value={this.state.filename} readOnly={true} ></input>
                 <input type="file" ref="import" className="import-file" onChange={this.onChange} {...props} style={{display:this.state.choseDisabled?"none":"inline"}}></input>
-                <Button type="button" disabled={this.state.choseDisabled} className="import-chose" theme="cancel" title="选择文件"></Button>
+                <Button type="button" disabled={this.state.choseDisabled} className="import-chose"  title="选择文件"></Button>
             </div>
 
             <div className="import-submit">
                 <a className="import-failload" target="blank" href={this.props.failloadurl} style={{display:this.state.showfail==true?"inline":"none"}}>下载失败信息</a>
-                <Button title="导入" disabled={this.state.uploadDisabled}  onClick={this.importBegin} theme="green"></Button>
+                <Button title="导入" disabled={this.state.uploadDisabled}  onClick={this.importBegin} ></Button>
                 <Button title="终止" disabled={this.state.giveupdisabled} onClick={this.giveup} theme="cancel"></Button>
                 <Button title="关闭"  onClick={this.close} theme="cancel"></Button>
             </div>

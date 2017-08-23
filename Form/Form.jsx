@@ -169,7 +169,7 @@ var Form = React.createClass({
                             if (typeof child.type !== "function") {//非react组件
                                 return child;
                             } else {
-                                return React.cloneElement(child, { readonly: this.state.disabled, key: index, ref: index })
+                                return React.cloneElement(child, { readonly: this.state.disabled, key: index, ref: child.ref?child.ref:index })
                             }
 
                         })

@@ -14,6 +14,7 @@ var SearchBar = React.createClass({
         submitHide: React.PropTypes.bool,
         submitTheme:React.PropTypes.string,
         submitStyle:React.PropTypes.object,
+        cols:React.PropTypes.number,//多余几个隐藏
         onSubmit: React.PropTypes.func,
 
     },
@@ -25,9 +26,17 @@ var SearchBar = React.createClass({
             submitHide: false,//是否隐藏按钮
             submitTheme:"primary",//主题
             submitStyle:{},//查询按钮的样式
+            cols:4,
             onSubmit: null,//提交成功后的回调事           
         }
 
+    },
+  
+    getInitialState()
+    {
+    return {
+        dropType:"wasabi-button wasabi-searchbar-down"
+    }
     },
     getData: function () {
         var data = {}
@@ -123,6 +132,11 @@ var SearchBar = React.createClass({
                 return data;
             }      
     }, 
+    expandHandler(){
+        this.setState({
+            dropType:this.state.dropType=="wasabi-button wasabi-searchbar-down"?"wasabi-button wasabi-searchbar-up":"wasabi-button wasabi-searchbar-down"
+        })
+    },
     render: function () {
     
      return (
@@ -133,13 +147,19 @@ var SearchBar = React.createClass({
                             if (typeof child.type !== "function") {//非react组件
                                 return child;
                             } else {
-                            return React.cloneElement(child, { key: index, ref: index })
+                                if(this.state.dropType=="wasabi-button wasabi-searchbar-down"&&index>=this.props.cols){
+                                     return null;
+                                }
+                                else {
+                                    return React.cloneElement(child, { key: index, ref: child.ref?child.ref:index })
+                                }
+                          
                             }
                         })
                     }
                 </div>
-                <div className=" col-xs-3" style={{ display: this.props.submitHide == true ? "none" : this.props.onSubmit ? null : "none" }} >
-            
+                <div className=" col-xs-3"  >
+                <button className={this.state.dropType} style={{ float: "left", display: ( this.props.children.length)>this.props.cols ? "inline" : "none" }} onClick={this.expandHandler}  ></button>
                     <Button onClick={this.onSubmit.bind(this, "submit")} theme={this.props.submitTheme} style={this.props.submitStyle} title={this.props.submitTitle}   >
                     </Button>
                 </div>
