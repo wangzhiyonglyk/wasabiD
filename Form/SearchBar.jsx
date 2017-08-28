@@ -160,7 +160,7 @@ var SearchBar = React.createClass({
                 </div>
                 <div className=" col-xs-3"  >
                 <button className={this.state.dropType} style={{ float: "left", display: ( this.props.children.length)>this.props.cols ? "inline" : "none" }} onClick={this.expandHandler}  ></button>
-                    <Button onClick={this.onSubmit.bind(this, "submit")} theme={this.props.submitTheme} style={this.props.submitStyle} title={this.props.submitTitle}   >
+                    <Button onClick={this.onSubmit.bind(this, "submit")} theme={this.props.submitTheme} hide={this.props.onSubmit?false:true} style={this.props.submitStyle} title={this.props.submitTitle}   >
                     </Button>
                 </div>
 

@@ -145,27 +145,20 @@ let DataGridHandler={
             var actualParams={};
             if(!params&&this.state.params&&typeof this.state.params =="object")
             {//新的参数为null或者undefined，旧参数不为空
-                if(this.props.pagination==true) {
-                    actualParams.data =(this.state.params);
-                }
-                else {
-                    actualParams = (this.state.params);
-                }
+                actualParams = (this.state.params);
                 params=this.state.params;//保存以便下一次更新
             }
             else
             {//新参数不为空
-                if(this.props.pagination==true) {
-                    actualParams.data = params;
-                }
-                else
-                {
-                    actualParams=params;
-                }
+                actualParams=params;
             }
 
             if(this.props.pagination==true)
             {
+                if(!actualParams)
+                    {
+                        actualParams={};
+                    }
                 actualParams.pageSize=pageSize;
                 actualParams.pageIndex=pageIndex;
                 actualParams.sortName=sortName;
