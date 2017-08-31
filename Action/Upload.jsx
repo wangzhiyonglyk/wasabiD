@@ -28,8 +28,6 @@ let Upload = React.createClass({
     },
     getInitialState: function () {
         return {
-
-            visible: false,
             filenames: "",//选择的文件名集合
             uploadurl: this.props.uploadurl,
             multiple: this.props.multiple,
@@ -73,7 +71,6 @@ let Upload = React.createClass({
         }
         this.setState({
             filenames: filenames,
-            visible: true,
         })
 
     },
@@ -180,7 +177,7 @@ let Upload = React.createClass({
             uploadDisabled: false,
         });
 
-        this.state.visible = false;
+       
     },
     uploadFailed: function (event) {
         Message.alert("上传文件失败");
@@ -193,7 +190,7 @@ let Upload = React.createClass({
             accept: this.state.accept,
             multiple: this.state.multiple,
         }
-        return (<Modal ref="modal" visible={this.state.visible} width={460} height={340} title="请选择导入文件">
+        return (<Modal ref="modal" width={460} height={340} title="请选择导入文件">
             <div className="import-section">
                 <input type="text" name={this.state.name} className="import-text" value={this.state.filenames} readOnly={true} ></input>
                 <input type="file" ref="import" className="import-file" onChange={this.onChange} {...props} style={{ display: this.state.uploadDisabled ? "none" : "inline" }}></input><Button type="button" disabled={this.state.uploadDisabled} className="import-chose" title="选择文件"></Button>

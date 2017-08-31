@@ -8,7 +8,7 @@ var Message= {
     info(msg,timeout) {
         if(!timeout)
         {
-            timeout=2000;
+            timeout=1000;
         }
         if (!!document.getElementById("alog-info")) {
             //存在
@@ -31,7 +31,7 @@ var Message= {
     success(msg,timeout) {
         if(!timeout)
         {
-            timeout=2000;
+            timeout=1000;
         }
         if (!!document.getElementById("alog-success")) {
             //存在
@@ -54,7 +54,7 @@ var Message= {
     error(msg,timeout) {
         if(!timeout)
         {
-            timeout=2000;
+            timeout=1000;
         }
         if (!!document.getElementById("alog-error")) {
             //存在

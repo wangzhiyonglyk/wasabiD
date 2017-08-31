@@ -86,21 +86,21 @@ let MessageView= React.createClass({
        this.timeoutArray.push( setTimeout(()=> {
            if(this.onmouse==false) {
                this.setState({
-                   opacity: 0.7,
+                visible: false,
                })
            }
-       }, 1000));
-      this.timeoutArray.push(
-          setTimeout(()=> {
-              if(this.onmouse==false) {
-                  this.setState({
+       }, this.props.timeout));
+    //   this.timeoutArray.push(
+    //       setTimeout(()=> {
+    //           if(this.onmouse==false) {
+    //               this.setState({
 
-                      visible: false,
-                  })
-              }
-          }, this.props.timeout *2)
+    //                   visible: false,
+    //               })
+    //           }
+    //       }, this.props.timeout *2)
 
-        );
+    //     );
 
     },
 
