@@ -96,7 +96,12 @@ let Upload = React.createClass({
 
                 // 实例化一个AJAX对象
                 var xhr = new XMLHttpRequest();
-                xhr.upload.addEventListener("progress", this.uploadProgress, false);
+                if(this.props.progress)
+                    {    
+                        xhr.upload.addEventListener("progress", this.uploadProgress, false);
+                        
+                    }
+            
                 xhr.addEventListener("load", this.uploadComplete, false);
                 xhr.addEventListener("error", this.uploadFailed, false);
                 xhr.addEventListener("abort", this.uploadCanceled, false);
