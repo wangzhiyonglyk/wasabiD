@@ -4,7 +4,7 @@
  * wasabi框架的第一个组件
  * 2016-06-09后开始调整整个样式
  * 2017-01-04 注意了,这里渲染分页与复制的CopyDataGrid不一样，因为CopyDataGrid宽度比较小可能放不下
- *
+ *2017-09-20 将固定表头，右键菜单等功能先隐藏掉
  */
 require("../Sass/Data/DataGrid.scss");
 require("../Sass/Data/DataGridDetail.scss");
@@ -208,10 +208,10 @@ let DataGrid = React.createClass({
             this.updateHandler(this.state.url, this.state.pageSize, this.state.pageIndex, this.state.sortName, this.state.sortOrder)
         }
         this.registerClickAway(this.hideMenuHandler, this.refs.grid);//注册全局单击事件
-        this.resizeTableWidthHandler();//固定的表头每一列的宽度
+        // this.resizeTableWidthHandler();//固定的表头每一列的宽度
     },
     componentDidUpdate: function () {
-        this.resizeTableWidthHandler();//固定的表头每一列的宽度
+        // this.resizeTableWidthHandler();//固定的表头每一列的宽度
     },
     renderHeader: function () {//渲染表头
         if (!(this.state.headers instanceof Array)) {
@@ -628,7 +628,7 @@ let DataGrid = React.createClass({
                 {/* 表格容器 */}
                 <div className="table-container">
                     {/* 固定表头 */}
-                    <div className="table-fixed" ref="fixedTableContainer">
+                    {/* <div className="table-fixed" ref="fixedTableContainer">
                         <table className={className} key="fixedTable" ref="fixedTable">
                             <thead>
                                 <tr>
@@ -636,7 +636,7 @@ let DataGrid = React.createClass({
                                 </tr>
                             </thead>
                         </table>
-                    </div>
+                    </div> */}
                     {/* 真实表格  监听滚动事件以便固定表头一起滚动*/}
                     <div className="table-realTable" ref="realTableContainer" style={{ height: this.state.height }}
                         onScroll={this.tableBodyScrollHandler}>

@@ -3,54 +3,43 @@ date:2017-01-09
 desc:圣杯布局样式
 */
 
-.wasabi-layout{
-  position: relative;
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  width: 100%;
-  box-sizing: border-box;
-  min-height: 500px;
-
-
-.layout-panel {
-  min-width: 1px;
-  min-height: 1px;
-  position: absolute;
-  box-sizing: border-box;
-  border: 1px solid #ccc;
-  overflow: auto;
+.wasabi-layout {
+	position: relative;
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	width: 100%;
+	box-sizing: border-box;
+	min-height: 500px;
+	overflow: hidden
 }
-  .wasabi-layout-header{
-    height: 100px;
-    width: 100%;
-    top:0px;
 
-  }
-  .wasabi-layout-footer{
-    height: 100px;
-    width: 100%;
-    bottom: 0px;
-  }
- 
-  .wasabi-layout-left
-  {
-    width: 100px;
-   height: calc(100% - 200px);
-    left:0px;
-    top:100px;
-  }
-  .wasabi-layout-right{
-    width: 100px;
-    right:0px;
-    height: calc(100% - 200px);
+.wasabi-layout .layout-panel {
+	min-width: 1px;
+	min-height: 1px;
+	position: absolute;
+	box-sizing: border-box;
+	border: 1px solid #ccc
+}
 
-    top:100px;
-  } 
-  .wasabi-layout-center{
-    width: calc(100% - 200px);
-    left :100px;
-    top:100px;
-    height: calc(100% - 200px);
-  }
+.wasabi-layout .wasabi-layout-header {
+	height: 100px;
+	width: 100%;
+	top: 0
+}
+
+.wasabi-layout .wasabi-layout-footer {
+	height: 100px;
+	width: 100%;
+	bottom: 0
+}
+
+.wasabi-layout .wasabi-layout-left {
+	left: 0;
+	height: 100%
+}
+
+.wasabi-layout .wasabi-layout-right {
+	right: 0;
+	height: 100%
 }

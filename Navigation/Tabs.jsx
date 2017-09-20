@@ -13,11 +13,13 @@ var Tabs=React.createClass({
                
             ]),
             activeIndex:React.PropTypes.number,
+            onClose:React.PropTypes.func,
         },
         getDefaultProps: function () {
             return {
                 theme:"default",
                 activeIndex:0,
+                onClose:null,
 
             }
         }
@@ -40,6 +42,9 @@ var Tabs=React.createClass({
                activeIndex:index
            })
         },
+        onClose(index){
+            this.props.onClose&&this.props.onClose(index);
+        },
         render: function () {
             return (
                 <div className="wasabi-tabs" >
@@ -48,7 +53,10 @@ var Tabs=React.createClass({
                             
                             React.Children.map(this.props.children, (child, index) => {
                               
-                                return    <a key={index} href="javascript:void(0);"  onClick={this.tabClickHandler.bind(this,index)} className={"wasabi-tab "+this.props.theme+" "+(this.state.activeIndex==index?"active ":"")} >{child.props.title}</a>
+                                return    <a key={index} href="javascript:void(0);"  onClick={this.tabClickHandler.bind(this,index)} className={"wasabi-tab "+this.props.theme+" "+(this.state.activeIndex==index?"active ":"")} >
+                                    {child.props.title}
+                                     <i className="tab-icon icon-close" onClick={this.onClose.bind(this,index)}></i>
+                                </a>
                             })
                         }
                     </div>

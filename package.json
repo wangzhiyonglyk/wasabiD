@@ -1,29 +1,54 @@
 {
-  "name": "wasabiD",
-  "version": "0.8.57",
+  "_from": "wasabiD@0.8.57",
+  "_id": "wasabiD@0.8.57",
+  "_inBundle": false,
+  "_integrity": "sha1-DzTU++36aoUWOf/u21nSjHIqyFE=",
+  "_location": "/wasabiD",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "wasabiD@0.8.57",
+    "name": "wasabiD",
+    "escapedName": "wasabiD",
+    "rawSpec": "0.8.57",
+    "saveSpec": null,
+    "fetchSpec": "0.8.57"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "http://registry.npm.taobao.org/wasabiD/download/wasabiD-0.8.57.tgz",
+  "_shasum": "0f34d4fbedfa6a851639ffeedb59d28c722ac851",
+  "_spec": "wasabiD@0.8.57",
+  "_where": "E:\\front-end\\private\\wechat",
+  "author": {
+    "name": "wangzhiyong"
+  },
+  "bugs": {
+    "url": "https://github.com/wangzhiyonglyk/wasabi/issues"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
   "description": "wasabi design——PC前端框架",
-  "main": "index.js",
+  "homepage": "https://github.com/wangzhiyonglyk/wasabiD#readme",
   "keywords": [
     "react",
     "wasabi",
     "bluehy"
   ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/wangzhiyonglyk/wasabiD.git"
-  },
-  "author": {
-    "name": "wangzhiyong"
-  },
+  "license": "ISC",
+  "main": "index.js",
   "maintainers": [
     {
       "name": "wangzhiyonglyk",
       "email": "wangzhiyonglyk@163.com"
     }
   ],
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/wangzhiyonglyk/wasabi/issues"
-  }
-
+  "name": "wasabiD",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wangzhiyonglyk/wasabiD.git"
+  },
+  "version": "0.8.57"
 }
