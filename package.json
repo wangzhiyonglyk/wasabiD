@@ -10,10 +10,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wangzhiyonglyk/wasabiD.git"
+    "url": "https://github.com/wangzhiyonglyk/wasabiD.git"
   },
   "author": {
-    "name": "wangzhiyong"
+    "name": "wangzhiyonglyk"
   },
   "maintainers": [
     {
