@@ -10,7 +10,6 @@ require("../Sass/Layout/Panel.scss");
 var Panel=React.createClass({
     propTypes: {
         theme: React.PropTypes.oneOf([
-            "none",
             "default",
             "primary",
             "success",
@@ -27,8 +26,9 @@ var Panel=React.createClass({
     },
     getDefaultProps:function() {
         return{
-            theme:"none",
+            theme:"default",
             expand:true,
+            className:"",
             expandAble:true,
             title:"",
             height:400,
@@ -78,7 +78,7 @@ var Panel=React.createClass({
             }
         return (
             <div className={"wasabi-panel panel-"+this.props.theme+" "+this.props.className} style={style}  >
-                <div className="panel-heading" ><h3 className="panel-title">{this.props.title}</h3>
+                <div className="panel-heading" ><span >{this.props.title}</span>
                     <div className="panel-buttons"><Toolbars buttons={this.props.buttons} buttonClick={this.buttonClick}></Toolbars></div>
                 <div className="panel-icon" style={{display:(this.state.expandAble)?"block":"none"}}><LinkButton tip={this.state.iconTip} iconCls={this.state.iconCls} onClick={this.expandHandler}></LinkButton></div>
                 </div>

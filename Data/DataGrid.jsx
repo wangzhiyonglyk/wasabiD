@@ -1,10 +1,10 @@
 /**
- *Created by wangzhiyong on 2016-04-05
+ *Created by wangzhiyong on 3016-04-05
  * desc:列表组件,由此组件开始独立重构所组件,不再依赖
  * wasabi框架的第一个组件
- * 2016-06-09后开始调整整个样式
- * 2017-01-04 注意了,这里渲染分页与复制的CopyDataGrid不一样，因为CopyDataGrid宽度比较小可能放不下
- *2017-09-20 将固定表头，右键菜单等功能先隐藏掉
+ * 3016-06-09后开始调整整个样式
+ * 3017-01-04 注意了,这里渲染分页与复制的CopyDataGrid不一样，因为CopyDataGrid宽度比较小可能放不下
+ *3017-09-30 将固定表头功能先隐藏掉
  */
 require("../Sass/Data/DataGrid.scss");
 require("../Sass/Data/DataGridDetail.scss");
@@ -50,7 +50,7 @@ let DataGrid = React.createClass({
         pagination: React.PropTypes.bool,//是否分页,默认值 true
 
         pageIndex: React.PropTypes.number,//当前页号
-        pageSize: React.PropTypes.number,//分页大小，默认20
+        pageSize: React.PropTypes.number,//分页大小，默认30
         sortName: React.PropTypes.string,//排序字段,
         sortOrder: React.PropTypes.oneOf([
             "asc",
@@ -220,8 +220,8 @@ let DataGrid = React.createClass({
         let headers = [];
         if (this.props.rowNumber) {
             headers.push(
-                <th key="headerorder" name="order"  >
-                    <div className="wasabi-grid-cell" style={{ width: 40 }} name="order">序号</div>
+                <th key="headerorder" name="order" style={{ width: 50 }} >
+                    <div className="wasabi-grid-cell"  name="order">序号</div>
                 </th>
             );
         }
@@ -233,8 +233,8 @@ let DataGrid = React.createClass({
                 name: "all",
             }
             headers.push(
-                <th key="headercheckbox" name="check-column"  >
-                    <div className="wasabi-grid-cell" style={{ width: 20 }} name="check-column">{this.props.singleSelect ? null : <CheckBox {...thCheckProps} ></CheckBox>}</div>
+                <th key="headercheckbox" name="check-column" style={{ width: 30 }}  >
+                    <div className="wasabi-grid-cell"  name="check-column">{this.props.singleSelect ? null : <CheckBox {...thCheckProps} ></CheckBox>}</div>
                 </th>
             );
         }
@@ -261,13 +261,14 @@ let DataGrid = React.createClass({
                         //使用label作为元素name属性，是因为可能有多个列对应同一个字段
                         <th key={"header" + index.toString()} name={header.label} {...props}
                             className={"" + sortOrder}
-                            style={{ textAlign: header.align }}
-                            onContextMenu={this.headerContextMenuHandler}
-                        >
-                            <div className="wasabi-grid-cell" name={header.label} style={{
+                            style={{
                                 width: (header.width ? header.width : null),
                                 textAlign: header.align
-                            }}><span>{header.label}</span>{panelIcon}{saveIcon}</div>
+                            }}
+                          
+                            onContextMenu={this.headerContextMenuHandler}
+                        >
+                            <div className="wasabi-grid-cell" name={header.label}   style={{ textAlign: header.align }}><span>{header.label}</span>{panelIcon}{saveIcon}</div>
                         </th>)
 
 
@@ -291,8 +292,8 @@ let DataGrid = React.createClass({
             //序号列
             if (this.props.rowNumber) {
                 tds.push(
-                    <td key={"bodyorder" + rowIndex.toString()}  >
-                        <div className="wasabi-grid-cell" style={{ width: 40 }} > {((this.state.pageIndex - 1) * this.state.pageSize + rowIndex+1).toString()}</div></td>
+                    <td key={"bodyorder" + rowIndex.toString()}  style={{ width: 50 }} >
+                        <div className="wasabi-grid-cell" > {((this.state.pageIndex - 1) * this.state.pageSize + rowIndex+1).toString()}</div></td>
                 );
             }
             //设置这一行的选择列
@@ -306,15 +307,15 @@ let DataGrid = React.createClass({
 
                 if (this.props.singleSelect == true) {
                     tds.push(
-                        <td key={"bodycheckbox" + rowIndex.toString()} className="check-column" >
-                            <div className="wasabi-grid-cell" style={{ width: 20 }}> <Radio {...props} ></Radio></div></td>
+                        <td key={"bodycheckbox" + rowIndex.toString()}  style={{ width: 30 }} className="check-column" >
+                            <div className="wasabi-grid-cell"> <Radio {...props} ></Radio></div></td>
                     );
 
                 }
                 else {
                     tds.push(
-                        <td key={"bodycheckbox" + rowIndex.toString()} className="check-column" >
-                            <div className="wasabi-grid-cell" style={{ width: 20 }} ><CheckBox {...props} ></CheckBox></div></td>
+                        <td key={"bodycheckbox" + rowIndex.toString()} style={{ width: 30 }} className="check-column" >
+                            <div className="wasabi-grid-cell"  ><CheckBox {...props} ></CheckBox></div></td>
                     );
                 }
             }
@@ -362,8 +363,8 @@ let DataGrid = React.createClass({
                     }
                     tds.push(<td onClick={this.onClick.bind(this, rowIndex, rowData)}
                         onDoubleClick={this.onDoubleClick.bind(this, rowIndex, rowData)}
-                        key={"col" + rowIndex.toString() + "-" + columnIndex.toString()}
-                    ><div className="wasabi-grid-cell" style={{ width: (header.width ? header.width : null), textAlign: (header.align) }}>
+                        key={"col" + rowIndex.toString() + "-" + columnIndex.toString()} style={{ width: (header.width ? header.width : null), textAlign: (header.align) }}
+                    ><div className="wasabi-grid-cell" style={{ textAlign: (header.align) }}>
                             <Input {...header.editor.options} type={header.editor.type} value={currentValue} text={currentText} onChange={this.rowEditHandler.bind(this, columnIndex)}
                                 onSelect={this.rowEditHandler.bind(this, columnIndex)} label={""}></Input>
                         </div></td>);
