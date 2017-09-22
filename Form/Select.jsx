@@ -126,7 +126,7 @@ let Select = React.createClass({
         let text = "";
         for (let i = 0; i < this.state.data.length; i++) {
             if (this.state.data[i].value == value) {
-                text = item;
+                text = this.state.data[i].text;
                 break;
             }
         }
