@@ -43,7 +43,7 @@ var Tabs=React.createClass({
            })
         },
         onClose(index){
-            this.props.onClose&&this.props.onClose(index);
+            this.props.onClose&&this.props.onClose(index,this.state.activeIndex);
         },
         render: function () {
             return (
