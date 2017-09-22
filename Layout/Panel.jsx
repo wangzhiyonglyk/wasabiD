@@ -79,7 +79,7 @@ var Panel=React.createClass({
         return (
             <div className={"wasabi-panel panel-"+this.props.theme+" "+this.props.className} style={style}  >
                 <div className="panel-heading" ><span >{this.props.title}</span>
-                    <div className="panel-buttons"><Toolbars buttons={this.props.buttons} buttonClick={this.buttonClick}></Toolbars></div>
+                    <div className="panel-buttons"><Toolbars buttons={this.props.buttons} onClick={this.buttonClick}></Toolbars></div>
                 <div className="panel-icon" style={{display:(this.state.expandAble)?"block":"none"}}><LinkButton tip={this.state.iconTip} iconCls={this.state.iconCls} onClick={this.expandHandler}></LinkButton></div>
                 </div>
                 <div className={"panel-body  "}  style={{height:this.state.height}}>
