@@ -21,7 +21,7 @@ class Left extends  React.Component{
     }
     render() {
         return <div className={"wasabi-layout-left  layout-panel "} 
-        style={{top:this.props.top,width:this.props.width,height: (this.props.height?"calc(100% - "+(this.props.height).toString()+"px":null) }}>
+        style={{top:this.props.top,width:this.props.width,height: (this.props.height?"calc(100% - "+(this.props.height).toString()+"px":"100%") }}>
           {this.props.children}
         </div>
     }

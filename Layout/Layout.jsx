@@ -44,6 +44,7 @@ class Layout extends React.Component {
 
             }
         })
+        console.log("centerHeight",centerHeight);
         return {
             width: centerWidth ? centerWidth : null,
             height: centerHeight ? centerHeight : null,
@@ -53,7 +54,9 @@ class Layout extends React.Component {
         }
     }
     render() {
+    
         let widthHeight = this.calWidthHeight();//计算宽高
+        console.log(widthHeight.height);
         return <div className={"wasabi-layout clearfix"}
             style={{ width: this.props.width, height: this.props.height }}  >
             {
@@ -62,9 +65,9 @@ class Layout extends React.Component {
                         case "center":
                             return React.cloneElement(child, { key: index, ref: index, ...widthHeight });
                         case "left":
-                            return React.cloneElement(child, { key: index, ref: index, top: widthHeight.top, height: widthHeight.height });
+                            return React.cloneElement(child, {width:child.props.width?child.props.width:100, key: index, ref: index, top: widthHeight.top, height: widthHeight.height });
                         case "right":
-                            return React.cloneElement(child, { key: index, ref: index, top: widthHeight.top, height: widthHeight.height });
+                            return React.cloneElement(child, { width:child.props.width?child.props.width:100,key: index, ref: index, top: widthHeight.top, height: widthHeight.height });
                         default:
                             return React.cloneElement(child, { key: index, ref: index });
 

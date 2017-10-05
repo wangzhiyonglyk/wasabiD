@@ -25,7 +25,7 @@ class Center extends  React.Component{
     }
     render() {  
         return <div className={" wasabi-layout-center  layout-panel" }
-       style={{ top:this.props.top,left:this.props.left, width: (this.props.width?"calc(100% - "+(this.props.width).toString()+"px":null), height: (this.props.height?"calc(100% - "+(this.props.height).toString()+"px":null) }} 
+       style={{ top:this.props.top,left:this.props.left, width: (this.props.width?"calc(100% - "+(this.props.width).toString()+"px":null), height: (this.props.height?"calc(100% - "+(this.props.height).toString()+"px":"100%") }} 
        >
           {  this.props.children}
         </div>
