@@ -66,7 +66,8 @@
 
 .wasabi-tabs .section {
 	display: none;
-	min-height: 400px
+	min-height: 400px;
+	overflow: auto;
 }
 
 .wasabi-tabs .section.active {

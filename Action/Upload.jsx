@@ -115,6 +115,9 @@ let Upload = React.createClass({
                 Message.alert("您没有设置上传路径");
             }
         }
+        else{
+            Message.info("请选择文件");
+        }
 
 
 

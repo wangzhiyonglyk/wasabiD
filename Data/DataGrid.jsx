@@ -497,15 +497,15 @@ let DataGrid = React.createClass({
 
                 paginationComponent = <div className="pagination-number col-sm-6">
                     <ul className="pagination">
-                        <li key={"lipre"} className="paginate_button "><a href="javascript:void(0)" onClick={this.prePaginationHandler} >‹</a></li>
+                        <li key={"lipre"} className="paginate_button "><a href="javascript:void(0)" onClick={this.prePaginationHandler} >上一页</a></li>
                         <li key={"lifirst"} className={"paginate_button  " + ((this.state.pageIndex * 1) == (1) ? "active" : "")}><a
                             href="javascript:void(0)" onClick={this.paginationHandler.bind(this, (1))}>{(1)}</a></li>
                         {
                             pageComponent
                         }
 
-                        <li key="lilast" className={"paginate_button " + ((this.state.pageIndex * 1) == (pageAll) ? "active" : "")}><a href="javascript:void(0)" onClick={this.paginationHandler.bind(this, (pageAll))}>{(pageAll)}</a></li>
-                        <li key="linext" className="paginate_button"><a href="javascript:void(0)" onClick={this.nextPaginationHandler} >›</a></li>
+                        <li key="lilast" className={"paginate_button previous" + ((this.state.pageIndex * 1) == (pageAll) ? "active" : "")}><a href="javascript:void(0)" onClick={this.paginationHandler.bind(this, (pageAll))}>{(pageAll)}</a></li>
+                        <li key="linext" className="paginate_button next"><a href="javascript:void(0)" onClick={this.nextPaginationHandler} >下一页</a></li>
                     </ul>
                 </div>;
             }
@@ -513,17 +513,20 @@ let DataGrid = React.createClass({
                 //小于7页直接显示
 
                 let pagearr = [];
+                console.log(this.state.pageIndex);
                 for (let i = 0; i < pageAll; i++) {
-                    let control = <li key={"li" + i} className={"paginate_button " + ((this.state.pageIndex * 1) == (pageAll) ? "active" : "")}>
+                    let control = <li key={"li" + i} className={"paginate_button " + ((this.state.pageIndex * 1) == (i*1+1) ? "active" : "")}>
                         <a href="javascript:void(0)" onClick={this.paginationHandler.bind(this, (i + 1))}>{(i + 1)}</a></li>;
                     pagearr.push(control);
                 }
                 paginationComponent = (
                     <div className="pagination-number col-sm-6">
                         <ul className="pagination">
+                        <li key={"lipre"} className="paginate_button previous"><a href="javascript:void(0)" onClick={this.prePaginationHandler} >上一页</a></li>
                             {
                                 pagearr
                             }
+                           <li key="linext" className="paginate_button next"><a href="javascript:void(0)" onClick={this.nextPaginationHandler} >下一页</a></li>
                         </ul>
                     </div>
                 )

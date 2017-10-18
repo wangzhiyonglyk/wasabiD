@@ -47,17 +47,18 @@ let Input = React.createClass({
             control = <None ref="input" {...props } ></None>
         }
         else if (type == "radio") {//单选按钮组
-            control = <Radio ref="input" {...props } onSelect={this.onSelect}></Radio>
+            control = <Radio ref="input" {...props } ></Radio>
         }
         else if (type == "checkbox") {//多选择按钮组
-            control = <CheckBox ref="input" {...props } onSelect={this.onSelect} ></CheckBox>
+            control = <CheckBox ref="input" {...props }  ></CheckBox>
         }
         else if (type == "switch") {//开关
-            control = <SwitchButton ref="input"  {...props} onSelect={this.onSelect}></SwitchButton>
+            control = <SwitchButton ref="input"  {...props} ></SwitchButton>
         }
 
         else if (type == "muti" || type == "select" || type == "datetime" || type == "time" || type == "date" || type == "daterange" || type == "datetimerange" || type == "picker" || type == "treepicker" ) {//下拉组件
-            control = <ComboBox ref="input" {...props } onSelect={this.onSelect}></ComboBox>
+          
+            control = <ComboBox ref="input" {...props } ></ComboBox>
         }
 
 
