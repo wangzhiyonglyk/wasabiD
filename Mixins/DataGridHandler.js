@@ -2,10 +2,10 @@
  * Created by wangzhiyong on 2016/10/25.
  * 将DataGrid拆分,基本处理事件存在这里
  */
-var React=require("react");
-var unit=require("../libs/unit.js");
-var FetchModel=require("../Model/FetchModel.js");
-var Message=require("../Unit/Message.jsx");
+import React, { Component } from "react";
+import   unit from "../libs/unit.js";
+import FetchModel from "../Model/FetchModel.js";
+import Message from "../Unit/Message.jsx";
 let DataGridHandler={
 
     //列表自用处理函数
@@ -14,10 +14,12 @@ let DataGridHandler={
             return ;
         }
         else {//跳转到指定页
+         
             this.updateHandler(this.state.url,this.state.pageSize,pageIndex,this.state.sortName,this.state.sortOrder,null,null);
         }
     },
     prePaginationHandler:function() {//上一页
+       
         if(this.state.pageIndex==1)
         {
 
@@ -27,7 +29,8 @@ let DataGridHandler={
         }
 
     },
-    nextPaginationHandler:function() {//下一页
+    nextPaginationHandler: function() {//下一页
+       
         var pageAll = ( parseInt(this.state.total / this.state.pageSize));//共多少页
         var lastPageNum = (this.state.total % this.state.pageSize);
         if (lastPageNum > 0) {
@@ -42,16 +45,15 @@ let DataGridHandler={
             this.paginationHandler(this.state.pageIndex+1);
         }
     },
-    pageSizeHandler:function (event) {
+    pageSizeHandler: function(event) {
 
         this.updateHandler(this.state.url,event.target.value*1,this.state.pageIndex,this.state.sortName,this.state.sortOrder,null);
     },
-    sumHandler:function(footerModel){//计算某一列的总和
+    sumHandler:function(footerModel) {//计算某一列的总和
         var sum=null;
         if(this.state.data instanceof  Array)
         {
-            this.state.data.map((rowData,rowIndex)=>
-            {
+            this.state.data.map((rowData,rowIndex) =>{
 
                 var footerModelValue=rowData[footerModel.name];//当前行当前列的值
             if(typeof footerModel.content==="function")
@@ -83,7 +85,7 @@ let DataGridHandler={
         var sum=0; var avg=null;
         if(this.state.data instanceof  Array)
         {
-            this.state.data.map((rowData,rowIndex)=> {
+            this.state.data.map((rowData,rowIndex) =>{
                 var footerModelValue = rowData[footerModel.name];//当前行当前列的值
             if (typeof  footerModel.content === "function") {//有函数则通过计算得到值
                 footerModelValue = footerModel.content(rowData, rowIndex);//
@@ -111,11 +113,11 @@ let DataGridHandler={
     },
 
     //更新函数
-    updateHandler:function(url,pageSize,pageIndex,sortName,sortOrder,params){////数据处理函数,更新
+    updateHandler:function(url,pageSize,pageIndex,sortName,sortOrder,params) {////数据处理函数,更新
 
 
         if(this.state.addData.length>0||this.state.deleteData.length>0||this.state.updatedData.length>0) {
-            Message.confirm("有脏数据,是否继续更新列表?", this.updateHandlerConfirm.bind(this, url, pageSize, pageIndex, sortName, sortOrder, params), () => {
+            Message.confirm("有脏数据,是否继续更新列表?", this.updateHandlerConfirm.bind(this, url, pageSize, pageIndex, sortName, sortOrder, params), ()=>  {
                 return;
             })
 
@@ -124,7 +126,7 @@ let DataGridHandler={
             this.updateHandlerConfirm(url, pageSize, pageIndex, sortName, sortOrder, params);
         }
     },
-    updateHandlerConfirm(url, pageSize, pageIndex, sortName, sortOrder, params){
+    updateHandlerConfirm:function(url, pageSize, pageIndex, sortName, sortOrder, params) {
         /*
      url与params而url可能是通过reload方法传进来的,并没有作为状态值绑定
      headers可能是后期才传了,见Page组件可知
@@ -293,9 +295,10 @@ let DataGridHandler={
         })
     },
     //选择处理函数
-    getKey:function (index,pageIndex) {//获取指定行的关键字，没有指定页号则为当前页
+    getKey: function(index,pageIndex) {//获取指定行的关键字，没有指定页号则为当前页
         let key;//TODO
         if(!pageIndex) {
+           
             pageIndex = this.state.pageIndex;
         }
         if(index==null&&index==undefined)
@@ -352,13 +355,13 @@ let DataGridHandler={
 
             }
             else {
-                node.className = node.className + " selected";
+                node.className ="selected"+( node.className?" "+node.className:"") ;
             }
         }
          this.focusIndex=index;//不更新状态值，否则导致频繁的更新
 
     },
-    checkCurrentPageCheckedAll:function() {//判断当前页是否全部选中
+    checkCurrentPageCheckedAll: function() {//判断当前页是否全部选中
         if(this.state.data instanceof Array )
         {
 
@@ -383,7 +386,7 @@ let DataGridHandler={
         }
         return ischeckall;
     },
-    checkedAllHandler:function(value){//全选按钮的单击事件
+    checkedAllHandler:function(value) {//全选按钮的单击事件
         if(this.state.data instanceof  Array)
         {
 
@@ -454,7 +457,7 @@ let DataGridHandler={
 
         }
     },
-    getFocusIndex:function() { //只读函数,用于父组件获取数据
+    getFocusIndex: function() { //只读函数,用于父组件获取数据
 
         return this.focusIndex;
     },
@@ -469,7 +472,7 @@ let DataGridHandler={
         }
         return this.state.data[index];
     },
-    getChecked:function() {
+    getChecked: function() {
         //获取选中的行数据
         var data=[];
         for (let value of this.state.checkedData.values()) {
@@ -477,7 +480,7 @@ let DataGridHandler={
         }
         return data;
     },
-    getFooterData:function() {//获取得页脚的统计值
+    getFooterData: function() {//获取得页脚的统计值
         return this.footerActualData;
     },
     detailHandler:function(rowIndex,rowData ) {//执行显示详情功能
@@ -514,6 +517,6 @@ let DataGridHandler={
 
             }
         }
-    },
+    }
 }
-module .exports=DataGridHandler;
+export default DataGridHandler;

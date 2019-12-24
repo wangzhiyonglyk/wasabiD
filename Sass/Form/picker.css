@@ -20,6 +20,7 @@
 }
 .picker ul{
   list-style: none;
+  text-align: left;
 }
 .picker ul li{
   display: inline-block;

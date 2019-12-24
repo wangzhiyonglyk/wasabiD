@@ -3,7 +3,7 @@
  * 能够翻转的层
  */
 var React=require("react");
-require("../sass/Layout/reverse.scss");
+require("../sass/Layout/reverse.css");
 var Reverse=React.createClass({
     propTypes: {
         dblAble: React.PropTypes.bool,//是否允许双击翻转

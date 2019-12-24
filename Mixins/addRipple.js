@@ -3,7 +3,7 @@
  * 在点击时 ，按钮的添加波纹特效
  *
  */
-let React=require("react");
+
 let addRipple={
     rippleHandler:function (event) {
         var $ripple ;
@@ -29,4 +29,4 @@ let addRipple={
 
     }
 }
-module.exports=addRipple;
+export default addRipple;

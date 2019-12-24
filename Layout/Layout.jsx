@@ -5,7 +5,7 @@ desc:圣杯布局
  */
 
 var React = require("react");
-require("../Sass/Layout/Layout.scss");
+require("../Sass/Layout/Layout.css");
 class Layout extends React.Component {
     constructor(props) {
         super(props);

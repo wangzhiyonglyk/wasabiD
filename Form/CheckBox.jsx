@@ -2,26 +2,28 @@
  * Created by zhiyongwang on 2016-04-05以后.
  * 复选框集合组件
  */
-require("../Sass/Form/Check.scss");
-let React = require("react");
-let unit = require("../libs/unit.js");
-var FetchModel = require("../Model/FetchModel.js");
-var validation = require("../Lang/validation.js");
-var validate = require("../Mixins/validate.js");
-var showUpdate = require("../Mixins/showUpdate.js");
 
-var Label = require("../Unit/Label.jsx");
-var Message = require("../Unit/Message.jsx");
-import props from "./config/props.js";
+import React, { Component } from "react";
+import unit from "../libs/unit.js";
+import FetchModel from "../Model/FetchModel.js";
+import validation from "../Lang/validation.js";
+import validate from "../Mixins/validate.js";
+import showUpdate from "../Mixins/showUpdate.js";
+
+import Label from "../Unit/Label.jsx";
+import Message from "../Unit/Message.jsx";
+
+import props from "./config/propType.js";
 import defaultProps from "./config/defaultProps.js";
-let CheckBox = React.createClass({
-    mixins: [validate, showUpdate],
-    propTypes: props,
-    getDefaultProps: function () {
-         defaultProps.type="checkbox";
-         return defaultProps;
-    },
-    getInitialState: function () {
+import("../Sass/Form/Input.css");
+import("../Sass/Form/Check.css");
+
+class CheckBox extends Component {
+    constructor(props) {
+
+        super(props);;
+      
+        //对传来的数据进行格式化
         var newData = []; var text = this.props.text;
         if (this.props.data instanceof Array) {
             for (let i = 0; i < this.props.data.length; i++) {
@@ -34,107 +36,100 @@ let CheckBox = React.createClass({
                 newData.push(obj);
             }
         }
-
-        return {
-            hide: this.props.hide,
-            min: this.props.min,
-            max: this.props.max,
+        this.state = {
             params: unit.clone(this.props.params),//参数
             data: newData,
             value: this.props.value,
             text: text,
             ulShow: false,//是否显示下拉选项
-            readonly: this.props.readonly,
-
-            //验证
-            required: this.props.required,
             validateClass: "",//验证的样式
             helpShow: "none",//提示信息是否显示
             helpTip: validation["required"],//提示信息
             invalidTip: "",
         }
-    },
-    componentWillReceiveProps: function (nextProps) {
-        var newData = []; var text = nextProps.text;
-        if (nextProps.data != null && nextProps.data instanceof Array && (!nextProps.url || nextProps.url == "")) {
+        this.setValue = this.setValue.bind(this);
+        this.getValue = this.getValue.bind(this);
+        this.loadData = this.loadData.bind(this);
+        this.loadError = this.loadError.bind(this);
+        this.loadSuccess = this.loadSuccess.bind(this);
+        this.changeHandler = this.changeHandler.bind(this);
+        this.onSelect = this.onSelect.bind(this);
 
-            for (let i = 0; i < nextProps.data.length; i++) {
-                let obj = nextProps.data[i];
-                obj.text = nextProps.data[i][this.props.textField];
-                obj.value = nextProps.data[i][this.props.valueField];
-                if (obj.value == nextProps.value) {
-                    text = obj.text;//根据value赋值
-                }
+    }
+
+    componentWillReceiveProps(nextProps) {
+      
+        if (nextProps.url) {
+
+            if (nextProps.url != this.props.url) {
+                this.loadData(nextProps.url, nextProps.params);
+            }
+            else if (this.showUpdate(nextProps.params, this.props.params)) {//如果不相同则更新
+                this.loadData(nextProps.url, nextProps.params);
+            }
+
+        } else if (nextProps.data && nextProps.data instanceof Array) {//又传了数组
+            if (nextProps.data.length != this.props.data.length) {
+                    this.setState({
+                        data:nextProps.data,
+                        value:"",
+                        text:""
+                    })
+            }else{
+                let newData=[];
+                for(let i=0;i<nextProps.data.length;i++)
+            {
+                let obj=nextProps.data[i];
+                obj.text=nextProps.data[i][this.props.textField];
+                obj.value=nextProps.data[i][this.props.valueField];
+              
                 newData.push(obj);
             }
-            this.setState({
-                hide: nextProps.hide,
-                data: newData,
-                min: nextProps.min,
-                max: nextProps.max,
-                value: nextProps.value,
-                text: text,
-                params: unit.clone(nextProps.params),
-                readonly: nextProps.readonly,
-                required: nextProps.required,
-                validateClass: "",//重置验证样式
-                helpTip: validation["required"],//提示信息
+            if(newData[0].text!=this.state.data[0].text||newData[newData.length-1].text!=this.state.data[this.state.data.length-1].text)
+            {this.setState({
+                data:nextProps.data,
+                value:"",
+                text:""
             })
-        }
-        else {
 
-
-            if (nextProps.url != null) {
-
-                if (this.showUpdate(nextProps.params)) {//如果不相同则更新
-                    this.loadData(nextProps.url, nextProps.params);
-                }
-                else {
-
-                }
             }
-
-            this.setState({
-                hide: nextProps.hide,
-                min: nextProps.min,
-                max: nextProps.max,
-                value: nextProps.value,
-                text: text,
-                params: unit.clone(nextProps.params),
-                readonly: nextProps.readonly,
-                required: nextProps.required,
-                validateClass: "",//重置验证样式
-                helpTip: validation["required"],//提示信息
-            })
-
         }
-    },
+        }
+    }
     setValue(value) {
         let text = "";
         for (let i = 0; i < this.state.data.length; i++) {
             if (this.state.data[i].value == value) {
-                text = item;
+                text = this.state.data[i].text;
                 break;
             }
         }
 
-      
-            this.setState({
-                value: value,
-                text: text
-            })
-        
 
-    },
+        this.setState({
+            value: value,
+            text: text
+        })
+
+
+    }
     getValue() {
         return this.state.value;
 
-    },
-   
-    componentWillMount: function () {//如果指定url,先查询数据再绑定
+    }
+    validate(value) {
+
+        validate.call(this, value)
+    }
+    showUpdate(newParam, oldParam) {
+        showUpdate.call(this, newParam, oldParam);
+    }
+    componentWillMount() {//如果指定url,先查询数据再绑定
+
         this.loadData(this.props.url, this.state.params);//查询数据
-    },
-    loadData: function (url, params) {
+    }
+
+    loadData(url, params) {
 
         if (url != null && url != "") {
             if (params == null) {
@@ -149,12 +144,12 @@ let CheckBox = React.createClass({
             }
             console.log("checkbox", fetchmodel);
         }
-    },
-    loadError: function (errorCode, message) {//查询失败
+    }
+    loadError(errorCode, message) {//查询失败
         console.log("checkbox-error", errorCode, message);
         Message.error(message);
-    },
-    loadSuccess: function (data) {//数据加载成功
+    }
+    loadSuccess(data) {//数据加载成功
         var realData = data;
         if (this.props.dataSource == null) {
         }
@@ -193,13 +188,15 @@ let CheckBox = React.createClass({
             value: this.state.value,
             text: text,
         })
-    },
-    changeHandler: function (event) {//一害绑定，但不处理
-       
-    },
-    onSelect: function (value, text, data, e) {//选中事件
+    }
+    changeHandler(event) {//一定绑定，但不处理
+
+    }
+
+    onSelect(value, text, row, e) {//选中事件
         e.preventDefault();//因为有用户借助label属性生成新的checkbox,所以要阻止默认事件
-        if (this.state.readonly) {
+
+        if (this.props.readonly) {
             return;
         }
         var newvalue = ""; var newtext = "";
@@ -240,14 +237,16 @@ let CheckBox = React.createClass({
             value: newvalue,
             text: newtext
         });
+
         this.validate(newvalue);
         if (this.props.onSelect != null) {
-            this.props.onSelect(newvalue, newtext, this.props.name, data);
+            this.props.onSelect(newvalue, newtext, this.props.name, row);
         }
-    },
-    render: function () {
-       
-        var componentClassName = "wasabi-form-group " ;//组件的基本样式
+    }
+    render() {
+
+        console.log("checkbox",this.props);
+        var componentClassName = "wasabi-form-group ";//组件的基本样式
         var control = null;
         if (this.state.data instanceof Array) {
             control = this.state.data.map((child, i) => {
@@ -257,11 +256,11 @@ let CheckBox = React.createClass({
                 }
                 var props = {
                     checked: checked,//是否为选中状态
-                    readOnly: this.state.readonly == true ? "readonly" : null,
+                    readOnly: this.props.readonly == true ? "readonly" : null,
                 }
                 return <li style={this.props.style} className={this.props.className} key={i} onClick={this.onSelect.bind(this, child.value, child.text, child)}  >
-                    <input type="checkbox" id={"checkbox" + this.props.name + child.value} 
-                         className="checkbox"  {...props}></input>
+                    <input type="checkbox" id={"checkbox" + this.props.name + child.value}
+                        className="checkbox"  {...props} onChange={() => { }}></input>
                     <label className="checkbox-label"  {...props}></label>
                     <div className="checktext" >{child.text}</div>
                 </li >
@@ -271,14 +270,14 @@ let CheckBox = React.createClass({
         return (
 
             <div className={componentClassName + this.state.validateClass} >
-                <Label name={this.props.label} ref="label" style={this.props.labelStyle} hide={this.state.hide} required={this.state.required}></Label>
+                <Label name={this.props.label} ref="label" style={this.props.labelStyle} hide={this.props.hide} required={this.props.required}></Label>
                 <div className={"wasabi-form-group-body"} style={{ width: !this.props.label ? "100%" : null }}>
-                    <ul className="wasabi-checkul">
+                    <ul className="wasabi-checkul" style={{marginTop:6}}>
                         {
                             control
                         }
                     </ul>
-                    <small className={"wasabi-help-block " } style={{ display: (this.state.helpTip && this.state.helpTip != "") ? this.state.helpShow : "none" }}><div className="text">{this.state.helpTip}</div></small>
+                    <small className={"wasabi-help-block "} style={{ display: (this.state.helpTip && this.state.helpTip != "") ? this.state.helpShow : "none" }}><div className="text">{this.state.helpTip}</div></small>
                 </div>
             </div>
 
@@ -286,5 +285,10 @@ let CheckBox = React.createClass({
 
     }
 
-});
-module.exports = CheckBox;
+}
+CheckBox.propTypes = props;
+
+CheckBox.defaultProps =  Object.assign({},defaultProps,{type:"checkbox"});
+
+export default CheckBox;
+

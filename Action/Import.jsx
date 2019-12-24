@@ -9,7 +9,7 @@ let Button=require("../Buttons/Button.jsx");
 let Message=require("../Unit/Message.jsx");
 let fileType=require("../libs/fileType.js");
 var unit=require("../libs/unit.js");
-require("../Sass/Action/Import.scss");
+require("../Sass/Action/Import.css");
 let  Import=React.createClass({
     propTypes: {
         name:React.PropTypes.string,//文件字段名称

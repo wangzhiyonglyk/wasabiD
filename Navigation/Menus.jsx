@@ -1,5 +1,5 @@
 import React from 'react';
-require("../sass/Navigation/menu.scss");
+require("../sass/Navigation/menu.css");
 class Menus extends React.Component {
   constructor(props) {
     super(props);

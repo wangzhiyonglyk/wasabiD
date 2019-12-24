@@ -2,7 +2,7 @@
 date:2016-04-01
 desc:表单输入框样式
 */
-
+@import url("../base.css");
 .wasabi-checkul
 {
   list-style: none;
@@ -10,7 +10,7 @@ desc:表单输入框样式
   padding: 0px;
   height: 27px;
   margin: 0px;
-  margin-top: 8px;
+  margin-top: 9px;
 
 }
 .wasabi-checkul li

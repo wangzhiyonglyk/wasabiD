@@ -4,7 +4,7 @@
  *
  */
 
-var paramFormat=require("./paramFormat.js");
+import  paramFormat from "./paramFormat.js";
 
 var baseUtil = {};
 
@@ -53,7 +53,7 @@ baseUtil. BrowserType=function(){
         browserType= "Safari";
     }
     else if ( /msie|trident/.test(userAgent)) {////判断是否IE浏览器
-        browserType=  IEType();
+        browserType= baseUtil. IEType();
     }
 
 
@@ -631,4 +631,4 @@ var md5 = require("./md5.js");
 baseUtil.md5 = md5;
 
 
-module.exports = baseUtil;
+export default baseUtil;

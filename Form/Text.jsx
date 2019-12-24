@@ -1,63 +1,55 @@
 //creete by wangzy
 //date:2016-08-02
 //desc 将输入框从Input中独立出来
-let React=require("react");
-var validation=require("../Lang/validation.js");
-var validate=require("../Mixins/validate.js");
-var Label=require("../Unit/Label.jsx");
-var Message=require("../Unit/Message.jsx");
-var FetchModel=require("../Model/FetchModel.js");
-var unit=require("../libs/unit.js");
-import props from "./config/props.js";
+import React, {Component} from "react";
+import PropTypes from "prop-types";
+import  validation from "../Lang/validation.js";
+import  validate from "../Mixins/validate.js";
+import  Label from "../Unit/Label.jsx";
+import  Message from "../Unit/Message.jsx";
+import  FetchModel from "../Model/FetchModel.js";
+import  unit from "../libs/unit.js";
+import props from "./config/propType.js";
 import config from "./config/textConfig.js";
 import defaultProps from  "./config/defaultProps.js";
-var Text=React.createClass({
-    mixins:[validate],
-     propTypes: Object.assign({type:React.PropTypes.oneOf(config)},props),
-    getDefaultProps:function() {
-        return defaultProps;
-    },
-    componentWillReceiveProps:function(nextProps) {
-         this.setState({
-            ...nextProps
-        })
-    },
-    getInitialState:function() {
-        return{
-            hide:this.props.hide,
-            min:this.props.min,
-            max:this.props.max,
+import ("../Sass/Form/Input.css");
+
+class  Text  extends Component{
+
+    constructor(props){
+        super(props);
+        this.state={
             value:this.props.value,
             text:this.props.text,
-            readonly:this.props.readonly,
-            required:this.props.required,
             validateClass:"",//验证的样式
             helpShow:"none",//提示信息是否显示
             helpTip:validation["required"],//提示信息
             invalidTip:"",
             validateState:null,//是否正在验证
-
         }
-    },
-    componentWillReceiveProps:function(nextProps) {
-        this.setState({
-            hide:nextProps.hide,
-            min:nextProps.min,
-            max:nextProps.max,
-            value: nextProps.value,
-            text: nextProps.text,
-            readonly: nextProps.readonly,
-            required: nextProps.required,
-            validateClass:"",//重置验证样式
-            helpTip:validation["required"],//提示信息
-        });
+        this.onChange=this.onChange.bind(this);
+       
+        this.keyDownHandler=this.keyDownHandler.bind(this);
+        this.keyUpHandler=this.keyUpHandler.bind(this);
+        this.focusHandler=this.focusHandler.bind(this);
+        this.blurHandler=this.blurHandler.bind(this);
+        this.clickHandler=this.clickHandler.bind(this);
+        this.getValue=this.getValue.bind(this);
+        this.setValue=this.setValue.bind(this);
+        this.validateHandler=this.validateHandler.bind(this);
+        this.validateHandlerSuccess=this.validateHandlerSuccess.bind(this);;
+        this.validateHandlerError=this.validateHandlerError.bind(this)
 
-    },
-    componentDidMount:function() {
+    }
+    componentWillReceiveProps(nextProps) {
+        
+         
+    }
+    componentDidMount() {    
         this.validateInput=true;//设置初始化值，输入有效
         this.onblur=false;
-    },
-    componentDidUpdate:function() {
+    }
+    componentDidUpdate() {
         this.validateInput=true;//设置初始化值
         if(this.state.helpTip=="非有效数字"||this.state.helpTip=="输入非法")
         {
@@ -68,8 +60,8 @@ var Text=React.createClass({
             this.onblur=false;
             this.props.onBlur();
         }
-    },
-    onChange:function(event) {
+    }
+    onChange(event) {
         if (this.validateInput==true) {//输入有效的时候
 
             if((this.props.type=="integer"||this.props.type=="number")) {
@@ -109,8 +101,8 @@ var Text=React.createClass({
         }
 
 
-    },
-    keyDownHandler:function(event) {//控制输入
+    }
+    keyDownHandler(event) {//控制输入
         this.validateInput=true;
         if(this.props.type=="integer"||this.props.type=="number")
         {
@@ -120,13 +112,13 @@ var Text=React.createClass({
             }
 
         }
-        if(this.props.onKeyDown!=null)
+        if(this.props.onKeyDown)
         {
             this.props.onKeyDown(event);
         }
 
-    },
-    keyUpHandler:function(event) {
+    }
+    keyUpHandler(event) {
         if(event.keyCode==13)
         {
             if(this.props.validateUrl)
@@ -135,18 +127,18 @@ var Text=React.createClass({
             }
         }
 
-        if(this.props.onKeyUp!=null)
+        if(this.props.onKeyUp)
         {
             this.props.onKeyUp(event);
         }
-    },
-    focusHandler:function() {//焦点事件
+    }
+    focusHandler() {//焦点事件
         if(this.props.onFocus!=null)
         {
             this.props.onFocus();
         }
-    },
-    blurHandler:function(event) {
+    }
+    blurHandler(event) {
         if(this.props.validateUrl) {//后台验证
             this.validateHandler(event.target.value);
         }
@@ -162,11 +154,11 @@ var Text=React.createClass({
 
         }
 
-    },
-    clickHandler:function(event) {//单击事件
+    }
+    clickHandler(event) {//单击事件
 
         if(this.props.onClick!=null) {
-            var model = {};
+            let model = {};
             try {//有可能存在复制不成功的情况
                 model ={...this.props};
             }
@@ -177,55 +169,55 @@ var Text=React.createClass({
             model.text=this.state.text;
             this.props.onClick(this.props.name,this.state.value,model);
         }
-    },
-    getValue:function () {//获取值
+    }
+    validate(value){
+    
+        validate.call(this,value)
+    }
+    getValue () {//获取值
         return this.state.value;
-    },
-    setValue:function(value){//设置值
+    }
+    setValue(value){//设置值
         this.setState({
             value:value,
         })
-    },
-    validateHandler:function (value) {//后台请求验证
+    }
+    validateHandler (value) {//后台请求验证
         this.setState({
             validateState:"validing",//正在验证
         })
-        var fetchmodel=new FetchModel(this.props.validateUrl,this.validateHandlerSuccess,{key:value});
+        let fetchmodel=new FetchModel(this.props.validateUrl,this.validateHandlerSuccess,{key:value});
         console.log("text-validing:",fetchmodel);
         unit.fetch.post(fetchmodel);
-    },
-    validateHandlerSuccess:function () {//后台请求验证成功
+    }
+    validateHandlerSuccess () {//后台请求验证成功
         this.setState({
             validateState:"valid",//验证成功
         })
-    },
-    validateHandlerError:function (errorCode,message) {//后台请求验证失败
+    }
+    validateHandlerError (errorCode,message) {//后台请求验证失败
         Message.error(message);
         this.setState({
             validateState:"invalid",//验证失败
         })
-    },
-    render:function() {
-        var inputType="text";
-        if(this.props.type=="password") {
-            inputType = "password";
-        }
-        var componentClassName=  "wasabi-form-group ";//组件的基本样式
+    }
+    render() {
        
+        let inputType=this.props.type?this.props.type:"text";
             let inputProps=
             {
-                readOnly:this.state.readonly==true?"readonly":null,
+                readOnly:this.props.readonly==true?"readonly":null,
                 style:this.props.style,
                 name:this.props.name,
-                placeholder:(this.props.placeholder===""||this.props.placeholder==null)?this.state.required?"必填项":"":this.props.placeholder,
-                className:"wasabi-form-control  "+(this.props.className!=null?this.props.className:""),
+                placeholder:(this.props.placeholder===""||this.props.placeholder==null)?this.props.required?"必填项":"":this.props.placeholder,
+                className:"wasabi-form-control  "+(this.props.className?this.props.className:""),
                 rows:this.props.rows,
                 title:this.props.title,
 
             }//文本框的属性
-        var control=null;
-        if(this.props.type!="textarea")
-        {
+        let control=null;
+        if(inputType!="textarea")
+        {//普通输入框
             control = <input  ref="input" type={inputType}   {...inputProps} onClick={this.clickHandler}
                               onChange={this.onChange} onKeyDown={this.keyDownHandler}
                               onKeyUp={this.keyUpHandler} onFocus={this.focusHandler}
@@ -248,8 +240,8 @@ var Text=React.createClass({
 
 
 
-        return (<div className={componentClassName+this.state.validateClass} onPaste={this.onPaste} style={{display:this.state.hide==true?"none":"block"}}>
-                <Label name={this.props.label} ref="label" hide={this.state.hide} style={this.props.labelStyle} required={this.state.required}></Label>
+        return (<div className={"wasabi-form-group "+this.state.validateClass} onPaste={this.onPaste} style={{display:this.props.hide==true?"none":"block"}}>
+                <Label name={this.props.label} ref="label" hide={this.props.hide} style={this.props.labelStyle} required={this.props.required}></Label>
                 <div className={ "wasabi-form-group-body"} style={{width:!this.props.label?"100%":null}}>
                     {control}
                     <i className={this.state.validateState} style={{display:(this.state.validateState?"block":"none")}} ></i>
@@ -259,5 +251,9 @@ var Text=React.createClass({
             </div>
         )
     }
-});
-module .exports=Text;
+}
+
+ Text. propTypes=Object.assign({type:PropTypes.oneOf(config)},props);
+
+Text.defaultProps=  Object.assign({},defaultProps,{type:"text"});;
+ export default Text;

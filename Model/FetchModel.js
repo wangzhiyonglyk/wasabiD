@@ -16,4 +16,4 @@ class FetchModel
         this.contentType="application/x-www-form-urlencoded";////请求数据格式
     }
 }
-module .exports=FetchModel;
+export default FetchModel;

@@ -6,169 +6,84 @@
  * 3017-01-04 注意了,这里渲染分页与复制的CopyDataGrid不一样，因为CopyDataGrid宽度比较小可能放不下
  *3017-09-30 将固定表头功能先隐藏掉
  */
-require("../Sass/Data/DataGrid.scss");
-require("../Sass/Data/DataGridDetail.scss");
-let React = require("react");
-let unit = require("../libs/unit.js");
-let FetchModel = require("../Model/FetchModel.js");
-let Button = require("../Buttons/Button.jsx");
-let LinkButton = require("../Buttons/LinkButton.jsx");
-let CheckBox = require("../Form/CheckBox.jsx");
-let Input = require("../Form/Input.jsx");
-let Radio = require("../Form/Radio.jsx");
-let Message = require("../Unit/Message.jsx");
-let Transfer = require("./Transfer.jsx");
-
-let DataGridHandler = require("../Mixins/DataGridHandler.js");
-let DataGridExtend = require("../Mixins/DataGridExtend.js");
-let pasteExtend = require("../Mixins/pasteExtend.js");
-let ClickAway = require("../Unit/ClickAway.js");
-let showUpdate = require("../Mixins/showUpdate.js");
-let regs = require("../Lang/regs.js");
-
-let DataGrid = React.createClass({
-    mixins: [DataGridHandler, DataGridExtend, pasteExtend, ClickAway, showUpdate],
-    propTypes: {
-        width: React.PropTypes.oneOfType([
-            React.PropTypes.number,
-            React.PropTypes.string,
-        ]),//宽度
-        height: React.PropTypes.oneOfType([
-            React.PropTypes.number,
-            React.PropTypes.string,
-        ]),//高度
-        selectAble: React.PropTypes.bool,// 是否显示选择，默认值 false
-        singleSelect: React.PropTypes.bool,//是否为单选,默认值为 false
-        detailAble: React.PropTypes.bool,//是否显示详情,默认值 false
-        rowNumber: React.PropTypes.bool,//是否显示行号,true
-        focusAble: React.PropTypes.bool,//是否显示焦点行，默认值 true
-        editAble: React.PropTypes.bool,//是否允许编辑
-        borderAble: React.PropTypes.bool,//是否显示表格边框，默认值 false
-
-        clearChecked: React.PropTypes.bool,//刷新数据后是否清除选择,true
-        selectChecked: React.PropTypes.bool,//选择行的时候是否同时选中,false
-        pagination: React.PropTypes.bool,//是否分页,默认值 true
-
-        pageIndex: React.PropTypes.number,//当前页号
-        pageSize: React.PropTypes.number,//分页大小，默认30
-        sortName: React.PropTypes.string,//排序字段,
-        sortOrder: React.PropTypes.oneOf([
-            "asc",
-            "desc",
-        ]),//排序方式,默认asc,
-        keyField: React.PropTypes.string,//关键字段
-        headers: React.PropTypes.array,//表头设置
-        footer: React.PropTypes.array,//页脚,
-        total: React.PropTypes.number,// 总条目数，有url没用，默认为 0
-        data: React.PropTypes.array,//当前页数据（json）
-
-        url: React.PropTypes.string,//ajax地址
-        backSource: React.PropTypes.string,//ajax的返回的数据源中哪个属性作为数据源(旧版本)
-        dataSource: React.PropTypes.string,//ajax的返回的数据源中哪个属性作为数据源(新版本)
-        footerSource: React.PropTypes.string,//页脚数据源,
-        totalSource: React.PropTypes.string,//ajax的返回的数据源中哪个属性作为总记录数源
-
-        params: React.PropTypes.object,//查询条件
-        onClick: React.PropTypes.func,//单击事件
-        onDoubleClick: React.PropTypes.func,//双击事件
-        onChecked: React.PropTypes.func,//监听表格中某一行被选中/取消
-        updateHandler: React.PropTypes.func,//手动更新事件，父组件一定要有返回值,返回详情组件
-        detailHandler: React.PropTypes.func,//展示详情的函数，父组件一定要有返回值,返回详情组件
-        pagePosition: React.PropTypes.oneOf([
-            "top",
-            "bottom",
-            "both"
-        ]),//分页栏的位置
-        control: React.PropTypes.bool,//是否显示菜单按钮
-        controlPanel: React.PropTypes.any,//菜单面板
-        headerUrl: React.PropTypes.string,//自定义列地址
-        updateUrl: React.PropTypes.string,//列更新的地址
-        pasteSuccess: React.PropTypes.func,//粘贴成功事件
-
-    },
-    getDefaultProps: function () {
-        return {
-            width: "100%",
-            height: null,
-            selectAble: false,
-            singleSelect: false,
-            detailAble: false,
-            rowNumber: true,
-            focusAble: true,
-            borderAble: true,
-            clearChecked: true,//是否清空选择的
-            selectChecked: false,
-            pagination: true,
-            pageIndex: 1,
-            pageSize: 20,
-            sortName: "id",
-            sortOrder: "asc",
-            keyField: "id",
-            headers: [],
-            total: 0,
-            data: null,
-            url: null,//
-            backSource: "data",//
-            dataSource: "data",//
-            totalSource: "total",//
-            params: null,
-            footer: null,//页脚
-            onClick: null,
-            onDoubleClick: null,
-            onChecked: null,
-            updateHandler: null,
-            detailHandler: null,
-            footerSource: "footer",//页脚数据源
-            pagePosition: "bottom",//默认分页在底部
-            control: false,
-            controlPanel: null,
-            headerUrl: null,
-            editAble: false,//是否允许编辑
-            updateUrl: null,
-            pasteSuccess: null
-
-        }
-    },
-    getInitialState: function () {
-        this.clientHeight = document.documentElement.clientHeight;//先得到高度,防止后期页面发生晃动
-        let data = [];
-        if (this.props.data instanceof Array) {
-            data = this.props.data;
-        }
-        return {
-            url: this.props.url,
-
-            params: unit.clone(this.props.params),//这里一定要复制,只有复制才可以比较两次参数是否发生改变没有,防止父组件状态任何改变而导致不停的查询
-            pageIndex: this.props.pageIndex,
-            pageSize: this.props.pageSize,
-            sortName: this.props.sortName,
-            sortOrder: this.props.sortOrder,
-            data: (this.props.pagination == true ? data.slice(0, this.props.pageSize) : data),//只只保留当前的数据
-            checkedData: new Map(),
-            detailView: null,//详情行,
-            detailIndex: null,//显示详情的行下标
-            total: this.props.total,//总记录数
-            loading: (this.props.url || this.props.headerUrl) ? true : false,//显示正在加载图示
-            footer: this.props.footer,//页脚
-            headers: this.props.headers,//表头会可能后期才传送,也会动态改变
-            height: this.props.height,//如果没有设置高度还要从当前页面中计算出来空白高度,以适应布局
-            headerMenu: [],//被隐藏的列
-            panelShow: false,//列表的操作面板
-            control: this.props.control,
-            controlPanel: this.props.controlPanel,
-            headerUrl: this.props.headerUrl,
-            updateUrl: this.props.updateUrl,
-            editAble: this.props.editAble,
-            editIndex: null,//当前处理编辑的列
-            addData: new Map(),//新增的数据,因为有可能新增一个空的，然后再修改
-            updatedData: new Map(),//被修改过的数据，因为要判断曾经是否修改
-            deleteData: [],//删除的数据
 
 
 
-        }
-    },
-    componentWillReceiveProps: function (nextProps) {
+import React, {Component} from "react";
+import PropTypes from "prop-types";
+
+import unit from "../libs/unit.js";
+import LinkButton from "../Buttons/LinkButton.jsx";
+import CheckBox from "../Form/CheckBox.jsx";
+import Input from "../Form/Input.jsx";
+import Radio  from "../Form/Radio.jsx";
+
+import DataGridHandler from "../Mixins/DataGridHandler.js";
+import DataGridExtend from "../Mixins/DataGridExtend.js";
+import pasteExtend  from "../Mixins/pasteExtend.js";
+import ClickAway from "../Unit/ClickAway.js";
+import showUpdate from "../Mixins/showUpdate.js";
+import mixins from "../Mixins/mixins"
+import ("../Sass/Data/DataGrid.css");
+import ("../Sass/Data/DataGridDetail.css");
+class DataGrid extends Component{
+   // mixins: [DataGridHandler, DataGridExtend, pasteExtend, ClickAway, showUpdate],
+   constructor(props)
+   {
+       super(props);
+       this.clientHeight = document.documentElement.clientHeight;//先得到页面高度,防止后期页面发生晃动
+       let data = [];
+       if (this.props.data instanceof Array) {
+           data = this.props.data;
+       }
+       this.state={
+      
+        url: this.props.url,
+
+        params: unit.clone(this.props.params),//这里一定要复制,只有复制才可以比较两次参数是否发生改变没有,防止父组件状态任何改变而导致不停的查询
+        pageIndex: this.props.pageIndex,
+        pageSize: this.props.pageSize,
+        sortName: this.props.sortName,
+        sortOrder: this.props.sortOrder,
+        data: (this.props.pagination == true ? data.slice(0, this.props.pageSize) : data),//只只保留当前的数据
+        checkedData: new Map(),
+        detailView: null,//详情行,
+        detailIndex: null,//显示详情的行下标
+        total: this.props.total,//总记录数
+        loading: (this.props.url || this.props.headerUrl) ? true : false,//显示正在加载图示
+        footer: this.props.footer,//页脚
+        headers: this.props.headers,//表头会可能后期才传送,也会动态改变
+        height: this.props.height,//如果没有设置高度还要从当前页面中计算出来空白高度,以适应布局
+        headerMenu: [],//被隐藏的列
+        panelShow: false,//列表的操作面板
+        control: this.props.control,
+        controlPanel: this.props.controlPanel,
+        headerUrl: this.props.headerUrl,
+        updateUrl: this.props.updateUrl,
+        editAble: this.props.editAble,
+        editIndex: null,//当前处理编辑的列
+        addData: new Map(),//新增的数据,因为有可能新增一个空的，然后再修改
+        updatedData: new Map(),//被修改过的数据，因为要判断曾经是否修改
+        deleteData: [],//删除的数据
+       }
+       //绑定事件
+     let baseCtors=[DataGridHandler, DataGridExtend, pasteExtend, showUpdate]
+       baseCtors.forEach(baseCtor => {
+        Object.getOwnPropertyNames(baseCtor).forEach(name => {
+            if(typeof baseCtor[name]=="function")
+          
+            {
+            this[name]=this[name].bind(this);
+            }
+        });
+    });
+
+       this.substitute=this.substitute.bind(this);
+     
+     
+   }
+   
+    componentWillReceiveProps (nextProps) {
         /*      
          headers可能是后期才传了,见Page组件可知
          所以此处需要详细判断
@@ -198,8 +113,9 @@ let DataGrid = React.createClass({
                 controlPanel: nextProps.controlPanel,
             })
         }
-    },
-    componentDidMount: function () {
+    }
+    componentDidMount () {
+      
         //渲染后再开始加载数据
         if (this.state.headerUrl) {//如果存在自定义列
             this.getHeaderDataHandler();
@@ -207,13 +123,13 @@ let DataGrid = React.createClass({
         if (this.state.url) {//如果存在url,
             this.updateHandler(this.state.url, this.state.pageSize, this.state.pageIndex, this.state.sortName, this.state.sortOrder)
         }
-        this.registerClickAway(this.hideMenuHandler, this.refs.grid);//注册全局单击事件
+        //this.registerClickAway(this.hideMenuHandler, this.refs.grid);//注册全局单击事件
         // this.resizeTableWidthHandler();//固定的表头每一列的宽度
-    },
-    componentDidUpdate: function () {
+    }
+    componentDidUpdate () {
         // this.resizeTableWidthHandler();//固定的表头每一列的宽度
-    },
-    renderHeader: function () {//渲染表头
+    }
+    renderHeader () {//渲染表头
         if (!(this.state.headers instanceof Array)) {
             return null;
         }
@@ -278,8 +194,8 @@ let DataGrid = React.createClass({
 
 
         return headers;
-    },
-    renderBody: function () {//渲染表体
+    }
+    renderBody () {//渲染表体
         let trobj = [];
         if (!(this.state.data instanceof Array) || !(this.state.headers instanceof Array)) {
             return;
@@ -411,16 +327,16 @@ let DataGrid = React.createClass({
         });
         return trobj;
 
-    },
-    substitute: function (str, obj) {//得到绑定字段的内容
+    }
+    substitute (str, obj) {//得到绑定字段的内容
         return str.replace((/\\?\{([^{}]+)\}/g), function (match, name) {
             if (match.charAt(0) === '\\') {
                 return match.slice(1);
             }
             return (obj[name] === null || obj[name] === undefined) ? '' : obj[name];
         });
-    },
-    renderTotal: function () {//渲染总记录数，当前记录的下标
+    }
+    renderTotal () {//渲染总记录数，当前记录的下标
         if (this.state.headers && this.state.headers.length > 0) {//设计了header
             let beginOrderNumber = 0; let endOrderNumber = 0;//数据开始序号与结束序号
             let total = this.state.total;//总记录数
@@ -450,9 +366,9 @@ let DataGrid = React.createClass({
             return null;
         }
 
-    },
+    }
 
-    renderPagination: function () {//显示分页控件
+    renderPagination () {//显示分页控件
         let paginationComponent = null;
         if (this.props.pagination) {
 
@@ -468,8 +384,8 @@ let DataGrid = React.createClass({
                 let pageComponent = [];//分页组件
                 let firstIndex = 0;//第一个显示哪一页
                 let lastIndex = 0;//最后一个显示哪一页
-                let predisabledli = <li key="predis" className="paginate_button disabled"><a href="javascript:void(0)">...</a></li>;//多余的分页标记
-                let lastdisabledli = <li key="lastdis" className="paginate_button disabled"><a href="javascript:void(0)">...</a></li>;//多余的分页标记
+                let predisabledli = <li key="predis" className="paginate_button disabled"><a  >...</a></li>;//多余的分页标记
+                let lastdisabledli = <li key="lastdis" className="paginate_button disabled"><a  >...</a></li>;//多余的分页标记
                 if (this.state.pageIndex >= 4 && this.state.pageIndex <= pageAll - 3) {//当前页号处于中间位置
                     firstIndex = this.state.pageIndex - 2;
                     lastIndex = this.state.pageIndex + 2;
@@ -491,21 +407,21 @@ let DataGrid = React.createClass({
                 }
                 for (let i = firstIndex; i <= lastIndex; i++) {
                     pageComponent.push(<li key={"li" + i} className={"paginate_button " + ((this.state.pageIndex * 1) == (i) ? "active" : "")}><a
-                        href="javascript:void(0)" onClick={this.paginationHandler.bind(this, (i))}>{(i)}</a></li>);
+                          onClick={this.paginationHandler.bind(this, (i))}>{(i)}</a></li>);
                 }
                 pageComponent.unshift(predisabledli); pageComponent.push(lastdisabledli);
 
                 paginationComponent = <div className="pagination-number col-sm-6">
                     <ul className="pagination">
-                        <li key={"lipre"} className="paginate_button "><a href="javascript:void(0)" onClick={this.prePaginationHandler} >上一页</a></li>
+                        <li key={"lipre"} className="paginate_button "><a   onClick={this.prePaginationHandler} >上一页</a></li>
                         <li key={"lifirst"} className={"paginate_button  " + ((this.state.pageIndex * 1) == (1) ? "active" : "")}><a
-                            href="javascript:void(0)" onClick={this.paginationHandler.bind(this, (1))}>{(1)}</a></li>
+                              onClick={this.paginationHandler.bind(this, (1))}>{(1)}</a></li>
                         {
                             pageComponent
                         }
 
-                        <li key="lilast" className={"paginate_button previous" + ((this.state.pageIndex * 1) == (pageAll) ? "active" : "")}><a href="javascript:void(0)" onClick={this.paginationHandler.bind(this, (pageAll))}>{(pageAll)}</a></li>
-                        <li key="linext" className="paginate_button next"><a href="javascript:void(0)" onClick={this.nextPaginationHandler} >下一页</a></li>
+                        <li key="lilast" className={"paginate_button previous" + ((this.state.pageIndex * 1) == (pageAll) ? "active" : "")}><a   onClick={this.paginationHandler.bind(this, (pageAll))}>{(pageAll)}</a></li>
+                        <li key="linext" className="paginate_button next"><a   onClick={this.nextPaginationHandler} >下一页</a></li>
                     </ul>
                 </div>;
             }
@@ -513,20 +429,20 @@ let DataGrid = React.createClass({
                 //小于7页直接显示
 
                 let pagearr = [];
-                console.log(this.state.pageIndex);
+              
                 for (let i = 0; i < pageAll; i++) {
                     let control = <li key={"li" + i} className={"paginate_button " + ((this.state.pageIndex * 1) == (i*1+1) ? "active" : "")}>
-                        <a href="javascript:void(0)" onClick={this.paginationHandler.bind(this, (i + 1))}>{(i + 1)}</a></li>;
+                        <a   onClick={this.paginationHandler.bind(this, (i + 1))}>{(i + 1)}</a></li>;
                     pagearr.push(control);
                 }
                 paginationComponent = (
                     <div className="pagination-number col-sm-6">
                         <ul className="pagination">
-                        <li key={"lipre"} className="paginate_button previous"><a href="javascript:void(0)" onClick={this.prePaginationHandler} >上一页</a></li>
+                        <li key={"lipre"} className="paginate_button previous"><a   onClick={this.prePaginationHandler} >上一页</a></li>
                             {
                                 pagearr
                             }
-                           <li key="linext" className="paginate_button next"><a href="javascript:void(0)" onClick={this.nextPaginationHandler} >下一页</a></li>
+                           <li key="linext" className="paginate_button next"><a   onClick={this.nextPaginationHandler} >下一页</a></li>
                         </ul>
                     </div>
                 )
@@ -536,8 +452,8 @@ let DataGrid = React.createClass({
         }
         return paginationComponent;
 
-    },
-    renderFooter: function () {//渲染页脚
+    }
+    renderFooter () {//渲染页脚
         let tds = [];
         this.footerActualData = [];//,页脚的实际统计数据，用于返回
         if (this.state.footer instanceof Array && this.state.footer.length > 0) {
@@ -602,18 +518,19 @@ let DataGrid = React.createClass({
         }
 
 
-    },
+    }
     renderHeaderMenu() {//渲染表头右键菜单
         let headerMenuCotrol = [];//右键菜单中隐藏的列
         if (this.state.headerMenu.length > 0) {
             this.state.headerMenu.map((item, index) => {
                 headerMenuCotrol.push(
-                    <li key={index}><a href="javascript:void(0);" className="header-menu-item" onMouseDown={this.menuShowHandler.bind(this, index, item)} >{"显示[" + item + "]"}</a></li>)
+                    <li key={index}><a  className="header-menu-item" onMouseDown={this.menuShowHandler.bind(this, index, item)} >{"显示[" + item + "]"}</a></li>)
             })
         }
         return headerMenuCotrol;
-    },
-    render: function () {
+    }
+   
+    render () {
         let className = this.props.borderAble ? "table " : "table table-no-bordered";
         let headerControl = this.renderHeader();//渲染两次，所以定义一个变量
         return (
@@ -675,7 +592,7 @@ let DataGrid = React.createClass({
                 {/* 菜单 没有使用单击事件,用户有可能继续使用鼠标右键*/}
                 <div className="wasabi-header-menu-container" ref="headermenu">
                     <ul className="wasabi-header-menu">
-                        <li key="first"><a href="javascript:void(0);" className="header-menu-item" onMouseDown={this.menuHideHandler} >隐藏此列</a></li>
+                        <li key="first"><a   className="header-menu-item" onMouseDown={this.menuHideHandler} >隐藏此列</a></li>
                         {this.renderHeaderMenu()}
                     </ul>
                 </div>
@@ -685,5 +602,112 @@ let DataGrid = React.createClass({
                 </div>
             </div>);
     }
-});
-module.exports = DataGrid;
+}
+
+
+
+DataGrid.propTypes= {
+    width: PropTypes.oneOfType([
+        PropTypes.number,
+        PropTypes.string,
+    ]),//宽度
+    height: PropTypes.oneOfType([
+        PropTypes.number,
+        PropTypes.string,
+    ]),//高度
+    selectAble: PropTypes.bool,// 是否显示选择，默认值 false
+    singleSelect: PropTypes.bool,//是否为单选,默认值为 false
+    detailAble: PropTypes.bool,//是否显示详情,默认值 false
+    rowNumber: PropTypes.bool,//是否显示行号,true
+    focusAble: PropTypes.bool,//是否显示焦点行，默认值 true
+    editAble: PropTypes.bool,//是否允许编辑
+    borderAble: PropTypes.bool,//是否显示表格边框，默认值 false
+
+    clearChecked: PropTypes.bool,//刷新数据后是否清除选择,true
+    selectChecked: PropTypes.bool,//选择行的时候是否同时选中,false
+    pagination: PropTypes.bool,//是否分页,默认值 true
+
+    pageIndex: PropTypes.number,//当前页号
+    pageSize: PropTypes.number,//分页大小，默认30
+    sortName: PropTypes.string,//排序字段,
+    sortOrder: PropTypes.oneOf([
+        "asc",
+        "desc",
+    ]),//排序方式,默认asc,
+    keyField: PropTypes.string,//关键字段
+    headers: PropTypes.array,//表头设置
+    footer: PropTypes.array,//页脚,
+    total: PropTypes.number,// 总条目数，有url没用，默认为 0
+    data: PropTypes.array,//当前页数据（json）
+
+    url: PropTypes.string,//ajax地址
+    backSource: PropTypes.string,//ajax的返回的数据源中哪个属性作为数据源(旧版本)
+    dataSource: PropTypes.string,//ajax的返回的数据源中哪个属性作为数据源(新版本)
+    footerSource: PropTypes.string,//页脚数据源,
+    totalSource: PropTypes.string,//ajax的返回的数据源中哪个属性作为总记录数源
+
+    params: PropTypes.object,//查询条件
+    onClick: PropTypes.func,//单击事件
+    onDoubleClick: PropTypes.func,//双击事件
+    onChecked: PropTypes.func,//监听表格中某一行被选中/取消
+    updateHandler: PropTypes.func,//手动更新事件，父组件一定要有返回值,返回详情组件
+    detailHandler: PropTypes.func,//展示详情的函数，父组件一定要有返回值,返回详情组件
+    pagePosition: PropTypes.oneOf([
+        "top",
+        "bottom",
+        "both"
+    ]),//分页栏的位置
+    control: PropTypes.bool,//是否显示菜单按钮
+    controlPanel: PropTypes.any,//菜单面板
+    headerUrl: PropTypes.string,//自定义列地址
+    updateUrl: PropTypes.string,//列更新的地址
+    pasteSuccess: PropTypes.func,//粘贴成功事件
+
+};
+DataGrid.defaultProps= {
+  
+        width: "100%",
+        height: null,
+        selectAble: false,
+        singleSelect: false,
+        detailAble: false,
+        rowNumber: true,
+        focusAble: true,
+        borderAble: true,
+        clearChecked: true,//是否清空选择的
+        selectChecked: false,
+        pagination: true,
+        pageIndex: 1,
+        pageSize: 20,
+        sortName: "id",
+        sortOrder: "asc",
+        keyField: "id",
+        headers: [],
+        total: 0,
+        data: null,
+        url: null,//
+        backSource: "data",//
+        dataSource: "data",//
+        totalSource: "total",//
+        params: null,
+        footer: null,//页脚
+        onClick: null,
+        onDoubleClick: null,
+        onChecked: null,
+        updateHandler: null,
+        detailHandler: null,
+        footerSource: "footer",//页脚数据源
+        pagePosition: "bottom",//默认分页在底部
+        control: false,
+        controlPanel: null,
+        headerUrl: null,
+        editAble: false,//是否允许编辑
+        updateUrl: null,
+        pasteSuccess: null
+
+    
+};
+
+mixins(DataGrid,[DataGridHandler, DataGridExtend, pasteExtend, showUpdate]);
+
+export default DataGrid;

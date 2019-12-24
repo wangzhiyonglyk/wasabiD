@@ -1,4 +1,4 @@
-//create by wangzy
+/*create by wangzy
 //date:2016-07-22
 //desc:筛选框
 /*
@@ -9,9 +9,9 @@
   width:100%;
   position: relative;
   text-align: center;
-  height: 50px;
-  line-height: 50px;
-  background-color: #eff0f1;
+  padding-right: 10px;
+  padding-bottom: 10px;
+ 
 }
 .wasabi-searchbox input {
   width: 90%;
@@ -28,8 +28,8 @@
 
   font-family: 'icomoon' !important;
   position: absolute;
-  right: 7%;
-  top: 1px;
+  right: 30px;
+  top: 6px;
   width: 14px;
   height: 14px;
   font-size: 14px;

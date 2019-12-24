@@ -1,44 +1,28 @@
 //create by wangzy
 //date:2016-04-05后开始独立改造
 //desc:页面筛选条件组件
-require("../Sass/Form/SearchBar.scss");
-var React = require("react");
-var Input = require("./Input.jsx");
-var Button = require("../Buttons/Button.jsx");
-var unit = require("../libs/unit.js");
-var SearchBar = React.createClass({
-    propTypes: {
-          style: React.PropTypes.object,//样式
-        className: React.PropTypes.string,//自定义样式
-        submitTitle: React.PropTypes.string,
-        submitHide: React.PropTypes.bool,
-        submitTheme:React.PropTypes.string,
-        submitStyle:React.PropTypes.object,
-        cols:React.PropTypes.number,//多余几个隐藏
-        onSubmit: React.PropTypes.func,
 
-    },
-    getDefaultProps: function () {
-        return {
-            style:{},
-            className: "",
-            submitTitle: "查询",//查询按钮的标题
-            submitHide: false,//是否隐藏按钮
-            submitTheme:"primary",//主题
-            submitStyle:{},//查询按钮的样式
-            cols:4,
-            onSubmit: null,//提交成功后的回调事           
-        }
+import React, { Component } from "react";
+import PropTypes from "prop-types";
 
-    },
-  
-    getInitialState()
-    {
-    return {
+import  Button  from "../Buttons/Button.jsx";
+
+import ("../Sass/Form/SearchBar.css");
+class  SearchBar extends Component{
+   constructor(props)
+   {
+       super(props);
+       this.state={
         dropType:"wasabi-button wasabi-searchbar-down"
-    }
-    },
-    getData: function () {
+       }
+       this.getData=this.getData.bind(this);
+       this.setData=this.setData.bind(this);
+       this.clearData=this.clearData.bind(this);
+       this.onSubmit=this.onSubmit.bind(this);
+       this.expandHandler=this.expandHandler.bind(this);
+   }
+    
+    getData () {
         var data = {}
         for (let v in this.refs) {      
             if (this.refs[v].props.name&&this.refs[v].getValue) {//说明是表单控件
@@ -70,9 +54,9 @@ var SearchBar = React.createClass({
 
         }
         return data;
-    },
+    }
 
-    setData: function (data) {//设置值,data是对象
+    setData (data) {//设置值,data是对象
 
         if (!data) {
             return;
@@ -86,15 +70,15 @@ var SearchBar = React.createClass({
                     this.refs[v].setData(data);
                 }
         }
-    },
+    }
 
-    clearData: function () {
+    clearData () {
         for (let v in this.refs) {
           this.refs[v].setValue && this.refs[v].setValue("");
             this.refs[v].clearData && this.refs[v].clearData();
         }
-    },
-    onSubmit: function () {
+    }
+    onSubmit () {
         //提交 数据
         var data = {};//各个字段对应的值 
         for (let v in this.refs) {      
@@ -131,19 +115,21 @@ var SearchBar = React.createClass({
             else {
                 return data;
             }      
-    }, 
+    }
     expandHandler(){
         this.setState({
             dropType:this.state.dropType=="wasabi-button wasabi-searchbar-down"?"wasabi-button wasabi-searchbar-up":"wasabi-button wasabi-searchbar-down"
         })
-    },
-    render: function () {
+    }
+    render () {
     
      return (
-            <div   className={"wasabi-searchbar clearfix" + this.props.className} style={this.props.style}  >
-                <div className=" col-xs-9"   >
+            <div   className={"wasabi-searchbar clearfix "  + this.props.className} style={this.props.style}  >
+                <div className=" col-xs-10"   >
                     {
-                        React.Children.map(this.props.children, (child, index) => {
+                       React. Children.map(this.props.children, (child, index) => {
+                         
+
                             if (typeof child.type !== "function") {//非react组件
                                 return child;
                             } else {
@@ -151,15 +137,20 @@ var SearchBar = React.createClass({
                                      return null;
                                 }
                                 else {
-                                    return React.cloneElement(child, { key: index, ref: child.ref?child.ref:index })
+                                    //这里有个问题，value与text在第二次会被清除,防止数据丢失
+                                let data=child.props.data?JSON.parse(JSON.stringify(child.props.data)):null;
+                              
+                                return React. cloneElement(child, {data:data,key: index, ref: child.ref?child.ref:index })
+                           
                                 }
+                               
                           
                             }
                         })
                     }
                 </div>
-                <div className=" col-xs-3"  >
-                <button className={this.state.dropType} style={{ float: "left", display: ( this.props.children.length)>this.props.cols ? "inline" : "none" }} onClick={this.expandHandler}  ></button>
+                <div className=" col-xs-2"   >
+                <button className={this.state.dropType} style={{  display: ( this.props.children.length)>this.props.cols ? "inline" : "none" }} onClick={this.expandHandler}  ></button>
                     <Button onClick={this.onSubmit.bind(this, "submit")} theme={this.props.submitTheme} hide={this.props.onSubmit?false:true} style={this.props.submitStyle} title={this.props.submitTitle}   >
                     </Button>
                 </div>
@@ -167,5 +158,28 @@ var SearchBar = React.createClass({
             </div>
         )
     }
-});
-module.exports = SearchBar;
+}
+SearchBar.propTypes={
+    style: PropTypes.object,//样式
+  className: PropTypes.string,//自定义样式
+  submitTitle: PropTypes.string,
+  submitHide: PropTypes.bool,
+  submitTheme:PropTypes.string,
+  submitStyle:PropTypes.object,
+  cols:PropTypes.number,//多余几个隐藏
+  onSubmit: PropTypes.func,
+
+};
+SearchBar. defaultProps= {
+      style:{},
+      className: "",
+      submitTitle: "查询",//查询按钮的标题
+      submitHide: false,//是否隐藏按钮
+      submitTheme:"primary",//主题
+      submitStyle:{},//查询按钮的样式
+      cols:4,//一行排几个
+      onSubmit: null,//提交成功后的回调事           
+
+}
+
+export default SearchBar;

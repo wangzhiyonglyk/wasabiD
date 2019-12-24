@@ -1,64 +1,55 @@
 //create by wangzy
 //date:2016-04-25
 //desc:日期时间组件，
-let React=require("react");
-let Lang=require("../Lang/language.js");
-require("../Sass/Form/DateTime.scss");
-let Time=require("./Time.jsx");
-let Button=require("../Buttons/Button.jsx");
-let CalendarHeader=require("./CalendarHeader.jsx");
-let CalendarBody=require("./CalendarBody.jsx");
-let DateTime = React.createClass({
-    PropTypes:{
-        name:React.PropTypes.string,//字段名称，对应于表单
-        year: React.PropTypes.number,//年
-        month:React.PropTypes.number,//月
-        day:React.PropTypes.number,//日
-        time:React.PropTypes.string,//时间
-        isRange:React.PropTypes.bool,//是否为范围选择
-        min:React.PropTypes.number,//最小值，用于日期范围选择
-        max:React.PropTypes.number,//最大值,用于日期范围选择
 
-        onSelect:React.PropTypes.func,//选择后的事件
+import React, { Component } from "react";
+import PropTypes from "prop-types";
 
-    },
-    getDefaultProps:function() {
-        return{
-            type:"datetime",
-            year:null,
-            month:null,
-            day:null,
-            time:null,
-            isRange:false,///默认否
-            min:null,//默认为空，不属于日期范围选择
-            max:null,//默认为空，不属于日期范围选择
+import Time from "./Time.jsx";
+import Button from "../Buttons/Button.jsx";
+import CalendarHeader from "./CalendarHeader.jsx";
+import CalendarBody from "./CalendarBody.jsx";
 
+import validate from "../Mixins/validate.js";
+import("../Sass/Form/DateTime.css");
+class DateTime extends Component {
+
+    constructor(props) {
+        super(props);
+        var newDate = new Date();
+        var year = (this.formatDate(newDate, 'yyyy'));
+        var month = (this.formatDate(newDate, 'MM'));
+        
+        this.state = {
+            year: this.props.year ? this.props.year : year*1,
+            month: this.props.month ? this.props.month : month*1,
+            day: this.props.day,
+            time: this.props.time,
+            isRange: this.props.isRange,
+            min: this.props.min,
+            max: this.props.max,
+            changeYear: false,//选择年份
+            changeMonth: false,//选择月份
         }
+        this.setValue=this.setValue.bind(this);
+        this.getValue=this.getValue.bind(this);
+        this.validate=this.validate.bind(this);
+        this.updateYearAndMonth=this.updateYearAndMonth.bind(this);
+        this.dayHandler=this.dayHandler.bind(this);
+        this.changeYear=this.changeYear.bind(this);
+        this.changeMonth=this.changeMonth.bind(this);
+        this.changeYearHandler=this.changeYearHandler.bind(this);
+        this.changeMonthHandler=this.changeMonthHandler.bind(this);
+        this.formatDate=this.formatDate.bind(this);
+    }
 
-    },
-    getInitialState:function(){
-        var newDate =  new Date();
-        var year=(this.formatDate(newDate,'yyyy'));
-        var month=(this.formatDate(newDate,'MM'));
-        return( {
-            year:this.props.year?this.props.year:year,
-            month:this.props.month?this.props.month:month,
-            day:this.props.day,
-            time:this.props.time,
-            isRange:this.props.isRange,
-            min:this.props.min,
-            max:this.props.max,
-            changeYear:false,//选择年份
-            changeMonth:false,//选择月份
-        })
-    },
-    componentWillReceiveProps:function(nextProps) {
+    componentWillReceiveProps(nextProps) {
         if (nextProps.isRange == true) {//是日期范围选择，要更新最大值与最小值
             this.setState({
                 year: nextProps.year ? nextProps.year : this.state.year,
                 month: nextProps.month ? nextProps.month : this.state.month,
                 day: nextProps.day,
-                time:nextProps.time,
+                time: nextProps.time,
                 isRange: nextProps.isRange,
                 min: nextProps.min,
                 max: nextProps.max,
@@ -68,91 +59,89 @@ let DateTime = React.createClass({
                 year: nextProps.year ? nextProps.year : this.state.year,
                 month: nextProps.month ? nextProps.month : this.state.month,
                 day: nextProps.day,
-                time:nextProps.time,
+                time: nextProps.time,
                 isRange: nextProps.isRange,
             });
         }
 
-    },
-      setValue(value)    {
-        if(this.validate(value))
-            {
-                this.setState({
-                    value:value
-                })
-            }
-    },
-    getValue()  {
+    }
+    setValue(value) {
+        if (this.validate(value)) {
+            this.setState({
+                value: value
+            })
+        }
+    }
+    getValue() {
         return this.state.value;
 
-    },
-   
-    updateYearAndMonth: function(filterYear,filterMonth) {
+    }
+    validate(value) {
+
+        validate.call(this, value)
+    }
+    updateYearAndMonth(filterYear, filterMonth) {
         this.setState({
             year: filterYear,
             month: filterMonth,
-            day:null,//清空
-            min:null,
-            max:null,
+            day: null,//清空
+            min: null,
+            max: null,
         });
 
-        if(this.props.updateYearAndMonth!=null)
-        {
-            this.props.updateYearAndMonth(filterYear,filterMonth);
+        if (this.props.updateYearAndMonth != null) {
+            this.props.updateYearAndMonth(filterYear, filterMonth);
         }
-    },
-    dayHandler:function(day) {
+    }
+    dayHandler(day) {
 
-        var time=this.refs.time.getValue();
+        var time = this.refs.time.getValue();
         this.setState({
-            day:day,
-            min:day,
-            max:day,
-            time:time
+            day: day,
+            min: day,
+            max: day,
+            time: (time < 10 ? "0" + day.toString() : day) + (time ? " " + time : "")
+
         })
-        if(this.props.onSelect!=null) {
+        let value = this.state.year + "-" + (this.state.month.toString().length == 1 ? "0" + this.state.month.toString() : this.state.month)
+        + "-" + (day < 10 ? "0" + day.toString() : day);
+        this.props.onSelect(value+" "+time, value+" "+time, this.props.name)
 
-
-            let  value=this.state.year+"-"+(this.state.month.toString().length==1?"0"+this.state.month.toString():this.state.month)
-                +"-"+(day*1<10?"0"+day.toString():day)+(time?" "+time:"");
-            this.props.onSelect(value,value,this.props.name);
-        }
-
-    },
-    changeYear:function () {
+    }
+    changeYear() {
         this.setState({
-            changeYear:!this.state.changeYear,
-            changeMonth:false,
+            changeYear: !this.state.changeYear,
+            changeMonth: false,
         })
 
-    },
-    changeMonth:function () {
+    }
+    changeMonth() {
         this.setState({
-            changeYear:false,
-            changeMonth:!this.state.changeMonth,
+            changeYear: false,
+            changeMonth: !this.state.changeMonth,
         })
-    },
-    changeYearHandler:function (value) {
+    }
+    changeYearHandler(value) {
         this.setState({
-            year:value,
-            changeYear:false,
-            changeMonth:false,
-            day:null,//清空
-            min:null,
-            max:null,
+            year: value,
+            changeYear: false,
+            changeMonth: false,
+            day: null,//清空
+            min: null,
+            max: null,
         })
-    },
-    changeMonthHandler:function (value) {
+    }
+    changeMonthHandler(value) {
         this.setState({
-            month:value,
-            changeYear:false,
-            changeMonth:false,
-            day:null,//清空
-            min:null,
-            max:null,
+            month: value,
+            changeYear: false,
+            changeMonth: false,
+            day: null,//清空
+            min: null,
+            max: null,
         })
-    },
-    formatDate:function (date,format) {
+    }
+    formatDate(date, format) {
         /**
          * 对Date的扩展，将 Date 转化为指定格式的String
          * 月(M)、日(d)、12小时(h)、24小时(H)、分(m)、秒(s)、周(E)、季度(q) 可以用 1-2 个占位符
@@ -167,69 +156,99 @@ let DateTime = React.createClass({
          * Utils.formatDate(new Date(),'yyyy-MM-dd EEE hh:mm:ss') ==> 2009-03-10 星期二 08:09:04
          * Utils.formatDate(new Date(),'yyyy-M-d h:m:s.S') ==> 2006-7-2 8:9:4.18
          */
-        if(!date) return;
+        if (!date) return;
         var o = {
-            "M+" : date.getMonth()+1, //月份
-            "d+" : date.getDate(), //日
-            "h+" :  (date.getHours()%12 == 0 ? 12 : date.getHours()%12), //小时
-            "H+" : date.getHours(), //小时
-            "m+" : date.getMinutes(), //分
-            "s+" : date.getSeconds(), //秒
-            "q+" : Math.floor((date.getMonth()+3)/3), //季度
-            "S" : date.getMilliseconds() //毫秒
+            "M+": date.getMonth() + 1, //月份
+            "d+": date.getDate(), //日
+            "h+": (date.getHours() % 12 == 0 ? 12 : date.getHours() % 12), //小时
+            "H+": date.getHours(), //小时
+            "m+": date.getMinutes(), //分
+            "s+": date.getSeconds(), //秒
+            "q+": Math.floor((date.getMonth() + 3) / 3), //季度
+            "S": date.getMilliseconds() //毫秒
         };
         var week = {
-            "0" : "\u65e5",
-            "1" : "\u4e00",
-            "2" : "\u4e8c",
-            "3" : "\u4e09",
-            "4" : "\u56db",
-            "5" : "\u4e94",
-            "6" : "\u516d"
+            "0": "\u65e5",
+            "1": "\u4e00",
+            "2": "\u4e8c",
+            "3": "\u4e09",
+            "4": "\u56db",
+            "5": "\u4e94",
+            "6": "\u516d"
         };
 
-        if(/(y+)/.test(format)){
-            format=format.replace(RegExp.$1, (date.getFullYear()+"").substr(4 - RegExp.$1.length));
+        if (/(y+)/.test(format)) {
+            format = format.replace(RegExp.$1, (date.getFullYear() + "").substr(4 - RegExp.$1.length));
         }
 
-        if(/(E+)/.test(format)){
-            format=format.replace(RegExp.$1, ((RegExp.$1.length>1) ? (RegExp.$1.length>2 ? "\u661f\u671f" : "\u5468") : "")+week[date.getDay()+""]);
+        if (/(E+)/.test(format)) {
+            format = format.replace(RegExp.$1, ((RegExp.$1.length > 1) ? (RegExp.$1.length > 2 ? "\u661f\u671f" : "\u5468") : "") + week[date.getDay() + ""]);
         }
-        for(var k in o){
-            if(new RegExp("("+ k +")").test(format)){
-                format = format.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+        for (var k in o) {
+            if (new RegExp("(" + k + ")").test(format)) {
+                format = format.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
             }
         }
         return format;
-    },
-    render:function(){
-        return(
+    }
+    render() {
+        
+        return (
             <div>
-            <div style={{position:"relative",height:32}}><Time ref="time" type="time"  key="end"  ></Time></div>
-            <div className="wasabi-datetime"  >
-                <CalendarHeader
-                    year = {this.state.year}
-                    month = {this.state.month}
-                    updateFilter={this.updateYearAndMonth}
-                    changeYear={this.changeYear}
-                    changeMonth={this.changeMonth}
-                />
-                <CalendarBody
-                    year = {this.state.year}
-                    month = {this.state.month}
-                    day = {this.state.day}
-                    isRange={this.state.isRange}
-                    min={this.state.min}
-                    max={this.state.max}
-                    dayHandler={this.dayHandler}
-                    changeYear={this.state.changeYear}
-                    changeMonth={this.state.changeMonth}
-                    changeYearHandler={this.changeYearHandler}
-                    changeMonthHandler={this.changeMonthHandler}
-                />
-            </div>
+                <div style={{ position: "relative", height: 32 }}><Time ref="time" type="time" key="end"  ></Time></div>
+                <div className="wasabi-datetime"  >
+                    <CalendarHeader
+                        year={this.state.year}
+                        month={this.state.month}
+                        updateFilter={this.updateYearAndMonth}
+                        changeYear={this.changeYear}
+                        changeMonth={this.changeMonth}
+                    />
+                    <CalendarBody
+                        year={this.state.year}
+                        month={this.state.month}
+                        day={this.state.day}
+                        isRange={this.state.isRange}
+                        min={this.state.min}
+                        max={this.state.max}
+                        dayHandler={this.dayHandler}
+                        changeYear={this.state.changeYear}
+                        changeMonth={this.state.changeMonth}
+                        changeYearHandler={this.changeYearHandler}
+                        changeMonthHandler={this.changeMonthHandler}
+                    />
                 </div>
+            </div>
         )
     }
-});
-module .exports=DateTime;
+}
+DateTime.propTypes = {
+    name: PropTypes.string,//字段名称，对应于表单
+    year: PropTypes.number,//年
+    month: PropTypes.number,//月
+    day: PropTypes.number,//日
+    time: PropTypes.string,//时间
+    isRange: PropTypes.bool,//是否为范围选择
+    min: PropTypes.number,//最小值，用于日期范围选择
+    max: PropTypes.number,//最大值,用于日期范围选择
+
+    onSelect: PropTypes.func,//选择后的事件
+
+}
+DateTime.defaultProps =
+    {
+        type: "datetime",
+        year: null,
+        month: null,
+        day: null,
+        time: null,
+        isRange: false,///默认否
+        min: null,//默认为空，不属于日期范围选择
+        max: null,//默认为空，不属于日期范围选择
+
+
+
+
+    };
+
+export default DateTime;

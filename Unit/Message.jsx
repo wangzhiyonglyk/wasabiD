@@ -1,10 +1,11 @@
 //create by wangzy
 //date:2016-03-22
+//edit 2019-12-18
 //desc:模态窗口
-var React=require("react");
-var ReactDOM=require("react-dom");
-var MessageView=require("./MessageView.jsx");
-var Message= {
+import  React from "react";
+import  ReactDOM from "react-dom";
+import  MessageView from "./MessageView.jsx";
+let  Message= {
     info(msg,timeout) {
         if(!timeout)
         {
@@ -109,4 +110,4 @@ var Message= {
         }
     }
 };
-module.exports=Message;
+export default Message;

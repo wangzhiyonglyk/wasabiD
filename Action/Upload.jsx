@@ -7,7 +7,7 @@ let React = require("react");
 let Modal = require("../Layout/Modal.jsx");
 let Button = require("../Buttons/Button.jsx");
 let Message = require("../Unit/Message.jsx");
-require("../Sass/Action/Import.scss");
+require("../Sass/Action/Import.css");
 let Upload = React.createClass({
     propTypes: {
         uploadurl: React.PropTypes.string.isRequired,//上传地址

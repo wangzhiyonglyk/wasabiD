@@ -2,7 +2,7 @@
  * Created by apple on 2016/11/8.
  * 将复制粘贴功能独立出来
  */
-let React=require("react");
+import React, { Component } from "react";
 let pasteExtend={
     pasteHandler:function(event,callBack) {
         if ( !(event.clipboardData && event.clipboardData.items) ) {//浏览器不支持这个功能
@@ -57,4 +57,4 @@ let pasteExtend={
     },
 }
 
-module.exports=pasteExtend;
+export default pasteExtend;

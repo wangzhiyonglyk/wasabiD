@@ -3,7 +3,7 @@
  */
 
 
-var  validation= {
+let  validation= {
     alpha: '只能包含英文字符，"-"，"_"',
     alphanum: '只能包含数字、英文字符和"_"',
     email: '邮箱格式不正确',
@@ -30,5 +30,5 @@ var  validation= {
     email: '邮箱格式不正确',
     fileSize: '最大上传文件大小不能超过 {0} KB'
 }
-module.exports=validation;
+ export default validation;
 

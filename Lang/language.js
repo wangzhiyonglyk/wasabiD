@@ -1,8 +1,8 @@
 /**
  * Created by zhiyongwang on 2016-04-25.
  */
-var en=require("./en.js");
-var cn=require("./zh-cn.js");
+import   en from "./en.js";
+import cn  from "./zh-cn.js";
 
 var Lang=
 {
@@ -14,4 +14,4 @@ var Lang=
 }
 
 
-module.exports=Lang;
+export default Lang;

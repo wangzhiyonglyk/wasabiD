@@ -5,7 +5,7 @@ desc:基本样式
 date:2017-07-28 对整体样式风格修改 实现hplus主题
 */
 
-@import url("./animation.scss");
+@import url("./animation.css");
 
 /*!
  * 引用Bootstrap v3.3.7 对基本样式的设置，定制时只勾选的grid

@@ -5,6 +5,7 @@ desc:小图标按钮样式
 
 .wasabi-linkbutton
 {
+    cursor: pointer;
     display: inline-block;
     position: relative;
     border: 1px solid transparent;
@@ -83,10 +84,10 @@ desc:小图标按钮样式
 }
 .wasabi-linkbutton-text.left
 {
-    margin-left: 8px;
+    margin-left: 2px;
 
 }
 .wasabi-linkbutton-text.right
 {
-    margin-right: 8px;
+    margin-right: 2px;
 }

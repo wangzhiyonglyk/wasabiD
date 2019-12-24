@@ -5,7 +5,7 @@ date:2016-04-05
 desc:滑动面板
 */
 let React=require("react");
-require("../Sass/Layout/SlidePanel.scss");
+require("../Sass/Layout/SlidePanel.css");
 var Toolbar=require("../Buttons/Toolbar.jsx");
 var Button=require("../Buttons/Button.jsx");
 class SlidePanel extends  React.Component{

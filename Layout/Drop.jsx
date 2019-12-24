@@ -4,7 +4,7 @@
  */
 var React=require("react");
 var LinkButton=require("../Buttons/LinkButton.jsx");
-require("../sass/Layout/Drop.scss");
+require("../sass/Layout/Drop.css");
 class Drop extends  React.Component {
     constructor(props) {
         super(props);

@@ -3,97 +3,78 @@ create by wangzhiyong 创建树组件
 
  */
 
-let React=require("react");
-require("../Sass/Data/Tree.scss");
-let TreeNode=require("./TreeNode.jsx");
-let unit=require("../libs/unit.js");
-var showUpdate=require("../Mixins/showUpdate.js");
-let Tree=React.createClass({
-    mixins:[showUpdate],
-    propTypes: {
-            name:React.PropTypes.string,//树名称
-             value:React.PropTypes.oneOfType([React.PropTypes.number,React.PropTypes.string]),//值
-            text:React.PropTypes.oneOfType([React.PropTypes.number,React.PropTypes.string]),//标题
-            valueField: React.PropTypes.string,//数据字段值名称
-            textField:React.PropTypes.string,//数据字段文本名称
-            url:React.PropTypes.string,//后台查询地址
-            params:React.PropTypes.object,//向后台传输的额外参数
-            dataSource:React.PropTypes.string,//ajax的返回的数据源中哪个属性作为数据源,为null时直接后台返回的数据作为数据源
-            data:React.PropTypes.array,//节点数据
-            onSelect:React.PropTypes.func,//选中后的事件
 
-        },
-    getDefaultProps:function() {
-        return {
-            name:null,
-            text:null,
-            value:null,
-            valueField:"value",
-            textField:"text",
-            url:null,
-            params:null,
-            dataSource:"data",
-            data:[],
-            onSelect:null,
-        }
-    },
-    getInitialState(){
-        var newData=  this.setValueAndText(this.props.data);//对数据进行处理
-        return {
-            name:this.props.name,
-            text: this.props.text,
-            value: this.props.value,
-            data:newData,
-            onSelect: this.props.onSelect,
-        }
-    },
-    componentWillReceiveProps:function(nextProps) {
-        /*
-         this.isChange :代表自身发生了改变,防止父组件没有绑定value,text,而导致无法选择
-         */
-        this.isChange=false;//重置
-        var value=this.isChange?this.state.value: nextProps.value;
-        var text = this.isChange?this.state.text: nextProps.text;
-        var newData = [];
-        if(nextProps.data!=null&&nextProps.data instanceof  Array &&(!nextProps.url||nextProps.url=="")) {//没有url,传的是死数据
-            newData=[];
-            //因为这里统一将数据进行了改造,所以这里要重新处理一下
-            newData=  this.setValueAndText(nextProps.data);
+import React, { Component } from "react";
+import PropTypes from "prop-types";
 
-        }
-        else {//url形式
-            newData = this.state.data;//先得到以前的数据
-            if (this.showUpdate(nextProps.params)) {//如果不相同则更新
-                this.loadData(this.props.url, nextProps.params);//异步更新
-            }
-            else {
+import Message from "../Unit/Message";
+import FetchModel from "../Model/FetchModel";
+import  TreeNode from "./TreeNode.jsx";
+import  unit from "../libs/unit.js";
+import showUpdate from "../Mixins/showUpdate.js";
+require("../Sass/Data/Tree.css");
+ class  Tree extends Component{
+constructor(props)
+{
+    super(props);
+    var newData=  this.setValueAndText(this.props.data);//对数据进行处理
+    this.state={
+        name:this.props.name,
+        text: this.props.text,
+        value: this.props.value,
+        data:newData,
+       
+    }
+}
 
-            }
+componentWillReceiveProps(nextProps) {
+      
+    if (nextProps.url) {
+
+        if (nextProps.url != this.props.url) {
+            this.loadData(nextProps.url, nextProps.params);
+        }
+        else if (this.showUpdate(nextProps.params, this.props.params)) {//如果不相同则更新
+            this.loadData(nextProps.url, nextProps.params);
         }
 
-        this.setState({
-            value:value,
-            text:text,
-            data: newData,
-            url:nextProps.url,
-            params:unit.clone( nextProps.params),
+    } else if (nextProps.data && nextProps.data instanceof Array) {//又传了数组
+        if (nextProps.data.length != this.props.data.length) {
+                this.setState({
+                    data:nextProps.data,
+                    value:"",
+                    text:""
+                })
+        }else{
+            let newData=[];
+            for(let i=0;i<nextProps.data.length;i++)
+        {
+            let obj=nextProps.data[i];
+            obj.text=nextProps.data[i][this.props.textField];
+            obj.value=nextProps.data[i][this.props.valueField];
+          
+            newData.push(obj);
+        }
+        if(newData[0].text!=this.state.data[0].text||newData[newData.length-1].text!=this.state.data[this.state.data.length-1].text)
+        {this.setState({
+            data:nextProps.data,
+            value:"",
+            text:""
         })
 
-    },
-    componentDidUpdate:function() {
-        if(this.isChange==true)
-        {//说明已经改变了,回传给父组件
-            if( this.props.onSelect!=null)
-            {
-                this.props.onSelect(this.state.value,this.state.text,this.props.name,this.property);
-            }
         }
-    },
+    }
+    }
+}
+   
 
-    componentDidMount:function () {
+    componentDidMount () {
         this.loadData(this.state.url,this.state.params);
-    },
-    loadData:function(url,params) {
+    }
+    showUpdate(newParam, oldParam) {
+        showUpdate.call(this, newParam, oldParam);
+    }
+    loadData(url,params) {
         if(url!=null&&url!="")
         {
             if(params==null)
@@ -109,8 +90,8 @@ let Tree=React.createClass({
             }
             console.log("treepicker",fetchmodel);
         }
-    },
-    loadSuccess:function(data) {//数据加载成功
+    }
+    loadSuccess(data) {//数据加载成功
         var realData=data;
         if(this.props.dataSource==null) {
         }
@@ -122,8 +103,8 @@ let Tree=React.createClass({
         this.setState({
             data:realData,
         })
-    },
-    setValueAndText:function (realData) {//遍历设置text，value的值
+    }
+    setValueAndText (realData) {//遍历设置text，value的值
         if(realData instanceof  Array) {
             for (let i = 0; i < realData.length; i++) {
                 realData[i].text = realData[i][this.props.textField];
@@ -136,14 +117,14 @@ let Tree=React.createClass({
         }
 
         return realData;
-    },
-    loadError:function(errorCode,message) {//查询失败
+    }
+    loadError(errorCode,message) {//查询失败
         console.log("treepicker-error",errorCode,message);
         Message. error(message);
-    },
-    onSelect:function (value,text,property) {
-        this.isChange=true;//代表自身发生了改变,防止父组件没有绑定value,text的状态值,而导致无法选择的结果
-        this.property=property;//临时保存起来
+    }
+    onSelect (value,text,row) {
+       
+    
         if(value==undefined)
         {
             console.error("绑定的valueField没有")
@@ -156,8 +137,9 @@ let Tree=React.createClass({
             value:value,
             text:text
         })
-    },
-    render:function () {
+        this.props.onSelect(this.state.value, this.state.text, this.props.name, row);
+    }
+    render () {
         var nodeControl=[];
         if(this.state.data instanceof  Array)
         {
@@ -169,12 +151,41 @@ let Tree=React.createClass({
                 else {
 
                 }
-                nodeControl.push(<TreeNode key={index} rootValue={this.state.value} rootText={this.state.text} {...item} isParent={isParent} onSelect={this.onSelect} />);
+                nodeControl.push(<TreeNode key={index} rootValue={this.state.value} rootText={this.state.text} {...item} isParent={isParent}
+                     onSelect={this.onSelect} />);
             });
         }
         return <ul className="wasabi-tree">
             {nodeControl}
         </ul>
     }
-})
-module.exports=Tree;
+}
+    
+Tree. propTypes= {
+    name:PropTypes.string,//树名称
+     value:PropTypes.oneOfType([PropTypes.number,PropTypes.string]),//值
+    text:PropTypes.oneOfType([PropTypes.number,PropTypes.string]),//标题
+    valueField: PropTypes.string,//数据字段值名称
+    textField:PropTypes.string,//数据字段文本名称
+    url:PropTypes.string,//后台查询地址
+    params:PropTypes.object,//向后台传输的额外参数
+    dataSource:PropTypes.string,//ajax的返回的数据源中哪个属性作为数据源,为null时直接后台返回的数据作为数据源
+    data:PropTypes.array,//节点数据
+    onSelect:PropTypes.func,//选中后的事件
+
+}
+Tree.defaultProps= {
+
+    name:null,
+    text:null,
+    value:null,
+    valueField:"value",
+    textField:"text",
+    url:null,
+    params:null,
+    dataSource:"data",
+    data:[],
+    onSelect:null,
+
+}
+export default Tree;

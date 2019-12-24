@@ -6,7 +6,7 @@ desc:面板组件
 var React=require("react");
 var LinkButton=require("../Buttons/LinkButton.jsx");
 var Toolbars=require("../Buttons/Toolbar.jsx");
-require("../Sass/Layout/Panel.scss");
+require("../Sass/Layout/Panel.css");
 var Panel=React.createClass({
     propTypes: {
         theme: React.PropTypes.oneOf([

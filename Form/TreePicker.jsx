@@ -3,28 +3,24 @@
  date:2016-07-04
  desc:列表下拉选择
  */
-let React=require("react");
+import React, { Component } from "react";
 
-let SearchBox=require("./SearchBox.jsx");
-let Tree=require("../Data/Tree.jsx");
-var unit=require("../libs/unit.js");
-var validation=require("../Lang/validation.js");
 
-var validate=require("../Mixins/validate.js");
-var showUpdate=require("../Mixins/showUpdate.js");
+import Tree from "../Data/Tree.jsx";
+import unit from "../libs/unit.js";
+import validation from "../Lang/validation.js";
 
-var Label=require("../Unit/Label.jsx");
-var ClickAway=require("../Unit/ClickAway.js");
-import props from "./config/props.js";
+import validate from "../Mixins/validate.js";
+import showUpdate from "../Mixins/showUpdate.js";
+
+import Label from "../Unit/Label.jsx";
+import ClickAway from "../Unit/ClickAway.js";
+import props from "./config/propType.js";
 import defaultProps from "./config/defaultProps.js";
-let TreePicker=React.createClass({
-    mixins:[validate,showUpdate,ClickAway],
-    propTypes: props,
-    getDefaultProps:function() {
-        return defaultProps;
-    },
-    getInitialState:function() {
-        return {
+class TreePicker extends Component{
+   
+    constructor(props){
+        this.state={
             hide:this.props.hide,
             params:this.props.params,//默认筛选条件
             url:null,//默认为空,表示不查询,后期再更新,
@@ -40,8 +36,9 @@ let TreePicker=React.createClass({
             helpTip:validation["required"],//提示信息
             invalidTip:"",
         }
-    },
-    componentWillReceiveProps:function(nextProps) {
+    }
+   
+    componentWillReceiveProps(nextProps) {
         /*
          this.isChange :代表自身发生了改变,防止父组件没有绑定value,text,而导致无法选择
          */
@@ -49,19 +46,17 @@ let TreePicker=React.createClass({
         var value=this.isChange?this.state.value: nextProps.value;
         var text = this.isChange?this.state.text: nextProps.text;
         this.setState({
-            hide:nextProps.hide,
+           
             value:value,
             text:text,
             url:nextProps.url,
             data: nextProps.data,
             params:unit.clone( nextProps.params),
-            readonly: nextProps.readonly,
-            required: nextProps.required,
             validateClass:"",//重置验证样式
             helpTip:validation["required"],//提示信息
         })
-    },
-    componentDidUpdate:function() {
+    }
+    componentDidUpdate() {
         if(this.isChange==true)
         {//说明已经改变了,回传给父组件
             if( this.props.onSelect!=null)
@@ -69,18 +64,25 @@ let TreePicker=React.createClass({
                 this.props.onSelect(this.state.value,this.state.text,this.props.name,this.property);
             }
         }
-    },
-    componentDidMount:function(){
+    }
+    componentDidMount(){
 
-        this.registerClickAway(this.hidePicker, this.refs.picker);//注册全局单击事件
-    },
-    changeHandler:function(event) {
-    },
+       // this.registerClickAway(this.hidePicker, this.refs.picker);//注册全局单击事件
+    }
+    changeHandler(event) {
+    }
+    validate(value) {
+
+        validate.call(this, value)
+    }
+    showUpdate(newParam, oldParam) {
+        showUpdate.call(this, newParam, oldParam);
+    }
       setValue(value) {
         let text = "";
         for (let i = 0; i < this.state.data.length; i++) {
             if (this.state.data[i].value == value) {
-                text = item;
+                text = this.state.data[i].text;
                 break;
             }
         }
@@ -90,16 +92,16 @@ let TreePicker=React.createClass({
             })
         
 
-    },
+    }
     getValue() {
         return this.state.value;
 
-    },
-    onBlur:function () {
+    }
+    onBlur () {
         this.refs.label.hideHelp();//隐藏帮助信息
-    },
-    showPicker:function(type) {//显示选择
-        if (this.state.readonly) {
+    }
+    showPicker(type) {//显示选择
+        if (this.props.readonly) {
             //只读不显示
             return;
         }
@@ -109,56 +111,51 @@ let TreePicker=React.createClass({
             })
         }
         this.bindClickAway();//绑定全局单击事件
-    },
-    hidePicker:function () {
+    }
+    hidePicker () {
         this.setState({
             show: false
         })
         this.unbindClickAway();//卸载全局单击事件
-    },
-    onSelect:function(value,text,name,property) {
-        this.isChange=true;//代表自身发生了改变,防止父组件没有绑定value,text的状态值,而导致无法选择的结果
-        this.property=property;//临时保存起来
-        if(value==undefined)
-        {
-            console.error("绑定的valueField没有")
-        }
-        if(text==undefined)
-        {
-            console.error("绑定的textField没有");
-        }
-        this.validate(value);
+    }
+    onSelect(value,text,name,row) {
+      
+      
         this.setState({
             value: value,
             text: text,
             show: !this.state.show
         });
+        this.validate(value);//
+                if (this.props.onSelect != null) {
+                    this.props.onSelect(value, text, name, row);
+                }
 
-    },
-    clearHandler:function() {//清除数据
+    }
+    clearHandler() {//清除数据
         this.setState({
             value: "",
             text: "",
         })
          this.props.onSelect&& this.props.onSelect("", "", this.props.name, null); 
-    },
-    render:function() {             
+    }
+    render() {             
         var componentClassName=  "wasabi-form-group ";//组件的基本样式
             let inputProps=
             {
-                readOnly:this.state.readonly==true?"readonly":null,
+                readOnly:this.props.readonly==true?"readonly":null,
                 style:this.props.style,
                 name:this.props.name,
-                placeholder:(this.props.placeholder===""||this.props.placeholder==null)?this.state.required?"必填项":"":this.props.placeholder,
+                placeholder:(this.props.placeholder===""||this.props.placeholder==null)?this.props.required?"必填项":"":this.props.placeholder,
                 className:"wasabi-form-control  "+(this.props.className!=null?this.props.className:""),
                 title:this.props.title,
 
             }//文本框的属性
-        return <div className={componentClassName+this.state.validateClass}  ref="picker" style={{display:this.state.hide==true?"none":"block"}}>
-            <Label name={this.props.label} ref="label" style={this.props.labelStyle} required={this.state.required}></Label>
+        return <div className={componentClassName+this.state.validateClass}  ref="picker" style={{display:this.props.hide==true?"none":"block"}}>
+            <Label name={this.props.label} ref="label" style={this.props.labelStyle} required={this.props.required}></Label>
             <div className={ "wasabi-form-group-body"} style={{width:!this.props.label?"100%":null}}>
                 <div className="combobox"    >
-                    <i className={"picker-clear "} onClick={this.clearHandler} style={{display:this.state.readonly?"none":(this.state.value==""||!this.state.value)?"none":"inline"}}></i>
+                    <i className={"picker-clear "} onClick={this.clearHandler} style={{display:this.props.readonly?"none":(this.state.value==""||!this.state.value)?"none":"inline"}}></i>
                     <i className={"pickericon  " +(this.state.show?"rotate":"")} onClick={this.showPicker.bind(this,1)}></i>
                     <input type="text" {...inputProps}  value={this.state.text} onBlur={this.onBlur}   onClick={this.showPicker.bind(this,2)} onChange={this.changeHandler}     />
                     <div className={"dropcontainter treepicker  "} style={{height:this.props.height,display:this.state.show==true?"block":"none"}}  >
@@ -175,5 +172,8 @@ let TreePicker=React.createClass({
         </div>
 
     }
-});
-module .exports=TreePicker;
+}
+ 
+TreePicker. propTypes=props;
+TreePicker. defaultProps=Object.assign({type:"treepicker",defaultProps});
+export default  TreePicker;

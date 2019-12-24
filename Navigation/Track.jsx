@@ -3,12 +3,12 @@
 //desc 物流跟踪信息
 
 let React=require("react");
-require("../sass/Navigation/Track.scss");
+require("../sass/Navigation/Track.css");
 class Track extends  React.Component {
 
     constructor(props){
         super(props);
-        this.  state = {
+        this.state = {
             model:this.props.model,
             expressName:this.props.expressName,
             expressId:this.props.expressId,

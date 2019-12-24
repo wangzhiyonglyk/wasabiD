@@ -3,26 +3,32 @@
  * desc:下拉框容器
  *
  */
-require("../Sass/Form/ComboBox.scss");
-let React=require("react");
-var unit=require("../libs/unit.js");
-let Time=require("./Time.jsx");
-let DatePicker=require("./DatePicker.jsx");
-let Picker=require("./Picker.jsx");
-let Select=require("./Select.jsx");
-let MutiText=require("./MutiText.jsx");
 
-let TreePicker=require("./TreePicker.jsx");
-import props from "./config/props.js";
+
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import Time from "./Time.jsx";
+import  DatePicker from "./DatePicker.jsx";
+import  Picker from "./Picker.jsx";
+import Select from "./Select.jsx";
+import  MutiText from "./MutiText.jsx";
+
+import  TreePicker from "./TreePicker.jsx";
+import props from "./config/propType.js";
 import config from "./config/comboboxConfig.js";
 import defaultProps from  "./config/defaultProps.js";
-let ComboBox=React.createClass({
-    PropTypes: Object.assign({type:React.PropTypes.oneOf(config)},props),
-    getDefaultProps:function() {     
-        return defaultProps;
-    },
+import ("../Sass/Form/ComboBox.css");
+class  ComboBox extends Component{
+    
+  constructor(props)
+  {
+      super(props);
+      this.state={
 
-    splitDate:function(splitdate) {//拆分日期格式
+      }
+  }
+
+    splitDate(splitdate) {//拆分日期格式
         var regs=/^(\d{4})-(\d{2})-(\d{2})$/;
         if(splitdate&&splitdate!=""&&regs.test(splitdate))
         {
@@ -34,55 +40,55 @@ let ComboBox=React.createClass({
             return returnvalue;
         }
         else {
-            null;
+          return   null;
         }
 
-    },
+    }
 
-    validate:function() {//用于Form调用验证
+    validate() {//用于Form调用验证
         return this.refs.combobox.validate();
-    },
-    getValue:function()
+    }
+    getValue()
     {//用于调用获取值
         return this.refs.combobox.getValue();
-    },
+    }
     setValue(value){//用于调用设置值
          this.refs.combobox.setValue(value);
-    },
-    changeHandler:function(event) {
-    },
+    }
+    changeHandler(event) {
+    }
 
-    renderMuti:function(){//普通下拉框
+    renderMuti(){//普通下拉框
 
         var props={...this.props};
        
         return <MutiText ref="combobox" {...props}  ></MutiText>
-    },
-    renderSelect:function(){//普通下拉框
+    }
+    renderSelect(){//普通下拉框
 
         var props={...this.props};
        
         return <Select ref="combobox" {...this.props}  ></Select>
-    },
-    renderPicker:function(){//下拉面板
+    }
+    renderPicker(){//下拉面板
      
         return    <Picker ref="combobox"{...this.props}></Picker>
-    },
-    renderTime:function() {
+    }
+    renderTime() {
        
 
         return <Time ref="combobox" {...this.props}></Time>
-    },
-    renderDatePicker:function() {
+    }
+    renderDatePicker() {
     
         return <DatePicker ref="combobox" {...this.props}></DatePicker>
-    }, 
-    renderTreePicker:function() {
+    }
+    renderTreePicker() {
        
         return <TreePicker ref="combobox" {...this.props}></TreePicker>;
-    },
+    }
 
-    render:function() {
+    render() {
 
         let control = null;
         switch (this.props.type) {
@@ -138,5 +144,8 @@ let ComboBox=React.createClass({
 
 
     }
-});
-module.exports=ComboBox;
+}
+
+ComboBox.propTypes= Object.assign({type:PropTypes.oneOf(config)},props);
+ComboBox.defaultProps =   defaultProps;
+export default ComboBox;

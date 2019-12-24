@@ -105,5 +105,4 @@ var paramFormat=function(data) {
     }
 }
 
-
-module .exports=paramFormat;
+export default paramFormat;

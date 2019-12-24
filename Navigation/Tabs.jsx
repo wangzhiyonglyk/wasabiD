@@ -1,7 +1,7 @@
 //create by wangzy
 //date:2016-02-18
 //标签页组
-require("../sass/Navigation/Tabs.scss");
+require("../sass/Navigation/Tabs.css");
 var React =require("react");
 var addRipple=require("../Mixins/addRipple.js");
 var Tabs=React.createClass({

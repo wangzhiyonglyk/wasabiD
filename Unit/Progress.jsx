@@ -1,7 +1,7 @@
 /**
  * Created by 12295 on 2016/10/21.
  */
-require("../sass/Unit/Progress.scss");
+require("../sass/Unit/Progress.css");
 const React = require('react');
 var Progress = React.createClass({
     propTypes:{

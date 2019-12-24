@@ -1,7 +1,7 @@
 /*
 按钮样式
 */
-@import url("../base.scss");
+@import url("../base.css");
 .wasabi-button
 {
       display: inline-block;
@@ -161,7 +161,6 @@
 }
 
 
-// 线性按钮
 .wasabi-button .outline {
     color: inherit;
     background-color: transparent;
@@ -169,7 +168,7 @@
     transition: all .5s;
 }
 
-//禁止按钮
+
 .wasabi-button[disabled] {
   -khtml-opacity: 0.40;
   -moz-opacity: 0.40;

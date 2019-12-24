@@ -1,9 +1,8 @@
 /**
  * Created by apple on 16/8/5.
  */
-let React=require("react");
-let showUpdate={
-    showUpdate:function(newParam,oldParam) {//判断前后参数是否相同
+import React from "react";
+export default function(newParam,oldParam) {//判断前后参数是否相同
         let isupdate=false;
         if(!oldParam) {
             oldParam = this.state.params;
@@ -63,7 +62,6 @@ let showUpdate={
         }
 
 return isupdate;
-    },
+    }
 
-}
-module .exports=showUpdate;
+

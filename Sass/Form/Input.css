@@ -23,28 +23,28 @@ desc:表单输入框样式
 label
 */
 
-.wasabi-form-group {
-  .wasabi-form-group-label {
+ .wasabi-form-group-label {
     padding-right: 4px;
     height: 34px;
     float: left;
     text-align: right;
     white-space: normal;
     display: table;
-    label{
+}
+.wasabi-form-group-label  label{
       vertical-align:middle;
       display: table-cell;
       
       overflow: hidden;
     }
-    .help{
+    .wasabi-form-group-label  .help{
       margin-left: 2px;
       color: #666666;
     }
-    .help:hover{
+    .wasabi-form-group-label .help:hover{
       color: #de2c3b;
     }
-    .heip-text {
+    .wasabi-form-group-label .heip-text {
       display: block;
       position: absolute;
       top: 36px;
@@ -56,10 +56,7 @@ label
       z-index: 2;
       box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3);
       border-radius: 1px;
-
     }
-  }
-}
 .wasabi-form-group .wasabi-form-group-label.required  label:before {
   content: "*";
   color: #de2c3b;
@@ -71,17 +68,17 @@ label
 /*
  输入框主体
  */
-.wasabi-form-group {
-  .wasabi-form-group-body {
+.wasabi-form-group .wasabi-form-group-body {
+   min-width: 190px;
     float: left;
     position: relative;
   }
-}
+
 /*
 普通input
 */
 .wasabi-form-control {
-       display: block;
+    display: block;
     width: 100%;
     height: 34px;
     padding: 0px 6px;
@@ -111,20 +108,20 @@ label
   border-color: #1c84c6;
     box-shadow: none;
 }
-// 下拉
-.combobox
+/* 下拉
+*/
+.combobox .wasabi-form-control
 {
-  .wasabi-form-control
-  {
+ 
     padding-right: 42px;
-  }
+  
 }
-.nice-select{
-  .wasabi-form-control
-  {
+.nice-select  .wasabi-form-control {
+ 
+  
     padding-right: 36px;
   }
-}
+
 /*
 input验证失败
 */
@@ -296,7 +293,7 @@ input验证通过
   -webkit-animation: rotate 0.75s 0s linear infinite;
   animation: rotate 0.75s 0s linear infinite;
 }
-// 正在提交
+/* 正在提交*/
 @keyframes rotate {
   0% {
     -webkit-transform: rotate(0deg) scale(1);

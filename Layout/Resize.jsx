@@ -2,7 +2,7 @@
 //date:2016-03-22
 //desc:模态窗口
 var React=require("react");
-require("../Sass/Layout/resize.scss");
+require("../Sass/Layout/resize.css");
 var Resize=React.createClass({
     propTypes: {
         width: React.PropTypes.number,

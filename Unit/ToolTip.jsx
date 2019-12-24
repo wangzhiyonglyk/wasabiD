@@ -1,5 +1,5 @@
 let React=require("react");
-require("../Sass/Unit/newToolTip.scss");
+require("../Sass/Unit/newToolTip.css");
 let ToolTip=React.createClass({
     propTypes:{
         theme:React.PropTypes.oneOf([

@@ -6,7 +6,7 @@
 import React from "react";
 import  unit from "../libs/unit";
 import  FetchModel from "../Model/FetchModel";
-require("../Sass/Action/Page.scss");
+require("../Sass/Action/Page.css");
 class Page extends React.Component {
     constructor(props) {
         super(props)

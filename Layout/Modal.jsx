@@ -1,8 +1,8 @@
 //create by wangzy
 //date:2016-03-22
 //desc:模态窗口
-require("../Sass/Layout/Modal.scss");
-require("../Sass/Buttons/button.scss");
+require("../Sass/Layout/Modal.css");
+require("../Sass/Buttons/button.css");
 let React =require("react");
 let Button=require("../Buttons/Button.jsx");
 let Resize=require("./Resize.jsx");

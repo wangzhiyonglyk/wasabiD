@@ -2,7 +2,7 @@
  * Created by zhiyongwang on 2016-03-24.
  */
 
-module.exports = {
+export default {
     email: /^[a-z0-9!#$%&'*+/=?^_`{|}~.-]+@[a-z0-9-]+(\.[a-z0-9-]+)*$/i,
     url: /^(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?$/,
     number: /^\s*(\-|\+)?(\d+|(\d*(\.\d*)))\s*$/,

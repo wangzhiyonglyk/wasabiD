@@ -4,69 +4,66 @@
  2017-08-14改造
  desc:表单组件窗口
  */
-require("../Sass/Form/Input.scss");
-let React = require("react");
-let regexp = require("../Lang/regs.js");
-let validation = require("../Lang/validation.js");
-let Radio = require("./Radio.jsx");
-let CheckBox = require("./CheckBox.jsx");
-let SwitchButton = require("./SwitchButton.jsx");
-let ComboBox = require("./ComboBox.jsx");
-let Text = require("./Text.jsx");
-let None = require("./None.jsx");
-let Button = require("../Buttons/Button.jsx");
-let LinkButton = require("../Buttons/LinkButton.jsx");
 
-let unit = require("../libs/unit.js");
-import props from "./config/props.js";
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+
+import Radio from "./Radio.jsx";
+import CheckBox from "./CheckBox.jsx";
+import SwitchButton from "./SwitchButton.jsx";
+import ComboBox from "./ComboBox.jsx";
+import Text from "./Text.jsx";
+import None from "./None.jsx";
+import props from "./config/propType.js";
 import config from "./config/inputConfig.js"
 import defaultProps from "./config/defaultProps.js";
-let Input = React.createClass({
+import("../Sass/Form/Input.css");
+class Input extends Component {
 
-    propTypes: Object.assign({ type: React.PropTypes.oneOf(config) }, props),
-    getDefaultProps: function () {
-        return defaultProps;
-    },
-    validate: function (value) {//用于Form调用验证
+constructor(props)
+{
+    super(props);
+}
+    validate(value) {//用于Form调用验证
         return this.refs.input.validate();
-    },
-    getValue: function () {//用于调用获取值
+    }
+    getValue() {//用于调用获取值
         return this.refs.input.getValue();
-    },
-    setValue: function (value) {//用于设置值
-         this.refs.input.setValue(value);
-    },
-    renderText: function () {//普通文本框
+    }
+    setValue(value) {//用于设置值
+        this.refs.input.setValue(value);
+    }
+    renderText() {//普通文本框
         return <Text ref="input" {...this.props} ></Text>
-    },
-    renderUnInput: function (type) {//非输入框组件
+    }
+    renderUnInput(type) {//非输入框组件
         let control;//组件
         let props = { ...this.props }////原有的属性
-       
+
         if (type == "none") {//空占位组件
-            control = <None ref="input" {...props } ></None>
+            control = <None ref="input" {...props} ></None>
         }
         else if (type == "radio") {//单选按钮组
-            control = <Radio ref="input" {...props } ></Radio>
+            control = <Radio ref="input" {...props} ></Radio>
         }
         else if (type == "checkbox") {//多选择按钮组
-            control = <CheckBox ref="input" {...props }  ></CheckBox>
+            control = <CheckBox ref="input" {...props}  ></CheckBox>
         }
         else if (type == "switch") {//开关
             control = <SwitchButton ref="input"  {...props} ></SwitchButton>
         }
 
-        else if (type == "muti" || type == "select" || type == "datetime" || type == "time" || type == "date" || type == "daterange" || type == "datetimerange" || type == "picker" || type == "treepicker" ) {//下拉组件
-          
-            control = <ComboBox ref="input" {...props } ></ComboBox>
+        else if (type == "muti" || type == "select" || type == "datetime" || type == "time" || type == "date" || type == "daterange" || type == "datetimerange" || type == "picker" || type == "treepicker") {//下拉组件
+
+            control = <ComboBox ref="input" {...props} ></ComboBox>
         }
 
 
 
         return control;
-    },
-    render: function () {
-    
+    }
+    render() {
+
         if (this.props.type == "text" || this.props.type == "email"
             || this.props.type == "url" || this.props.type == "number"
             || this.props.type == "integer" || this.props.type == "alpha"
@@ -87,5 +84,7 @@ let Input = React.createClass({
         return null;
 
     }
-});
-module.exports = Input;
+}
+Input.propTypes = Object.assign({ type: PropTypes.oneOf(config) }, props);
+Input.defaultProps = Object.assign({ type: "text" }, defaultProps);
+  export default Input;

@@ -3,7 +3,7 @@
  date:2016-12-19
  */
 let React=require("react");
-require("../Sass/Data/Transfer.scss");
+require("../Sass/Data/Transfer.css");
 let unit=require("../libs/unit.js");
 let LinkButton=require("../Buttons/LinkButton.jsx");
 var showUpdate=require("../Mixins/showUpdate.js");

@@ -1,10 +1,11 @@
 /**
  * Created by wangzhiyong on 2016/12/12.
- * 从rctui改造过来,绑定全局单击事件
+ * 
  */
-let React=require("react");
-let ReactDOM=require("react-dom");
-let dom=require("./dom.js");
+import React from "react";
+import ReactDOM from "react-dom";
+
+import dom from "./dom.js";
 import * as Events from './events';
 let ClickAway= {
 
@@ -30,8 +31,10 @@ let ClickAway= {
     },
 
     getClickAwayEvent () {
+        
         let fn = this._clickAwayEvent;//
         if (!fn) {//第一次不存在的时候
+            console.log("dd");
             fn = (event) => {
                 let el = this.clickAwayTarget || ReactDOM.findDOMNode(this);
 
@@ -47,4 +50,4 @@ let ClickAway= {
         return fn;
     }
 }
-module.exports=ClickAway;
+export default ClickAway;

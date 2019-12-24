@@ -4,58 +4,57 @@
  *
  */
 
-let React=require("react");
+import React, { Component } from "react";
+import PropTypes from "prop-types";
 
-let Label=React.createClass({
-    propTypes: {
+class Label extends Component{
+  constructor(props)
+  {
+      super(props);
+      this.state={
 
-        name:React.PropTypes.oneOfType([React.PropTypes.string,React.PropTypes.object,React.PropTypes.element,React.PropTypes.node]),//名称
-        hide:React.PropTypes.bool,//是否隐藏
-        help:React.PropTypes.string,//帮助文字
-        required:React.PropTypes.bool,//是否必填项
-    },
-    getDefaultProps:function() {
-        return {
-            name: "",
-            hide: false,
-            help:null,
-            required: false
-        }
-
-    },
-    getInitialState(){
-        return {
-            name:this.props.name,
-            hide: this.props.hide,
-            showHelp:false,
-            required: this.props.required
-        }
-    },
-    helpHandler:function () {
+        showHelp:false,
+       
+      }
+  }
+ 
+    helpHandler () {
         this.setState({
             showHelp:!this.state.showHelp
         })
-    },
-    hideHelp:function () {//给父组件调用
+    }
+    hideHelp () {//给父组件调用
         this.setState({
             showHelp:false
         })
-    },
-    componentWillReceiveProps:function(nextProps) {
-        this.setState({
-            name:nextProps.name,
-            hide:nextProps.hide,
-            required:nextProps.required
-        })
-    },
+    }
+    componentWillReceiveProps(nextProps) {
+       
+    }
     render(){
         let style=this.props.style?this.props.style:{};
-        style.display=(this.state.hide?"none":(this.state.name&&this.state.name!="")?"table":"none");
-
-        return  <div className={"wasabi-form-group-label "+(this.state.required?"required":"") }
+        style.display=(this.props.hide?"none":(this.props.name&&this.props.name!="")?"table":"none");
+        return  <div className={"wasabi-form-group-label "+(this.props.required?"required":"") }
                      style={style}>
-            <label>{this.state.name}<a className="help" onClick={this.helpHandler} style={{display:(this.props.help?"inline-block":"none")}}>?</a><div className="heip-text" style={{display:(this.state.showHelp?"block":"none")}} >{this.props.help}</div></label>
+            <label>{this.props.name}<a className="help" onClick={this.helpHandler} style={{display:(this.props.help?"inline-block":"none")}}>?</a><div className="heip-text" style={{display:(this.state.showHelp?"block":"none")}} >{this.props.help}</div></label>
         </div>
     }
-})
-module .exports=Label;
+}
+
+Label.propTypes ={
+
+    name:PropTypes.oneOfType([PropTypes.string,PropTypes.object,PropTypes.element,PropTypes.node]),//名称
+    hide:PropTypes.bool,//是否隐藏
+    help:PropTypes.string,//帮助文字
+    required:PropTypes.bool,//是否必填项
+};
+Label.dfaultProps= {
+    
+        name: "",
+        hide: false,
+        help:null,
+        required: false
+    
+
+};
+export default Label;

@@ -13,4 +13,4 @@ var lang=
     FRI: "FRI",
     SAT: "SAT",
 }
-module .exports=lang;
+export default lang;

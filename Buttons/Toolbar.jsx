@@ -1,32 +1,26 @@
 /**
  * Created by wangzhiyong on
  * date:2016-04-05后开始独立改造
+ * edit 2019-12-18
  * desc:按钮工具栏
  */
-var React = require("react");
-require("../Sass/Buttons/Toolbar.scss");
-var LinkButton = require("./LinkButton.jsx");
-var Button = require("./Button.jsx");
-var Toolbar = React.createClass({
-    propTypes: {
-        buttons: React.PropTypes.array.isRequired,
-        type: React
-            .PropTypes
-            .oneOf([ //主题
-                "button",
-                "link"
-            ]),
-            style:React.PropTypes.object,
-            className:React.PropTypes.string,
-        onClick: React.PropTypes.func
-    },
-    getDefaultProps: function () {
-        return {buttons: [], type: "button",style:{}, className: ""}
-    },
-    onClick: function (name, title, event) {
+import React, {Component} from "react";
+import PropTypes from "prop-types";
+import  LinkButton  from "./LinkButton.jsx";
+import Button from "./Button.jsx";
+import ("../Sass/Buttons/Toolbar.css");
+
+class Toolbar  extends Component {
+     
+    constructor(props){
+        super(props);
+        this.onClick=this.onClick.bind(this);
+        this.state={}
+    }
+    onClick (name, title, event) {
         this.props.onClick(name, title, event); //执行父组件的事件
-    },
-    render: function () {
+    }
+    render () {
         let props = {
             className: this.props.className + " wasabi-toolbar",
             style: this.props.style
@@ -53,6 +47,19 @@ var Toolbar = React.createClass({
 
         )
     }
-});
+}
 
-module.exports = Toolbar;
+Toolbar.propTypes= {
+    buttons: PropTypes.array.isRequired,
+    type: PropTypes
+        .oneOf([ //主题
+            "button",
+            "link"
+        ]),
+        style:PropTypes.object,
+        className:PropTypes.string,
+    onClick:PropTypes.func
+};
+Toolbar.defaultProps= {buttons: [], type: "button",style:{}, className: ""};
+
+export default Toolbar;

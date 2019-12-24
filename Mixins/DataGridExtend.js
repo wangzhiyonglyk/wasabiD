@@ -4,10 +4,10 @@
  * 将新增,修改,粘贴,鼠标右键,滚动,固定表头,固定列,等功能
  * 作为DataGrid扩展功能
  */
-let React=require("react");
-var unit=require("../libs/unit.js");
-var FetchModel=require("../Model/FetchModel.js");
-var Message=require("../Unit/Message.jsx");
+import React, { Component } from "react";
+import unit from "../libs/unit.js";
+import FetchModel from "../Model/FetchModel.js";
+import Message from "../Unit/Message.jsx";
 let DataGridExtend= {
     //列表常用操作
     onClick: function (rowIndex,rowData) {
@@ -87,6 +87,7 @@ let DataGridExtend= {
 
     gridMouseDownHandler:function(event){//全局列表鼠标按下事件
 
+      
         if(event.button!=2)
         {//不是鼠标右键
             if(event.target.className=="header-menu-item")
@@ -115,7 +116,7 @@ let DataGridExtend= {
     hideMenuHandler:function (event) {//隐藏菜单，远程更新某一行
         this.refs.headermenu.style.display="none";//表头菜单隐藏
         this.menuHeaderName=null;//清空全局列名
-        this.unbindClickAway();//卸载全局单击事件
+        //this.unbindClickAway();//卸载全局单击事件
     },
     
     headerMouseDownHandler: function (event) {//表头列,鼠标按下事件
@@ -382,5 +383,5 @@ let DataGridExtend= {
     }
       /****新增，修改，删除*/
 }
-module .exports=DataGridExtend;
+export default DataGridExtend;
 

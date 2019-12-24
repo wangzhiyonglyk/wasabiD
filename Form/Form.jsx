@@ -1,53 +1,39 @@
 //create by wangzy
 //date:2016-04-05后开始独立改造
 //desc:表单组件
-require("../Sass/Form/Form.scss");
-var React = require("react");
-var Input = require("./Input.jsx");
-var Button = require("../Buttons/Button.jsx");
-var unit = require("../libs/unit.js");
-var Form = React.createClass({
-    propTypes: {
-        style: React.PropTypes.object,//样式
-        className: React.PropTypes.string,//自定义样式
-        disabled: React.PropTypes.bool,//是否只读
-        submitTitle: React.PropTypes.string,
-        submitHide: React.PropTypes.bool,
-        submitTheme: React.PropTypes.string,
-        onSubmit: React.PropTypes.func,//提交成功后的回调事件
-    },
-    getDefaultProps: function () {
-        return {
-            style: {},
-            className: "",
-            disabled: false,
-            submitTitle: "提交",//查询按钮的标题
-            submitHide: false,//是否隐藏按钮
-            submitTheme: "primary",//主题
-            onSubmit: null,//提交成功后的回调事 
+import React, {Component} from "react";
+import PropTypes from "prop-types";
 
+import  Button  from "../Buttons/Button.jsx";
 
+import ("../Sass/Form/Form.css");
+class   Form extends Component {
+    constructor(props){
+        super(props)
+        this.state={
+           
         }
-    },
-    getInitialState: function () {
-        return {
-            disabled: this.props.disabled,//是否只读
-        }
-    },
-    componentWillReceiveProps: function (nextProps) {
+this.validate=this.validate.bind(this);
+this.getData=this.getData.bind(this);
+this.setData=this.setData.bind(this);
+this.clearData=this.clearData.bind(this);
+this.onSubmit=this.onSubmit.bind(this);
+    }
+  
+    componentWillReceiveProps (nextProps) {
         this.setState({
             disabled: nextProps.disabled,
         })
-    },
-    validate: function () {
+    }
+    validate () {
         let isva = true;
         for (let v in this.refs) {
             //如果没有验证方法说明不是表单控件，保留原来的值
             isva = this.refs[v].validate ? this.refs[v].validate() : isva;
         }
         return isva;
-    },
-    getData: function () {
+    }
+    getData () {
         var data = {}
         for (let v in this.refs) {      
             if (this.refs[v].props.name&&this.refs[v].getValue) {//说明是表单控件
@@ -79,9 +65,8 @@ var Form = React.createClass({
 
         }
         return data;
-    },
-
-    setData: function (data) {//设置值,data是对象
+    }
+    setData (data) {//设置值,data是对象
 
         if (!data) {
             return;
@@ -95,17 +80,15 @@ var Form = React.createClass({
                     this.refs[v].setData(data);
                 }
         }
-    },
-
-    clearData: function () {
+    }
+    clearData () {
         for (let v in this.refs) {
           this.refs[v].setValue && this.refs[v].setValue("");
             this.refs[v].clearData && this.refs[v].clearData();
         }
-    },
-    
+    }
 
-    onSubmit: function () {
+    onSubmit () {
         //提交 数据
         var data = {};//各个字段对应的值
         let isva = true;
@@ -139,10 +122,10 @@ var Form = React.createClass({
                 }
             }
         }
-
+console.log(isva);
         if (isva) {
-
-            if (this.props.onSubmit != null) {
+console.log(this.props);
+            if (this.props.onSubmit ) {
                 this.props.onSubmit(data);
             }
             else {
@@ -150,38 +133,51 @@ var Form = React.createClass({
             }
 
         }
-    },
-
-    setDisabled: function (disabled) {
-        this.setState({
-            disabled: disabled//等于刷新了
-        })
-    },
-    render: function () {
+    }
+    render() {
         return (
             <div className={"wasabi-form  clearfix " + " " + this.props.className} style={this.props.style}>
                 <div className={"form-body clearfix "}>
 
                     {
-                        React.Children.map(this.props.children, (child, index) => {
+                      React.  Children.map(this.props.children, (child, index) => {
 
                            
                             if (typeof child.type !== "function") {//非react组件
                                 return child;
                             } else {
-                                return React.cloneElement(child, { readonly: this.state.disabled, key: index, ref: child.ref?child.ref:index })
+                                return React. cloneElement(child, { readonly: this.props.disabled, key: index, ref: child.ref?child.ref:index })
                             }
 
                         })
                     }
                 </div>
-                <div className="form-submit clearfix" style={{ display: (this.props.onSubmit ? "block" : "none") }}>
-                    <Button theme={this.props.submitTheme} onClick={this.onSubmit} title={this.props.submitTitle} hide={this.props.submitHide} disabled={this.state.disabled}  >
+                <div className="form-submit clearfix" >
+                    <Button theme={this.props.submitTheme} onClick={this.onSubmit} title={this.props.submitTitle} hide={this.props.submitHide} disabled={this.props.disabled}  >
                     </Button>
 
                 </div>
             </div>
         )
     }
-});
-module.exports = Form;
+}
+
+Form. propTypes= {
+    style: PropTypes.object,//样式
+    className: PropTypes.string,//自定义样式
+    disabled: PropTypes.bool,//是否只读
+    submitTitle: PropTypes.string,
+    submitHide: PropTypes.bool,
+    submitTheme: PropTypes.string,
+    onSubmit: PropTypes.func,//提交成功后的回调事件
+};
+Form.defaultProps= {
+        style: {},
+        className: "",
+        disabled: false,
+        submitTitle: "提交",//查询按钮的标题
+        submitHide: false,//是否隐藏按钮
+        submitTheme: "primary",//主题
+        onSubmit: null,//提交成功后的回调事 
+    };
+export default Form;

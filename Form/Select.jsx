@@ -3,28 +3,29 @@
  * date:2016-04-05后开始独立改造
  * 下拉框
  */
-require("../Sass/Form/Select.scss");
-let React = require("react");
-let unit = require("../libs/unit.js");
-var FetchModel = require("../Model/FetchModel.js");
-var validation = require("../Lang/validation.js");
-var validate = require("../Mixins/validate.js");
-var showUpdate = require("../Mixins/showUpdate.js");
-var Label = require("../Unit/Label.jsx");
-var Message = require("../Unit/Message.jsx");
-var ClickAway = require("../Unit/ClickAway.js");
-import props from "./config/props.js";
+import React, { Component } from "react";
+
+import unit from  "../libs/unit.js";
+import FetchModel from "../Model/FetchModel.js";
+import validation from "../Lang/validation.js";
+import validate  from "../Mixins/validate.js";
+import showUpdate from "../Mixins/showUpdate.js";
+import Label from "../Unit/Label.jsx";
+import Message from "../Unit/Message.jsx";
+import ClickAway  from "../Unit/ClickAway.js";
+
+import props from "./config/propType.js";
 import defaultProps from  "./config/defaultProps.js";
-let Select = React.createClass({
-    mixins: [validate, showUpdate, ClickAway],
-    PropTypes: props,
-    getDefaultProps: function () {
-        return defaultProps;
-    },
-    getInitialState: function () {
-        var newData = [];
-        var text = this.props.text;
-        if (this.props.data && this.props.data instanceof Array) {
+import ("../Sass/Form/Select.css");
+class  Select extends  Component{
+ 
+    constructor(props) {
+
+        super(props);;
+      
+        //对传来的数据进行格式化
+        var newData = []; var text = this.props.text;
+        if (this.props.data instanceof Array) {
             for (let i = 0; i < this.props.data.length; i++) {
                 let obj = this.props.data[i];
                 obj.text = this.props.data[i][this.props.textField];
@@ -35,93 +36,84 @@ let Select = React.createClass({
                 newData.push(obj);
             }
         }
-
-        return {
-            hide: this.props.hide,
+        this.state = {
             params: unit.clone(this.props.params),//参数
             data: newData,
             value: this.props.value,
             text: text,
-            show: false,//是否显示下拉选项
-            multiple: this.props.multiple,
-            min: this.props.min,
-            max: this.props.max,
-            readonly: this.props.readonly,
-
-            //验证
-            required: this.props.required,
+            ulShow: false,//是否显示下拉选项
             validateClass: "",//验证的样式
             helpShow: "none",//提示信息是否显示
             helpTip: validation["required"],//提示信息
             invalidTip: "",
-            filterValue: null,//筛选框的值
         }
-    },
-    componentWillReceiveProps: function (nextProps) {
-        /*
-         this.isChange :代表自身发生了改变,防止父组件没有绑定value,text,而导致无法选择
-         */
+        this.setValue = this.setValue.bind(this);
+        this.getValue = this.getValue.bind(this);
+        this.loadData = this.loadData.bind(this);
+        this.loadError = this.loadError.bind(this);
+        this.loadSuccess = this.loadSuccess.bind(this);
+        this.changeHandler = this.changeHandler.bind(this);
 
-        var value = this.isChange ? this.state.value : nextProps.value;
-        var text = this.isChange ? this.state.text : nextProps.text;
-        this.isChange = false;//重置
-        var newData = null;
-        if (nextProps.data != null && nextProps.data instanceof Array && (!nextProps.url || nextProps.url == "")) {//没有url,传的是死数据
-            newData = [];
-            //因为这里统一将数据进行了改造,所以这里要重新处理一下
-            for (let i = 0; i < nextProps.data.length; i++) {
-                let obj = nextProps.data[i];
-                obj.text = nextProps.data[i][this.props.textField];
-                obj.value = nextProps.data[i][this.props.valueField];
-                if (obj.value == nextProps.value) {
-                    text = obj.text;//根据value赋值
-                }
+        this.onSelect = this.onSelect.bind(this);
+
+    }
+
+    componentWillReceiveProps(nextProps) {
+      
+        if (nextProps.url) {
+
+            if (nextProps.url != this.props.url) {
+                this.loadData(nextProps.url, nextProps.params);
+            }
+            else if (this.showUpdate(nextProps.params, this.props.params)) {//如果不相同则更新
+                this.loadData(nextProps.url, nextProps.params);
+            }
+
+        } else if (nextProps.data && nextProps.data instanceof Array) {//又传了数组
+            if (nextProps.data.length != this.props.data.length) {
+                    this.setState({
+                        data:nextProps.data,
+                        value:"",
+                        text:""
+                    })
+            }else{
+                let newData=[];
+                for(let i=0;i<nextProps.data.length;i++)
+            {
+                let obj=nextProps.data[i];
+                obj.text=nextProps.data[i][this.props.textField];
+                obj.value=nextProps.data[i][this.props.valueField];
+              
                 newData.push(obj);
             }
-
-        }
-        else {//url形式
-            newData = this.state.data;//先得到以前的数据
-            if (this.showUpdate(nextProps.params)) {//如果不相同则更新
-                this.loadData(this.props.url, nextProps.params);//异步更新
-            }
-            else {
+            if(newData[0].text!=this.state.data[0].text||newData[newData.length-1].text!=this.state.data[this.state.data.length-1].text)
+            {this.setState({
+                data:nextProps.data,
+                value:"",
+                text:""
+            })
 
             }
         }
-
-        this.setState({
-            hide: nextProps.hide,
-            value: value,
-            text: text,
-            data: newData,
-            params: unit.clone(nextProps.params),
-            multiple: nextProps.multiple,
-            min: nextProps.min,
-            max: nextProps.max,
-            readonly: nextProps.readonly,
-            required: nextProps.required,
-            validateClass: "",//重置验证样式
-            helpTip: validation["required"],//提示信息
-            filterValue: null,
-        })
-
-    },
-    componentWillMount: function () {//如果指定url,先查询数据再绑定
+        }
+    }
+    componentWillMount () {//如果指定url,先查询数据再绑定
         this.loadData(this.props.url, this.state.params);//查询数据
-    },
-    componentDidMount: function () {
+    }
+    componentDidMount () {
 
-        this.registerClickAway(this.hideOptions, this.refs.select);//注册全局单击事件
-    },
-    componentDidUpdate: function () {
-        if (this.isChange == true) {//说明已经改变了,回传给父组件
-            if (this.props.onSelect != null) {
-                this.props.onSelect(this.state.value, this.state.text, this.props.name, this.rowData);
-            }
-        }
-    },
+        //this.registerClickAway(this.hideOptions, this.refs.select);//注册全局单击事件
+    }
+    componentDidUpdate () {
+      
+    }
+    validate(value) {
 
+        validate.call(this, value)
+    }
+    showUpdate(newParam, oldParam) {
+        showUpdate.call(this, newParam, oldParam);
+    }
     setValue(value) {
         let text = "";
         for (let i = 0; i < this.state.data.length; i++) {
@@ -136,12 +128,12 @@ let Select = React.createClass({
             })
         
 
-    },
+    }
     getValue() {
         return this.state.value;
 
-    },
-    loadData: function (url, params) {
+    }
+    loadData (url, params) {
         if (url != null && url != "") {
             if (params == null) {
                 var fetchmodel = new FetchModel(url, this.loadSuccess, null, this.loadError);
@@ -153,8 +145,8 @@ let Select = React.createClass({
             }
            
         }
-    },
-    loadSuccess: function (data) {//数据加载成功
+    }
+    loadSuccess (data) {//数据加载成功
         var realData = data;
         if (this.props.dataSource == null) {
         }
@@ -192,12 +184,12 @@ let Select = React.createClass({
             value: this.state.value,
             text: text,
         })
-    },
-    loadError: function (errorCode, message) {//查询失败
+    }
+    loadError (errorCode, message) {//查询失败
         console.log("select-error", errorCode, message);
         Message.error(message);
-    },
-    showOptions: function (type) {//显示下拉选项
+    }
+    showOptions (type) {//显示下拉选项
        
         if (this.state.readonly) {
             return;
@@ -209,28 +201,17 @@ let Select = React.createClass({
             show: type == 1 ? !this.state.show : true,
         });
         this.bindClickAway();//绑定全局单击事件
-    },
-    hideOptions: function (event) {
+    }
+    hideOptions (event) {
       
         this.setState({
             show: false
         });
         this.unbindClickAway();//卸载全局单击事件
-    },
+    }
 
-    onSelect: function (value, text, rowData) {//选中事件  
-        if ((this.props.onBeforeSelect && value != this.state.value && this.props.onBeforeSelect(value, text, rowData)) || !this.props.onBeforeSelect) {//选择之前的确定事件返回true,或者没有
-
-            this.isChange = true;//代表自身发生了改变,防止父组件没有绑定value,text的状态值,而导致无法选择的结果
-            this.rowData = rowData;//临时保存起来
-            var newvalue = "";
-            var newtext = "";
-            if (value == undefined) {
-                console.error("绑定的valueField没有")
-            }
-            if (text == undefined) {
-                console.error("绑定的textField没有");
-            }
+    onSelect (value, text, row) {//选中事件  
+       
             if (this.state.multiple) {
 
                 var oldvalue = [];
@@ -260,6 +241,10 @@ let Select = React.createClass({
                     value: newvalue,
                     text: newtext,
                 });
+                this.validate(newvalue);//
+                if (this.props.onSelect != null) {
+                    this.props.onSelect(value, text, this.props.name, row);
+                }
             }
             else {
                 var newvalue = value;
@@ -272,19 +257,21 @@ let Select = React.createClass({
                 });
             }
             this.validate(newvalue);//
+            if (this.props.onSelect != null) {
+                this.props.onSelect(value, text, this.props.name, row);
+            }
         }
 
 
-    },
-    getComponentData: function () {//只读属性，获取当前下拉的数据源
+    
+    getComponentData () {//只读属性，获取当前下拉的数据源
         return this.state.data;
-    },
-    onBlur: function () {
+    }
+    onBlur () {
 
         this.refs.label.hideHelp();//隐藏帮助信息
-    },
-
-    keyUpHandler: function (event) {
+    }
+    keyUpHandler (event) {
         if (this.props.addAbled && event.keyCode == 13) {
             var filter = this.state.data.filter((item, index) => {
                 return item.text == event.target.value;
@@ -306,8 +293,8 @@ let Select = React.createClass({
             ;
 
         }
-    },
-    filterChangeHandler: function (event) {//筛选查询
+    }
+    filterChangeHandler (event) {//筛选查询
         
         this.setState({
             filterValue: event.target.value,
@@ -316,16 +303,16 @@ let Select = React.createClass({
         this.refs.ul.scrollTop = 0;//回到顶部
 
 
-    },
-    clearHandler: function () {//清除数据
+    }
+    clearHandler () {//清除数据
        
         this.setState({
             value: "",
             text: "",
         })
          this.props.onSelect&& this.props.onSelect("", "", this.props.name, null);      
-    },
-    render: function () {
+    }
+    render () {
     
         var componentClassName = "wasabi-form-group ";//组件的基本样式
         let inputProps =
@@ -398,5 +385,10 @@ let Select = React.createClass({
 
     }
 
-});
-module.exports = Select;
+}
+
+
+Select.propTypes= props;
+Select.defaultProps=Object.assign({type:"select",defaultProps});
+   
+export default Select;

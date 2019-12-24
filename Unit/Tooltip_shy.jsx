@@ -2,7 +2,7 @@
  * Created by 42591 on 2016/10/17.
  * Tooltip提示框组件
  */
-require("../sass/Unit/Tooltip_shy.scss");
+require("../sass/Unit/Tooltip_shy.css");
 let React = require("react");
 let ReactDOM = require("react-dom");
 var Tooltip = React.createClass({

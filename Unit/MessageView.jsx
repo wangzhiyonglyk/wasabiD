@@ -1,38 +1,21 @@
 
-var React=require("react");
-var Button=require("../Buttons/Button.jsx");
-require("../Sass/Unit/Message.scss");
-let MessageView= React.createClass({
-    propTypes: {
-        type:React.PropTypes.oneOf([
-            "alert",
-            "info",
-            "success",
-            "error",
-            "confirm",
-        ]),
-        msg: React.PropTypes.string.isRequired,//消息
-        timeout:React.PropTypes.number,//自动消失时间
-        cancelHandler:React.PropTypes.func,//取消事件
-        OKHandler:React.PropTypes.func,//确定事件
-
-    },
-    getDefaultProps: function () {
-        return {
-            type:"alert",
-            msg: "",
-            timeout:2000,
-            showOK:true,
-            showCancel:true,
-        }
-    },
-    getInitialState:function() {
-        return {
+import   React ,{Component} from "react";
+import PropTypes from "prop-types";
+import  Button from "../Buttons/Button.jsx";
+import ("../Sass/Unit/Message.css");
+class  MessageView extends Component{
+constructor(props)
+{
+    super(props);
+    this.state={
+      
             opacity:1,//透明度
             visible:true,//可见性
-        }
-    },
-    componentDidMount:function() {
+        
+    }
+}
+  
+    componentDidMount() {
         this.onmouse = false;////初始化
         if (this.props.type == "confirm"||this.props.type=="alert") {
 
@@ -41,8 +24,8 @@ let MessageView= React.createClass({
             this.timeOutHandler();//设置定时器
         }
 
-    },
-    OKHandler:function() {
+    }
+    OKHandler() {
         this.setState({
             visible:false
         })
@@ -50,8 +33,8 @@ let MessageView= React.createClass({
         {
             this.props.OKHandler();
         }
-    },
-    cancelHandler:function() {
+    }
+    cancelHandler() {
         this.setState({
             visible:false
         })
@@ -59,8 +42,8 @@ let MessageView= React.createClass({
         {
             this.props.cancelHandler();
         }
-    },
-    onMouseOver:function()
+    }
+    onMouseOver()
     {
 
         //先清空所有定时器
@@ -73,14 +56,14 @@ let MessageView= React.createClass({
         this.setState({
             opacity:1,
         })
-    },
-    onMouseOut:function()
+    }
+    onMouseOut()
     {
         this.onmouse=false;//标记属性在上面
 
         this.timeOutHandler();//设置定时器
-    },
-    timeOutHandler:function() {
+    }
+    timeOutHandler() {
 
        this.timeoutArray=[];
        this.timeoutArray.push( setTimeout(()=> {
@@ -90,28 +73,17 @@ let MessageView= React.createClass({
                })
            }
        }, this.props.timeout));
-    //   this.timeoutArray.push(
-    //       setTimeout(()=> {
-    //           if(this.onmouse==false) {
-    //               this.setState({
+  
 
-    //                   visible: false,
-    //               })
-    //           }
-    //       }, this.props.timeout *2)
-
-    //     );
-
-    },
-
-    renderInfo:function(){
+    }
+    renderInfo(){
         return   <div onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} className={"wasabi-message "+this.props.type}
                       style={{display:this.state.visible?"inline-block":"none",opacity:this.state.opacity,transition:("opacity "+(this.props.timeout/1000).toString()+"s")}} >
             <div className="notice">{this.props.msg}</div>
         </div>
-    },
+    }
 
-    renderAlert:function () {
+    renderAlert () {
         return <div className="wasabi-confirm" style={{display:this.state.visible?"inline-block":"none"}}>
             <div className="message">
                 {(this.props.msg==null||this.props.msg=="")?"友情提示?":this.props.msg}
@@ -120,8 +92,8 @@ let MessageView= React.createClass({
                 <Button  name="ok" title="确定" onClick={this.cancelHandler}></Button>
             </div>
         </div>
-    },
-    renderConfirm:function() {
+    }
+    renderConfirm() {
         return <div className="wasabi-confirm" style={{display:this.state.visible?"inline-block":"none"}}>
             <div className="message">
                 {(this.props.msg==null||this.props.msg=="")?"确定删除这条信息吗?":this.props.msg}
@@ -131,8 +103,8 @@ let MessageView= React.createClass({
                 <Button theme="cancel" name="cancel" title="取消"  onClick={this.cancelHandler}></Button>
             </div>
         </div>
-    },
-    render: function () {
+    }
+    render() {
         switch (this.props.type)
         {
             case "info":
@@ -148,5 +120,28 @@ let MessageView= React.createClass({
         }
         return null;
     }
-});
-module.exports=MessageView;
+}
+MessageView. propTypes={
+    type:PropTypes.oneOf([
+        "alert",
+        "info",
+        "success",
+        "error",
+        "confirm",
+    ]),
+    msg: PropTypes.string.isRequired,//消息
+    timeout:PropTypes.number,//自动消失时间
+    cancelHandler:PropTypes.func,//取消事件
+    OKHandler:PropTypes.func,//确定事件
+
+};
+MessageView.defaultProps = {
+     
+        type:"alert",
+        msg: "",
+        timeout:2000,
+        showOK:true,
+        showCancel:true,
+    
+};
+ export default MessageView;
