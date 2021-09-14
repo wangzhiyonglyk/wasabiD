@@ -1,0 +1,93 @@
+/*create by wangzhiyong
+//date:2016-07-27
+//desc:物流跟踪组件样式
+*/
+
+.wasabi-track
+{
+  min-width: 400px;
+  max-width: 600px;
+  padding:30px 0px 20px;
+  font-size: 14px;
+  color: var(--color);
+}
+.wasabi-track .express{
+  display: block;
+  height: 20px;
+  line-height: 20px;
+  margin-bottom: 20px;
+  margin-top: 20px;
+
+  padding-left: 45px;
+}
+.wasabi-track .expressName
+{
+  padding-right: 20px;
+  float:left;
+  padding-bottom: 10px;
+}
+
+.wasabi-track .expressId
+{
+  float: left;
+  overflow: hidden;
+}
+.wasabi-track li
+{
+  position: relative;
+  padding-left: 20px;
+  min-height: 20px;
+  padding-top: 2px;
+  padding-bottom: 10px;
+  list-style-type: none;
+  min-width:500px;
+  margin-left: 45px;
+  display: flex;
+
+}
+.wasabi-track li:before
+{
+  content: "11";
+  color: transparent;
+  width: 10px;
+  height: 10px;
+  background-color: #dcdcdc;
+  border-radius: 100%;
+  position: absolute;
+  top: 5px;
+  left: 0px;
+}
+.wasabi-track li:after{
+  content: "11";
+  color: transparent;
+  width: 1px;
+  height: 100%;
+  background-color: #dcdcdc;
+  position: absolute;
+  top: 5px;
+  left: 5px;
+}
+.wasabi-track li:last-child:after
+{
+  content:"";
+  width:0px;
+
+}
+.wasabi-track li:first-child:before
+{
+  background-color: #ff5e4b;
+}
+.wasabi-track li:first-child:after{
+  background-color: #ff5e4b;
+}
+
+.wasabi-track li .track-time
+{
+  width:120px;
+   margin-right:20px;
+}
+.wasabi-track li .track-info
+{
+  width:340px;
+  text-align: left;
+}

@@ -1,0 +1,306 @@
+.wasabi-system {
+   position: relative;
+   font-size: var(--font-size);
+   color: var(--color);
+}
+
+
+.wasabi-system .system {
+   height: 42px;
+   line-height: 42px;
+   left: 0px;
+   top: 0px;
+   z-index: 1;
+   position: sticky;
+}
+
+.wasabi-system .system.wihte {
+   background-color: white;
+   border-bottom: 1px solid var(--border-color);
+   text-align: center;
+}
+
+.wasabi-system .system.black {
+   background-color: #001529;
+   color: white;
+   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+   text-align: center;
+ 
+}
+
+.wasabi-system .system.primary {
+   background-color: var(--primary-color);
+   color: white;
+   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+ 
+}
+
+.wasabi-system .system.success {
+   background-color: var(--success-color);
+   color: white;
+   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+ 
+}
+
+.wasabi-system .system.warning {
+   background-color: var(--warning-color);
+   color: white;
+   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+ 
+}
+
+.wasabi-system .system.danger {
+   background-color: var(--danger-color);
+   color: white;
+   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+ 
+}
+
+.wasabi-system .system .logo {
+   height: 20px;
+   width: 20px;
+   margin-left: 20px;
+   margin-top: 11px;
+
+
+}
+
+.wasabi-system .system .title {
+   margin-left: 5px;
+   line-height: 42px;
+   height: 42px;
+   font-size: 16px;
+   font-weight: 700;
+
+}
+
+.wasabi-system .wasabi-menu {
+   min-height: calc(100% - 42px);
+   height: auto;
+}
+
+.wasabi-system .header {
+   height: 42px;
+   line-height: 42px;
+   font-size: var(--font-size);
+
+}
+.wasabi-system .header .wasabi-notice-right-title{
+   color:var(--color)!important;
+}
+.wasabi-system .header .wasabi-notice-right-subtitle{
+   color: rgba(0,0,0,.45)!important;
+}
+.wasabi-system .header .wasabi-notice-right-date{
+   color: rgba(0,0,0,.45)!important;
+}
+.wasabi-system .header .user-menu *{
+   color: var(--color)!important;
+}
+.wasabi-system .header.white{
+   background-color: white;
+}
+.wasabi-system .header.black{
+   background-color: #001529;
+}
+.wasabi-system .header.black *{
+   color: white;
+}
+.wasabi-system .header.primary{
+   background-color: #106ac7;
+}
+.wasabi-system .header.primary *{
+   color: white;
+}
+.wasabi-system .header.success{
+   background-color:#38920c;
+}
+.wasabi-system .header.success *{
+   color: white;
+}
+.wasabi-system .header.warning{
+   background-color: #9a6008;
+}
+.wasabi-system .header.warning *{
+   color: white;
+}
+.wasabi-system .header.danger{
+   background-color: #c30b0b;
+}
+.wasabi-system .header.danger *{
+   color: white;
+}
+
+
+.wasabi-system .header .nav {
+   float: right;
+   height: 100%;
+}
+
+.wasabi-system .header .nav ul {
+   list-style-type: none;
+   height: 100%;
+
+}
+
+.wasabi-system .header .nav ul li {
+   display: inline-block;
+   height: 100%;
+   text-align: center;
+   position: relative;
+   padding: 0px 10px;
+   color: var(--color);
+   cursor: pointer;
+}
+
+.wasabi-system .header .nav ul li:hover {
+   color: var(--primary-color);
+}
+
+.wasabi-system .header .nav li.active {
+
+   color: var(--primary-color);
+}
+
+.wasabi-system .header .system-icon {
+   float: right;
+   height: 100%;
+   margin-right: 10px;
+   position: relative;
+   text-align: center;
+   width: 40px;
+}
+
+
+.wasabi-system .header.white .system-icon:hover {
+   background-color: var(--background-color);
+}
+.wasabi-system .header.black .system-icon:hover {
+   background-color:  #3c3f42;
+}
+.wasabi-system .header.primary .system-icon:hover {
+   background-color:  #1d7ada;
+}
+.wasabi-system .header.success .system-icon:hover{
+   background-color:  #4fa525;
+}
+.wasabi-system .header.warning .system-icon:hover{
+   background-color:  #ad7827;
+}
+.wasabi-system .header.danger .system-icon:hover{
+   background-color:  #e44d4d;
+}
+.wasabi-system .header .user {
+   float: right;
+   height: 100%;
+   margin-right: 10px;
+   position: relative;
+}
+
+.wasabi-system .header.white .user:hover {
+   background-color: var(--background-color);
+}
+.wasabi-system .header.black .user:hover{
+   background-color:  #3c3f42;
+}
+.wasabi-system .header.primary .user:hover{
+   background-color:  #1d7ada;
+}
+.wasabi-system .header.success .user:hover{
+   background-color:  #4fa525;
+}
+.wasabi-system .header.warning .user:hover{
+   background-color:  #ad7827;
+}
+.wasabi-system .header.danger .user:hover{
+   background-color:  #e44d4d;
+}
+.wasabi-system .user .userheader {
+   height: 25px;
+   width: 25px;
+   margin-left: 10px;
+   margin-top: 8px;
+}
+
+.wasabi-system .user .title {
+   margin-left: 5px;
+   float: right;
+   margin-right: 5px;
+}
+
+.wasabi-system .icon-menus {
+   position: absolute;
+   top: 44px;
+   left: -20px;
+   min-width: 100%;
+   line-height: 36px;
+   box-shadow: 0 2px 4px rgba(0, 0, 0, .12);
+   border: 1px solid #d2d2d2;
+   background-color: #fff;
+   z-index: 3;
+   border-radius: 2px;
+   white-space: nowrap;
+   padding: 20px;
+   margin-top:2px;
+}
+
+.wasabi-system .icon-menus::after, .wasabi-system .icon-menus::before {
+   content: "";
+   display: block;
+   width: 0;
+   height: 0;
+   border-width: 8px;
+   border-style: solid;
+   position: absolute;
+   left: 30px;
+
+}
+.wasabi-system .icon-menus::before {
+   border-color: transparent transparent #fff;
+   z-index: 1;
+   top: -16px;
+}
+.wasabi-system .icon-menus::after {
+   border-color: transparent transparent var(--border-color);
+   top: -17px;
+}
+.wasabi-system .icon-menus.notice::before,.wasabi-system .icon-menus.notice::after{
+left:112px;
+}
+.wasabi-system .user .icon-menus.show {
+   display: block;
+}
+
+.wasabi-system .user .icon-menus.hide {
+   display: none;
+}
+
+.wasabi-system .user .user-menu:hover {
+ background-color: var(--background-color);
+}
+
+.wasabi-system .user .user-menu {
+   color: #333;
+   padding: 0 20px;
+   cursor: pointer;
+}
+
+.wasabi-system .menuicon {
+   display: inline-block !important;
+   padding: 0px !important;
+   position: relative;
+}
+
+.wasabi-system .menuicon::before {
+   left: -20px;
+   top: 1px;
+   position: absolute;
+}
+
+.wasabi-theme-box {
+   width: 20px;
+   height: 20px;
+   text-align: center;
+   color: var(--color);
+   cursor: pointer;
+}

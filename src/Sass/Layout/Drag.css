@@ -1,0 +1,35 @@
+/*create by wangzhiyong
+date:2016-03-26
+desc:可停靠div样式
+edit:2020-10-18
+*/
+
+.drop
+{
+
+  background: #ffffff;
+border: 1px solid #dadada;
+overflow: auto;
+
+}
+.dragEnter
+{
+  background-color:var(--background-color);
+
+}
+.wasabi-drag-box{
+  display: inline-block;
+  cursor: move;
+  z-index: 9;
+}
+.wasabi-drag-box>*{
+  cursor: move!important;
+}
+.wasabi-drag-box .wasabi-drag-box-dot{
+  position: fixed;
+  display: none;
+   z-index: 3;
+    overflow: hidden;
+    opacity: 0.8;
+    padding:2px;
+}

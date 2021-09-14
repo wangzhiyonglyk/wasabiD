@@ -1,0 +1,91 @@
+/*create by wangzhiyong
+date:2017-01-09
+desc:圣杯布局样式
+*/
+@import url("../base.css");
+
+.wasabi-container{
+	width: 100%;
+	height: 100%;
+	margin: 0px;
+	padding:0px;
+}
+.wasabi-layout {
+	position: relative;
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	width: 100%;
+	box-sizing: border-box;
+	min-height: 500px;
+	height: 100%;
+}
+
+.wasabi-layout .layout-panel {
+	min-width: 1px;
+	min-height: 1px;
+	box-sizing: border-box;
+	position:absolute;
+	cursor: pointer;
+	
+}
+
+.wasabi-layout .wasabi-layout-header {
+	height:42px;
+	width: 100%;
+	top: 0;
+}
+
+.wasabi-layout .wasabi-layout-footer {
+	height: 100px;
+	width: 100%;
+	bottom: 0;
+
+	border-top: 1px solid var(--border-color);
+}
+
+.wasabi-layout .wasabi-layout-left {
+	left: 0;
+	height: 100%;
+	border-top:0;
+	border-bottom: 0;
+	overflow-x: hidden;	
+	transition: all 0.3s;
+	border-right: 1px solid var(--border-color);
+}
+
+.wasabi-layout .wasabi-layout-right {
+	right: 0;
+	height: 100%;
+	border-top:0;
+	border-bottom: 0;
+	box-sizing: border-box;
+	transition: all 0.3s;
+}
+.wasabi-layout .wasabi-layout-center{
+	border:none;
+	height: 100%;
+	transition: all 0.3s;
+
+}
+.wasabi-layout .wasabi-separator-left{
+    height: 100%;
+    z-index: 1;
+    position: absolute;
+	cursor:ew-resize;
+	width: 3px;
+	text-align: center;
+	border-right:1px solid var(--border-color);
+
+}
+
+.wasabi-layout .wasabi-separator-right{
+    height: 100%;
+    z-index: 1;
+    position: absolute;
+	cursor:ew-resize;
+	width: 3px;
+	text-align: center;
+	border-left:1px solid var(--border-color);
+
+}

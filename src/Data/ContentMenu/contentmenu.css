@@ -1,0 +1,32 @@
+.wasabi-contentmenu
+{
+    margin-top: 1px;
+    border: 1px solid var(--border-color);
+    border-radius: 2px;
+    position: absolute;
+    z-index: 3;
+    background: #fff;
+    list-style: none;
+    box-shadow: var(--box-shadow);
+    display: none;
+    flex-direction: column;
+
+   
+}
+.wasabi-contentmenu .menu-item{
+    position: relative;
+    max-width: 360px;
+    padding:0px 10px;
+    text-align: left;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: var(--font-size);
+    color: var(--color);
+    user-select: none;
+    height: 40px;
+    line-height: 40px;
+}
+
+.wasabi-contentmenu .menu-item:hover{
+    background-color: var(--background-color);
+}

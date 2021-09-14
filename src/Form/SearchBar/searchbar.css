@@ -1,0 +1,59 @@
+/*create by wangzhiyong
+//date:2016-05-10
+desc:菜单树的样式
+*/
+
+.wasabi-searchbar 
+{
+  margin: 0px;
+  padding-top: 5px;
+  padding-left: 10px;
+  padding-bottom: 5px;
+  width:100%;
+  overflow: visible;
+  display: flex;
+}
+.wasabi-searchbar .inputcontainer{
+  display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    width: calc(100% - 180px);
+}
+
+.wasabi-searchbar .inputcontainer[cols="1"]>.wasabi-form-group{
+  width: 99%;
+}
+.wasabi-searchbar .inputcontainer[cols="2"]>.wasabi-form-group{
+  width: 49%;
+}
+.wasabi-searchbar .inputcontainer[cols="3"]>.wasabi-form-group{
+  width: 32%;
+}
+.wasabi-searchbar .inputcontainer[cols="4"]>.wasabi-form-group{
+  width: 24%;
+}
+.wasabi-searchbar .inputcontainer[cols="5"]>.wasabi-form-group{
+  width: 19%;
+}
+.wasabi-searchbar .inputcontainer[cols="1"]>.wasabi-cols{
+  width: 99%;
+}
+.wasabi-searchbar .inputcontainer[cols="2"]>.wasabi-cols{
+  width: 49%;
+}
+.wasabi-searchbar .inputcontainer[cols="3"]>.wasabi-cols{
+  width: 32%;
+}
+.wasabi-searchbar .inputcontainer[cols="4"]>.wasabi-cols{
+  width: 24%;
+}
+.wasabi-searchbar .inputcontainer[cols="5"]>.wasabi-cols{
+  width: 19%;
+}
+
+.wasabi-searchbar .buttoncontainer{
+  min-width: 180px;
+}
+.wasabi-searchbar .buttoncontainer>.wasabi-linkbutton{
+line-height: 40px;
+}

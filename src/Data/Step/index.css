@@ -1,0 +1,116 @@
+.wasabi-step{
+    white-space: nowrap;
+    display: flex;
+}
+
+
+.wasabi-step-item{
+    flex: 1;
+    margin-right: 0px;
+    display: inline-block;
+    color: var(--color);
+
+}
+.wasabi-step-item.default {
+    color: var(--primary-color);
+}
+.wasabi-step-item.primary {
+    color: var(--primary-color);
+}
+.wasabi-step-item.info{
+    color: var(--info-color);
+}
+.wasabi-step-item.success{
+    color: var( --success-color);
+}
+.wasabi-step-item.warning{
+    color: var(--warning-color);
+}
+.wasabi-step-item.danger{
+    color: var(--danger-color);
+}
+
+
+
+.wasabi-step-item-header{
+    position: relative;
+    width: 100%;
+    text-align: center;
+}
+ .wasabi-step-line{
+    height: 2px;
+    top: 11px;
+    left: 50%;
+    right: -50%;
+    position: absolute;
+    border-color: inherit;
+    background-color: var(--border-color);
+}
+.wasabi-step-item.default  .wasabi-step-line{
+    background-color: var(--primary-color);
+}
+.wasabi-step-item.primary   .wasabi-step-line{
+    background-color: var(--primary-color);
+}
+.wasabi-step-item.info  .wasabi-step-line{
+    background-color: var(--info-color);
+}
+.wasabi-step-item.success  .wasabi-step-line{
+    background-color: var( --success-color);
+}
+.wasabi-step-item.warning  .wasabi-step-line{
+    background-color: var(--warning-color);
+}
+.wasabi-step-item.danger .wasabi-step-line{
+    background-color: var(--danger-color);
+}
+
+
+.wasabi-step-icon{
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 24px;
+    height: 24px;
+    font-size: 14px;
+    box-sizing: border-box;
+    background: #fff;
+   
+    border-radius: 50%;
+    border: 2px solid;
+    border-color: inherit;
+  
+}
+
+.wasabi-step-icon-inner{
+    display: inline-block;
+    user-select: none;
+    text-align: center;
+    font-weight: 700;
+    line-height: 1;
+    color: inherit;
+}
+
+.wasabi-step-content{
+    text-align: center;
+    white-space: normal;
+}
+.wasabi-step-title{
+    color: inherit;
+    font-size: 16px;
+    line-height: 38px;
+    text-align: center;
+    white-space: normal;
+}
+
+.wasabi-step-desc{
+    color: inherit;
+    margin-top: -5px;
+    font-size: 12px;
+    line-height: 20px;
+    font-weight: 400;
+    padding-left: 20%;
+    padding-right: 20%;
+}

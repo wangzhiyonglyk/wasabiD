@@ -1,0 +1,35 @@
+/*create by wangzhiyong
+//date:2016-07-22
+//desc:筛选框
+/*
+筛选框
+*/
+.wasabi-searchbox
+{
+  position: relative;
+  text-align: center;
+  padding-right: 10px;
+  padding-bottom: 10px;
+  display: flex;
+  font-size: var(--font-size);
+  color:var(--color);
+ 
+}
+.wasabi-searchbox input {
+  width: 100%;
+  border: 1px solid var(--border-color);
+  box-shadow: none !important;
+  outline: none;
+  height: 40px;
+  position: relative;
+  border-radius: 20px;
+  margin: auto;
+  padding-left: 20px;
+}
+.wasabi-searchbox .icon-search {
+  position: absolute;
+  right: 25px;
+  top: 14px;
+  font-size:var(--icon-size);
+  color:var(--primary-color);
+}

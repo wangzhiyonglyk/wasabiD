@@ -1,0 +1,71 @@
+.wasabi-globalsearch{
+    width: 100%;
+    height:100%;
+    z-index: 2;
+    position: absolute;
+    left: 0px;
+    top:0px;
+    overflow: hidden;
+    transform:scale(0);
+
+}
+.wasabi-globalsearch-overlay{
+    position: absolute;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  transition:all 0.3s;
+}
+.wasabi-globalsearch-container{
+    position: relative;
+    width: 632px;
+    margin: 50px auto auto auto;
+    background-color: #fff;
+    border-radius: 16px;
+    box-shadow:var(--box-shadow);
+    flex-direction: column;
+
+}
+
+.wasabi-globalsearch-container .search{
+ width: 100%;
+ height: 90px;
+ padding:20px;
+}
+.wasabi-globalsearch-container .search .input-icon{
+    font-size: 32px;
+    position: absolute;
+    color: var(--color);
+    opacity: 0.4;
+    top: 35px;
+    left: 25px;
+}
+.wasabi-globalsearch-container .search .input{
+    height: 50px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    width: 100%;
+    outline: none;
+    padding-left:40px;
+
+}
+.wasabi-globalsearch-container .search .input:focus{
+    border-color: var(--primary-color);
+    box-shadow: var(--box-shadow);
+}
+.wasabi-globalsearch-container .result{
+    display: flex;
+    width: 100%;
+    
+}
+.wasabi-globalsearch-container .empty{
+    display: flex;
+    width: 100%;
+    height: 100px;
+    font-size: var(--font-size);
+    color: var(--color);
+    opacity: 0.8;
+    align-items: center;
+    justify-content: center;
+
+}

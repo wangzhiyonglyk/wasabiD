@@ -1,0 +1,40 @@
+/*create by wangzhiyong
+/*!
+ * 借用了bootstrap一些样式调整,
+date:2016-03-02
+edit by wangzhyong 扩展一些基本属性
+desc:基本样式
+date:2017-07-28 对整体样式风格修改 
+date:2021-02-06 重新调整
+ date: 2021-05-15 去掉控制字体大小，颜色等属性，以方便与其他ui库兼容
+ date:2021-05-20 增加变量
+ date:2021-06-22 拆分样式，取bootstrap5中的grid,与reboot
+*/
+@import url("./reboot.css");
+@import url("./grid.css");
+@import url("./animation.css");
+@import url("./font/iconfont.css");
+:root {
+  --color: #676a6c;
+  --deepColor:#2e2e2e;
+  --primary-color: #409eff;
+  --primary-hover-color: #66b1ff;
+  --success-color: #67c23a;
+  --success-hover-color: #85ce61;
+  --info-color: #909399;
+  --info-hover-color: #a6a9ad;
+  --danger-color: #f56c6c;
+  --danger-hover-color: #f78989;
+  --warning-color: #e6a23c;
+  --warning-hover-color: #ebb563;
+  --border-color: #dcdfe6;
+  --border-hover-color:#c0c4cc;
+  --background-color: #f6f6f6;
+  --background-hover-color:#e7e7e7;
+  --icon-color:#c0c4cc;
+  --icon-hover-color:#409eff;
+  --font-size: 14px;
+  --icon-size:16px;
+  --box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
+}
+

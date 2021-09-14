@@ -1,0 +1,72 @@
+.wasabi-treegrid{
+    position: relative;
+    width: 100%;
+    display: flex;
+}
+
+.wasabi-treegrid-left{
+    height: 100%;
+    width: 300px;
+    position: relative;
+
+}
+
+.wasabi-treegrid-right {
+    width: calc(100% - 300px);
+}
+
+.wasabi-treegrid-configuration{
+    position: relative;
+    width: 100%;
+    text-align: center;
+    cursor: pointer;
+    border-top: 1px solid var(--border-color);
+    border-left: 1px solid var(--border-color);
+    overflow: hidden;
+    height: 42px;
+    color: var(--color);
+    font-size: var(--font-size);
+    font-weight: bold;
+}
+.wasabi-treegrid-configuration-panel
+{
+    padding: 10px;
+    position: relative;
+    height: 100%;
+    
+}
+.wasabi-treegrid-configuration-fields{
+    float: left;
+    width: calc( 30% - 10px);
+    overflow-y: auto;
+    height: 100%;
+}
+.wasabi-treegrid-configuration-set{
+    float:right;
+    width:calc( 70% - 10px);
+    margin-left: 10px;
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content:flex-start;
+}
+
+.wasabi-treegrid-set-item{
+  width:calc( 50% - 10px);
+  height:calc( 50%);
+}
+.wasabi-treegrid-set-item:nth-child(1){
+    margin-right: 10px;
+}
+.wasabi-treegrid-set-item:nth-child(3){
+    margin-right: 10px;
+}
+
+
+.wasabi-treegrid-rowsData{
+    position:relative;
+    border-top: 1px solid var(--border-color);
+    border-left: 1px solid var(--border-color);
+    overflow: hidden;
+}
+

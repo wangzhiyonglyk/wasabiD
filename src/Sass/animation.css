@@ -1,0 +1,255 @@
+/*
+自定义文本显示方式
+*/
+
+.ellipsis {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.nowrap{
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow:clip; 
+}
+.hide{
+  display: none;
+}
+.show{
+  display: block;
+}
+html{
+  height: 100%;
+  width: 100%;
+}
+body{
+  height: 100%;
+  width: 100%;
+}
+a{
+  text-decoration:none;
+}
+/*
+自定义滚动条样式
+*/
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track-piece {
+  background-color: #ffffff;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #D1D1D1;
+  border-radius: 5px;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  font-family: 'iconfont' !important;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: inherit;
+  cursor: pointer;
+}
+
+[class^="icon-"][disabled], [class*=" icon-"][disabled] {
+  opacity: 0.40;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+/**
+加载动画
+*/
+.loading{
+  animation: loading 1s linear infinite;
+}
+.tree-loading{
+  animation: tree-loading 1s linear infinite;
+}
+
+@keyframes loading {
+  0% {
+    transform:rotate(0deg)
+}
+100% {
+    transform: rotate(360deg)
+}
+}
+@keyframes tree-loading {
+  0% {
+    transform:translateY(4px) rotate(0deg)
+}
+100% {
+    transform:translateY(4px) rotate(360deg)
+}
+}
+
+/*
+自定义水波纹点按效果
+ */
+
+.ripple-container {
+  position: relative;
+}
+
+.ripple {
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.4);
+  border-radius: 100%;
+  -webkit-transform: scale(0);
+  transform: scale(0);
+  pointer-events: none;
+  -webkit-animation: ripple 1s ease-out;
+  animation: ripple 1s ease-out;
+  width: 100%;
+  height: 100%;
+}
+
+.wasabi-nav-tabs .ripple {
+  background-color: #306c70;
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  80% {
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/*
+抖动特效
+ */
+
+.wasabi-shake {
+  animation: shake 1.5s ease-out;
+  ;
+}
+
+@-webkit-keyframes shake {
+  0%, 100% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  25% {
+    -webkit-transform: rotate(15deg);
+    transform: rotate(15deg);
+  }
+  50% {
+    -webkit-transform: rotate(-15deg);
+    transform: rotate(-15deg);
+  }
+  75% {
+    -webkit-transform: rotate(5deg);
+    transform: rotate(5deg);
+  }
+  85% {
+    -webkit-transform: rotate(-5deg);
+    transform: rotate(-5deg);
+  }
+}
+
+@keyframes shake {
+  0%, 100% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  25% {
+    -webkit-transform: rotate(15deg);
+    transform: rotate(15deg);
+  }
+  50% {
+    -webkit-transform: rotate(-15deg);
+    transform: rotate(-15deg);
+  }
+  75% {
+    -webkit-transform: rotate(5deg);
+    transform: rotate(5deg);
+  }
+  85% {
+    -webkit-transform: rotate(-5deg);
+    transform: rotate(-5deg);
+  }
+}
+
+/*自定义打开与关闭动画*/
+
+.wasabi-scale-in {
+  animation: wasabi-scale-in 0.5s ease forwards;
+}
+
+.wasabi-scale-out {
+  animation: wasabi-scale-out 0.5s ease forwards;
+}
+
+@keyframes wasabi-scale-in {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes wasabi-scale-out {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  30% {
+    transform: scale(1.05);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(0.7);
+    opacity: 0;
+  }
+}
+
+.wasabi-fade-in {
+  animation-delay: 0.1;
+  animation: wasabi-fade-in 0.3s forwards;
+}
+
+.wasabi-fade-out {
+  animation-delay: 0.1;
+  animation: wasabi-fade-out 0.3s forwards;
+}
+
+@keyframes wasabi-fade-in {
+  0% {
+    transform: translate3d(0, -20px, 0);
+    opacity: 0
+  }
+  to {
+    transform: translateZ(0);
+    opacity: 1
+  }
+}
+
+@keyframes wasabi-fade-out {
+  0% {
+    transform: translateZ(0);
+    opacity: 1
+  }
+  to {
+    transform: translate3d(0, -20px, 0);
+    opacity: 0
+  }
+}

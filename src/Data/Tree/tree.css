@@ -1,0 +1,208 @@
+.wasabi-tree {
+  position: relative;
+  font-size: 14px;
+  color: var(--color);
+  margin:0px;
+  padding: 0px;
+}
+
+.wasabi-tree .wasabi-tree-li-node-text {
+  display: flex;
+  position: relative;
+  flex: 1;
+}
+
+.wasabi-tree .wasabi-form-group {
+  margin: 0px;
+}
+
+.wasabi-tree li.wasabi-tree-li {
+  list-style: none;
+  cursor: pointer;
+  position: relative;
+}
+.wasabi-tree>li.wasabi-tree-li::before{
+  content: "";
+  height: calc(100% - 0px);
+  width: 1px;
+  border-right-width: 1px;
+  box-sizing: border-box;
+  border-right-style: dashed;
+  border-right-color: var(--border-color);
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  z-index: 1;
+}
+.wasabi-treegrid .wasabi-tree>li.wasabi-tree-li::before{
+  content: none;
+}
+.wasabi-pivot .wasabi-tree>li.wasabi-tree-li::before{
+  content: none;
+}
+.wasabi-tree>li.wasabi-tree-li:first-child:before{
+  top: 21px;
+}
+.wasabi-tree>li.wasabi-tree-li:last-child:before{
+  height: 20px
+}
+.wasabi-tree .wasabi-tree-li-node {
+  line-height: 42px;
+  height: 42px;
+  box-sizing: border-box;
+  display: flex;
+  position: relative;
+}
+.wasabi-tree .wasabi-tree-li-node::before{
+  content: "";
+  width: 18px;
+  height: 1px;
+  border-top: 1px dashed var(--border-color);
+  position: absolute;
+  top: 20px;
+  left: 0px;
+  z-index: 1;
+}
+.wasabi-pivot .wasabi-tree .wasabi-tree-li-node::before{
+  content: none;
+}
+.wasabi-treegrid .wasabi-tree .wasabi-tree-li-node::before{
+  content: none;
+}
+/*
+*这个连线设置有bug
+*/
+.wasabi-pivot .wasabi-tree .wasabi-tree-li-node::after {
+  content: "";
+  position: absolute;
+  border-bottom: 1px solid var(--border-color);
+  width: 300%;
+  bottom: 0px;
+  left:-200%;
+}
+
+
+.wasabi-treegrid .wasabi-tree .wasabi-tree-li-node::after {
+  content: "";
+  position: absolute;
+  border-bottom: 1px solid var(--border-color);
+  width: 300%;
+  bottom: 0px;
+  left:-200%;
+}
+
+
+.wasabi-tree  .wasabi-tree-li-node:hover {
+  background-color: var(--background-color);
+
+}
+.wasabi-tree  .wasabi-tree-li-node:hover a,
+.wasabi-tree  .wasabi-tree-li-node:hover i {
+  color: var(--primary-color);
+}
+
+.wasabi-treegrid .wasabi-tree  .wasabi-tree-li-node:hover{
+  background-color:transparent;
+
+}
+.wasabi-pivot .wasabi-tree  .wasabi-tree-li-node:hover{
+  background-color:transparent;
+ 
+}
+.wasabi-tree .wasabi-tree-li-node.selected {
+  background-color: var(--background-color);
+  
+}
+
+.wasabi-treegrid .wasabi-tree  .wasabi-tree-li-node.selected:hover{
+  background-color:var(--background-color);
+  
+}
+.wasabi-pivot .wasabi-tree  .wasabi-tree-li-node.selected:hover{
+  background-color:var(--background-color);
+
+}
+
+.wasabi-treegrid .wasabi-tree  .wasabi-tree-li-node.selected:hover a
+{
+  color: var(--color);
+  
+}
+
+.wasabi-pivot .wasabi-tree  .wasabi-tree-li-node.selected:hover a
+{
+  color: var(--color);
+  
+}
+.wasabi-treegrid .wasabi-tree  .wasabi-tree-li-node.selected:hover i{
+  color: var(--icon-color);
+}
+
+.wasabi-pivot .wasabi-tree  .wasabi-tree-li-node.selected:hover i{
+  color: var(--icon-color);
+}
+
+
+
+.wasabi-tree-li-node-text-div{
+  overflow: hidden;
+}
+.wasabi-tree .wasabi-tree-sub {
+  padding-left: 25px;
+  position: relative;
+}
+
+
+.wasabi-tree .wasabi-tree-sub::before{
+  content: "";
+    height: calc(100% - 10px);
+    width: 1px;
+    border-right-width: 1px;
+    box-sizing: border-box;
+    border-right-style: dashed;
+    border-right-color: var(--border-color);
+    position: absolute;
+    left: 24px;
+    top: -10px;
+    z-index: 1;
+
+}
+.wasabi-treegrid .wasabi-tree .wasabi-tree-sub::before
+{
+  content: none;
+}
+.wasabi-pivot .wasabi-tree .wasabi-tree-sub::before
+{
+  content: none;
+}
+
+.wasabi-tree [class*=" icon-"],
+.wasabi-tree [class^=icon-] {
+  color: var(--icon-color);
+}
+.wasabi-tree .wasabi-tree-txt {
+  margin-left: 3px;
+  position: relative;
+  color: var(--color);
+  word-break: break-all;
+ 
+}
+
+.wasabi-tree i {
+  margin-right: 1px;
+  font-size: 16px;
+  height: 16px;
+  transform: translateY(1px);
+  
+  z-index: 2;
+}
+
+
+.wasabi-tree .wasabi-drag-box {
+  cursor: pointer;
+}
+
+.wasabi-tree .wasabi-input {
+  height: 30px;
+  margin-top: 8px;
+}

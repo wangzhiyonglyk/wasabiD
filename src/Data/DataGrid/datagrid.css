@@ -1,0 +1,118 @@
+/*
+grid
+*/
+
+.wasabi-grid {
+  width: 100%;
+  position: relative;
+  font-size: var(--font-size);
+  color: var(--color);
+}
+
+.wasabi-grid .wasabi-grid-tool{
+  border: 1px solid var(--border-color);
+  border-bottom: none;
+  height: 40px;
+  line-height: 40px;
+  padding-left: 20px;
+  background-color: var(--background-color);
+  width:calc(100% - 2px);
+}
+.wasabi-grid .wasabi-check-column .wasabi-form-group
+{
+  height: 21px;
+  min-height: 0px;
+  margin-bottom: 0px;
+  margin-left: 4px;
+}
+
+
+
+.wasabi-grid .wasabi-checkul {
+  margin: 0px;
+  padding: 0px;
+  margin-top: 3px;
+}
+
+/*
+真实表格容器
+*/
+
+.wasabi-grid .table-realTable {
+  width: 100%;
+  overflow: auto;
+  box-sizing: border-box;
+}
+
+/* 固定表头容器 */
+
+.wasabi-grid .table-fixedth {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  z-index: 1;
+  background-color: white;
+}
+
+/* 固定列中的 固定表头容器 */
+
+.wasabi-grid .table-fixed-fixedth {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  z-index: 3;
+  background-color: white;
+}
+
+/*
+固定列容器
+*/
+
+.wasabi-grid .table-fixed {
+  margin-bottom: 0px;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  z-index: 2;
+  background-color: white;
+}
+
+/*
+正在加载
+*/
+
+.wasabi-grid .wasabi-grid-loading {
+  position: absolute;
+  float: left;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  background-color: #000000;
+  opacity: 0.1;
+  z-index: 3;
+}
+
+.wasabi-grid .wasabi-load-icon {
+  position: absolute;
+  left: 50%;
+  top: 20%;
+  background-image: url("../../img/loading.gif");
+  background-size: 16px 16px;
+  background-repeat: no-repeat;
+  width: 16px;
+  height: 16px;
+}
+
+/*拖动时的分隔线*/
+
+.wasabi-grid .wasabi-grid-divide {
+  position: absolute;
+  height: 100%;
+  width: 1px;
+  z-index: 2;
+  top: 0px;
+  display: none;
+  cursor: ew-resize;
+  background-color:var(--border-color);
+}

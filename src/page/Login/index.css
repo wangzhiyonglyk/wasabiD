@@ -1,0 +1,94 @@
+.wasabi-page{
+    width: 100%;
+    height: 100%;
+    margin:0px;
+    padding: 0px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: var(--color);
+    background-color: #ffffff;
+}
+
+.wasabi-page .bgone{
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top:0;right: 0;left: 0;bottom: 0;margin: auto;
+}
+.wasabi-page .pic{
+	width: 492px;
+	height: auto;
+	position: absolute;
+	top:173px;right: 453px;left: 0;bottom: 0;margin: auto;
+	z-index: 99999;
+}
+.wasabi-page .login-table{
+	background-color: #FFFFFF;
+	width: 960px;
+	height: 465px;
+	position: absolute;
+	top:20%;right: 0;left: 0;bottom: 0;margin: auto;
+}
+.wasabi-page .password{
+    position: absolute;
+    top: 200px;
+    right: 65px;
+    display: flex;
+}
+.wasabi-page .login-btn{
+    position: absolute;
+    top: 310px;
+    right: 64px;
+    border: none;
+    color: #fff;
+    width: 373px;
+    text-align: center;
+    background-color: #1592ef;
+    text-indent: 0rem;
+    border-radius: 10px;
+    text-shadow:2px 2px 1px rgba(0, 0, 0, 0.2);
+    box-shadow:2px 2px 1px rgba(0, 0, 0, 0.2);
+    font-size:20px ;
+    height: 50px;
+}
+.wasabi-page .login-btn:focus,.login-btn:active{
+    outline: none;
+    border: none;
+}
+
+.wasabi-page .welcome{
+	width: 960px;
+	height: 35px;
+	color: #fff;
+    font-size: 30px;
+    position: absolute;
+    top: -7rem;
+    text-align: center;  
+   
+    
+}
+.wasabi-page input{	 
+    border: none;
+     height: 55px;
+     width: 373px;
+     text-indent: 55px;
+     outline:none;
+     border: 0;
+     background: #eef6fd;
+     border-bottom:2px #d6e7fa solid ;
+}
+
+.wasabi-page .user{
+    position: absolute;
+    top: 90px;
+    right: 65px;
+    display: flex;
+}
+
+.wasabi-page .login-table img{
+	height: 30px;
+	position: absolute;
+	left: 10px;
+	top: 13px;
+}

@@ -1,0 +1,144 @@
+.wasabi-tabs {
+	width: 100%;
+	overflow: hidden;
+	height: 100%;
+	font-size: 14px;
+	color: var(--color);
+	position: relative;
+	/* background-color: var(--background-color); */
+}
+.wasabi-tabs .wasabi-tab-nav{
+	border: 1px solid var(--border-color);
+    border-radius: 4px 4px 0 0;
+	box-sizing: border-box;
+	border-bottom: 1px solid var(--border-color);
+	background-color: white;
+	border-left:none;
+	padding: 0;
+    position: relative;
+	height: 42px;
+}
+.wasabi-tabs .wasabi-tab-nav .wasabi-tab {
+	flex-shrink: 0;
+	padding: 0 10px;
+	height: 40px;
+	box-sizing: border-box;
+	line-height: 40px;
+	display: inline-block;
+	list-style: none;
+	font-size: var(--font-size);
+	color: var(--color);
+	position: relative;
+	overflow: hidden;
+	transition: all .3s ease-out 0s;
+	cursor: pointer;
+    border-left: 1px solid var(--border-color);
+}
+.wasabi-tab:last-child{
+	border-right: 1px solid var(--border-color);
+}
+.wasabi-tab .tab-icon {
+	color: var(--color);
+	font-size: 12px;
+	margin-left: 10px;
+	top: 1px;
+	position: relative;
+}
+.wasabi-tab.default:hover {
+	color: var(--info-color);
+}
+.wasabi-tab.default.active {
+	border-bottom-color: #fff;
+	color: var(--info-color);
+}
+.wasabi-tab.default:hover .tab-icon {
+	color: var(--info-color);
+}
+.wasabi-tab.default.active .tab-icon{
+color:var(--info-color);
+}
+
+.wasabi-tab.primary:hover {
+	color: var(--primary-color);
+}
+.wasabi-tab.primary.active {
+background-color: var(--primary-color);
+	color: white;
+}
+.wasabi-tab.primary:hover .tab-icon {
+	color: var(--primary-color);
+}
+.wasabi-tab.primary.active .tab-icon{
+	color: white;
+}
+.wasabi-tab.success:hover {
+	color: var( --success-color);
+}
+.wasabi-tab.success.active {
+	color: white;
+	background-color: var( --success-color);
+}
+.wasabi-tab.success:hover .tab-icon {
+	color: var( --success-color);
+}
+.wasabi-tab.success.active .tab-icon{
+	color: white;
+}
+
+
+
+.wasabi-tab.info:hover {
+	color: var(--info-color);
+}
+.wasabi-tab.info.active {
+	color: white;
+	background-color: var(--info-color);
+}
+.wasabi-tab.info:hover .tab-icon {
+	color: var(--info-color);
+}
+.wasabi-tab.info.active .tab-icon{
+	color: white;
+}
+
+.wasabi-tab.warning:hover {
+	color: var(--warning-color);
+}
+.wasabi-tab.warning.active {
+	color: white;
+	background-color: var(--warning-color);
+}
+.wasabi-tab.warning:hover .tab-icon {
+	color: var(--warning-color);
+}
+.wasabi-tab.warning.active .tab-icon{
+	color: white;
+}
+
+.wasabi-tab.danger:hover {
+	color: var(--danger-color);
+}
+.wasabi-tab.danger.active {
+	color: white;
+	background-color: var(--danger-color);
+}
+.wasabi-tab.danger:hover .tab-icon {
+	color: var(--danger-color);
+}
+.wasabi-tab.danger.active .tab-icon{
+	color: white;
+}
+
+
+
+.wasabi-tabs .section {
+	display: none;
+	min-height: 400px;
+	height: calc(100% - 42px);
+}
+
+.wasabi-tabs .section.active {
+	display: block;
+}
+
+

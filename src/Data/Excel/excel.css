@@ -1,0 +1,424 @@
+.wasabi-excel {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    font-size: var(--font-size);
+    color: var(--color);
+}
+
+.wasabi-excel-workbook {
+    height: calc(100% - 33px);
+}
+
+.wasabi-excel-sheet {
+    height: 100%;
+    width: 100%;
+}
+
+.wasabi-excel-tool {
+    position: relative;
+    background-color: var(--background-color);
+    border: 1px solid var(--border-color);
+    border-bottom: none;
+    height: 158px;
+    z-index: 3;
+}
+
+/**
+滚动时没有双重border
+*/
+.wasabi-excel-tool::after {
+    content: "";
+    border-top: 1px solid var(--border-color);
+    width: 100%;
+    position: absolute;
+    bottom: -1px;
+    left: 0px;
+}
+
+.wasabi-execel-tool-tabs {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 116px;
+
+}
+
+.wasabi-execel-tool-tab {
+    position: relative;
+    display: flex;
+    height: 31px;
+    line-height: 31px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.wasabi-execel-tool-tab-button {
+    padding-left: 15px;
+    padding-right: 15px;
+    border-right: 1px solid var(--border-color);
+    cursor: pointer;
+    height: 30px;
+    line-height: 30px;
+    width: 60px;
+}
+
+
+.wasabi-execel-tool-tab-button:first-child {
+    width: 40px;
+}
+
+.wasabi-execel-tool-tab-button:first-child i {
+    font-size: 18px;
+    color: var(--primary-color);
+    position: absolute;
+    top: 6px;
+    left: 10px;
+}
+
+.wasabi-execel-tool-tab-button:first-child:hover {
+    background-color: white;
+}
+
+.wasabi-execel-tool-tab-button:hover {
+    background-color: var(--background-hover-color);
+}
+
+.wasabi-execel-tool-tab-button.active {
+    background-color: white;
+    color: var(--primary-color);
+}
+
+.wasabi-execel-tool-section {
+    position: relative;
+    display: flex;
+    padding-left: 15px;
+    height: 85px;
+}
+
+.wasabi-excel-sheet .table-realTable {
+    width: 100%;
+    overflow: auto;
+    box-sizing: border-box;
+    height: calc(100% - 158px);
+    position: relative;
+    user-select: none;
+}
+
+
+.wasabi-execel-tool-group {
+    border: 1px solid var(--border-color);
+    margin: 5px;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+}
+
+.wasabi-excel-tool-button {
+    border: 1px solid var(--border-color);
+    height: 32px;
+    line-height: 32px;
+    margin: 5px;
+    min-width: 30px;
+    cursor: pointer;
+}
+
+.wasabi-excel-tool-button:hover {
+    background-color: var(--background-hover-color);
+    border-color: var(--border-hover-color);
+}
+
+.wasabi-excel-tool-button.active {
+    background-color: var(--background-hover-color);
+    border-color: var(--border-hover-color);
+}
+
+.wasabi-excel-tool-button .wasabi-dropdown{
+    color: inherit!important;
+}
+.wasabi-excel-tool-button .wasabi-linkbutton {
+    margin-top: -7px;
+    margin-left: 7px;
+    color: inherit!important;
+}
+
+.wasabi-execel-tool-group .wasabi-form-group {
+    height: 32px;
+    min-height: 0;
+    width: 100px;
+    margin: 0px;
+}
+
+.wasabi-execel-tool-group .wasabi-input {
+    background-color: var(--background-color);
+    border: none;
+    height: 30px;
+}
+
+.wasabi-execel-tool-group .combobox .comboxbox-icon {
+    top: 8px;
+    right: -3px;
+    font-size: 14px;
+}
+
+.wasabi-execel-tool-group .combobox .comboxbox-icon.rotate {
+    transform: rotate(180deg) translateY(10px);
+}
+
+.wasabi-execel-tool-group .combobox .combobox-clear {
+    display: none;
+    width: 0px;
+    height: 0px;
+    opacity: 0;
+
+}
+
+.wasabi-execel-tool-group .combobox .select {
+    width: 100px;
+    min-width: 0px;
+}
+
+.wasabi-execel-edit {
+    height: 38px;
+    line-height: 38px;
+    padding-left: 25px;
+    display: flex;
+}
+
+.wasabi-execel-edit .wasabi-form-group {
+    min-height: 0px;
+    height: 36px;
+    margin-right: 0px;
+}
+
+.wasabi-excel-sheet-tabs {
+    position: relative;
+    background-color: var(--background-color);
+    border: 1px solid var(--border-color);
+    border-top: none;
+    height: 33px;
+    line-height: 33px;
+    display: flex;
+    padding-left: 15px;
+}
+
+.wasabi-excel-sheet-tabs .wasabi-excel-tool-button {
+    margin: 0px;
+    padding-left: 5px;
+    padding-right: 10px;
+}
+
+/*
+todo 
+*/
+.wasabi-excel-sheet-tabs .wasabi-excel-tool-button.active:hover {
+    background-color: var(--background-hover-color);
+}
+
+.wasabi-excel-sheet-tabs .wasabi-excel-tool-button.active {
+    background-color: white;
+    border-top: none;
+}
+
+.wasabi-excel-sheet-tabs .wasabi-excel-tool-button .wasabi-linkbutton {
+    margin: 0px;
+}
+
+.wasabi-excel-sheet-tabs .wasabi-form-group {
+    height: 32px;
+    min-height: 0;
+    width: 100px;
+    margin: 0px;
+}
+
+.wasabi-excel-sheet-tabs .wasabi-input {
+    background-color: var(--background-color);
+    border: none;
+    height: 30px;
+}
+
+.wasabi-excel-sheet-selection-layer {
+    position: absolute;
+    z-index: 2;
+}
+
+.wasabi-excel-sheet-selection {
+    position: absolute;
+    background-color: var(--primary-color);
+}
+
+.wasabi-excel-sheet-selection.left {
+    width: 2px;
+
+}
+
+.wasabi-excel-sheet-selection.right {
+    width: 2px;
+
+}
+
+.wasabi-excel-sheet-selection.top {
+    height: 2px;
+
+}
+
+.wasabi-excel-sheet-selection.bottom {
+    height: 2px;
+
+}
+
+.wasabi-excel-sheet-selection.dot {
+    width: 6px;
+    height: 6px;
+    cursor: crosshair;
+}
+
+.wasabi-excel-file {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: 4;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    display: none;
+
+}
+
+.wasabi-excel-file-left {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 220px;
+    background-color: #217346;
+}
+
+.wasabi-excel-file-right {
+    position: absolute;
+    top: 0;
+    left: 220px;
+    right: 0;
+    bottom: 0;
+    overflow: auto;
+    background-color: white;
+}
+
+.wasabi-excel-file-left .menu-item {
+    margin: 0px;
+    padding: 0 0 0 20px;
+    height: 40px;
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    font-size: var(--font-size);
+    color: white;
+
+}
+
+.wasabi-excel-file-left .menu-item:hover {
+    background-color: #0A6332;
+}
+
+.wasabi-excel-file-left .menu-item.active {
+    background-color: #8DBeA3;
+}
+
+.wasabi-excel-file-right .menu-item {
+    display: none;
+    padding-top: 40px;
+    padding-left: 40px;
+    height: 100%;
+    width: 100%;
+    position: relative;
+    justify-content: flex-start;
+}
+
+.wasabi-excel-file-right .menu-item.active {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
+.wasabi-excel-file-right .menu-item .newfile {
+    user-select: none;
+    padding: 10px;
+    width: 240px;
+}
+
+.wasabi-excel-file-right .menu-item .newfile:hover {
+    background-color: #D5EFE2;
+}
+.wasabi-excel-file-import{
+    width: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+.wasabi-excel-file-import-left{
+    width: 350px;
+    display: flex;
+    flex-direction: column; 
+    margin-top:20px;
+}
+.wasabi-excel-file-import-left .menu-item{
+    display: block;
+    height: 40px;
+    line-height: 40px;
+    padding-left: 20px;
+    width: 300px;
+    padding: 0px;
+    cursor: pointer;
+    padding-left:20px;
+}
+.wasabi-excel-file-import-left .menu-item:hover{
+    background-color: #D4F0E1   ;
+}
+.wasabi-excel-file-import-left .menu-item.active{
+    background-color: #9FD587   ;  
+}
+.wasabi-excel-file-import-right{
+    flex:1;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+     flex-wrap: wrap;
+     padding-top:20px;
+}
+
+.wasabi-excel-file-import-right .menu-item-panel{
+    display: none;
+
+}
+.wasabi-excel-file-import-right .menu-item-panel.active{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.wasabi-excel-file-import-right .import-icon{
+    width: 120px;
+    height: 120px;
+    margin-top: 30px;
+    display: flex;
+    border:1px solid var(--border-color);
+    flex-direction: column;
+    justify-content: center;
+    cursor: pointer;
+
+}
+.wasabi-excel-file-import-right .import-icon:hover{
+    background-color: var(--background-color);
+}
+.wasabi-excel-file-import-right .menu-item-panel.csv .wasabi-form-group{
+    min-height: 0px;
+    height: 22px;
+    line-height: 22px;
+}
+.wasabi-excel-file-import-right .menu-item-panel.csv .wasabi-label{
+    height: 22px;
+    line-height: 22px;
+}
+

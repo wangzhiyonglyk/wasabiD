@@ -1,0 +1,177 @@
+/*create by wangzhiyong
+date:2016-04-01
+desc:checkbox
+*/
+.wasabi-checkul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+.wasabi-tree .wasabi-checkul{
+  margin-top:4px;
+  width: 23px;
+}
+.wasabi-checkul li {
+  float: left;
+  position: relative;
+  list-style-type: none;
+  display: flex;
+  margin-right: 5px;
+
+}
+
+.wasabi-checkul .checktext {
+  cursor: default;
+ 
+  height: 21px;
+  line-height: 21px;
+  font-size: var(--font-size);
+  color: var(--color);
+  margin-top: -2px;
+  margin-left: 4px;
+}
+
+.wasabi-checkul .checktext[readOnly] {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+
+.wasabi-checkul .checkbox-label {
+  font-family: 'iconfont' !important;
+  width: 16px;
+  height: 16px;
+  border: 1px solid var(--border-hover-color);
+  border-radius: 2px;
+}
+
+.wasabi-checkul .checkbox-label[readOnly],
+.wasabi-checkul .checkbox-label[disabled] {
+  background-color: var(--background-color);
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.wasabi-checkul .checkbox-label:hover {
+  border: 1px solid var(--primary-color);
+}
+
+.wasabi-checkul .checktext.checked {
+  color: var(--primary-color);
+}
+
+.wasabi-checkul .checkbox-label.checked {
+  border: 1px solid transparent;
+  background-color: var(--primary-color);
+}
+
+.wasabi-checkul .checkbox-label::after {
+  content: "\ea38";
+  position: absolute;
+  left: 1px;
+  top: -2px;
+  font-size: var(--font-size);
+  background-repeat: no-repeat;
+  color: white;
+}
+.wasabi-tree .wasabi-checkul .checkbox-label::after
+{
+  top:-12px;
+}
+
+
+
+.wasabi-checkul .checkbox-label.halfcheck {
+  border: 1px solid transparent;
+  background-color: var(--primary-color);
+}
+
+.wasabi-checkul .checkbox-label.halfcheck::after {
+  content: "";
+  height: 8px;
+  width: 8px;
+  position: absolute;
+  left: 4px;
+  top: 4px;
+  background-color: white;
+  background-size: 12px 12px;
+  background-repeat: no-repeat;
+  color: white;
+}
+
+
+/*radio*/
+
+
+.wasabi-radio-btn {
+  width: 18px;
+  height: 18px;
+  display: inline-block;
+  margin-top: -1px;
+  cursor: pointer;
+  position: relative;
+  -webkit-border-radius: 100%;
+  -moz-border-radius: 100%;
+  border-radius: 100%;
+  border: 1px solid var(--border-hover-color);
+  box-sizing: border-box;
+
+}
+
+.wasabi-radio-btn.readOnly {
+  background-color: var(--background-color);
+  cursor: not-allowed;
+  border-color: var(--border-color);
+  color: var(--border-hover-color);
+}
+
+.wasabi-radio-btn input[type="radio"] {
+  visibility: hidden;
+  width: 23px;
+  height: 23px;
+  margin-top: -3px;
+  margin-left: -3px;
+
+}
+
+.wasabi-radio-btn i {
+  width: 8px;
+  height: 8px;
+  position: absolute;
+  left: 4px;
+  top: 4px;
+  -webkit-border-radius: 100%;
+  -moz-border-radius: 100%;
+  border-radius: 100%;
+  box-sizing: border-box;
+  background-color: transparent;
+}
+
+.treenode .wasabi-radio-btn i {
+  top: 1px !important;
+}
+
+.wasabi-radio-btn.checkedRadio {
+  border-color: var(--primary-color);
+}
+
+.checkedRadio i {
+  background-color: var(--primary-color);
+}
+
+.wasabi-checkul .radiotext {
+  float: right;
+  margin-left: 4px;
+  cursor: default;
+
+}
+
+.wasabi-checkul .radiotext.readOnly {
+  color: var(--border-hover-color);
+}
+
+.wasabi-checkul .radiotext.checkedRadio {
+  color: var(--primary-color);
+}

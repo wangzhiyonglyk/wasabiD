@@ -1,0 +1,115 @@
+/*
+create by wangzhiyong
+desc:模态窗口样式
+*/
+
+.wasabi-modal-container.active {
+  display: block;
+}
+
+.wasabi-modal-container {
+  position: fixed;
+  display: none;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 3;
+  overflow: hidden;
+  font-size: 14px;
+  color: var(--color);
+}
+
+.wasabi-overlay.active {
+  left: 0;
+  opacity: 1;
+  filter: alpha(opacity=1);
+}
+
+.wasabi-overlay {
+  position: fixed;
+  left: -100%;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  filter: alpha(opacity=0);
+  z-index: 3;
+  background-color: rgba(0, 0, 0, .0.15);
+}
+
+.wasabi-modal-container .wasabi-modal {
+  position: absolute;
+  border: 1px solid var(--border-color);
+  background-color: #fff;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 30%);
+  overflow: hidden;
+  padding: 0px;
+  opacity: 0;
+  top: calc(50% - 200px);
+  left: calc(50% - 200px);
+  margin-bottom: 5px;
+  height: 400px;
+  width: 400px;
+  z-index: 7;
+}
+
+
+.wasabi-modal-close {
+  float: right;
+  line-height: normal;
+  text-decoration: none;
+  width: 18px;
+  height: 18px;
+  position: absolute;
+  right: 10px;
+  top: 18px;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.wasabi-modal-close:hover{
+  color:var(--danger-color);
+}
+
+.wasabi-modal-header {
+  font-size: 18px;
+  font-weight: bold;
+  height: 50px;
+  line-height: 50px;
+  padding-left: 20px;
+  text-align: left;
+  background-color: var(--background-color);
+  border-bottom: 1px solid var(--border-color);
+  cursor: move;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.wasabi-modal-container .wasabi-modal .wasabi-modal-content {
+  overflow: auto;
+  width: 100%;
+  position: relative;
+  text-align: left;
+  height: calc(100% - 100px);
+  padding: 10px;
+  margin: auto;
+}
+
+
+
+.wasabi-modal-footer {
+  width: 100%;
+  border-top: 1px solid var(--border-color);
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 50px;
+  padding-top: 10px;
+  padding-right: 20px;
+  background-color: var(--background-color);
+  text-align: right;
+}

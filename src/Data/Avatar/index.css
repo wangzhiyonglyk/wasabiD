@@ -1,0 +1,41 @@
+.wasabi-avatar{
+    position: relative;
+    display: inline-block;
+}
+.wasabi-avatar .wasabi-avatar-icon{
+    display: block;
+    border-radius: 50%;
+    border: 1px solid #eee;
+    min-width: 48px;
+    min-height: 48px;
+    width: 48px;
+    height: 48px;
+    margin-left: 10px;
+}
+
+.wasabi-avatar .wasabi-upload-input{
+    display: none;
+}
+
+.wasabi-avatar .wasabi-upload-icon {
+    animation:turn 2s linear infinite;
+    -webkit-animation:turn 2s linear infinite;
+    font-size: 16px;
+    margin: 0;
+    line-height: 16px;
+    position: absolute;
+    top: 45%;
+    left:45%;
+    width: 16px;
+    height: 16px;
+    color:#ffffff;
+    z-index: 2;
+}
+
+@keyframes turn{
+    0%{-webkit-transform:rotate(0deg);}
+    25%{-webkit-transform:rotate(90deg);}
+    50%{-webkit-transform:rotate(180deg);}
+    75%{-webkit-transform:rotate(270deg);}
+    100%{-webkit-transform:rotate(360deg);}
+  }

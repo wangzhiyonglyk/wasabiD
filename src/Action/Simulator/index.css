@@ -1,0 +1,81 @@
+.wasabi-preview-phone{
+    position: relative;
+    width: 455px;
+    height: 820px;
+    overflow: hidden;
+    text-align: center;
+    border-radius: 40px;
+    padding-left: 30px;
+    padding-top: 10px;
+    padding-bottom: 5px;
+    margin: 10px auto;
+}
+
+
+.wasabi-preview-phone .wasabi-preview-top {
+    height: 76px;
+    box-sizing: border-box;
+    position: absolute;
+    top: 32px;
+    left: 193px;
+    z-index: 1;
+    
+}
+.wasabi-preview-phone .wasabi-preview-top i{
+  
+    display: block;
+    background: #fff;
+    margin: 0 auto;
+    margin-bottom: 6px;
+    height: 11px;
+    width: 11px;
+    border-radius: 50%;
+    font-style: normal;
+    text-decoration: none;
+}
+.wasabi-preview-top span {
+    display: block;
+    margin: 0 auto;
+    height: 8px;
+    width: 86px;
+    border-radius: 30px;
+    background: #fff;
+}
+
+.wasabi-preview-phone .wasabi-preview-home {
+    bottom: 22px;
+    margin-left: -21px;
+    width: 42px;
+    height: 42px;
+    left: 50%;
+    background: #e3e3e3;
+    border-radius: 50%;
+    position: absolute;
+    box-sizing: border-box;
+    background-color: #fff;
+    z-index: 1;
+}
+
+.wasabi-preview-phone .wasabi-preview-view{
+    width: 410px;
+    height: 800px;
+    box-shadow: -3px 3px 0 #bbb, -6px 6px 0 #bbb, -9px 9px 0 #bbb, -12px 12px 0 #bbb, -14px 10px 20px #666;
+    border: 40px solid #ddd;
+    border-width: 70px 7px;
+    border-radius: 40px;
+     position: relative;
+    transition: all .5s ease;
+    overflow-x: hidden;
+    overflow-y: auto;
+
+}
+.wasabi-preview-phone .wasabi-preview-view iframe{
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    border:none;
+    z-index: 1;
+}
+
+

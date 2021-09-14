@@ -1,0 +1,30 @@
+/**
+create by wangzhiyong 
+date:2021-04-20
+desc 引入输入框的样式即可
+*/
+/*
+label
+*/
+
+.wasabi-label {
+    padding-right: 5px;
+    height: 40px;
+    line-height: 40px;
+    text-align: right;
+    white-space: normal;
+    color: var(--color);
+    font-size: 14px;
+  }
+  
+  .wasabi-label.readOnly {
+    color: var(--border-hover-color);
+  }
+  
+  .wasabi-form-group .wasabi-label.required label:before {
+    content: "*";
+    color: var(--danger-color);
+    vertical-align: middle;
+    font-size: 14px;
+  }
+  

@@ -1,0 +1,141 @@
+.wasabi-article{
+position: relative;
+overflow: hidden;
+margin:auto;
+}
+.wasabi-article .wasabi-article-catalog {
+width: 100%;
+border-right: 1px solid var(--border-color);    
+height: 100%;
+padding-top: 10px;
+overflow-y: hidden;
+}
+
+
+.wasabi-article .wasabi-article-catalog .tool{
+    width:100% ;
+    height: 44px;
+}
+.wasabi-article .wasabi-article-catalog .list{
+    height: 100%;
+    overflow-y: auto;
+    list-style: none;
+    margin-top: 10px;
+
+}
+
+.wasabi-article .wasabi-article-catalog .list li {
+    display: flex;
+    height: 50px;
+    padding-left: 10px;
+    border-top: 1px solid var(--border-color);
+    align-items: center;
+    cursor: pointer;
+}
+.wasabi-article .wasabi-article-catalog .list li:last-child{
+    border-bottom: 1px solid var(--border-color);
+}
+.wasabi-article .wasabi-article-catalog .list li:hover,.wasabi-article .wasabi-article-catalog .list li.active
+{
+    background-color: var(--background-color);
+}
+.wasabi-article .wasabi-article-ellipsis{
+    display: block;
+    height: 30px;
+    line-height: 30px;
+    margin-right: 10px;
+    overflow: hidden;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-left: 10px;
+    width: 220px;
+}
+.wasabi-article .wasabi-article-saveStatus{
+    position: absolute;
+    left: 5px;
+    top: 2px;
+}
+
+.wasabi-article .wasabi-article-center{
+    width: 100%;
+    height: 100%;
+    border-right: 1px solid var(--border-color);
+}
+
+.wasabi-article .wasabi-article-title{
+    flex-shrink: 0;
+    width: 100%;
+    border: none;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 30px;
+    box-shadow: none;
+    background-color: transparent;
+    outline: none;
+    border-radius: 0;
+    white-space: pre-wrap;
+    text-align: left;
+    padding: 10px;
+}
+
+.wasabi-article .wasabi-article-headericon{
+    display: block;
+    border-radius: 50%;
+    border: 1px solid #eee;
+    min-width: 48px;
+    min-height: 48px;
+    width: 48px;
+    height: 48px;
+    margin-left: 10px;
+}
+
+.wasabi-article .wasabi-article-author{
+    font-size: 14px;
+    margin-right: 8px;
+}
+
+.wasabi-article .wasabi-article-content{
+    width: 100%;
+    position: relative;
+    display: flex;
+    margin-top: 30px;
+    padding-left: 20px;
+    padding-right: 20px;
+    list-style: none;
+    flex-direction: column;
+    margin-bottom: 10px;
+
+}
+.wasabi-article-content .title{
+    border: none;
+    width: 100%;
+    outline: none;
+    text-indent:1em;
+    -webkit-user-modify: read-write-plaintext-only;
+    -moz-user-select: read-write-plaintext-only;
+    font-size: 16px;
+    margin-top: 20px;
+    text-align: left;
+    font-weight: bold;
+}
+
+.wasabi-article-content .txt{
+    border: none;
+    width: 100%;
+    outline: none;
+    text-indent:2em;
+    -webkit-user-modify: read-write-plaintext-only;
+    -moz-user-select: read-write-plaintext-only;
+    margin-top: 10px;
+    text-align: left;
+}
+.wasabi-article-content .img{
+    margin-top:20px;
+    width: 100%;
+}
+.wasabi-article-content .wasabi-upload{
+    margin:auto;
+    margin-top: 10px;
+    width: 100%;
+}

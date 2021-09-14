@@ -1,12 +1,10 @@
 {
   "name": "wasabiD",
-  "version": "0.8.594",
-  "description": "wasabi design——PC前端框架",
-  "main": "index.js",
+  "version": "0.9.0",
+  "description": "wasabi UI——PC端前端框架",
   "keywords": [
     "react",
-    "wasabi",
-    "bluehy"
+    "wasabi"
   ],
   "repository": {
     "type": "git",
@@ -22,12 +20,34 @@
     }
   ],
   "license": "ISC",
+  "main": "lib/index.js",
+  "jsnext:main": "src/index.js",
+  "scripts": {
+    "build": "webpack",
+    "pub": "npm publish"
+  },
   "bugs": {
-    "url": "https://github.com/wangzhiyonglyk/wasabi/issues"
+    "url": "https://github.com/wangzhiyonglyk/wasabiD/issues"
   },
   "dependencies": {
     "prop-types": "^15.7.2",
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0"
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "wangeditor": "^3.1.1",
+    "wasabi-api": "^0.9.1",
+    "xlsx": "^0.17.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.14.8",
+    "@babel/plugin-transform-runtime": "^7.14.5",
+    "@babel/preset-env": "^7.14.9",
+    "@babel/preset-react": "^7.14.5",
+    "babel-loader": "^8.2.2",
+    "clean-webpack-plugin": "^4.0.0",
+    "css-loader": "^0.23.1",
+    "style-loader": "^3.2.1",
+    "webpack": "^5.47.1",
+    "webpack-cli": "^4.7.2",
+    "webpack-dev-server": "^3.11.2"
   }
 }

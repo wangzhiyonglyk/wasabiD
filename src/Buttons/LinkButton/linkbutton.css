@@ -1,0 +1,111 @@
+    /*create by wangzhiyong
+date:2016-03-02
+desc:小图标按钮样式
+*/
+
+.wasabi-linkbutton {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+    position: relative;
+    text-decoration: none;
+    outline: none;
+    cursor: pointer;
+    padding: 0px;
+    font-size: var(--font-size);
+    color: var(--color);
+ 
+}
+
+.wasabi-linkbutton+.wasabi-linkbutton {
+    margin-left: 10px;
+}
+.wasabi-linkbutton [class*=" icon-"] {
+    font-size: inherit;
+}
+
+.wasabi-linkbutton.default {
+    color: var(--color);
+}
+
+.wasabi-linkbutton.default:focus, .wasabi-linkbutton.default:hover {
+    color: var(--primary-color);
+}
+
+.wasabi-linkbutton.primary {
+    color: var(--primary-color);
+}
+
+.wasabi-linkbutton.primary:focus, .wasabi-linkbutton.primary:hover {
+    color: var(--primary-hover-color);
+}
+
+.wasabi-linkbutton.success {
+    color: var( --success-color);
+}
+
+.wasabi-linkbutton.success:focus, .wasabi-linkbutton.success:hover {
+    color: var( --success-hover-color);
+}
+
+.wasabi-linkbutton.info,.wasabi-linkbutton.cancel {
+    color: var(--info-color);
+}
+
+.wasabi-linkbutton.info:focus, .wasabi-linkbutton.info:hover,.wasabi-linkbutton.cancel:focus, .wasabi-linkbutton.cancel:hover {
+    color: var(--info-hover-color);
+}
+
+.wasabi-linkbutton.warning {
+    color: var(--warning-color);
+}
+
+.wasabi-linkbutton.warning:focus, .wasabi-linkbutton.warning:hover {
+    color: var(--warning-hover-color);
+}
+
+.wasabi-linkbutton.danger {
+    color: var(--danger-color);
+}
+
+.wasabi-linkbutton.danger:focus, .wasabi-linkbutton.danger:hover {
+    color: var(--danger-hover-color);
+}
+.wasabi-linkbutton i.left {
+    display: inline-block;
+    margin-right: 3px;
+    transform: translateY(-1px);
+  
+}
+.wasabi-linkbutton i.right {
+    display: inline-block;
+    margin-left: 3px;
+    transform: translateY(-1px);
+}
+.wasabi-linkbutton i.rightTop {
+    display: inline-block;
+    position: absolute;
+    top: -8px;
+    right: -9px;
+}
+
+.wasabi-linkbutton[disabled] {
+    opacity: 0.70;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.wasabi-linkbutton.onlyicon {
+    border: none;
+    text-decoration: none;
+    width: auto;
+    height: auto;
+    position: relative;
+    background-color: transparent;
+    margin: 0px;
+    padding: 0px;
+    background: transparent;
+    font-size: 14px;
+}

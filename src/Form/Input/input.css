@@ -1,0 +1,200 @@
+/*create by wangzhiyong
+date:2016-03-24
+desc:表单输入框样式
+*/
+
+/*
+外层div
+*/
+
+@import url("../../Sass/base.css");
+.wasabi-form-group {
+  margin-right: 10px;
+  position: relative;
+  margin-bottom:10px;
+  display: flex;
+  white-space: nowrap;
+}
+
+/*
+ 输入框主体
+ */
+
+.wasabi-form-group .wasabi-form-group-body {
+  position: relative;
+  flex: 1;
+}
+
+/*
+普通input
+*/
+
+.wasabi-input {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 10px 6px;
+  font-size: var(--font-size);
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  color: inherit;
+  display: block;
+  width: 100%;
+  outline: none;
+  border-radius: 4px;
+  resize: vertical;
+}
+
+
+textarea.wasabi-input {
+  height: 100%;
+}
+
+.wasabi-input[disabled], .wasabi-input[readOnly] {
+  background-color: var(--background-color);
+  border-color: var(--border-color);
+  color: var(--border-hover-color);
+  cursor: not-allowed;
+}
+
+.wasabi-input::placeholder {
+  color: var(--border-hover-color);
+}
+
+.wasabi-input:hover {
+  border-color: var(--border-hover-color);
+}
+
+.wasabi-input:focus {
+  border-color:var(--border-hover-color);
+}
+
+.wasabi-input[disabled]:hover, .wasabi-input[readOnly]:hover {
+  background-color: var(--background-color);
+  border-color: var(--border-color);
+  color: var(--border-hover-color);
+  cursor: not-allowed;
+}
+
+.wasabi-input[disabled]:focus, .wasabi-input[readOnly]:focus {
+  background-color: var(--background-color);
+  border-color: var(--border-color);
+  color: var(--border-hover-color);
+  cursor: not-allowed;
+}
+
+/*
+input验证失败
+*/
+
+.wasabi-has-error .wasabi-input {
+  border-color: var(--danger-color);
+}
+
+.wasabi-has-error .checkbox-label {
+  border-color: var(--danger-color);
+}
+
+.wasabi-has-error .timeinput {
+  border: 1px solid var(--border-color);
+}
+
+/*
+input验证通过
+*/
+
+.wasabi-has-success .wasabi-input {
+  border-color: var(--success-color);
+}
+
+.wasabi-has-success input[type="checkbox"] {
+  border-color: var(--success-color);
+}
+
+.wasabi-has-success input[type="radio"] {
+  border-color: var(--success-color);
+}
+
+/*
+ 错误提示信息
+*/
+
+.wasabi-help-block {
+  color: var(--danger-color);
+  display: none;
+  white-space: pre-wrap;
+  overflow: hidden;
+  z-index: 1;
+  font-size: 12px;
+  position: absolute;
+  top: -8px;
+  margin-left: 5px;
+  background: white;
+  transform: scale(0.9);
+}
+
+/*
+后台验证
+ */
+
+.wasabi-form-group-body .valid, .wasabi-form-group-body .invalid, .wasabi-form-group-body .validing {
+  font-family: 'iconfont' !important;
+  font-style: normal;
+  width: 14px;
+  height: 14px;
+  position: absolute;
+  right: 10px;
+  top: 8px;
+  cursor: pointer;
+}
+
+/*
+验证成功
+*/
+
+.wasabi-form-group-body .valid:before {
+  font-size: 16px;
+  content: "\e95d";
+  color: #25d7b9;
+}
+
+/*
+验证失败
+ */
+
+.wasabi-form-group-body .invalid:before {
+  font-size: 16px;
+  content: "\e918";
+  color: var(--danger-color);
+}
+
+.wasabi-form-group-body .validing {
+  top: 10px;
+  border-radius: 100%;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+  border: 1px solid #3c92a7;
+  border-bottom-color: transparent;
+  display: inline-block;
+  -webkit-animation: rotate 0.75s 0s linear infinite;
+  animation: rotate 0.75s 0s linear infinite;
+}
+
+/* 正在提交*/
+
+@keyframes rotate {
+  0% {
+    -webkit-transform: rotate(0deg) scale(1);
+    transform: rotate(0deg) scale(1);
+  }
+  50% {
+    -webkit-transform: rotate(180deg) scale(0.6);
+    transform: rotate(180deg) scale(0.6);
+  }
+  100% {
+    -webkit-transform: rotate(360deg) scale(1);
+    transform: rotate(360deg) scale(1);
+  }
+}

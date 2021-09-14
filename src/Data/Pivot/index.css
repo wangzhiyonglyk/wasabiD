@@ -1,0 +1,63 @@
+.wasabi-pivot{
+    position: relative;
+    width: 100%;
+    display: flex;
+}
+
+.wasabi-pivot-left{
+    height: 100%;
+    width: 300px;
+    position: relative;
+
+}
+
+.wasabi-pivot-right {
+    width: calc(100% - 300px);
+}
+
+.wasabi-pivot-configuration{
+    position: relative;
+    width: 100%;
+    text-align: center;
+    cursor: pointer;
+    border-top: 1px solid var(--border-color);
+}
+.wasabi-pivot-configuration-panel
+{
+    padding: 10px;
+    position: relative;
+    height: 100%;
+    
+}
+.wasabi-pivot-configuration-fields{
+    float: left;
+    width: calc( 30% - 10px);
+    overflow-y: auto;
+    height: 100%;
+}
+.wasabi-pivot-configuration-set{
+    float:right;
+    width:calc( 70% - 10px);
+    margin-left: 10px;
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content:flex-start;
+}
+
+.wasabi-pivot-set-item{
+  width:calc( 50% - 10px);
+  height:calc( 50%);
+}
+.wasabi-pivot-set-item:nth-child(1){
+    margin-right: 10px;
+}
+.wasabi-pivot-set-item:nth-child(3){
+    margin-right: 10px;
+}
+
+
+.wasabi-pivot-rowsData{
+    position:relative;
+}
+

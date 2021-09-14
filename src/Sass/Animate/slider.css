@@ -1,0 +1,34 @@
+/**
+create wangzhiyong
+date:2020-07-15
+desc:所以轮播组件的样式
+*/
+.wasabi-slider {
+    position: relative;
+    margin:auto;
+    width: 100%;
+    height: 400px;
+    overflow: hidden;
+    font-size: 14px;
+    color: var(--color);
+}
+
+
+.wasabi-slider .banner {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    transition-property:all;
+}
+.wasabi-slider .banner > *{
+    float: left;
+    height: 100%;
+    left:0px;
+  
+}
+
+.wasabi-upslider{
+    height: 200px;
+    overflow: hidden;
+}

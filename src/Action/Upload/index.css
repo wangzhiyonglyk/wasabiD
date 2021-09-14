@@ -1,0 +1,73 @@
+.wasabi-upload-container {
+    margin: 0px;
+    padding: 0px;
+    position: relative;
+    box-sizing: border-box;
+}
+.wasabi-upload{
+    background-color: #fff;
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    box-sizing: border-box;
+    width: 360px;
+    height: 180px;
+    text-align: center;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    font-size: 14px;
+    color: var(--color);
+}
+.wasabi-upload.disabled{
+    cursor:not-allowed;
+    background-color: #d9d9d9;
+}
+.wasabi-upload .wasabi-upload-icon {
+    font-size: 68px;
+    color: var(--border-hover-color);
+    margin: 40px 0 16px;
+    line-height: 50px;
+    display: inline-block;
+}
+.wasabi-upload .wasabi-upload-icon.icon-loading{
+    animation:turn 2s linear infinite;
+    -webkit-animation:turn 2s linear infinite;
+    font-size: 16px;
+    margin: 0;
+    line-height: 16px;
+    position: absolute;
+    top: 9px;
+    width: 16px;
+    height: 16px;
+
+ 
+}
+@keyframes turn{
+    0%{-webkit-transform:rotate(0deg);}
+    25%{-webkit-transform:rotate(90deg);}
+    50%{-webkit-transform:rotate(180deg);}
+    75%{-webkit-transform:rotate(270deg);}
+    100%{-webkit-transform:rotate(360deg);}
+  }
+.wasabi-upload .wasabi-upload-text {
+    color: var(--color);
+    font-size: 14px;
+    text-align: center;
+}
+.wasabi-upload .wasabi-upload-input{
+    display: none;
+}
+
+.wasabi-uplaod-files{
+    text-align: left;
+    padding:2px;
+    width: 100%;
+    height: 100%;
+}
+.wasabi-upload .wasabi-uoload-ok{
+    
+    position: absolute;
+    bottom: 10px;
+    width: calc(100% - 20px);
+    text-align: center;
+}

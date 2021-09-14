@@ -1,0 +1,71 @@
+/*create by wangzhiyong
+date:2016-02-24
+desc:表单样式
+*/
+
+.wasabi-form
+{
+    position: relative;
+    margin-top: 0px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 5px;
+    width:100%;
+    display: block;
+    font-size: 14px;
+    color: var(--color);
+}
+.wasabi-form .form-body{
+    width:100%;
+    display: flex;
+    justify-content: start;
+    flex-wrap: wrap;
+}
+
+.wasabi-form .form-body[cols="1"]>.wasabi-form-group{
+    width: 99%;
+}
+.wasabi-form .form-body[cols="2"]>.wasabi-form-group{
+    width: 49%;
+}
+.wasabi-form .form-body[cols="3"]>.wasabi-form-group{
+    width: 32%;
+}
+.wasabi-form .form-body[cols="4"]>.wasabi-form-group{
+    width: 24%;
+}
+.wasabi-form .form-body[cols="5"]>.wasabi-form-group{
+    width: 19%;
+}
+/**
+控制col组件的布局
+*/
+.wasabi-form .form-body[cols="1"]>.wasabi-cols{
+    width: 99%;
+}
+.wasabi-form .form-body[cols="2"]>.wasabi-cols{
+    width: 49%;
+}
+.wasabi-form .form-body[cols="3"]>.wasabi-cols{
+    width: 32%;
+}
+.wasabi-form .form-body[cols="4"]>.wasabi-cols{
+    width: 24%;
+}
+.wasabi-form .form-body[cols="5"]>.wasabi-cols{
+    width: 19%;
+}
+.wasabi-form .form-submit
+{
+    display: block;
+    text-align: center;
+    width:100%;
+    margin-top: 20px;
+    height:30px;
+
+
+
+}
+
+
+

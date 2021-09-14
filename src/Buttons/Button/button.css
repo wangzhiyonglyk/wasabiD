@@ -1,0 +1,109 @@
+/*
+按钮样式
+*/
+
+/* @import url("../../Sass/base.css"); */
+.wasabi-button {
+  display: inline-block;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  background: #fff;
+  border: 1px solid var(--border-color);
+  font-size: 14px;
+  color: var(--color);
+  -webkit-appearance: none;
+  text-align: center;
+  box-sizing: border-box;
+  outline: none;
+  margin: 0;
+  transition: .1s;
+  user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  padding: 10px 12px;
+  border-radius: 4px;
+  box-shadow: var(--box-shadow);
+  position: relative;
+
+}
+
+.wasabi-button+.wasabi-button {
+  margin-left: 10px;
+}
+
+
+
+.wasabi-button.size-large {
+  padding: 10px 16px;
+  font-size: 16px;
+ 
+}
+
+.wasabi-button.size-default {
+  padding: 10px 12px;
+  font-size: 14px;
+
+}
+
+.wasabi-button.size-small {
+  padding: 5px 10px;
+  font-size: 12px;
+}
+
+.wasabi-button.size-mini {
+  padding: 3px 5px;
+  font-size: 12px;
+}
+
+.wasabi-button .wasabi-button-icon {
+  transform: translateY(1px);
+}
+
+
+
+.wasabi-button.default {
+  background: #fff;
+  border: 1px solid var(--border-color);
+  color: var(--color);
+}
+
+.wasabi-button.primary {
+  color: #fff;
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.wasabi-button.success {
+  color: #fff;
+  background-color: var( --success-color);
+  border-color: var( --success-color);
+}
+
+
+.wasabi-button.info, .wasabi-button.cancel {
+  color: #fff;
+  background-color: var(--info-color);
+  border-color: var(--info-color);
+}
+
+
+.wasabi-button.warning {
+  color: #fff;
+  background-color: var(--warning-color);
+  border-color: var(--warning-color);
+}
+
+
+.wasabi-button.danger {
+  color: #fff;
+  background-color: var(--danger-color);
+  border-color: var(--danger-color);
+}
+
+
+
+.wasabi-button[disabled] {
+  opacity: 0.70;
+  cursor: not-allowed;
+}

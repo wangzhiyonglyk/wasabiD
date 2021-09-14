@@ -1,0 +1,12 @@
+
+.wasabi-detail
+{
+    overflow: visible;
+    font-size: 14px;
+    color: var(--color);
+}
+
+.wasabi-detail .wasabi-table
+{
+    overflow: visible;
+}

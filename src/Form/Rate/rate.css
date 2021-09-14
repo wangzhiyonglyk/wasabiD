@@ -1,0 +1,27 @@
+.wasabi-rate{
+    display: inline-block;
+    margin-top: 11px;
+}
+.wasabi-form-group-body.readOnly .wasabi-rate{
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+.wasabi-rate-star{
+    color:rgb(198, 209, 222);
+  font-size: 18px;
+  cursor: pointer;
+  margin-left:5px;
+}
+.wasabi-form-group-body.readOnly .wasabi-rate-star{
+    cursor: not-allowed;
+}
+
+.wasabi-rate-text{
+    margin-left: 6px;
+    font-size: 14px;
+    color: var(--color);
+    transform: translateY(-1px);
+    display: inline-block;
+    min-width: 40px;
+    
+}

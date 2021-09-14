@@ -1,0 +1,225 @@
+/*create by wangzhiyong
+date:2016-04-26
+desc:日期选择样式
+*/
+
+.combobox {
+  width: 100%;
+  display: block;
+  position: relative;
+  font-size: 14px;
+  color: var(--color);
+}
+
+/*下拉图标*/
+
+.combobox .comboxbox-icon {
+  font-style: normal;
+  display: block;
+  width: 22px;
+  height: 24px;
+  position: absolute;
+  right: 4px;
+  top: 12px;
+  cursor: pointer;
+  text-align: center;
+  transition: all, transform .6s;
+  color: var(--icon-color);
+  font-size: var(--icon-size);
+}
+.combobox .comboxbox-icon:hover{
+  color:var(--icon-hover-color);
+}
+.wasabi-form-group-body.readOnly .combobox .comboxbox-icon {
+  cursor: not-allowed;
+}
+
+
+.combobox .comboxbox-icon.rotate {
+  transform: rotate(180deg) translateY(8px);
+}
+
+/*清空图标*/
+
+.combobox .combobox-clear {
+  font-family: iconfont;
+  font-style: normal;
+  width: 12px;
+  height: 12px;
+  position: absolute;
+  right: 25px;
+  top: 14px;
+  color: var(--icon-color);
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.combobox .combobox-clear:hover{
+  color:var(--icon-hover-color);
+}
+
+/*下拉容器*/
+
+.dropcontainter {
+  padding: 0px;
+  margin: 0px;
+  min-height: 250px;
+  display: none;
+  position: absolute;
+  overflow: visible;
+  z-index: 2;
+  top: 44px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  box-shadow: var(--box-shadow);
+  background-color: white;
+  margin: 5px 0;
+  width: 100%;
+}
+.dropcontainter::before {
+  border-color: transparent transparent #ffffff;
+  z-index: 1;
+  top: -16px;
+}
+
+.dropcontainter::after {
+  border-color: transparent transparent var(--border-color);
+  top: -17px;
+}
+
+.dropcontainter::before, .dropcontainter::after {
+  content: '';
+  display: block;
+  width: 0;
+  height: 0;
+  border-width: 8px;
+  border-style: solid;
+  position: absolute;
+  left: 25px;
+}
+
+/*日期*/
+
+.combobox .date {
+  width: 294px;
+  height: 304px;
+
+}
+
+.combobox .time {
+  width: 220px;
+  height: 220px;
+}
+.combobox .datetime {
+  width: 294px;
+  height: 370px;
+}
+.combobox  .datetime .wasabi-datetime{
+  border:none;
+}
+.combobox  .datetimerange .wasabi-datetime{
+  border:none;
+}
+.combobox .daterange {
+  width: 686px;
+  height: 330px;
+}
+
+.combobox  .datetimerange {
+  width: 686px;
+  height: 370px;
+}
+
+
+
+
+
+/*日期范围*/
+
+.combobox .range {
+  width: 502px;
+  height: 250px;
+}
+
+.combobox .timerange {
+  width: 502px;
+  height: 223px;
+}
+
+
+
+.combobox .datetimeicon .icon-time {
+  font-size: 20px;
+}
+
+.combobox .timeinput {
+  width: 120px;
+  height: 34px;
+  top: 2px;
+  position: absolute;
+  margin-left: 15px;
+  border-radius: 4px;
+  outline: none;
+  border: 1px solid #dddddd;
+  right: 5px;
+  padding-right: 6px;
+}
+
+/**
+  普通下拉框
+  */
+
+.combobox .select {
+  width: 100%;
+  min-width: 210px;
+  height: auto;
+}
+
+/*联级选择*/
+
+.combobox .picker {
+  width: 410px;
+  height: 527px;
+}
+
+/*下拉列表*/
+
+.combobox .gridpicker {
+  min-width: 500px;
+  width:100%;
+  height: 600px;
+}
+
+
+/*下拉列表*/
+
+.combobox .treepicker {
+  width: 100%;
+  min-width: 300px;
+  height: 400px;
+  overflow: auto;
+}
+
+.combobox .treepicker.default {
+  left: 0px;
+}
+
+.combobox .treepicker.left {
+  left: 0px;
+}
+
+.combobox .treepicker.right {
+  left: -60px;
+}
+
+.combobox .treepickerinput {
+  height: 30px;
+  margin-right: 10px;
+  border-radius: 4px;
+  outline: none;
+  border: 1px solid var(--border-color);
+  padding-right: 6px;
+  border-color: var(--border-color)!important;
+}
+
+

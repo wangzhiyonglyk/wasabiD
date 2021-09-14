@@ -1,0 +1,153 @@
+/**
+列表样式
+ */
+@import url("../../Sass/base.css");
+
+.wasabi-table-container {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+/*
+表格基本样式
+border奇怪的现象，出现变粗的现象
+*/
+.wasabi-table {
+  clear: both;
+  border-top: 1px solid var(--border-color);
+  border-left: 1px solid var(--border-color);
+  width: 100%;
+  border-spacing: 0;
+  border-collapse:inherit;
+  box-sizing: border-box;
+  table-layout: fixed;
+}
+
+
+.wasabi-table td,
+.wasabi-table th {
+  border-bottom: 1px solid var(--border-color);
+  border-right: 1px solid var(--border-color);
+  padding: 10px 5px;
+  vertical-align: middle;
+  box-sizing: border-box;
+  text-align: center;
+  overflow: hidden;
+  height: 42px;
+  font-weight: normal;
+}
+
+/*
+没有边框的时候
+*/
+
+.wasabi-table.table-no-bordered td {
+  border: none;
+  border-top: 1px solid var(--border-color);
+}
+
+.wasabi-table.table-no-bordered th {
+  border: none;
+  border-bottom: 1px solid var(--border-color);
+}
+
+/*
+背景颜色
+*/
+
+.wasabi-table thead{
+  background-color: var(--background-color);
+}
+.wasabi-table>tbody>tr.selected {
+  background-color: var(--background-color);
+}
+
+/*
+编辑状态下
+*/
+
+.wasabi-table td.focus{
+  padding: 0px;
+  background-color:white;
+  overflow: visible;
+}
+.wasabi-table td.focus .wasabi-table-cell{
+  border: 1px solid var(--primary-color);
+  height: 100%;
+}
+.wasabi-table td.focus .wasabi-table-cell .wasabi-form-group {
+  margin: 0;
+  min-height: 0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+.wasabi-table td.focus .wasabi-input{
+  border:none;
+  text-align: inherit;
+}
+
+
+/*
+单元格样式
+*/
+.wasabi-table-cell {
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 21px;
+  line-height: 21px;
+  word-break: break-all;
+  position: relative;
+  cursor: pointer;
+  color: inherit;
+  font-size: inherit;
+  overflow:inherit;
+  white-space:inherit;
+  text-overflow:inherit;
+}
+.wasabi-table-cell:hover{
+  color: var(--primary-color);
+}
+
+.wasabi-pivot .wasabi-table .wasabi-table-cell {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: clip;
+}
+
+.wasabi-treegrid .wasabi-table .wasabi-table-cell {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: clip;
+}
+
+.wasabi-propertygrid .wasabi-table .wasabi-table-cell {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: clip;
+}
+
+.wasabi-table .wasabi-order-column{
+  background-color: var(--background-color);
+}
+
+.wasabi-excel-sheet .wasabi-table td,
+.wasabi-excel-sheet  .wasabi-table th {
+  border-bottom: 1px solid var(--border-color);
+  border-right: 1px solid var(--border-color);
+  padding: 0px 12px;
+  vertical-align: middle;
+  box-sizing: border-box;
+  text-align: center;
+  overflow: hidden;
+  height: 36px;
+  line-height: 36px;
+  font-weight: normal;
+}
+
+
+
+.wasabi-excel-sheet .wasabi-table td.chosed{
+  background-color: var(--background-color);
+}

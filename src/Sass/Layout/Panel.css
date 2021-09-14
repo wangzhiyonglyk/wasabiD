@@ -1,0 +1,99 @@
+/*
+create by wangzhiyong
+date:2016-05-18
+desc:面板组件样式
+*/
+.wasabi-panel{
+  margin: 0px;
+  margin-bottom: 10px;
+  box-shadow:none;
+  
+  border-radius: 4px;
+  -webkit-transition: height 1s;
+  transition:height 1s;
+  font-size: 14px;
+  color: var(--color);
+}
+
+.wasabi-panel .panel-header
+{
+  position: relative;
+  height: 40px;
+  line-height: 40px;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-bottom: 1px solid var(--border-color);
+  
+}
+.wasabi-panel .panel-header [class^="icon-"],.wasabi-panel .panel-header [class*=" icon-"]{
+  margin-right: 5px;
+}
+.panel-default>.panel-header {
+  background: #fff;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--color);
+}
+.panel-primary>.panel-header {
+  color: #fff;
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.panel-success>.panel-header {
+  color: #fff;
+    background-color: var( --success-color);
+    border-color: var( --success-color);
+}
+.panel-info>.panel-header {
+  color: #fff;
+  background-color: var(--info-color);
+  border-color: var(--info-color);
+}
+.panel-warning>.panel-header{
+  color: #fff;
+  background-color: var(--warning-color);
+  border-color: var(--warning-color);
+}
+
+.panel-danger>.panel-header{
+  color: #fff;
+  background-color: var(--danger-color);
+  border-color: var(--danger-color);
+}
+
+.wasabi-panel .panel-buttons
+{
+  position: absolute;
+  right: 30px;
+  bottom: -6px;
+}
+
+.wasabi-panel .panel-icon
+{
+  position:absolute;
+  right:10px;
+  bottom: 8px;
+  width:40px;
+  height:20px;
+text-align: right;
+  color: var(--color);
+}
+.panel-icon i{
+  color: var(--color);
+}
+.panel-icon i:hover
+{
+  color: #333333;
+}
+.wasabi-panel .panel-body
+{
+  
+  height:calc(100% - 40px);
+  padding-top:10px;
+  padding-bottom: 10px;
+  text-align: left;
+  margin: 0;
+  border: 0;
+
+}
+

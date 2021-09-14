@@ -1,0 +1,49 @@
+/*create by wangzhiyong
+date:2016-03-30
+desc:下拉框样式
+*/
+
+.wasabi-select ul {
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    max-height: 270px;
+    min-height: 100px;
+    overflow-y: auto;
+    border-top: 0;
+    z-index: 3;
+    top: 34px;
+    padding: 0;
+    margin: 0;
+  }
+  .wasabi-select ul li {
+    height: 35px;
+    line-height: 35px;
+    overflow: hidden;
+    padding: 0 10px;
+    cursor: pointer;
+    position: relative;
+    text-align: left;
+    font-size: 14px;
+  }
+  .wasabi-select ul li:hover {
+    background-color: var(--background-color);
+  }
+  
+  .wasabi-select ul li.active {
+  color: var(--primary-color);
+  }
+  .wasabi-select ul li.active:after
+  {
+    font-family: 'iconfont' !important;
+    content:"\ea38";
+    position: absolute;
+    top:0px;
+    right: 10px;
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+    color:var(--primary-color);
+  }
+  
+  

@@ -1,0 +1,43 @@
+.wasabi-separator{
+    display: flex;
+    position: relative;
+    margin: 16px 0;
+    font-weight: 500;
+    white-space: nowrap;
+    text-align: center;
+    color:var(--color);
+}
+
+.wasabi-separator::before{
+    width: 50%;
+    border-top: 1px solid var(--border-color);
+    content: "";
+    transform: translateY(50%);
+}
+.wasabi-separator::after{
+    width: 50%;
+    border-top: 1px solid var(--border-color);
+    content: "";
+    transform: translateY(50%);
+}
+.wasabi-separator-text{
+    display: inline-block;
+    padding: 0px 15px;
+    font-size: 16px;
+    color: var(--color);
+}
+.wasabi-separator.primary .wasabi-separator-text{
+    color:var(--primary-color);
+}
+.wasabi-separator.success .wasabi-separator-text{
+    color:var(--success-color);
+}
+.wasabi-separator.warning .wasabi-separator-text{
+    color:var(--warning-color);
+}
+.wasabi-separator.danger .wasabi-separator-text{
+    color:var(--danger-color);
+}
+.wasabi-separator.info .wasabi-separator-text{
+    color:var(--info-color);
+}

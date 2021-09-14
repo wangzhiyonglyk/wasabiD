@@ -1,0 +1,12 @@
+/*create by wangzhiyong
+date:2016-03-02
+desc:大图标按钮样式
+*/
+
+.wasabi-toolbar
+{
+  padding-bottom: 8px;
+  padding-left: 10px;
+  font-size: 14px;
+  color: var(--color);
+}

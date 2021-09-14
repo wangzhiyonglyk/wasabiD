@@ -1,0 +1,86 @@
+.wasabi-dropdown {
+    position: relative;
+    display: inline-block;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -ms-border-radius: 4px;
+    -o-border-radius: 4px;
+    font-size: 14px;
+    color: var(--color);
+    padding-right: 6px;
+}
+
+.wasabi-dropdown+.wasabi-dropdown {
+    margin-left: 10px;
+}
+
+.wasabi-dropdown[disabled] {
+    cursor: not-allowed;
+}
+
+
+
+.wasabi-dropdown .wasabi-dropdown-arrow {
+    position: absolute;
+    right: -4px;
+    bottom: -2px;
+}
+
+.wasabi-dropdown .wasabi-dropdown-arrow.noicon {
+    top: 12px
+}
+
+.wasabi-dropdown-menu {
+    position: absolute;
+    overflow: visible;
+    top: 26px;
+    z-index: 10;
+    padding: 0;
+    margin: 5px 0;
+    background-color: #fff;
+    display: none;
+    min-width: 100px;
+}
+
+.wasabi-dropdown-menu:after,
+.wasabi-dropdown-menu:before {
+    content: "";
+    display: block;
+    width: 0;
+    height: 0;
+    border-width: 8px;
+    border-style: solid;
+    position: absolute;
+    left: 15px;
+
+}
+
+.wasabi-dropdown-menu:before {
+    border-color: transparent transparent #fff;
+    z-index: 1;
+    top: -16px;
+}
+
+.wasabi-dropdown-menu:after {
+    border-color: transparent transparent var(--border-color);
+    top: -17px;
+}
+
+.wasabi-dropdown-item {
+    list-style: none;
+    line-height: 36px;
+    padding: 0 20px;
+    margin: 0;
+    font-size: 14px;
+    color: var(--color);
+    cursor: pointer;
+    outline: none;
+    width: 100%;
+    text-align: center;
+}
+
+.wasabi-dropdown-item:hover {
+    background-color: #ecf5ff;
+    color: var(--primary-hover-color);
+}
