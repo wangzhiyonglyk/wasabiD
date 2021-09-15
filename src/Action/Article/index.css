@@ -113,7 +113,7 @@ overflow-y: hidden;
     outline: none;
     text-indent:1em;
     -webkit-user-modify: read-write-plaintext-only;
-    -moz-user-select: read-write-plaintext-only;
+    user-select: read-write-plaintext-only;
     font-size: 16px;
     margin-top: 20px;
     text-align: left;
@@ -126,7 +126,7 @@ overflow-y: hidden;
     outline: none;
     text-indent:2em;
     -webkit-user-modify: read-write-plaintext-only;
-    -moz-user-select: read-write-plaintext-only;
+    user-select: read-write-plaintext-only;
     margin-top: 10px;
     text-align: left;
 }

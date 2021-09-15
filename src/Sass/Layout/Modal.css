@@ -84,7 +84,7 @@ desc:模态窗口样式
   border-bottom: 1px solid var(--border-color);
   cursor: move;
   -webkit-user-select: none;
-  -moz-user-select: none;
+  user-select: none;
   -ms-user-select: none;
   user-select: none;
 }

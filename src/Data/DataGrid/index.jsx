@@ -30,7 +30,7 @@ import mixins from '../../Mixins/mixins';
  */
 import eventHandler from './method/eventHandler.js';
 import staticMethod from "./method/staticMethod"
-// import pasteExtend from './method/pasteExtend.js';
+import pasteExtend from './method/pasteExtend.js';
 import Grid from "./View/Grid"
 /**
  * 样式

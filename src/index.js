@@ -7,7 +7,7 @@
  * desc:框架入口
  */
 import React from "react";
-import("./Sass/base.css");
+import  "./Sass/base.css"
 window.onerror = function (message, url, line, column, error) {
   console.log('log---onerror::::', message, url, line, column, error);
   return false;

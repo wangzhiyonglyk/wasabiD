@@ -22,7 +22,7 @@
   padding: 2px 10px 2px 5px;
   font: 14px Helvetica, Arial, sans-serif;
   -webkit-user-select: none;
-  -moz-user-select: none;
+  user-select: none;
   -ms-user-select: none;
   user-select: none;
 }
