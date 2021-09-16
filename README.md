@@ -1,5 +1,8 @@
+
+##如何使用
+####import {Input} from "wasabiD"
+####import "wasabiD/lib/index.css"
 ##React 版本的PC端UI框架
-##此版本可以用来使用
-##也可以用于学习
+
 ###有任何问题 找作者即可。
 ###文档地址 暂时还未开放，可以作者要
