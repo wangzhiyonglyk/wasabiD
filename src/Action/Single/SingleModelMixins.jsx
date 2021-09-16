@@ -4,7 +4,7 @@
  desc:单页面应用的事件处理模型
  */
 
-let React = require('react');
+ import React from "react"
 import LinkButton from "../../Buttons/LinkButton"
 let PageModelMixins = {
   /**

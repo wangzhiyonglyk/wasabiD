@@ -12,7 +12,6 @@ import Center from "../../Layout/Center";
 import Container from "../../Layout/Container";
 import GlobalSearch from "../../Data/GlobalSearch"
 import SystemHeader from "./SystemHeader";
-import dom from "../../libs/dom";
 
 import "./index.css";
 import SystemSet from "./SystemSet";

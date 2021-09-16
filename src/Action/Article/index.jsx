@@ -297,7 +297,7 @@ class Article extends React.Component {
                     <Container className={"wasabi-article-center"}>
                         <div style={{ display: this.state.title ? "block" : "none" }} contentEditable={true} className="wasabi-article-title" dangerouslySetInnerHTML={{ __html: this.state.title }} onChange={this.titleChangeHandler}></div>
                         <div style={{ display: this.state.title ? "flex" : "none", alignItems: "center" }}>
-                            <img className="wasabi-article-headericon" src={this.props.headerIcon ? this.props.headerIcon : require("./icon.jpg")}></img>
+                            <img className="wasabi-article-headericon" src={this.props.headerIcon}></img>
                             <div style={{ marginLeft: 10, textAlign: "left" }}>
                                 <div><span className="wasabi-article-author">{this.props.author ? this.props.author : "匿名"}</span></div>
                                 <div>

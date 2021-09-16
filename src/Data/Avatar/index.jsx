@@ -241,7 +241,7 @@ class Avatar extends Component {
         return (
 
             <div className={"wasabi-avatar " +this.props.className+" "+(this.props.disabled?"disabled":"")}>
-                    <img onClick={this.onClick.bind(this)} className="wasabi-avatar-icon" src={this.state.icon ? this.state.icon : require("./icon.jpg")}></img>
+                    <img onClick={this.onClick.bind(this)} className="wasabi-avatar-icon" src={this.state.icon  }></img>
                     { this.state.uploadDisabled? <i style={{left:"50%",top:"20%",color:"#ffffff"}} className="icon-loading wasabi-upload-icon"></i>:null}
               <input id={this.state.uploadid} type="file" name="file" ref={this.filenode}   onChange={this.onChange.bind(this)} className="wasabi-upload-input" />
                 </div>

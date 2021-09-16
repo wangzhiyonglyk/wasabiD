@@ -16,7 +16,7 @@ module.exports = {
   },
   // 通过正则命中所有以 react 或者 babel-runtime 开头的模块
   // 这些模块使用外部的，不能被打包进输出的代码里
-  externals: /^(react|prop-types|xlsx|lodash)/,
+  externals: /^(react|prop\-types|xlsx|lodash|wasabi\-api|wangeditor)/,
   module: {
     // 加载器配置
     rules: [

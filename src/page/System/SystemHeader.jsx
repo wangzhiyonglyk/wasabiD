@@ -129,7 +129,7 @@ class SystemHeader extends React.Component {
                         borderRadius: "50%",
                         transform: "translateY(-2px)"
                     }}
-                    src={props.headerImg || require("./img/header.jpg")}
+                    src={props.headerImg}
                 ></img>
                 <span className='title'>{props.nick}</span>
                 <dl

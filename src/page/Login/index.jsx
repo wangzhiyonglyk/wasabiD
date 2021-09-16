@@ -16,15 +16,9 @@ class Login extends React.Component {
             username: "",
             password: ""
         }
-        this.usernameChange = this
-            .usernameChange
-            .bind(this);
-        this.passwordChange = this
-            .passwordChange
-            .bind(this);
-        this.onSumbit = this
-            .onSumbit
-            .bind(this)
+        this.usernameChange = this.usernameChange.bind(this);
+        this.passwordChange = this.passwordChange.bind(this);
+        this.onSumbit = this.onSumbit.bind(this)
     }
     componentDidMount() {
         this.usernameref.current.focus();
@@ -36,18 +30,12 @@ class Login extends React.Component {
     }
     usernameChange(event) {
         this.setState({
-            username: event
-                .target
-                .value
-                .trim()
+            username: event.target.value.trim()
         })
     }
     passwordChange(event) {
         this.setState({
-            password: event
-                .target
-                .value
-                .trim()
+            password: event.target.value.trim()
         })
     }
     /**
@@ -59,38 +47,25 @@ class Login extends React.Component {
                 if (this.props.loginHandler && typeof this.props.loginHandler === "function") {
                     this.props.loginHandler(this.state.username, this.state.password);
                 } else {
+                    //
                     api.ajax({
                         url: this.props.url,
                         type: "post",
                         contentType: this.props.contentType,
-                        data: this
-                            .props
-                            .contentType
-                            .indexOf("json") > -1
-                            ? JSON.stringify({ username: this.state.username, password: this.state.password })
-                            : {
-                                username: this.state.username,
-                                password: this.state.password
-                            },
+                        data: {
+                            username: this.state.username,
+                            password: this.state.password
+                        },
                         success: (res) => {
                             //做兼容性处理
                             res.statusCode = res.statusCode || res.code || res.status;
-                            if (res.success) {
-                                res.statusCode == 200;
-                            }
+                            if (res.success) { res.statusCode == 200; }//如果使用是这个字段
                             if (res.statusCode == 200) {
-
-                                window
-                                    .sessionStorage
-                                    .setItem("user", JSON.stringify(res.data));
+                                window.sessionStorage.setItem("user", JSON.stringify(res.data));
                                 if (typeof res.data == "object") {
-                                    window
-                                        .sessionStorage
-                                        .setItem("token", res.data.token);
+                                    window.sessionStorage.setItem("token", res.data.token);
                                 } else if (typeof res.data == "string") {
-                                    window
-                                        .sessionStorage
-                                        .setItem("token", res.data);
+                                    window.sessionStorage.setItem("token", res.data);
                                 }
                                 window.location.href = "/"; //跳转到主页
                             }
@@ -111,42 +86,31 @@ class Login extends React.Component {
         }
     }
     render() {
-        return <div className="wasabi-page">
+        console.log("this",this.props.backgroundImage)
+        return <div className="wasabi-login" style={{backgroundImage:(typeof this.props.backgroundImage==="string")?"url("+this.props.backgroundImage+")":this.props.backgroundImage? require(this.props.backgroundImage):null}}>
 
-            <img
-                className="bgone"
-                src={this.props.backgroundImage
-                    ? this.props.backgroundImage
-                    : require("./img/1.jpg")} />
-            <img
-                className="pic"
-                src={this.props.leftImage
-                    ? this.props.leftImage
-                    : require("./img/a.png")} />
+            <h1 className="title">{this.props.title || "后台登录"}</h1>
 
-            <div className="login-table">
-                <div className="welcome">{this.props.title || ""}</div>
+            <div className="login">
+                <div style={{ padding: 40 }}>
 
-                <div className="user">
-                    <div ><img src={require("./img/yhm.png")} /></div>
-                    <input
-                        type="text"
-                        ref={this.usernameref}
-                        name="username"
-                        placeholder="用户名"
-                        value={this.state.username}
-                        onChange={this.usernameChange} />
+                    <div className="wasabi-username" >
+                        <label className="input-tips" >账号：</label>
+                        <div className="inputOuter">
+
+                            <input type="text" className="inputstyle" ref={this.usernameref} onChange={this.usernameChange} />
+                        </div>
+                    </div>
+                    <div className="wasabi-password" >
+                        <label className="input-tips">密码：</label>
+                        <div className="inputOuter">
+
+                            <input type="password" className="inputstyle"  onInput={this.usernameChange}/>
+                        </div>
+                    </div>
+                    <input type="submit" value="登 录" onClick={this.onSumbit}
+                        className="button_blue" />
                 </div>
-                <div className="password">
-                    <div ><img src={require("./img/mm.png")} /></div>
-                    <input
-                        type="password"
-                        name="密码"
-                        placeholder="密码"
-                        value={this.state.password}
-                        onChange={this.passwordChange} />
-                </div>
-                <button className="login-btn" type="button" onClick={this.onSumbit}>登录</button>
             </div>
 
         </div>
@@ -154,10 +118,10 @@ class Login extends React.Component {
     }
 }
 Login.propTypes = {
-    title: PropTypes.string.isRequired, //系统名称
-    url: PropTypes.string.isRequired,
-    contentType: PropTypes.string,
-    backgroundImage: PropTypes.string, //背景图片,
+    title: PropTypes.string, //系统名称
+    url: PropTypes.string,//后台请求地址
+    contentType: PropTypes.string,//请求类型
+    backgroundImage: PropTypes.any, //背景图片,
     leftImage: PropTypes.string, //左侧图片,
     loginHandler: PropTypes.func, //自定义登陆事件
 
