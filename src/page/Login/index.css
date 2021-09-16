@@ -9,7 +9,7 @@
     background-size: 100% 100%;
 }
 
-.title {
+.wasabi-login .title {
    padding-top:200px;
     text-align: center;
     color: #2795dc;
@@ -17,7 +17,7 @@
     font-weight: bold;
 }
 
-.login {
+.wasabi-login .login {
     border: 0;
     padding: 5px 0;
     background: #fff;
@@ -39,14 +39,14 @@
     z-index: 3;
 }
 
-.inputOuter {
+.wasabi-login .inputOuter {
     width: 200px;
     height: 42px;
     margin-top: 10px;
     float: left;
 }
 
-.inputstyle {
+.wasabi-login .inputstyle {
     width: 250px;
     height: 40px;
     padding-left: 5px;
@@ -61,7 +61,7 @@
  
 }
 
-.input-tips {
+.wasabi-login .input-tips {
     float: left;
     margin-top: 10px;
     width: 50px;
@@ -71,7 +71,7 @@
     font-family: "Hiragino Sans GB", "Microsoft Yahei";
 }
 
-.button_blue {
+.wasabi-login .button_blue {
     display: inline-block;
     height: 40px;
     border-radius: 4px;
@@ -90,14 +90,14 @@
     width: 150px;
 }
 
-input.button_blue:hover {
+.wasabi-login input.button_blue:hover {
     background: #0081c1;
     border-bottom: 3px solid #006698;
     color: #fff;
     text-decoration: none;
 }
 
-.inputstyle:focus,.inputstyle:hover {
+.wasabi-login.inputstyle:focus,.inputstyle:hover {
     border: 1px solid #198BD4;
     box-shadow: 0 0 2px #198BD4;
 }
