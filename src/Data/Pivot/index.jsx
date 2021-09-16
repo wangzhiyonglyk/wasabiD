@@ -12,7 +12,7 @@ import Tree from "../Tree";
 import Configuration from "./Configuration";
 import mixins from "../../Mixins/mixins"
 import dataHandler from "./dataHandler"
-import("./index.css")
+import "./index.css"
 class Pivot extends Component {
     constructor(props) {
         super(props);

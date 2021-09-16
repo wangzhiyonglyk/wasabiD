@@ -6,7 +6,7 @@
  */
 import React from 'react';
 import PropTypes from 'prop-types'
-import('../Sass/Animate/progress.css')
+import '../Sass/Animate/progress.css'
 
 class ProgressChart extends React.Component {
     constructor(props) {

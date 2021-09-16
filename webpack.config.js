@@ -20,7 +20,7 @@ module.exports = {
   module: {
     // 加载器配置
     rules: [
-      // // .js 文件使用babel 来编译处理,react 需要几个插件
+      // .js 文件使用babel 来编译处理,react 需要几个插件
       {
         test: /\.js[x]?$/,
         use: [
@@ -67,7 +67,7 @@ module.exports = {
   },
   mode: "production",
   optimization: {
-    minimize: false
+    minimize: true
   },
   plugins: [
     //分离js中的css,独立打包

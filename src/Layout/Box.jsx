@@ -5,7 +5,7 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import ("../Sass/Layout/Box.css")
+import "../Sass/Layout/Box.css"
 class Box extends  React.Component{
     constructor(props)
     {

@@ -13,7 +13,7 @@ import fileType from "../../libs/fileType";
 import api from "wasabi-api";
 import func from "../../libs/func";
 
-import('./index.css');
+import './index.css' 
 class Upload extends Component {
     constructor(props) {
         super(props);

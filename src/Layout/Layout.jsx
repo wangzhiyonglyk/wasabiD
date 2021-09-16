@@ -6,7 +6,7 @@ desc:圣杯布局
 
 import React from 'react';
 import PropTypes from "prop-types";
-import("../Sass/Layout/Layout.css");
+import "../Sass/Layout/Layout.css"
 class Layout extends React.Component {
     constructor(props) {
         super(props);

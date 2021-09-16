@@ -7,7 +7,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import utils from "../../libs/func"
-import("./Label.css")
+import "./Label.css"
 class Label extends React.PureComponent {
     constructor(props) {
         super(props);

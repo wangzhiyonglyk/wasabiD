@@ -9,7 +9,7 @@
 
 import React from 'react';
 import PropTypes from "prop-types";
-import("../Sass/Animate/slider.css")
+import "../Sass/Animate/slider.css"
 class Slider extends React.Component {
   constructor(props) {
     super(props);

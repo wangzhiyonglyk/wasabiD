@@ -4,10 +4,10 @@
  desc 进度条组件重新开发
  */
 import React from "react";
-import PropTypes from "prop-types";
+
 import LineProgress from "./lineProgress"
 import CircleProgress from "./CircleProgress"
-import ("./index.css")
+import "./index.css"
 class Progress extends React.PureComponent{
   
     constructor(props){

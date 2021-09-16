@@ -6,7 +6,7 @@
 
 import React, { Component, PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import('./index.css');
+import './index.css'
 
 class DropdownItem extends PureComponent {
     constructor(props) {

@@ -8,7 +8,7 @@ import React from 'react';
 import propsTran from "../libs/propsTran";
 import func from "../libs/func"
 import PropTypes from "prop-types";
-import("../Sass/Layout/Layout.css");
+import "../Sass/Layout/Layout.css"
 class Container extends React.PureComponent {
     constructor(props) {
         super(props);

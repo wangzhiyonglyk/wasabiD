@@ -59,6 +59,8 @@ let dom = {
         let bottom = el.getBoundingClientRect().bottom + pad;
         return bottom > height;
     },
+
+   
     /**
      * 获取元素样式
      * @param {*} el 元素节点
@@ -88,7 +90,7 @@ let dom = {
             if (node.scrollHeight > node.offsetHeight && overflow != "visible" && overflow != "hidden") {
                 return node;
             } else {
-                node = node.parentNode;
+                no:de = node.parentNode;
             }
         }
         return null;

@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import func from "../../libs/func"
 import ripple from "./ripple"
 import regs from '../../libs/regs';
-import('./button.css');
+import './button.css'
 class Button extends React.Component {
     constructor(props) {
         super(props);

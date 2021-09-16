@@ -15,7 +15,7 @@ import SingleModelMixins from './SingleModelMixins.jsx';
 import SingleHandlerMixins from './SingleHandlerMixins.jsx';
 import func from '../../libs/func.js';
 import Form from '../../Form/Form/index.jsx';
-import("./index.css")
+import "./index.css"
 class Single extends React.Component {
     constructor(props) {
         super(props);

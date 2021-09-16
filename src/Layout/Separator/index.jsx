@@ -4,8 +4,8 @@
  * desc:分隔线
  */
  import React from "react";
- import PropTypes from "prop-types";
-import ("./separator.css")
+
+import "./separator.css"
  class Separator extends React.PureComponent{
      constructor(props){
          super(props);

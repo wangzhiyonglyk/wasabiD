@@ -5,7 +5,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import BaseInput from "../BaseInput";
 import Msg from "../../Info/Msg"
-import("./search.css");
+import"./search.css"
 class Search extends React.Component {
     constructor(props) {
         super(props);

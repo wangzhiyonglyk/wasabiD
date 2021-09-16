@@ -5,7 +5,7 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import("./index.css")
+import "./index.css"
 class StepItem extends React.Component {
 
     constructor(props) {

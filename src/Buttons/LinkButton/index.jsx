@@ -6,7 +6,7 @@ desc:链接按钮
  */
 import React from 'react';
 import PropTypes from 'prop-types';
-import('./linkbutton.css');
+import './linkbutton.css'
 class LinkButton extends React.PureComponent {
     constructor(props) {
         super(props);

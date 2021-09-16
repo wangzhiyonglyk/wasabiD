@@ -15,7 +15,7 @@ import Text from "../Text";
 import None from "../None.jsx";
 import propTypes from "../../propsConfig/propTypes.js";
 import Rate from "../Rate"
-import("./input.css");
+import "./input.css"
 class Input extends Component {
     constructor(props) {
         super(props);

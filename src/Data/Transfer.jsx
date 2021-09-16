@@ -10,7 +10,7 @@ import propsTran from "../libs/propsTran";
 import LinkButton from "../Buttons/LinkButton";
 import FetchModel from "../Model/FetchModel.js";
 import func from "../libs/func";
-import("../Sass/Data/Transfer.css");
+import "../Sass/Data/Transfer.css"
 class Transfer extends React.Component {
 
     constructor(props) {

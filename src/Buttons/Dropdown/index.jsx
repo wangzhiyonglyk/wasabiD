@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import LinkButton from "../LinkButton"
 import dom from "../../libs/dom"
 import func from "../../libs/func"
-import('./index.css');
+import './index.css'
 
 class Dropdown extends Component {
     constructor(props) {

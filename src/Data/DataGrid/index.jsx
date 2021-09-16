@@ -35,8 +35,8 @@ import Grid from "./View/Grid"
 /**
  * 样式
  */
-import('./datagrid.css');
-import('./datagridetail.css');
+import './datagrid.css'
+import './datagridetail.css'
 class DataGrid extends Component {
     constructor(props) {
         super(props);

@@ -4,7 +4,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import func from "../libs/func"
-import("../Sass/Layout/resize.css");
+import "../Sass/Layout/resize.css"
 
 class Resize extends React.Component {
     constructor(props) {

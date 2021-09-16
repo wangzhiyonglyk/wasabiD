@@ -5,8 +5,8 @@
  */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import func from "../../libs/func.js";
-import('./index.css');
+
+import './index.css'
 class Tag extends Component {
   constructor(props) {
     super(props);

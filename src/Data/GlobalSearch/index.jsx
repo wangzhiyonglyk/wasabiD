@@ -6,7 +6,7 @@
 import React from "react";
 import func from "../../libs/func";
 import PropTypes from 'prop-types';
-import("./search.css")
+import "./search.css"
 class GlobalSearch extends React.Component {
     constructor(props) {
         super(props);

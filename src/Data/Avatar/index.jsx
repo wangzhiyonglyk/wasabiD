@@ -11,8 +11,7 @@ import PropTypes from 'prop-types';
 import Msg from '../../Info/Msg.jsx';
 import api from "wasabi-api";
 import func from "../../libs/func";
-
-import('./index.css');
+import './index.css'
 class Avatar extends Component {
     constructor(props) {
         super(props);

@@ -4,7 +4,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import("../sass/Navigation/Track.css");
+import "../sass/Navigation/Track.css"
 class Track extends React.Component {
     constructor(props) {
         super(props);

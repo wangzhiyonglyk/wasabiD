@@ -8,7 +8,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import func from "../libs/func"
-import('../Sass/Animate/chart.css')
+import '../Sass/Animate/chart.css'
 
 class RotateChart extends React.Component {
   constructor(props) {

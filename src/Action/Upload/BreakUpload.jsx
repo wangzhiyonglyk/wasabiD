@@ -13,7 +13,7 @@ import Msg from '../../Info/Msg.jsx';
 import fileType from "../../libs/fileType";
 import func from "../../libs/func"
 import api from "wasabi-api"
-import('../../Sass/Action/Import.css');
+import '../../Sass/Action/Import.css'
 class Upload extends Component {
     constructor(props) {
         super(props);

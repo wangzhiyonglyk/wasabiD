@@ -18,7 +18,7 @@ import propsTran from "../../libs/propsTran";
 import Tree from "../Tree";
 import FetchModel from "../../Model/FetchModel";
 import api from "wasabi-api"
-import("./index.css")
+import "./index.css"
 class TreeGrid extends Component {
     constructor(props) {
         super(props);

@@ -18,7 +18,7 @@ import validateHoc from "../validateHoc";
 import ArrowInput from "./ArrowInput";
 import SelectbleList from "./SelectbleList";
 import Msg from "../../Info/Msg"
-import("./select.css");
+import "./select.css"
 class Select extends Component {
     constructor(props) {
         super(props);

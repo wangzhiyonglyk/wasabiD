@@ -8,7 +8,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import LinkButton from '../LinkButton';
 import Button from '../Button';
-import('./toolbar.css');
+import './toolbar.css'
 
 class Toolbar extends Component {
   constructor(props) {

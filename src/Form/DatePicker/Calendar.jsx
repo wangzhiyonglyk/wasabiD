@@ -8,7 +8,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import lang from "../../Lang/language.js";
 import utils from "../../libs/func";
-import("./calendar.css");
+import "./calendar.css"
 
 function CalendarHeader({ year, month, choseYear, choseMonth }) {
     return <div className="wasabi-datetime-header">

@@ -15,7 +15,7 @@ import loadDataHoc from "../../loadDataHoc"
 import treeFunc from "./treeFunc";
 import propsTran from "../../libs/propsTran";
 import api from "wasabi-api"
-import("./tree.css")
+import "./tree.css"
 
 class Tree extends Component {
     constructor(props) {

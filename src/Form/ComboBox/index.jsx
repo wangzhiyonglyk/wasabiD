@@ -11,7 +11,7 @@ import TreePicker from "../TreePicker";
 import GridPicker from "../GridPicker";
 import propTypes from "../../propsConfig/propTypes.js";
 
-import("./combobox.css");
+import "./combobox.css"
 class ComboBox extends React.PureComponent {
     constructor(props) {
         super(props);
