@@ -86,8 +86,8 @@ class Login extends React.Component {
         }
     }
     render() {
-        console.log("this",this.props.backgroundImage)
-        return <div className="wasabi-login" style={{backgroundImage:(typeof this.props.backgroundImage==="string")?"url("+this.props.backgroundImage+")":this.props.backgroundImage? require(this.props.backgroundImage):null}}>
+
+        return <div className="wasabi-login" style={{ backgroundImage: (typeof this.props.backgroundImage === "string") ? "url(" + this.props.backgroundImage + ")" : this.props.backgroundImage ? require(this.props.backgroundImage) : null }}>
 
             <h1 className="title">{this.props.title || "后台登录"}</h1>
 
@@ -98,14 +98,14 @@ class Login extends React.Component {
                         <label className="input-tips" >账号：</label>
                         <div className="inputOuter">
 
-                            <input type="text" className="inputstyle" ref={this.usernameref} onChange={this.usernameChange} />
+                            <input type="text" className="inputstyle" ref={this.usernameref} onInput={this.usernameChange} />
                         </div>
                     </div>
                     <div className="wasabi-password" >
                         <label className="input-tips">密码：</label>
                         <div className="inputOuter">
 
-                            <input type="password" className="inputstyle"  onInput={this.usernameChange}/>
+                            <input type="password" className="inputstyle" onInput={this.passwordChange} />
                         </div>
                     </div>
                     <input type="submit" value="登 录" onClick={this.onSumbit}
