@@ -57,10 +57,11 @@ let propsTran = {
    * @param {*} data 
    */
     processText(value = "", data = []) {
+    
         let text = [];//选中的文本值 
         if (data && data instanceof Array && data.length > 0) {
             for (let i = 0; i < data.length; i++) {
-                if (("," + (value || "") + ",").indexOf("," + (data[i].value || data[i].id) + ",") > -1) {
+                if (("," + (value) + ",").indexOf("," + ((data[i].value+"")||(data[i].id+""))+ ",") > -1) {
                     text.push(data[i].text);
                 }
                 if (data[i].children && data[i].children.length > 0) {

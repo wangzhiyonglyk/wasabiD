@@ -48,6 +48,7 @@ class Login extends React.Component {
                     this.props.loginHandler(this.state.username, this.state.password);
                 } else {
                     //
+                    console.log("test",this.state.username,this.state.password)
                     api.ajax({
                         url: this.props.url,
                         type: "post",

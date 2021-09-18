@@ -90,7 +90,7 @@ let dom = {
             if (node.scrollHeight > node.offsetHeight && overflow != "visible" && overflow != "hidden") {
                 return node;
             } else {
-                no:de = node.parentNode;
+                node = node.parentNode;
             }
         }
         return null;

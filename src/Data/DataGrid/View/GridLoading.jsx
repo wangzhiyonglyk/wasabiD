@@ -1,7 +1,7 @@
 import React from "react"
 
 const LoadingView = function (props) {
-    <React.Fragment>
+   return  <React.Fragment>
         <div
             className='wasabi-grid-loading'
             key="wasabi-grid-loading-div"

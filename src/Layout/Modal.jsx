@@ -131,15 +131,15 @@ class Modal extends React.Component {
 
         buttons.push(
             <Button title="确定" key="ok" theme="primary" onClick={this.OKHandler}
-                size="small"></Button>
+               >确定</Button>
         )
 
         buttons.push(
             <Button title="取消" key="cancel" theme="cancel" onClick={this.cancelHandler}
-                size="small"
-            ></Button>
+              
+            >取消</Button>
         )
-
+            
         footer = <div className="wasabi-modal-footer">
             {
                 buttons

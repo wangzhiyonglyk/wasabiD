@@ -204,6 +204,7 @@ class Text extends Component {
                 id={this.props.id}
                 type={this.props.type}
                 name={this.props.name}
+                readOnly={this.props.readOnly}
                 className={"wasabi-input "}
                 onChange={this.onChange}
                 onKeyUp={this.keyUpHandler}

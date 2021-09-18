@@ -54,11 +54,14 @@ class Select extends Component {
              */
             newState.rawData = (props.data);
             newState.data = func.clone(props.data)//复制一份
+           
             newState.text = propsTran.processText(state.value, newState.data).join(",")||state.text;
             newState.inputText=newState.text||state.inputText;
+            
         }
         if (props.value != state.oldPropsValue) {//父组件强行更新了
             let text = propsTran.processText(props.value, newState.data || state.data);
+          
             newState = {
                 value: props.value || "",
                 oldPropsValue: props.value,
@@ -74,6 +77,7 @@ class Select extends Component {
      * @param {*} value 
      */
     setValue(value) {
+       
         let text = propsTran.processText(value, this.state.data);
         this.setState({
             value: value,
@@ -150,7 +154,7 @@ class Select extends Component {
      */
     addHandler(event) {
         let formatValue = this.regValue(event);
-        let newValue = this.state.value ? this.state.value.toString().split(",") : [];
+        let newValue =this.state.value!=undefined&&this.state.value!=null ? this.state.value.toString().split(",") : [];
         let newText = this.state.text ? this.state.text.toString().split(",") : [];
         ////如果允许添加，则把未匹配的，添加到数据源中
         if (this.props && (this.props.attachAble) && formatValue.length > 0) {
@@ -289,13 +293,13 @@ class Select extends Component {
      * @param {*} row 此行数据
      */
     onSelect(value, text, row) {
-        if (value) {
+        if (value!==undefined&&value!==null) {
             //选中事件
             let newValue = [], newText = [];
             let inputText = [];
             if (this.props.multiple) {//多选
-                if (this.state.value) {
-                    newValue = this.state.value ? this.state.value.toString().split(',') : [];
+                if (this.state.value!=undefined&&this.state.value!=null) {
+                    newValue = this.state.value!=undefined&&this.state.value!=null ? this.state.value.toString().split(',') : [];
                     newText = this.state.text ? this.state.text.toString().split(',') : [];
                     inputText = this.state.inputText ? this.state.inputText.split(",") : [];
                 }
@@ -341,7 +345,7 @@ class Select extends Component {
 
         }
         else {
-            Msg.info("值是空值");
+            Msg.alert("值是空值");
         }
 
     }
@@ -412,6 +416,7 @@ class Select extends Component {
         }
     }
     render() {
+       
         return (<div className={'combobox wasabi-select'}>
             <ArrowInput
                 ref={this.input}

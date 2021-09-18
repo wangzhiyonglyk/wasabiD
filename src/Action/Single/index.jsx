@@ -65,6 +65,7 @@ class Single extends React.Component {
         this.form.current&&this.form.current.clearData();
     }
     render() {
+        console.log("this",this.props.pageHandler)
         let modalStyle = this.props.modalStyle || { width: 1600, height: 800, top: 20 };
         return (
             <div className="wasabi-single">
@@ -151,7 +152,7 @@ class Single extends React.Component {
     }
 }
 Single.propTypes = {
-    key: PropTypes.string.isRequired, //主键名称
+    keyField: PropTypes.string, //主键名称
     title: PropTypes.string.isRequired, //页面的标题
     model: PropTypes.array.isRequired,//模型
     contentType: PropTypes.string,//请求的类型
@@ -183,7 +184,7 @@ Single.propTypes = {
     cols: PropTypes.number,//表单列数
 }
 Single.defaultProps = {
-    key: "id",
+    keyField: "id",
     title: '',
     model: [],
     contentType: "application/x-www-form-urlencoded",//表单
