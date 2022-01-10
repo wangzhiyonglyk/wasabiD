@@ -4,26 +4,49 @@ grid
 
 .wasabi-grid {
   width: 100%;
+  height: 100%;
   position: relative;
   font-size: var(--font-size);
   color: var(--color);
 }
 
-.wasabi-grid .wasabi-grid-tool{
+.wasabi-grid .wasabi-grid-tool {
   border: 1px solid var(--border-color);
   border-bottom: none;
   height: 40px;
   line-height: 40px;
   padding-left: 20px;
   background-color: var(--background-color);
-  width:calc(100% - 2px);
+  width: calc(100% - 2px);
 }
-.wasabi-grid .wasabi-check-column .wasabi-form-group
-{
-  height: 21px;
-  min-height: 0px;
-  margin-bottom: 0px;
-  margin-left: 4px;
+
+/*
+表格容器
+*/
+.wasabi-grid .wasabi-table-container {
+  position: relative;
+  overflow:auto;
+  background-color: white;
+  border-left: 1px solid var(--border-color);
+  border-right: 1px solid var(--border-color);
+  border-top: 1px solid var(--border-color);
+  width: 100%;
+  height: 100%;
+}
+
+.wasabi-treegrid .wasabi-grid .wasabi-table-container {
+  overflow-y:hidden;
+
+}
+.wasabi-pivot .wasabi-grid .wasabi-table-container {
+  overflow-y:hidden;
+
+}
+
+.wasabi-grid .wasabi-select-column .wasabi-form-group {
+  margin-bottom: 0;
+  margin-left: 6px;
+  margin-top: -1px;
 }
 
 
@@ -34,48 +57,26 @@ grid
   margin-top: 3px;
 }
 
-/*
-真实表格容器
-*/
 
-.wasabi-grid .table-realTable {
+
+/*
+*真实表格
+*/
+.wasabi-grid .wasabi-table-realTable {
   width: 100%;
-  overflow: auto;
-  box-sizing: border-box;
+  height: 100%;
 }
 
 /* 固定表头容器 */
 
 .wasabi-grid .table-fixedth {
-  position: absolute;
+  position: sticky;
   top: 0px;
-  left: 0px;
-  z-index: 1;
-  background-color: white;
-}
-
-/* 固定列中的 固定表头容器 */
-
-.wasabi-grid .table-fixed-fixedth {
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  z-index: 3;
-  background-color: white;
-}
-
-/*
-固定列容器
-*/
-
-.wasabi-grid .table-fixed {
-  margin-bottom: 0px;
-  position: absolute;
-  top: 0px;
-  left: 0px;
   z-index: 2;
-  background-color: white;
+  width: 100%;
+  background-color: var(--background-color);
 }
+
 
 /*
 正在加载
@@ -104,15 +105,42 @@ grid
   height: 16px;
 }
 
-/*拖动时的分隔线*/
+
+/*列拖动时的分隔线*/
 
 .wasabi-grid .wasabi-grid-divide {
   position: absolute;
-  height: 100%;
+  height: 10000px;
   width: 1px;
   z-index: 2;
   top: 0px;
   display: none;
   cursor: ew-resize;
-  background-color:var(--border-color);
+  background-color: var(--border-color);
+}
+
+.wasabi-grid .wasabi-virtual-height {
+  position: absolute;
+  width: 1px;
+  z-index: -1;
+
+}
+
+/* 虚拟列表的分隔线 */
+.wasabi-virtual-above-separator {
+  position: absolute;
+  top: 0px;
+  height: 1px;
+
+  z-index: 1;
+  width: 100%;
+}
+
+.wasabi-virtual-below-separator {
+  position: absolute;
+  top: 0px;
+  height: 1px;
+
+  z-index: 1;
+  width: 100%;
 }

@@ -8,7 +8,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import propsTran from "../libs/propsTran";
 import LinkButton from "../Buttons/LinkButton";
-import FetchModel from "../Model/FetchModel.js";
+import api from "wasabi-api";
 import func from "../libs/func";
 import "../Sass/Data/Transfer.css"
 class Transfer extends React.Component {
@@ -18,8 +18,8 @@ class Transfer extends React.Component {
         this.transfer = React.createRef();
         this.up = React.createRef();
         this.down = React.createRef();
-        let realData = propsTran.formartData("transfer", "", this.props.data, this.props.valueField, this.props.textField);
-        let realSelectData = propsTran.formartData("transfer", "", this.props.selectData, this.props.valueField, this.props.textField);
+        let realData = propsTran.formatterData("transfer", "", this.props.data, this.props.valueField, this.props.textField);
+        let realSelectData = propsTran.formatterData("transfer", "", this.props.selectData, this.props.valueField, this.props.textField);
         this.state = {
             name: this.props.name,
             data: realData,
@@ -70,20 +70,19 @@ class Transfer extends React.Component {
     }
     loadData(url, params) {
         if (url) {
-            let type = this.props.httpType ? this.props.httpType : "POST";
-            type = type.toUpperCase();
-            let fetchmodel = new FetchModel(url, this.loadSuccess, params, this.loadError);
-            fetchmodel.headers = this.props.httpHeaders;
-            if (this.props.contentType) {
-                //如果传contentType值则采用传入的械
-                //否则默认
-
-                fetchmodel.contentType = this.props.contentType;
-                fetchmodel.data = fetchmodel.contentType == "application/json" ? fetchmodel.data ? JSON.stringify(fetchmodel.data) : "{}" : fetchmodel.data;
+            let fetchmodel =
+            {
+                url: url,
+                data: params,
+                success:  this.loadSuccess,
+                error: this.loadError,
+                type: this.props.httpType ? this.props.httpType.toUpperCase() : "POST",
+                headers: this.props.httpHeaders || {},
+                contentType: this.props.contentType || null,
             }
-
-            type == "POST" ? unit.fetch.post(fetchmodel) : unit.fetch.get(fetchmodel);
             console.log("transfer-fetch", fetchmodel);
+            let wasabi_api = window.api || api;
+            wasabi_api.ajax(fetchmodel);
         }
 
 

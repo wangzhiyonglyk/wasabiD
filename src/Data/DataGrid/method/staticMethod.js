@@ -5,15 +5,15 @@
 import React from "react";
 import func from "../../../libs/func.js";
 import Msg from "../../../Info/Msg"
-// import excel from "../../../libs/excel.js";
+import excel from "../../../libs/excel.js";
 export default {
     /**
-    * 专门用于交叉表与树表格
-    * @param {*} id 
+    * 设置焦点行
+    * @param {*} key 
     */
-    setClick(id) {
+    setFocus(key) {
         for (let i = 0; i < this.state.data.length; i++) {
-            if (this.state.data[i]["id"] == id) {
+            if (this.state.data[i][this.props.priKey||"id"] == key) {
                 this.setState({
                     focusIndex: i
                 })
@@ -189,7 +189,7 @@ export default {
         }
 
     },
-   
+
 
     /**
      * 清除脏数据
@@ -243,44 +243,34 @@ export default {
     reload: function (params = null, url = "") {//重新查询数据,
         url = url || this.state.url;//得到旧的url
         params = params || this.state.params;//如果不传则用旧的
-        if (!url) {//没有url,不自行加载，则调用更新事件
-            if (this.props.onUpdate) {//用户自定义了更新事件
-                this.props.onUpdate(this.state.pageSize, this.state.pageIndex, this.state.sortName, this.state.sortOrder);
-            }
-        }
-        else {//传了url        
-            if (func.diff(params, this.state.params)) {//为参数发生改变,从第一页查起           
-                this.onUpdate(url, this.state.pageSize, 1, this.state.sortName, this.state.sortOrder, params);
-            }
-            else {//从当前页查起，就是刷新
-                this.onUpdate(url, this.state.pageSize, this.state.pageIndex, this.state.sortName, this.state.sortOrder, params);
-            }
-
-        }
+       //查询条件发生，查询第一页
+       let pageIndex = func.diff(params, this.state.params, false) ? 1 : this.state.pageIndex
+       this.loadData(url, this.state.pageSize, pageIndex, this.state.sortName, this.state.sortOrder, params);
     },
 
     /**
-     * 导出
+     * todo 导出
      * @param {*} selected 是否只导出选择行
      * @param {*} title 导出标题
      */
     export(selected = false, title = "grid-") {
-        let realTable = document.getElementById(this.state.realTableid);
+
+        let fixTable = document.getElementsById(this.state.fixTableId);
+        let realTable = document.getElementById(this.state.realTableId);
         title = title + func.dateformat(new Date(), "yyyy-MM-dd");
         let json = {
             headers: [],
             body: [],
         }
         //导出表头
+        for (let rowIndex = 0; rowIndex < fixTable.children[1].children.length; rowIndex++) {
 
-        for (let rowIndex = 0; rowIndex < realTable.children[1].children.length; rowIndex++) {
-
-            for (let columnIndex = 0; columnIndex < realTable.children[1].children[rowIndex].children.length; columnIndex++) {
-                let html = realTable.children[1].children[rowIndex].children[columnIndex].outerHTML;
-                if (html.indexOf("wasabi-detail-column") > -1 || html.indexOf("wasabi-order-column") > -1 || html.indexOf("wasabi-check-column") > -1 || html.indexOf("wasabi-noexport") > -1) {//除去序号列与选择列及不需要导出的列
+            for (let columnIndex = 0; columnIndex < fixTable.children[1].children[rowIndex].children.length; columnIndex++) {
+                let html = fixTable.children[1].children[rowIndex].children[columnIndex].outerHTML;
+                if (html.indexOf("wasabi-detail-column") > -1 || html.indexOf("wasabi-order-column") > -1 || html.indexOf("wasabi-select-column") > -1 || html.indexOf("wasabi-noexport") > -1) {//除去序号列与选择列及不需要导出的列
                     continue;
                 }
-                json.headers.push(realTable.children[1].children[rowIndex].children[columnIndex].children[0].innerText);
+                json.headers.push(fixTable.children[1].children[rowIndex].children[columnIndex].children[0].innerText);
             }
 
         }
@@ -288,12 +278,12 @@ export default {
         if (selected) {//导出选择的行
             for (let value of this.state.checkedIndex.values()) {
                 let row = [];
-                for (let columnIndex = 0; columnIndex < realTable.children[2].children[value].children.length; columnIndex++) {
-                    let html = realTable.children[2].children[value].children[columnIndex].outerHTML;
-                    if (html.indexOf("wasabi-detail-column") > -1 || html.indexOf("wasabi-order-column") > -1 || html.indexOf("wasabi-check-column") > -1 || html.indexOf("wasabi-noexport") > -1) {//除去序号列与选择列及不需要导出的列
+                for (let columnIndex = 0; columnIndex < realTable.children[1].children[value].children.length; columnIndex++) {
+                    let html = realTable.children[1].children[value].children[columnIndex].outerHTML;
+                    if (html.indexOf("wasabi-detail-column") > -1 || html.indexOf("wasabi-order-column") > -1 || html.indexOf("wasabi-select-column") > -1 || html.indexOf("wasabi-noexport") > -1) {//除去序号列与选择列及不需要导出的列
                         continue;
                     }
-            
+
                     row.push(html)
                 }
                 json.body.push(row);
@@ -307,7 +297,7 @@ export default {
                 for (let columnIndex = 0; columnIndex < realTable.children[2].children[rowIndex].children.length; columnIndex++) {
                     if (realTable.children[2].children.length > rowIndex) {
                         let html = realTable.children[2].children[rowIndex].children[columnIndex].outerHTML;
-                        if (html.indexOf("wasabi-detail-column") > -1 || html.indexOf("wasabi-order-column") > -1 || html.indexOf("wasabi-check-column") > -1 || html.indexOf("wasabi-noexport") > -1) {//除去序号列与选择列及不需要导出的列
+                        if (html.indexOf("wasabi-detail-column") > -1 || html.indexOf("wasabi-order-column") > -1 || html.indexOf("wasabi-select-column") > -1 || html.indexOf("wasabi-noexport") > -1) {//除去序号列与选择列及不需要导出的列
                             continue;
                         }
 

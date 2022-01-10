@@ -75,6 +75,7 @@ class CheckBox extends React.Component {
      * @returns 
      */
     onSelect(value = "", text,row) {//选中事件
+        console.log("select",text,value)
         if (this.props.readOnly) {
             return;
         }
@@ -110,7 +111,7 @@ class CheckBox extends React.Component {
 
     }
     shouldComponentUpdate(nextProps, nextState) {
-        if (func.diffOrder(nextProps, this.props)) {
+        if (func.diff(nextProps, this.props,false)) {
             return true;
         }
         if (func.diff(nextState, this.state)) {

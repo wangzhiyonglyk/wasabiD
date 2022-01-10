@@ -12,27 +12,21 @@ class TableCell extends React.PureComponent {
         this.renderTh = this.renderTh.bind(this);
     }
     renderCell() {
-       let style=this.props.style?JSON.parse( JSON.stringify(this.props.style)):{};
-       style.background=null;
-       style.backgroundColor=null;
-     
-        return <div data-rowindex={this.props.rowIndex} data-columnindex={this.props.columnIndex} colSpan={this.props.colSpan || 1} rowSpan={this.props.rowSpan || 1} className={"wasabi-table-cell  "}
-            style={style} title={typeof this.props.children === "string" ? this.props.children : ""}>
+        return <div data-rowindex={this.props.rowIndex} data-columnindex={this.props.columnIndex}
+         colSpan={this.props.colSpan || 1} rowSpan={this.props.rowSpan || 1} 
+          style={this.props.style}
+         className={"wasabi-table-cell  "}
+            title={typeof this.props.children === "string" ? this.props.children : ""}>
             {
                 this.props.children
             }
         </div>;
     }
     renderTh() {
-        let backgroundColor=this.props.style&&this.props.style.backgroundColor||null;
-        let background=this.props.style&&this.props.style.background||null;
-        let style={
-            background:background,
-            backgroundColor:backgroundColor
-        }
-        return <th className={(this.props.className || "") + (this.props.position !== "body" ? ' nowrap ' : "")}
+     
+        return <th   name={this.props.name} className={(this.props.className || "") + (this.props.position !== "body" ? ' nowrap ' : "")}
          align={this.props.align} 
-         style={style}
+         style={this.props.thStyle}
          colSpan={this.props.colSpan || 1} rowSpan={this.props.rowSpan || 1} 
             onClick={this.props.onClick} 
             onDoubleClick={this.props.onDoubleClick}
@@ -45,17 +39,12 @@ class TableCell extends React.PureComponent {
         </th>
     }
     renderTd() {
-        let backgroundColor=this.props.style&&this.props.style.backgroundColor||null;
-        let background=this.props.style&&this.props.style.background||null;
-        let style={
-            background:background,
-            backgroundColor:backgroundColor
-        }
-        return <td id={this.props.id} data-rowindex={this.props.rowIndex} 
+        
+        return <td  name={this.props.name}  id={this.props.id} data-rowindex={this.props.rowIndex} 
         data-columnindex={this.props.columnIndex} 
         align={this.props.align} 
          colSpan={this.props.colSpan || 1} rowSpan={this.props.rowSpan || 1} 
-         style={style}
+         style={this.props.tdStyle}
          className={(this.props.className || "") + (this.props.position !== "body" ? ' nowrap ' : "")}  
             onClick={this.props.onClick} onDoubleClick={this.props.onDoubleClick}
             onMouseDown={this.props.onMouseDown}

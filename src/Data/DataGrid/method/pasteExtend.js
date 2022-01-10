@@ -43,25 +43,7 @@ export default {
         }
 
     },
-    /**
-    * 导入
-    */
-    upload(event) {
-        if (event.target.files && event.target.files.length > 0 && this.props.importAble) {
-            if (fileType.filter("excel", event.target.files[0])) {
-                excel.readFile(event.target.files[0]).then((workbook) => {
-                    event.target.value = "";//清空
-                    console.log("workbook",workbook)
-                    let json = excel.workbook2json(workbook);
-                    this.json2data(json,this.state.data.length);
-                })
-            } else {
-                Msg.error("只接受excel文件");
-            }
-        }
-
-
-    },
+  
     //excel粘贴事件
     onPaste: async function (rowIndex, columnIndex, event, oldValue) { //excel粘贴事件  
         try {
@@ -85,8 +67,8 @@ export default {
     json2data(json, rowIndex, columnIndex=0) {
         rowIndex=rowIndex===null||rowIndex===undefined?this.state.data.length:rowIndex;
         if (json && json.body) {
-            const headerResult = this.setHeaderEditor();//设置表头
-            const { headers, fixedHeaders } = headerResult;
+            const {headers} = this.setHeaderEditor();//设置表头
+         
             let addData = [];
             let oldData = func.clone(this.state.data);
             let beginRowIndex = rowIndex;//开始的行下标
@@ -95,12 +77,7 @@ export default {
                 let rowData = {};
                 beginColumnIndex = 0;
                 for (let j = columnIndex || 0; j < headers.length; j++) {
-                    if (this.state.single) {
-                        if (beginColumnIndex < json.body[i].length) {
-                            rowData[headers[j].name] = json.body[i][beginColumnIndex];
-                            beginColumnIndex++;
-                        }
-                    } else {
+                    if (headers[j] instanceof Array) {
                         for (let k = 0; i < headers[j][k].length; k++) {
                             if (headers[j][k].colSpan > 1) {
                                 continue;
@@ -110,6 +87,11 @@ export default {
                                     beginColumnIndex++;
                                 }
                             }
+                        }                 
+                    } else {
+                        if (beginColumnIndex < json.body[i].length) {
+                            rowData[headers[j].name] = json.body[i][beginColumnIndex];
+                            beginColumnIndex++;
                         }
                     }
                 }
@@ -145,7 +127,6 @@ export default {
                 }
             }
             this.setState({
-                fixedHeaders: fixedHeaders,
                 headers: headers,
                 data: newData,
                 total: newData.length,

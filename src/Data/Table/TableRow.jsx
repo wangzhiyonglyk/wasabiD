@@ -10,7 +10,7 @@ class TableRow extends React.PureComponent {
 
     }
     render() {
-       return <tr className={this.props.className} style={this.props.style}
+       return <tr data-rowindex={this.props.rowIndex} className={this.props.className} style={this.props.style}
      onClick={this.props.onClick||null}
         onDoubleClick={this.props.onDoubleClick||null}
         >{

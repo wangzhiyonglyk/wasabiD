@@ -575,7 +575,7 @@ class Sheet extends React.Component {
             let position = this.getSelectionPosition();
             return <div className="wasabi-excel-sheet" id={this.state.sheetcontainerid}>
                 <Tool ref={this.tool} cellProps={selectionCellProps} value={this.state.value} onClick={this.onToolClick} onChange={this.onChange} activeIndex={this.state.activeIndexTool} changeToolActive={this.changeToolActive}></Tool>
-                <div className="table-realTable" onMouseMove={this.onMouseMove} onContextMenu={this.onContextMenu}>
+                <div className="wasabi-table-realTable" onMouseMove={this.onMouseMove} onContextMenu={this.onContextMenu}>
                     <Table id={this.state.tableid}>
                         <SheetColGroup headers={this.state.sheet.headers || []}></SheetColGroup>
                         <SheetHeader headers={this.state.sheet.headers || []}></SheetHeader>

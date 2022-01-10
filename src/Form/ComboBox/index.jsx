@@ -59,7 +59,6 @@ class ComboBox extends React.PureComponent {
         let control = null;
         switch (this.props.type) {
             case "select":
-                console.log("select",this.props)
                 control = this.renderSelect();
                 break;
             case "picker":

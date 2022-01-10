@@ -6,10 +6,10 @@ import regexp from "../../libs/regs";
 import dom from "../../libs/dom"
 /**
  * 验证组件
- * @param {*} InputWidget 表单组件
+ * @param {*} Widget 表单组件
  * @returns 
  */
-let validateHoc = function (InputWidget, inputType = "text") {
+const validateHoc = function (Widget, componentType = "text") {
     class ValidateComponent extends React.Component {
         constructor(props) {
             super(props);
@@ -27,7 +27,7 @@ let validateHoc = function (InputWidget, inputType = "text") {
          * @returns 
          */
         validate(value) {
-            let type = this.props.type || inputType;
+            let type = this.props.type || componentType;
             value = (value == null || value == undefined) ? this.input.current.getValue() : value;//如果没有传值，则取文本框值
 
             let isvalidate = true;//默认是有效的
@@ -218,14 +218,14 @@ let validateHoc = function (InputWidget, inputType = "text") {
          * @param {*} value 
          */
         setValue(value) {
-            this.input.current.setValue && this.input.current.setValue(value);
+            this.input.current&&this.input.current.setValue && this.input.current.setValue(value);
         }
         /**
          * 获取值
          * @returns 
          */
         getValue() {
-            return this.input.current.getValue();
+            return  this.input.current&&this.input.current.getValue();
         }
 
         /**
@@ -235,7 +235,7 @@ let validateHoc = function (InputWidget, inputType = "text") {
          */
         reload(params, url) {
 
-            this.input.current.reload && this.input.current.loadData(url, params);
+            this.input.current&&this.input.current.reload && this.input.current.loadData(url, params);
         }
        
         
@@ -260,10 +260,11 @@ let validateHoc = function (InputWidget, inputType = "text") {
         }
 
         shouldComponentUpdate(nextProps, nextState) {
-            if (func.diffOrder(nextProps, this.props)) {
+             //全部用浅判断
+            if (func.diff(nextProps, this.props,false)) {
                 return true;
             }
-            if (func.diff(nextState, this.state)) {
+            if (func.diff(nextState, this.state,false)) {
                 return true;
             }
             return false;
@@ -281,7 +282,7 @@ let validateHoc = function (InputWidget, inputType = "text") {
                 style={style}>
                 <Label readOnly={this.props.readOnly || this.props.disabled} style={this.props.labelStyle} required={this.props.required}>{this.props.label}</Label>
                 <div className={'wasabi-form-group-body' + (this.props.readOnly || this.props.disabled ? " readOnly" : "")}>
-                    <InputWidget  {...this.props} ref={this.input} containerid={this.state.containerid} validate={this.validate}></InputWidget>
+                    <Widget  {...this.props} ref={this.input} containerid={this.state.containerid} validate={this.validate}></Widget>
                     <small className={'wasabi-help-block '} style={{ display: this.state.inValidateText ? "block" : 'none' }}>
                         <div className='text' >{this.state.inValidateText}</div>
                     </small>

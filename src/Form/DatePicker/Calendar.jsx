@@ -263,10 +263,10 @@ class Calendar extends Component {
 
 
     shouldComponentUpdate(nextProps, nextState) {
-        if (utils.diffOrder(nextProps, this.props)) {
+        if (utils.diff(nextProps, this.props,false)) {
             return true;
         }
-        if (utils.diffOrder(nextState, this.state)) {
+        if (utils.diff(nextState, this.state)) {
             return true;
         }
         return false;

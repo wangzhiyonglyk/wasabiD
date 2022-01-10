@@ -74,10 +74,10 @@ class DateTime extends Component {
 
     }
     shouldComponentUpdate(nextProps, nextState) {
-        if (func.diffOrder(nextProps, this.props)) {
+        if (func.diff(nextProps, this.props,false)) {
             return true;
         }
-        if (func.diffOrder(nextState, this.state)) {
+        if (func.diff(nextState, this.state)) {
             return true;
         }
         return false;

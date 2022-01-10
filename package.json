@@ -1,6 +1,6 @@
 {
   "name": "wasabiD",
-  "version": "0.9.14",
+  "version": "0.9.15",
   "description": "wasabi UI——PC端前端框架",
   "keywords": [
     "react",
@@ -21,6 +21,7 @@
   ],
   "license": "ISC",
   "main": "lib/index.js",
+  "jsnext:main":"src/index.js",
   "scripts": {
     "build": "webpack",
     "pub": "npm publish"

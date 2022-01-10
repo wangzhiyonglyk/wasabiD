@@ -147,7 +147,7 @@ class Container extends React.PureComponent {
                 if (labelStyle && labelStyle.width) {
                     //如果设置宽度，则不参与计算
                 } else {
-                    let width = func.charWidth(child.props.label);
+                    let width = func.charWidth(child.props.label);//大概计算宽度 todo
                     maxWidth = maxWidth < width ? width : maxWidth;
                     maxWidth = maxWidth > 160 ? 160 : maxWidth;//超过160就不管了，否则很难看
                 }

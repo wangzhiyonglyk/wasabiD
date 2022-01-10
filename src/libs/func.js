@@ -234,51 +234,20 @@ func.cookies = {
 }
 
 /**
- * 根据字符计算宽度
- * @param {*} str 字符
- */
-func.charWidth = function (str = "") {
-    let width = 0;
-    try {
-        let strArr = str.split("");
-
-        for (let i = 0; i < strArr.length; i++) {
-            let reg = new RegExp("[\\u4E00-\\u9FFF]+", "g");
-            if (reg.test(strArr[i])) {
-                width += 20;//汉字20个像素
-            }
-            else {
-                width += 10;
-            }
-        }
-    } catch (e) {
-
-    }
-
-    return width;
-}
-
-
-/**
- * 对象的复制
+ * 对象的深复制
  * @param {*} obj 源对象
  * @returns 
  */
 func.clone = function (obj) {
     let o;
     switch (typeof obj) {
-        case 'undefined': break;
-        case 'string': o = obj + ''; break;
-        case 'number': o = obj - 0; break;
-        case 'boolean': o = obj; break;
-        case "function": o = obj; break;//todo 
         case 'object':
             if (obj === null) {
                 o = null;
             } else {
                 if (obj instanceof Array) {
                     o = [];
-                    //o= obj.slice(0)， 注意了这里不能直接使用这个复制，如果数组中的元素为对象，复制是不成功的
+                    //o= obj.slice(0)， 注意了这里不能直接使用这个复制，如果数组中的元素为对象
                     for (let i = 0; i < obj.length; i++) {
                         o.push(func.clone(obj[i]));
                     }
@@ -288,8 +257,10 @@ func.clone = function (obj) {
                 else if (obj instanceof Map) {
                     o = new Map(obj);
                 }
-
-                else {//其他对象
+                else if (obj instanceof Set) {
+                    o = new Set(obj);
+                }
+                else {//普通对象
                     o = {};
                     for (let k in obj) {
                         o[k] = func.clone(obj[k]);
@@ -297,12 +268,48 @@ func.clone = function (obj) {
                 }
             }
             break;
-        default:
+        default://其他类型
             o = obj;
             break;
     }
     return o;
 }
+/**
+ * 对象的浅复制
+ * @param {*} obj 源对象
+ * @returns 
+ */
+func.shallowClone = function (obj) {
+    let o;
+    switch (typeof obj) {
+        case 'object':
+            if (obj === null) {
+                o = null;
+            } else {
+                if (obj instanceof Array) {
+                    o = obj.slice(0);
+                } else if (obj instanceof Date) {//对日期的复制
+                    o = new Date(obj.valueOf())
+                }
+                else if (obj instanceof Map) {
+                    o = new Map(obj);
+                }
+                else if (obj instanceof Set) {
+                    o = new Set(obj);
+                }
+                else {//普通对象
+                    o = { ...obj };
+                }
+            }
+            break;
+        default://其他类型
+            o = obj;
+            break;
+    }
+    return o;
+
+}
+
 //获取真正的数据源
 func.getSource = function (data, source = "data") {
     /// <summary>
@@ -381,60 +388,66 @@ func.uuid = function () {
 }
 
 /**
- * 判断两个对象是否完全相同
+ * 判断两个对象是相同
  * @param {*} objA 
  * @param {*} objB  
+ *  @param {bool} deep 是否深层遍历  
  * @returns 
  */
-func.diff = function (objA = null, objB = null) {//
-    if (objA === objB) {
+func.diff = function (objA = null, objB = null, deep = true) {//
+    if (objA === objB) {//直接相等，返回
         return false;
     }
-    if (objA && objB) {
-        if (typeof objA !== typeof objB) {
-            return true;
-        }
-        if (typeof objA !== "object" && typeof objA !== "function") {
-            return objA !== objB;
-        }
-        if (typeof objA === "object") {
-            //先拿所有的属性
+    if (Object.prototype.toString.call(objA) !== Object.prototype.toString.call(objB)) {//类型不同
+        return true;
+    }
+    if (typeof objA === "function") {//函数
+        return objA.toString() === objB.toString();
+    }
+    else if (typeof objA === "object") {//对象
+        //先拿所有的属性 
+        try {
+
+            if (Object.prototype.toString.call(objA).indexOf("Map") > -1 || Object.prototype.toString.call(objA).indexOf("Set") > -1) {
+                //如果是Map与Set则直接判断即可，因为两者的无法像普通对象遍历
+                return objA !== objB;
+            }
             let oldProps = Object.getOwnPropertyNames(objA);
             let newProps = Object.getOwnPropertyNames(objB);
             if (oldProps.length !== newProps.length) {
                 return true;//不相同
             }
+
             for (let i = 0; i < oldProps.length; i++) {
                 let propName = oldProps[i];//属性名
                 //值
                 let propA = objA[propName]
                 let propB = objB[propName]
-                if (func.diff(propA, propB)) {
-                    return true;
+                if (deep) {//注意条件不能合并
+                    //深比较
+                    if (func.diff(propA, propB, deep)) {
+                        return true;
+                    }
+                }
+                else {
+                    //浅比较
+                    if (propA !== propB) {
+                        return true;
+                    }
                 }
 
+
             }
+        } catch (e) {
+            console.log(objA, objB)
         }
+    } else {//其他类型
+        return objA !== objB;
     }
-    return func.diffOrder(objA, objB)
+
+    return false;
 }
 
-/**
- * 判断两个对象是否完全相同并顺序一致
- * @param {*} objA 
- * @param {*} objB 
- */
-func.diffOrder = function (objA, objB) {
-
-    try {
-        return JSON.stringify(objA) !== JSON.stringify(objB);
-    }
-    catch (e) {
-
-    }
-    return true;
-
-}
 
 /**
  * component Mixins实现
@@ -446,7 +459,6 @@ func.componentMixins = function (component, mixinClass = []) {
     try {
         mixinClass.forEach(baseCtor => {
             Object.getOwnPropertyNames(baseCtor).forEach(name => {
-
                 if (typeof baseCtor[name] == "function") {
                     component.prototype[name] = baseCtor[name];
                 }
@@ -468,9 +480,9 @@ func.componentMixins = function (component, mixinClass = []) {
  */
 func.toTreeData = function (data, idField = "id", parentField = "pId", textField = "text") {
     data = func.clone(data);//复制一份
-    let pos = {};
-    let tree = [];//最终数据
-    let count = 0;//
+    let tree = [];//最终树数据
+    let pos = {};//临时节点对象
+    let count = 0;//总次数，防止死循环
     let pId = "";//一级父节点pid值
     let ids = "";//所有id值
     for (let i = 0; i < data.length; i++) {
@@ -482,7 +494,7 @@ func.toTreeData = function (data, idField = "id", parentField = "pId", textField
         }
     }
     let index = 0;
-    while (data.length !== 0 && count < 200000) {
+    while (data.length !== 0 && count < 2000000) {
         count++;
         if (pId.indexOf("," + data[index][parentField] + ",") > -1 || !data[index][parentField]) {
             //一级节点
@@ -493,6 +505,7 @@ func.toTreeData = function (data, idField = "id", parentField = "pId", textField
                 text: data[index][textField],
                 children: []
 
+
             }
             tree.push(item);
             pos[data[index][idField]] = [tree.length - 1];//节点路径
@@ -502,11 +515,12 @@ func.toTreeData = function (data, idField = "id", parentField = "pId", textField
             data.splice(index, 1);
             index--;
         } else {
+            //非一级节点
             let posArr = pos[data[index][parentField]];//拿出父节点的路径
             if (posArr) {
-                let obj = tree[posArr[0]];//找到在树中的位置
+                let currentNode = tree[posArr[0]];//找到在树中的位置
                 for (let j = 1; j < posArr.length; j++) {
-                    obj = obj.children[posArr[j]];
+                    currentNode = currentNode.children[posArr[j]];
                 }
                 let item = {
                     ...data[index],
@@ -515,8 +529,8 @@ func.toTreeData = function (data, idField = "id", parentField = "pId", textField
                     text: data[index][textField],
                     children: data[index].children || [],
                 }
-                obj.children.push(item);
-                pos[data[index][idField]] = posArr.concat([obj.children.length - 1]);
+                currentNode.children.push(item);
+                pos[data[index][idField]] = posArr.concat([currentNode.children.length - 1]);
                 item._path = pos[data[index][idField]];//保存路径
                 //格式化子节点
                 item.children = func.formatTreeDataChildren(data[index].children, item.id, item._path, idField, parentField, textField);
@@ -526,7 +540,7 @@ func.toTreeData = function (data, idField = "id", parentField = "pId", textField
         }
         index++;
         if (index > data.length - 1) {
-            index = 0;
+            index = 0;//归零
         }
     }
     if (data.length > 0) {
@@ -535,6 +549,7 @@ func.toTreeData = function (data, idField = "id", parentField = "pId", textField
     return tree;
 
 }
+
 /**
  * 如果树节点本身包含了子节点，格式化节点
  * @param {*} node 
@@ -544,15 +559,14 @@ func.formatTreeDataChildren = function (children, pId, path, idField = "id", par
     if (children && children instanceof Array && children.length > 0) {
         for (let i = 0; i < children.length; i++) {
             let newPath = [...path, i];
-            let item = {
+            children[i] = {
                 ...children[i],
                 id: children[i][idField],
                 pId: pId,
                 text: children[i][textField],
                 _path: newPath,
                 children: func.formatTreeDataChildren(children[i].children, children[i][idField], newPath, idField, parentField, textField)
-            }
-            children[i] = item;
+            };
         }
         return children;
     }
@@ -560,45 +574,26 @@ func.formatTreeDataChildren = function (children, pId, path, idField = "id", par
 
 
 }
-/**
- * 找到父节点
- * @param {*} data 
- * @param {*} pId 
- */
-func.treeFindParent = function (data, pId) {
-    for (let i = 0; i < data.length; i++) {
-        if (data[i].id === pId) {
-            return data[i];
 
-        }
-        if (data[i].children && data[i].children.length > 0) {
-            let findNode = func.treeFindParent(data[i].children, pId);
-            if (findNode) {
-                return findNode;
+/**
+* 将树型结构的数据扁平化
+* @param {*} data 
+*/
+func.treeDataToFlatData = function (data) {
+    let result = [];
+    if (data && data instanceof Array) {
+        for (let i = 0; i < data.length; i++) {
+            result.push({
+                ...data[i],
+                isLast: i === data.length - 1 ? true : false
+            });
+            if (data[i].children && data[i].children.length > 0&&data[i].open!==false) {
+                result = result.concat(func.treeDataToFlatData(data[i].children));
             }
         }
     }
-    return null;
+    return result;
 }
-
-/**
- * 找到所有祖先节点
- * @param {*} data 
- * @param {*} pId 
- */
-func.treeFindALLParents = function (data, pId) {
-    let parents = [];
-    let parent = func.treeFindParent(data, pId);
-    let count = 0;;//防止死循环
-    while (parent && count < 1000) {
-        count++;
-        parents.push(parent);
-        parent = func.treeFindParent(data, parent.pId);
-
-    }
-    return parents;
-}
-
 /**
  * 深度合并
  * @param {*} targetObj 目标对象
@@ -631,7 +626,46 @@ func.arrayNodupMerge = function (arr1 = [], arr2 = [], key = "id") {
     }
     return result;
 }
+/**
+ * 根据字符计算大概宽度
+ * @param {*} str 字符
+ */
+func.charWidth = function (str = "") {
+    let width = 0;
+    try {
+        let strArr = str.split("");
 
+        for (let i = 0; i < strArr.length; i++) {
+            let reg = new RegExp("[\\u4E00-\\u9FFF]+", "g");
+            if (reg.test(strArr[i])) {
+                width += 20;//汉字20个像素
+            }
+            else {
+                width += 10;
+            }
+        }
+    } catch (e) {
+
+    }
+
+    return width;
+}
+
+/**
+ * 节流方案
+ */
+func.throttle = function (fn, wait) {
+    let pre = Date.now();
+    return function () {
+        let context = this;
+        let args = arguments;
+        let now = Date.now();
+        if (now - pre >= wait) {
+            fn.apply(context, args);
+            pre = Date.now();
+        }
+    }
+}
 /**
  * create by wangzhiyong
  * date:2021-04-22

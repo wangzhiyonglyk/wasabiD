@@ -13,7 +13,7 @@ class TreeNodeRow {
         this.iconOpen = "";//[父节点]打开图标
         this.open = true;//是否处于打开状态
         this.checked = false;//是否被勾选
-        this.checkAble = false;//是否允许勾选
+        this.selectAble = false;//是否允许勾选
         this.draggAble = false;//是否允许拖动，
         this.dropAble = false;//是否允许停靠
         this.href = null;//节点的链接
@@ -24,6 +24,7 @@ class TreeNodeRow {
         this.children=null;
         this._path=null;//路径
         this.half=false;//是否半选
+        this.isLast=false;//是否是同级最后一个节点
     }
 }
 export default TreeNodeRow;

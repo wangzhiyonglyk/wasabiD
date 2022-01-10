@@ -95,7 +95,7 @@
     height: 85px;
 }
 
-.wasabi-excel-sheet .table-realTable {
+.wasabi-excel-sheet .wasabi-table-realTable {
     width: 100%;
     overflow: auto;
     box-sizing: border-box;

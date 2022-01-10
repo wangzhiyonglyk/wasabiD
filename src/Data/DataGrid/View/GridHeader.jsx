@@ -1,6 +1,7 @@
 /**
  * 拆分datagrid,表头组件
  * 2021-05-28
+ * 2022-01-08 解决ref报错的bug
  */
 /**
  * :[[
@@ -18,19 +19,19 @@ import React from "react";
 
 import { TableCell, TableHead, TableRow } from "../../Table";
 import CheckBox from "../../../Form/CheckBox"
-class GridHeader extends React.PureComponent {
+import config from "../config";
+import func from "../../../libs/func";
+class GridHeader extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
 
         }
-        this.headerColumnIndex=null;
+        this.chosedHeaderColumnIndex = null;
         this.getHeaderProps = this.getHeaderProps.bind(this);
         this.getHeaderContent = this.getHeaderContent.bind(this);
         this.setOrderAndSelectAndDetailHeader = this.setOrderAndSelectAndDetailHeader.bind(this);
         this.onSort = this.onSort.bind(this);
-        this.renderSingleHeader = this.renderSingleHeader.bind(this);
-        this.renderComplexHeader = this.renderComplexHeader.bind(this);
         this.onMouseMove = this.onMouseMove.bind(this);
         this.onMouseDown = this.onMouseDown.bind(this);
     }
@@ -38,16 +39,16 @@ class GridHeader extends React.PureComponent {
      * 表头的鼠标监听事件
      * @param {*} event 
      */
-    onMouseMove( event) {
+    onMouseMove(event) {
         try {
             let offsetX = event && event.nativeEvent && event.nativeEvent.offsetX;
             let width = event.target.getBoundingClientRect().width;
-            if (width - offsetX <=2||offsetX<=2) {
-                event.target.style.cursor="ew-resize";
+            if (width - offsetX <= 4) {
+                event.target.style.cursor = "ew-resize";
             }
-            else{
-                event.target.style.cursor="pointer";
-                   
+            else {
+                event.target.style.cursor = "pointer";
+
             }
         }
         catch (e) {
@@ -55,11 +56,11 @@ class GridHeader extends React.PureComponent {
         }
 
     }
-    onMouseDown(headerColumnIndex,event){
-     if(event.target.style.cursor==="ew-resize"){
-        let offsetX = event && event.nativeEvent && event.nativeEvent.offsetX;
-         this.props.onHeaderMouseDown&&this.props.onHeaderMouseDown(offsetX<=2? headerColumnIndex-1:headerColumnIndex,event);
-     }
+    onMouseDown(headerColumnIndex, event) {
+        if (event.target.style.cursor === "ew-resize") {
+            let offsetX = event && event.nativeEvent && event.nativeEvent.offsetX;
+            this.props.onHeaderMouseDown && this.props.onHeaderMouseDown(offsetX <= 2 ? headerColumnIndex - 1 : headerColumnIndex, event);
+        }
     }
     /**
     * 得到头部相关属性
@@ -103,37 +104,76 @@ class GridHeader extends React.PureComponent {
     * 设置表头的详情，序号，选择列
     */
     setOrderAndSelectAndDetailHeader(rowSpan = 1) {
+        let stickyLeft = 1;//偏移量,表格左边有border
         let control = [];
+        //处理详情列
+        if (this.props.detailAble) {
+            control.push(<TableCell rowSpan={rowSpan} key='headerdetail' position="header" className="wasabi-detail-column"
+                thStyle={{ position: "sticky", left: this.props.borderAble ? stickyLeft : stickyLeft, zIndex: 1 }}></TableCell>)
+            stickyLeft += config.detailWidth;
+        }
+        //处理序号列
+        if (this.props.rowNumber) {
+            control.push(
+                <TableCell rowSpan={rowSpan} key='headerorder' position="header" className="wasabi-order-column"
+                    thStyle={{ position: "sticky", left: this.props.borderAble ? stickyLeft : stickyLeft, zIndex: 1 }} >
+                    序号
+                </TableCell>
+            );
+            stickyLeft += config.orderWidth;
+        }
         //处理选择列
         if (this.props.selectAble) {
-            let thCheckProps = {
+            let props = {
                 //设置checkbox的属性
                 value: this.props.isCheckAll == true ? 'yes' : null, //判断当前页是否选中
                 data: [{ value: 'yes', text: '' }],
                 onSelect: this.props.checkedAllHandler,
-                name: 'all'
+                name: 'datagrid-check-all',
+                rnd:func.uuid()//加个随机数，保证每次重新渲染，否则会报 ref错误，原因不详
             };
-            control.unshift(
-                <TableCell rowSpan={rowSpan} key='headercheckbox' position="header" className='wasabi-check-column'>
-                    {this.props.singleSelect ? null : (
-                        <CheckBox {...thCheckProps}></CheckBox>
-                    )}
+            control.push(
+                <TableCell rowSpan={rowSpan} key='headercheckbox' position="header" className='wasabi-select-column'
+                    thStyle={{ position: "sticky", left: this.props.borderAble ? stickyLeft : stickyLeft, zIndex: 1 }} >
+                    {this.props.singleSelect ? null : <CheckBox {...props} ></CheckBox>}
                 </TableCell>
+
             );
+            stickyLeft += config.selectWidth;
         }
-        //处理序号列
-        if (this.props.rowNumber) {
-            control.unshift(
-                <TableCell rowSpan={rowSpan} key='headerorder' position="header" className="wasabi-order-column" >
-                    { }
-                </TableCell>
-            );
-        }
-        //处理详情列
-        if (this.props.detailAble) {
-            control.unshift(<TableCell rowSpan={rowSpan} key='headerdetail' position="header" className="wasabi-detail-column"></TableCell>)
-        }
+
+
         return control;
+    }
+
+    /**
+   * 设置表头单元格
+   * @param {*} header 
+   * @param {*} headerRowIndex 
+   * @param {*} headerColumnIndex 
+   * @param {*} props 
+   * @param {*} stickyLeft 
+   * @returns 
+   */
+    setHeaderCell(header, headerRowIndex, headerColumnIndex, props, stickyLeft) {
+        return <TableCell
+            rowIndex={headerRowIndex}
+            columnIndex={headerColumnIndex}
+            name={header.name || header.label}
+            key={"header-" + headerRowIndex + "-" + headerColumnIndex.toString()}
+            position="header"
+            align={header.align}
+            thStyle={{ position: header.sticky ? "sticky" : null, left: header.sticky ? this.props.borderAble ? stickyLeft : stickyLeft : null, zIndex: header.sticky ? 1 : null }}
+            rowSpan={header.rowSpan}
+            colSpan={header.colSpan}
+            className={props.className || ""}
+            onClick={props.onClick || null}
+            onMouseMove={this.onMouseMove}
+            onMouseDown={this.onMouseDown.bind(this, headerColumnIndex)} >
+            {props.content}
+            <i className={props.iconCls}></i>
+
+        </TableCell>;
     }
     /**
      * 排序事件
@@ -143,88 +183,55 @@ class GridHeader extends React.PureComponent {
     onSort(name, sortOrder) {
         this.props.onSort && this.props.onSort(name, sortOrder);
     }
-    /**
-     * 渲染简单表头，即一行
-     * @returns 
-     */
-    renderSingleHeader() {
-        //渲染表头
-        let headerControl = [];
-        let headers = this.props.headers;
-        //处理表头
-        headers.map((header, headerColumnIndex) => {
-            //相关属性
-            let props = this.getHeaderProps(header);
-            headerControl.push(<TableCell
-                key={'header-0-' + headerColumnIndex.toString()}
-                position="header"
-                align={header.align}
-                rowSpan={header.rowSpan}
-                colSpan={header.colSpan}
-                className={props.className || ""}
-                onClick={props.onClick || null}
-                onMouseMove={this.onMouseMove}
-                onMouseDown={this.onMouseDown.bind(this, headerColumnIndex)}
-            >
-                {props.content}
-                <i className={props.iconCls} ></i>
-
-            </TableCell>);
-        });
-        if (headers && headers.length > 0) {
-            //设置表头的详情，序号，选择列
-            let control = this.setOrderAndSelectAndDetailHeader();//
-            headerControl = [].concat(control, headerControl);
+   
+    render() {
+        if (!(this.props.headers instanceof Array) || this.props.headers.length === 0) {
+            //格式不正确，或者数据为空
+            return null;
         }
-        //返回数据
-        return <TableHead><TableRow>{headerControl}</TableRow></TableHead>
-    }
-    /**
-     * 渲染复杂表头，即有多行
-     * @returns 
-     */
-    renderComplexHeader() {
         let headerControl = [];
+        let maxRowSpan = 1;
+        let trcontrol = [];
+        let stickyLeft = 1;//偏移量,表格左边有border
+        if (this.props.detailAble) { stickyLeft += config.detailWidth; }
+        if (this.props.rowNumber) { stickyLeft += config.orderWidth; }
+        if (this.props.selectAble) { stickyLeft += config.selectWidth; }
         //处理表头
         this.props.headers.map((trheader, headerRowIndex) => {
             if (trheader instanceof Array) {
-                let trcontrol = [];//当前行
+                maxRowSpan = this.props.headers.length;//多行时
                 trheader.map((header, headerColumnIndex) => {
                     let props = this.getHeaderProps(header);
-                    trcontrol.push(<TableCell
-                        key={"header-" + headerRowIndex + "-" + headerColumnIndex.toString()}
-                        position="header"
-                        align={header.align}
-                        rowSpan={header.rowSpan}
-                        colSpan={header.colSpan}
-                        className={props.className || ""}
-                        onClick={props.onClick || null} >
-                        {props.content}
-                        <i className={props.iconCls}></i>
-
-                    </TableCell>);
+                    trcontrol.push(this.setHeaderCell(header, headerRowIndex, headerColumnIndex, props, stickyLeft));
+                    let width = header.width ? header.width : this.props?.headerWidth && this.props?.headerWidth[header.name] || config.minWidth;
+                    stickyLeft += header.sticky ? width : 0;
                 })
                 headerControl.push(trcontrol)
+                trcontrol = [];//清空
+            }
+            else {//只有一行
+                let props = this.getHeaderProps(trheader);
+                trcontrol.push(this.setHeaderCell(trheader, 0, headerRowIndex, props, stickyLeft));
+                let width = trheader.width ? trheader.width : this.props?.headerWidth && this.props?.headerWidth[trheader.name] || config.minWidth;
+                stickyLeft += trheader.sticky ? width : 0;
             }
         })
-
+        if (trcontrol.length > 0) {
+            headerControl.push(trcontrol);//说明只有一行
+        }
         if (this.props.headers && this.props.headers.length > 0) {
-            //设置表头的详情，序号，选择列
-            let control = this.setOrderAndSelectAndDetailHeader(this.props.headers.length);
+            //设置表头的详情，序号，选择列,空白列
+
+            let control = this.setOrderAndSelectAndDetailHeader(maxRowSpan);
+
             headerControl[0] = [].concat(control, headerControl[0]);
         }
-
-
-        return <TableHead>
+        return <TableHead style={{ position: "sticky", top: 0, zIndex: 1 }}>
             {
                 headerControl && headerControl.map((tritem, rowindex) => {
                     return <TableRow key={rowindex}>{tritem}</TableRow>
                 })}
         </TableHead>
-
-    }
-    render() {
-        return this.props.single ? this.renderSingleHeader() : this.renderComplexHeader();
     }
 }
 

@@ -11,6 +11,11 @@
  2021-05-28 创建table组件， 重新改造datagrid，将view,event,data分离，组件单一责任原则
  2021-09-06 修复列拖动改变宽度的问题
  固定列，复杂表头仍然有bug，需要检查
+  2021-11-28 重新实现紧凑宽度，调整宽度，固定表头，固定列等功能，优化渲染，列不再换行
+  2021-12-28 增加虚拟列表功能
+  2022-01-07 重新设计虚拟列表的实现方式，采用onScroll,配置虚拟列表开关，目前是通过数据量的大小（300），这样可能适应于treegrid,pivot，又可以适应小数据量情况
+  2022-01-07 调整表格的宽度与高度等样式bug
+   2022-01-07 解决因虚拟列表导致固定列的效果失败的bug，减少onScroll事件重复渲染的次数
  */
 
 import React, { Component } from 'react';
@@ -28,25 +33,28 @@ import mixins from '../../Mixins/mixins';
 /**
  * 事件处理
  */
+import loadData from './method/loadData.js';
+import virtualHandler from './method/virtualHandler.js';
 import eventHandler from './method/eventHandler.js';
 import staticMethod from "./method/staticMethod"
 import pasteExtend from './method/pasteExtend.js';
-import Grid from "./View/Grid"
+import Grid from "./View"
 /**
  * 样式
  */
 import './datagrid.css'
 import './datagridetail.css'
+import config from './config.js';
 class DataGrid extends Component {
     constructor(props) {
         super(props);
-        this.containerWidth = 0;//表格的宽度 
+       
         this.state = {
-            fixedthcontainerid: func.uuid(),//固定表头容器
-            fixedTableContainerid: func.uuid(),//固定表格的容器
-            fixedTableid: func.uuid(),//固定的表格
-            realTableContainerid: func.uuid(),//真实表格容器
-            realTableid: func.uuid(),//真实表格
+            containerid: func.uuid(),//表格容器
+            divideid: func.uuid(),//分隔线
+            fixTableId: func.uuid(),//表头table
+            // realTableCotainerId: func.uuid(),//真实表格容器id
+            realTableId: func.uuid(),//真实table
             url: null,
             rawUrl: null,
             params: null, //参数
@@ -56,17 +64,14 @@ class DataGrid extends Component {
             sortName: this.props.sortName,//排序名称
             sortOrder: this.props.sortOrder,//排序方式
 
-            /************这几个字段在 getDerivedStateFromProps 处理逻辑，这样提升性能 */
-            fixedHeaders: [],//固定列的表头
-            rawFixedHeaders: [],//固定列的表头,保存用于更新
-            headers: [], //表头会可能后期才传送,也会动态改变
-            rawHeaders: [],//保存起来，用于更新
-            rawData: [],//原始数据，在自动分页时与判断是否更新有用
-            data: [],
-            single: false,//是否简单表头
-            headerChange: false,//表头是否有变化，用于更新
-            /************这几个字段在 getDerivedStateFromProps 处理逻辑，这样提升性能 */
-
+            /************以下这几个字段在 getDerivedStateFromProps 处理逻辑，这样提升性能 */
+            rawFixedHeaders: null,//固定列的表头,保存用于更新
+            rawHeaders: null,//原有默认列保存起来，用于更新判断
+            rawData: null,//原始数据，在自动分页时与判断是否更新有用
+            headers: [], //页面中的headers
+            data: [],//当前页的数据
+            visibleData: [],//可见的数据
+            /************以上这几个字段在 getDerivedStateFromProps 处理逻辑，这样提升性能 */
             checkedData: new Map(),//勾选的数据
             checkedIndex: new Map(),//勾选的下标
             detailView: null, //详情行,
@@ -80,12 +85,12 @@ class DataGrid extends Component {
             addData: new Map(), //新增的数据,因为有可能新增一个空的，然后再修改
             updateData: new Map(), //被修改过的数据，因为要判断曾经是否修改
             deleteData: [], //删除的数据
-            reloadData: false,//是否重新加载数据,用于强制刷新
-            adjustHeight: false,//是否调整宽度
-
+            urlLoadData: false,//有url并且分页情况下是否需要请求加载数据
+            initVirtualConfig: null,//是否需要重置虚拟列表的配置,null标记为没有虚拟列表
+            adjust: false,//是否要调整
         };
         //绑定事件
-        let baseCtors = [eventHandler, staticMethod, pasteExtend];
+        let baseCtors = [loadData, virtualHandler, eventHandler, staticMethod, pasteExtend];
         baseCtors.forEach(baseCtor => {
             Object.getOwnPropertyNames(baseCtor).forEach(name => {
                 if (typeof baseCtor[name] == 'function') {
@@ -93,327 +98,117 @@ class DataGrid extends Component {
                 }
             });
         });
-        this.computeHeaderStyleAndColumnWidth = this.computeHeaderStyleAndColumnWidth.bind(this)
+       
     }
     static getDerivedStateFromProps(props, state) {
-        let newState = {};//新的状态值
-        if ((props.url && props.url != state.rawUrl) || (props.params &&
-            func.diff(props.params, state.rawParams))) {//父如果参数有变
+     
+        let newState = {
+
+        };//新的状态值
+        // 处理Headers,因为交叉表的表头是后期传入的 
+        {
+            let headerChange = false;
+            //处理固定列
+            if (func.diff(props.fixedHeaders, state.rawFixedHeaders)) {
+                //有改变则更新headers等
+                newState.rawFixedHeaders = func.clone(props.fixedHeaders);
+
+                headerChange = true;
+            }
+            //处理非固定列
+            if (func.diff(props.headers, state.rawHeaders)) {
+                //有改变则更新headers等
+                newState.rawHeaders = func.clone(props.headers);
+
+                headerChange = true;
+            }
+            if (headerChange) {
+                //标记固定列
+                newState.headers = [].concat((newState.rawFixedHeaders || []).map((item) => { return { ...item, sticky: true } }), newState.rawHeaders || []);
+                if (newState.headers && newState.headers instanceof Array) {
+                    for (let i = 0; i < newState.headers.length; i++) {
+                        if (newState.headers[i] instanceof Array) {
+
+                        }
+                    }
+                }
+
+            }
+        }
+
+        if (props.data && props.data instanceof Array && func.diff(props.data, state.rawData, false)) {
+            //如果传了死数据,并且数据改变
+            newState.initVirtualConfig=props.data.length<config.minDataTotal?null:true;//数据比较小则不执行虚拟列表
+            newState.rawData = props.data;
+            try {
+                //分页情况下，数据切割
+                newState.data = props.pagination == true ? props.data.length > (state.pageSize || 20)
+                    ? props.data.slice(((state.pageIndex || 1) - 1) * (state.pageSize || 20), (state.pageIndex || 1) * (state.pageSize || 20))
+                    : props.data : props.data;    
+            }
+            catch (e) {
+                newState.data = func.shallowClone(props.data);
+            }
+            if(newState.initVirtualConfig===null){
+                newState.visibleData=newState.data;
+            }
+            newState.total = props.total || props.data.length || 0
+        }
+        else if (props.url  && (props.url != state.rawUrl || func.diff(props.params, state.rawParams))) {
+            //有url,并且分页,url或者参数有变
             newState = {
-                reloadData: true,
+                urlLoadData: true,//重新加载数据
                 url: props.url,
                 rawUrl: props.url,
                 rawParams: func.clone(props.params),
                 params: func.clone(props.params),
             }
         }
-        //处理Headers,因为交叉表的表头是后期传入的
-        {
-            //处理非固定列
-            {
-                let single = true;//默认是简单的表头
-                for (let i = 0; i < props.headers.length; i++) {
-                    if (props.headers[i] instanceof Array) {
-                        single = false;//复杂表头
-                    }
-                }
-                //是否是简单表头
-                if (single != state.single) {
-                    newState.single = single;
-                }
-                if (func.diff(props.headers, state.rawHeaders)) {
-                    //有改变
-                    newState.rawHeaders = props.headers;
-                    newState.headers = func.clone(props.headers);
-                }
-            }
-            {
-                //处理固定列
-                if (func.diff(props.fixedHeaders, state.rawFixedHeaders)) {
-                    //有改变
-                    newState.fixedHeaders = func.clone(props.fixedHeaders);
-                    newState.rawFixedHeaders = props.fixedHeaders;
-                    newState.headers = [].concat(newState.fixedHeaders, newState.headers);//合并列
-                }
-                else {//没有改变
-                    if (props.fixedHeaders && props.fixedHeaders instanceof Array && props.fixedHeaders.length > 0) {//没有改变，但是有固定列
-
-                        newState.headers = [].concat(state.fixedHeaders, newState.headers);//合并列
-                    }
-                }
-            }
-            if (newState.headers && func.diffOrder(newState.headers, state.headers)) {
-
-                newState.adjustHeight = true;//表头有变化，调整宽度
-            }
-        }
-        //todo 此处理还要仔细研究
-        if (props.data && props.data instanceof Array && func.diff(props.data, state.rawData)) {
-            //如果传了死数据
-            newState.rawData = props.data;
-            try {
-                //防止数据切割的时候报错
-                newState.data = props.pagination == true ? props.data.length > state.pageSize
-                    ? props.data.slice(((state.pageIndex) - 1) * state.pageSize, state.pageSize)
-                    : props.data : props.data;
-            }
-            catch (e) {
-                newState.data = props.data;
-            }
-            newState.total = props.total || props.data.length || 0
-        }
-        if (func.isEmptyObject(newState)) {
-            return null;
-        }
-        else {
-            return newState;
-        }
-
+       
+        return newState;
     }
     /**
      * 更新函数
      */
     componentDidUpdate(prevProps, prevState, snapshot) {
+       
         //重新加数据
-        if (this.state.reloadData) {
-            this.setState({
-                reloadData: false,
-            })
-            this.reload();
+        if (this.state.urlLoadData) {//需要请求数据
+            this.reload();//调用
         }
-        if (this.state.adjustHeight) {
-            this.computeHeaderStyleAndColumnWidth();//需要调整宽度
+        else  if (this.state.initVirtualConfig&&this.state.data&&this.state.data.length>0) { 
+            this.initVirtual();//重置虚拟列表,   
+    }
+        
+        if ((this.state.initVirtualConfig===null||this.adjust)&&this.state.data&&this.state.data.length>0) {//调整虚拟列表与表格宽度
+            this.adjustvirtual();
+
         }
+
     }
     componentDidMount() {
-        if (this.state.reloadData) {
-
-            this.setState({
-                reloadData: false,
-            })
-            this.reload();
+     
+        if (this.state.urlLoadData) {//需要请求数据
+            this.reload();//调用
         }
-
-        //监听window.resize事件
-        window.onresize = () => {
-            this.computeHeaderStyleAndColumnWidth();//重新计算一下宽度
+        else  if (this.state.initVirtualConfig&&this.state.data&&this.state.data.length>0) { 
+                this.initVirtual();//重置虚拟列表,   
         }
-        //延迟处理，因为有时候无法获取到真正的宽度
-        setTimeout(() => {
-            let containerWidth = document.getElementById(this.state.realTableContainerid).getBoundingClientRect().width;
-            if (containerWidth > this.containerWidth + 2) {
-                this.computeHeaderStyleAndColumnWidth();
-            }
-        }, 50);
-    }
+        if (this.state.initVirtualConfig===null&&this.state.data&&this.state.data.length>0) {///调整虚拟列表与表格宽度
+            this.adjustvirtual();
 
-    /**
-     * 计算出列的宽度
-     *因为有固定表头，固定列，还有拖动列等，必须设置好列的宽度，否则对不齐
-     */
-    computeHeaderStyleAndColumnWidth() {
-        //数据网格的宽度   
-        this.containerWidth = document.getElementById(this.state.realTableContainerid).getBoundingClientRect().width;
-        this.containerWidth = this.containerWidth - 2;//去掉两个像素
-        this.columnSum = 0;//总列数
-        this.fixedcolumnSum = 0;//固定列的总列数
-        this.releaseWidth = this.containerWidth;//剩余可分配宽度
-        this.releaseColumn = 0;//剩余要计算宽度的列
-        this.fixedreleaseColumn = 0;//剩余要计算宽度的固定列
-        this.perColumnWidth = 0;//每一列的宽度
-        this.tableWidth = 0;//表格宽度，因为有可能表格列都设置宽度，总宽度与网格的整体宽表不同
-        this.fixedTableWidth = 0;//固定表格的宽表
-        if (this.containerWidth > 0 && this.state.headers && this.state.headers instanceof Array) {
-            for (let i = 0; i < this.state.headers.length; i++) {
-                if (this.state.headers[i] instanceof Array) {
-                    for (let j = 0; j < this.state.headers[i].length; j++) {
-                        if (this.state.headers[i][j].colSpan && this.state.headers[i][j].colSpan > 1) {
-                            //不算一列
-                            continue;
-                        }
-                        else {
-                            //算一列
-                            this.columnSum++;
-                            if (i < this.state.fixedHeaders.length && j < this.state.fixedHeaders[i].length) {//固定列
-                                this.fixedcolumnSum++;//算一列
-                            }
-                            if (this.state.headers[i][j].width) {
-                                //设置了宽度
-                                try {
-                                    this.tableWidth += this.state.headers[i][j].width;//计算表格宽度
-                                    if (i < this.state.fixedHeaders.length && j < this.state.fixedHeaders[i].length) {//固定列
-                                        this.fixedTableWidth += this.state.headers[i][j].width;
-                                        this.fixedreleaseColumn++;
-                                    }
-                                    this.releaseWidth = this.releaseWidth - parseFloat(this.state.headers[i][j].width);
-                                    this.releaseColumn++;
-
-                                }
-                                catch (e) {
-                                    console.error("宽度设置错误", e);
-                                }
-
-                            }
-                            else {
-
-                            }
-                        }
-                    }
-
-                } else {
-                    if (this.state.headers[i].colSpan && this.state.headers[i].colSpan > 1) {
-                        continue;
-                    }
-                    else {
-                        //算一列
-                        this.columnSum++;
-                        if (i < this.state.fixedHeaders.length) {//固定列
-
-                            this.fixedcolumnSum++;//算一列
-                        }
-                        if (this.state.headers[i].width) {
-                            //设置了宽度
-                            try {
-                                this.tableWidth += this.state.headers[i].width;//计算表格宽度
-                                if (i < this.state.fixedHeaders.length) {//固定列
-                                    this.fixedTableWidth += this.state.headers[i].width;
-                                    this.fixedreleaseColumn++;//加上，后面做减法
-                                }
-                                this.releaseWidth = this.releaseWidth - parseFloat(this.state.headers[i].width);
-                                this.releaseColumn++;//加上，后面做减法
-                            }
-                            catch (e) {
-                                console.error("宽度设置错误", e);
-                            }
-
-                        }
-                        else {
-
-                        }
-                    }
-                }
-            }
-            if (this.props.detailAble) {//存在详情列
-                this.releaseWidth -= 30;
-                this.tableWidth += 30;
-                this.fixedTableWidth += 30;
-            }
-            if (this.props.selectAble) {//存在勾选列
-                this.releaseWidth -= 36;
-                this.tableWidth += 36;
-                this.fixedTableWidth += 36;
-            }
-            if (this.props.rowNumber) {////存在序号列
-                this.releaseWidth -= 60;
-                this.tableWidth += 60;
-                this.fixedTableWidth += 60;
-            }
-
-            this.releaseColumn = this.columnSum - this.releaseColumn;//剩余要分配的列
-            this.fixedreleaseColumn = this.fixedcolumnSum - this.fixedreleaseColumn;//剩余要分配的固定列
-            if (this.releaseColumn) {//防止有0的情况
-                try {
-                    this.perColumnWidth = parseInt((this.releaseWidth) / this.releaseColumn);//得到剩余要分配的列的平均宽度
-
-                    this.tableWidth += this.perColumnWidth * this.releaseColumn;//得到表格的宽度
-                }
-                catch (e) {
-                    console.error("计算宽度报错", e);
-                }
-
-            }
-            if (this.fixedreleaseColumn) {//还有剩下的列
-                this.fixedTableWidth += this.fixedreleaseColumn * this.perColumnWidth;
-            }
-        }
-        else if (this.containerWidth <= 0) {
-            //防止父组件被隐藏了，datagrid无法得到真实的宽度
-            this.timeout = setTimeout(this.computeHeaderStyleAndColumnWidth, 1000)
-        }
-        this.setState({
-            adjustHeight: false,//调整完成
-            headers:this.setHeaderWidth(),
-            fixedHeaders:this.setFixedHeaderWidth(),
-        })
-
-    }
-    /**
-     * 通过计算得到每一列的宽度
-     * @returns 
-     */
-    setHeaderWidth() {
-        let headers;
-        if (this.state.single) {
-            headers = this.state.headers&&this.state.headers.map(item => {
-                item.width = item.width || this.perColumnWidth;
-                return item;
-            })
-
-        }
-        else {
-            headers = this.state.headers.map(trheader => {
-                if (trheader instanceof Array) {
-                    return trheader.map(item => {
-                        if ((item.colSpan && header.colSpan > 1)) {
-                            return item;
-                        }
-                        else {
-                            item.width = item.width || this.perColumnWidth;
-                            return item;
-                        }
-                    })
-                }
-                else {
-                    trheader.width = trheader.width || this.perColumnWidth;
-                }
-            })
-        }
-        return headers;
-    }
-    setFixedHeaderWidth(){
-        let headers;
-        if (this.state.single) {
-            headers =  this.state.fixedHeaders&&this.state.fixedHeaders.map(item => {
-                item.width = item.width || this.perColumnWidth;
-                return item;
-            })
-
-        }
-        else {
-            headers =  this.state.fixedHeaders&&this.state.fixedHeaders.map(trheader => {
-                if (trheader instanceof Array) {
-                    return trheader.map(item => {
-                        if ((item.colSpan && header.colSpan > 1)) {
-                            return item;
-                        }
-                        else {
-                            item.width = item.width || this.perColumnWidth;
-                            return item;
-                        }
-                    })
-                }
-                else {
-                    trheader.width = trheader.width || this.perColumnWidth;
-                }
-            })
-        }
-        return headers;
+        }  
     }
     componentWillUnmount() {
         this.timeout && clearTimeout(this.timeout)
-    }
+    }   
     render() {
-        let style = func.clone(this.props.style) || {};
-        let height = style.height;//通过高度来判断是否渲染固定的表头
-        style.height = null;
+  
         return <Grid
             {...this.props}
             {...this.state}
-            style={style}
-            height={height}
-            tableWidth={this.tableWidth}
-            fixedTableWidth={this.fixedTableWidth}
-            perColumnWidth={this.perColumnWidth}
+            headerWidth={this.headerWidth}
+            data={this.state.data}
             checkedAllHandler={this.checkedAllHandler}
             checkCurrentPageCheckedAll={this.checkCurrentPageCheckedAll}
             getKey={this.getKey}
@@ -423,18 +218,18 @@ class DataGrid extends Component {
             tableCellEditHandler={this.tableCellEditHandler}
             onSort={this.onSort}
             onDetail={this.onDetail}
-            onRealTableScoll={this.onRealTableScoll}
             paginationHandler={this.paginationHandler}
             onPaste={this.onPaste}
             exportAble={this.props.exportAble}
             reload={this.reload}
             export={this.export.bind(this, false, "grid-")}
-            upload={this.upload}
             onAdd={this.onAdd}
             onSave={this.onSave}
             onDrop={this.onDrop}
             onDragOver={this.onDragOver}
+            onVirtualScroll={this.onVirtualScroll}
         ></Grid>
+
     }
 }
 
@@ -443,6 +238,7 @@ DataGrid.propTypes = {
     /**
      * 表格常用属性设置
      */
+
     style: PropTypes.object,//样式对象
     className: PropTypes.string,//样式
     selectAble: PropTypes.bool, // 是否显示选择，默认值 false
@@ -470,6 +266,7 @@ DataGrid.propTypes = {
     /**
      * 数据设置
      */
+     priKey: PropTypes.string, //key值字段,
     headers: PropTypes.array, //表头设置
     fixedHeaders: PropTypes.array, //固定列设置
     footer: PropTypes.array, //页脚,
@@ -509,17 +306,11 @@ DataGrid.propTypes = {
     onPaste: PropTypes.func, //粘贴成功事件
     onDrop: PropTypes.func,//停靠事件
     loadSuccess: PropTypes.func,//异步加载数据后，对数据进行进一步加工
-
-    /**
-     * pivot 专门为交叉提供的属性
-     */
-    isPivot: PropTypes.bool,//是否是交叉表，需要设置最小宽度
 };
 DataGrid.defaultProps = {
     /**
      * 表格常用属性设置
      */
-
 
     selectChecked: false,
     exportAble: true,
@@ -538,6 +329,7 @@ DataGrid.defaultProps = {
     /**
    * 数据设置
    */
+     priKey:"id",
     headers: [],
     fixedHeaders: [],
     total: 0,
@@ -555,7 +347,6 @@ DataGrid.defaultProps = {
     footerSource: 'footer', //页脚数据源
     totalSource: 'total', //
 };
-
-mixins(DataGrid, [eventHandler, staticMethod, pasteExtend]);
+mixins(DataGrid, [loadData, virtualHandler, eventHandler, staticMethod, pasteExtend]);
 
 export default DataGrid;

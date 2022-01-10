@@ -66,12 +66,7 @@ class Switch extends Component {
         if (this.props.readOnly) {
             className += " disabled";
         }
-        let style = this.props.style ? JSON.parse(JSON.stringify(this.props.style)) : {};
-        if (this.props.hide) {
-            style.display = "none";
-        } else {
-            style.display = "flex";
-        }
+   
         return (
             <div className={componentClassName + " " + this.props.validateClass} style={style}>
                 <Label readOnly={this.props.readOnly || this.props.disabled} style={this.props.labelStyle} required={this.props.required}>{this.props.label}</Label>

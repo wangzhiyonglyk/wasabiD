@@ -25,16 +25,18 @@ class Pivot extends Component {
             values: func.clone(this.props.values),//统计参数
             filters: func.clone(this.props.filters),//筛选条件
             data: func.clone(this.props.data),//数据
-            headers: [],//列纬度的表头
-            realData: [],//真实的数据
-            rowsTreeData: [],//行纬度的数据
         }
         let s = {};
         for (let key in p) {
             s[key] = p[key];
             s["old" + key] = p[key];//保留一份方便更新
         }
-        this.state = s;
+        this.state = {
+            ...s,
+            headers: [],//列纬度的表头,对应datagrid中的表头
+            realData: [],//真实的数据
+            rowsTreeData: [],//行纬度的数据
+        };
         this.initData=this.initData.bind(this)
     }
     static getDerivedStateFromProps(props, state) {
@@ -71,7 +73,7 @@ class Pivot extends Component {
     }
     dataGridClick(rowData, rowIndex) {
         
-        this.tree.current.setClickNode(rowData._id);
+        this.tree.current.setClick(rowData._id);
 
     }
     treeClick(_id) {
@@ -92,12 +94,13 @@ class Pivot extends Component {
             <div className="wasabi-pivot-left">
                 <Configuration height={treeTop}></Configuration>
                 <div className="wasabi-pivot-rowsData" >
-                    <Tree checkAble={this.props.checkAble} ref={this.tree} onClick={this.treeClick.bind(this)} isPivot={true} data={this.state.rowsTreeData} simpleData={true} ></Tree>
+                    <Tree checkAble={this.props.checkAble} ref={this.tree} onClick={this.treeClick.bind(this)}  data={this.state.rowsTreeData} simpleData={true} ></Tree>
                 </div>
             </div>
             <div className="wasabi-pivot-right">
-                <DataGrid ref={this.grid} pagination={this.props.pagination} rowNumber={false}
-                    headers={this.state.headers} data={this.state.realData} isPivot={true} onClick={this.dataGridClick.bind(this)}></DataGrid>
+                <DataGrid ref={this.grid} pagination={false} rowNumber={false}
+                selectAble={false} detailAble={false}
+                    headers={this.state.headers} data={this.state.realData}  onClick={this.dataGridClick.bind(this)}></DataGrid>
             </div>
         </div>
     }
@@ -105,7 +108,7 @@ class Pivot extends Component {
 
 
 Pivot.propTypes = {
-    fields: PropTypes.array,//所有的字段
+    fields: PropTypes.array,//所有的字段,是用于重新设计的
     rows: PropTypes.array,//行维度
     columns: PropTypes.array,//列维度
     values: PropTypes.array,//统计参数

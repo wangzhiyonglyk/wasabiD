@@ -4,14 +4,15 @@
 
 .wasabi-pagination
 {
-  font-size: 14px;
+  font-size: var(--font-size);
   color: var(--color);
   position: relative;
-  margin-top:5px;
+  margin-top:1px;
   padding-left: 4px;
-  padding-right: 10px;
-  height: 40px;
-  line-height: 40px;
+  height: 41px;
+  line-height: 41px;
+  background-color: var(--background-color);
+  border:1px solid var(--border-color);
 }
 
 
@@ -46,8 +47,8 @@
   border-bottom-right-radius: 4px;
 }
   .pagination>li>a { 
-    background-color: #FFF;
-    border: 1px solid var(--border-color);
+    /* background-color: #FFF;
+    border: 1px solid var(--border-color); */
     color: inherit;
     float: left;
     margin-left: -1px;
@@ -64,7 +65,7 @@
 
 }
 .pagination>li>a:focus, .pagination>li>a:hover{
-  background-color: var(--background-color);
+  /* background-color: var(--background-color); */
   color: var(--primary-color);
 }
 .pagination-select{

@@ -11,8 +11,6 @@ import propsTran from "../../libs/propsTran"
 import dom from "../../libs/dom"
 import loadDataHoc from "../../loadDataHoc";
 import validateHoc from "../validateHoc";
-import FetchModel from "../../Model/FetchModel.js";
-import PickerModel from "../../Model/PickerModel.js";
 import PickerInput from "./PickerInput";
 import propType from "../../propsConfig/propTypes.js";
 import api from "wasabi-api"
@@ -28,7 +26,7 @@ function HotView(props) {
                 <p style={{ display: (hotTitle && hotTitle != "") ? "block" : "none" }}>{hotTitle}</p>
                 <ul>{data.map((item, index) => {
                     return (< li key={"hot" + item.text} className="hot-item"
-                     onClick={activeHot.bind(this, item.value, item.text)} title={item.text}>{item.text}</li>);
+                        onClick={activeHot.bind(this, item.value, item.text)} title={item.text}>{item.text}</li>);
                 })}</ul></div>
             <div className="line" > </div >
         </div>
@@ -42,7 +40,7 @@ function HotView(props) {
  * 一级节点
  */
 function ProvinceView(props) {
-    const { data, activeProvince,provinceActiveIndex,activeCity ,distinctActiveIndex ,activeDistinct} = props;
+    const { data, activeProvince, provinceActiveIndex, activeCity, distinctActiveIndex, activeDistinct } = props;
     let provinceComponents = [];
     if (data && data instanceof Array && data.length > 0) {
         data.map((child, index) => {
@@ -65,8 +63,8 @@ function ProvinceView(props) {
  * 二级节点
  */
 function CityView(props) {
-    
-    const { data, provinceActiveIndex, activeCity,distinctActiveIndex,activeDistinct } = props;
+
+    const { data, provinceActiveIndex, activeCity, distinctActiveIndex, activeDistinct } = props;
     let cityComponents = [];
     if (data && data instanceof Array && data.length > 0) {
         data.map((child, index) => {
@@ -80,7 +78,7 @@ function CityView(props) {
                         <DistinctView data={child.children} distinctActiveIndex={distinctActiveIndex} activeDistinct={activeDistinct} ></DistinctView>
                     </ul>
                     <div className={"picker-container-name " + (child.expand ? "expand" : "")}
-                     onClick={activeCity.bind(this, provinceActiveIndex,index, child.value)} title={child.text}>{child.text}</div>
+                        onClick={activeCity.bind(this, provinceActiveIndex, index, child.value)} title={child.text}>{child.text}</div>
                 </li>
             )
         });
@@ -115,7 +113,7 @@ class Picker extends Component {
         super(props);
         this.input = React.createRef();
         this.state = {
-            pickerid:func.uuid(),
+            pickerid: func.uuid(),
             show: false,//是否显示下拉框
             text: "",
             value: "",
@@ -140,9 +138,9 @@ class Picker extends Component {
         this.hidePicker = this.hidePicker.bind(this);
         this.setPickerModel = this.setPickerModel.bind(this);
         this.activeHot = this.activeHot.bind(this);
-        this.activeProvince=this.activeProvince.bind(this);
-        this.activeCity=this.activeCity.bind(this);
-        this.activeDistinct=this.activeDistinct.bind(this)
+        this.activeProvince = this.activeProvince.bind(this);
+        this.activeCity = this.activeCity.bind(this);
+        this.activeDistinct = this.activeDistinct.bind(this)
         this.flodChildren = this.flodChildren.bind(this);
         this.loadCitySuccess = this.loadCitySuccess.bind(this);
     }
@@ -166,8 +164,8 @@ class Picker extends Component {
         return newState;
     }
     componentDidUpdate() {
-        dom.scrollVisible(document.getElementById( this.state.pickerid));//上在滚动条的情况下自动止浮
-      }
+        dom.scrollVisible(document.getElementById(this.state.pickerid));//上在滚动条的情况下自动止浮
+    }
     /**
     * 设置值
     * @param {*} value 
@@ -242,7 +240,12 @@ class Picker extends Component {
     setPickerModel(data) {//根据数据生成标准格式
         let realData = [];
         for (let index = 0; index < data.length; index++) {
-            let pickerModel = new PickerModel(data[index][this.props.valueField], data[index][this.props.textField ? this.props.textField : "text"]);
+            let pickerModel = {
+                value: data[index][this.props.valueField],
+                text: data[index][this.props.textField ? this.props.textField : "text"],//标题
+                expand: false,
+                children: [],
+            };
             realData.push(pickerModel);
         }
         return realData;
@@ -315,16 +318,15 @@ class Picker extends Component {
                     }
 
                 }
-                let type = this.props.httpType ? this.props.httpType : "POST";
-                type = type.toUpperCase();
-
-                let fetchmodel = new FetchModel(url, this.loadCitySuccess.bind(this, currentProvinceIndex), params, this.loadError, type);
-                if (this.props.contentType) {
-                    //如果传contentType值则采用传入的械
-                    //否则默认
-
-                    fetchmodel.contentType = this.props.contentType;
-                    fetchmodel.data = fetchmodel.contentType == "application/json" ? fetchmodel.data ? JSON.stringify(fetchmodel.data) : "{}" : fetchmodel.data;
+                let fetchmodel =
+                {
+                    url: url,
+                    data: params,
+                    success: this.loadCitySuccess.bind(this, currentProvinceIndex),
+                    error: this.loadError,
+                    type: this.props.httpType ? this.props.httpType.toUpperCase() : "POST",
+                    headers: this.props.httpHeaders || {},
+                    contentType: this.props.contentType || null,
                 }
                 console.log("picker-second", fetchmodel);
                 let wasabi_api = window.api || api;
@@ -420,7 +422,7 @@ class Picker extends Component {
                 show = false;
                 selectValue = newData[this.state.provinceActiveIndex].value + "," + newData[this.state.provinceActiveIndex].children[currentCityIndex].value;
                 selectText = newData[this.state.provinceActiveIndex].text + "," + newData[this.state.provinceActiveIndex].children[currentCityIndex].text;
-               
+
                 if (this.props.onSelect != null) {
                     this.props.onSelect(selectValue, selectText, this.props.name, newData[this.state.provinceActiveIndex]);
                 }
@@ -450,16 +452,15 @@ class Picker extends Component {
                         params[this.state.thirdParamsKey] = currentCityValue;
                     }
                 }
-                let type = this.props.httpType ? this.props.httpType : "POST";
-                type = type.toUpperCase();
-
-                let fetchmodel = new FetchModel(url, this.loadDistinctSuccess.bind(this, currentCityIndex), params, this.loadError, type);
-                if (this.props.contentType) {
-                    //如果传contentType值则采用传入的械
-                    //否则默认
-
-                    fetchmodel.contentType = this.props.contentType;
-                    fetchmodel.data = fetchmodel.contentType == "application/json" ? JSON.stringify(fetchmodel.data) : fetchmodel.data;
+                let fetchmodel =
+                {
+                    url: url,
+                    data: params,
+                    success: this.loadDistinctSuccess.bind(this, currentCityIndex),
+                    error: this.loadError,
+                    type: this.props.httpType ? this.props.httpType.toUpperCase() : "POST",
+                    headers: this.props.httpHeaders || {},
+                    contentType: this.props.contentType || null,
                 }
                 console.log("picker-third", fetchmodel);
                 let wasabi_api = window.api || api;
@@ -484,7 +485,7 @@ class Picker extends Component {
                     show = false;
                     selectValue = newData[this.state.provinceActiveIndex].value + "," + newData[this.state.provinceActiveIndex].children[currentCityIndex].value;
                     selectText = newData[this.state.provinceActiveIndex].text + "," + newData[this.state.provinceActiveIndex].children[currentCityIndex].text;
-                   
+
                     if (this.props.onSelect != null) {
                         this.props.onSelect(selectValue, selectText, this.props.name, newData[this.state.provinceActiveIndex]);
                     }
@@ -574,22 +575,24 @@ class Picker extends Component {
         })
     }
     render() {
-        const   {data, provinceActiveIndex ,distinctActiveIndex}=this.state;
-        const provinceProps= {data, activeProvince:this.activeProvince,provinceActiveIndex,
-            activeCity:this.activeCity,distinctActiveIndex,activeDistinct:this.activeDistinct};
+        const { data, provinceActiveIndex, distinctActiveIndex } = this.state;
+        const provinceProps = {
+            data, activeProvince: this.activeProvince, provinceActiveIndex,
+            activeCity: this.activeCity, distinctActiveIndex, activeDistinct: this.activeDistinct
+        };
         return <div className="combobox"     >
             <PickerInput ref={this.input} {...this.props} show={this.state.show} value={this.state.text} onClear={this.onClear} onClick={this.showPicker}></PickerInput>
             <div className={"dropcontainter  picker "} style={{ display: this.state.show == true ? "block" : "none" }} id={this.state.pickerid}>
-                <HotView data={this.props.hotData}  hotTitle={this.props.hotTitle}
-                activeHot={this.state.activeHot} ></HotView>
+                <HotView data={this.props.hotData} hotTitle={this.props.hotTitle}
+                    activeHot={this.state.activeHot} ></HotView>
                 <ul className="wrap" ><p>{this.props.placeholder}</p>
-              <ProvinceView  {...provinceProps}></ProvinceView>
+                    <ProvinceView  {...provinceProps}></ProvinceView>
                 </ul>
             </div></div>
-    
-        
+
+
     }
 }
 Picker.propTypes = propType;
 Picker.defaultProps = { type: "picker" }
-export default validateHoc(loadDataHoc(Picker, "picker"),"picker");
+export default validateHoc(loadDataHoc(Picker, "picker"), "picker");
