@@ -49,33 +49,33 @@ function NodeView(props) {
 
     }
     let childrenLength = row.open === false ? 0 : row?.children?.length || 0;//子节点个数
-    let textwidthReduce=20;//文本字段减少的宽度
+    let textwidthReduce = 20;//文本字段减少的宽度
     //空白位，表示节点层级
     let blankControl = [];
     if (row._path.length > 1) {
         for (let i = 1; i < row._path.length; i++) {
             blankControl.push(<span key={i} style={{ width: 20 }}></span>)
-            textwidthReduce+=20;
+            textwidthReduce += 20;
         }
     }
     //节点前面箭头图标
     let arrowIcon;
     if (row.open) {
         if (props.arrowUnFoldIcon) {
-            arrowIcon = <div className={"wasabi-tree-li-icon"} style={{ display: "inline-block" }} onClick={row.isParent ? onExpand.bind(this, !row.open, row.id, row.text, row) : null}>{props.arrowUnFoldIcon}</div>
+            arrowIcon = <div className={"wasabi-tree-li-icon"} style={{ display: "inline-block" }} onClick={row.isParent ? onExpand.bind(this, !row.open, row.id, row.text, props) : null}>{props.arrowUnFoldIcon}</div>
 
         }
     }
     else {
         if (props.arrowFoldIcon) {
-            arrowIcon = <div className={"wasabi-tree-li-icon"} style={{ display: "inline-block" }} onClick={row.isParent ? onExpand.bind(this, !row.open, row.id, row.text, row) : null}>{props.arrowFoldIcon}</div>
+            arrowIcon = <div className={"wasabi-tree-li-icon"} style={{ display: "inline-block" }} onClick={row.isParent ? onExpand.bind(this, !row.open, row.id, row.text, props) : null}>{props.arrowFoldIcon}</div>
 
         }
     }
     if (!arrowIcon) {
-        let icon=props.componentType==="tree"?"icon-caret":"icon-arrow";
+        let icon = props.componentType === "tree" ? "icon-caret" : "icon-arrow";
         arrowIcon = <i className={((clickId === row.id ? " selected " : "")) + (row.open ? ` wasabi-tree-li-icon  ${icon}-down ` : ` wasabi-tree-li-icon  ${icon}-right`)}
-            onClick={row.isParent ? onExpand.bind(this, !row.open, row.id, row.text, row) : null}>
+            onClick={row.isParent ? onExpand.bind(this, !row.open, row.id, row.text, props) : null}>
             {/* span用于右边加虚线*/}
             <span className="wasabi-tree-li-icon-beforeRight"></span>
             {/* 用于向下加虚线 */}
@@ -83,22 +83,33 @@ function NodeView(props) {
         </i>
     }
     let checkNode;//勾选节点
-    if (checkStyle === "checkbox" || checkStyle === "radio") {
-        checkNode = <Input key="1" type={checkStyle || "checkbox"}
+    if (checkStyle === "checkbox") {
+    
+        checkNode = <Input type="checkbox" key="c1" 
             hide={selectAble || row.selectAble ? false : true}
             half={row.half}
             name={"node" + row.id}
             /**有子节点有向下的虚线**/
             className={(clickId === row.id ? " selected " : "") + (childrenLength > 0 ? " hasChildren " : "  ")}
             value={row.checked ? row.id : ""} data={[{ value: row.id, text: "" }]}
-            onSelect={onChecked.bind(this, row.id, row.text, row)}></Input>
+            onSelect={onChecked.bind(this, row.id, row.text, props)}></Input>
     }
-    else if (typeof checkStyle === "function"&&row.selectAble) {
+    else if(checkStyle==="radio"){
+        checkNode = <Input type="radio" key="r1" 
+            hide={selectAble || row.selectAble ? false : true}
+            half={row.half}
+            name={"node" + row.id}
+            /**有子节点有向下的虚线**/
+            className={(clickId === row.id ? " selected " : "") + (childrenLength > 0 ? " hasChildren " : "  ")}
+            value={row.checked ? row.id : ""} data={[{ value: row.id, text: "" }]}
+            onSelect={onChecked.bind(this, row.id, row.text, props)}></Input>  
+    }
+    else if (typeof checkStyle === "function" && row.selectAble) {
         checkNode = checkStyle(row);
     }
 
-    if(checkNode){
-        textwidthReduce+=20;
+    if (checkNode) {
+        textwidthReduce += 20;
     }
     //节点元素
     return <li className="wasabi-tree-li" key={row.id} style={{ display: row.hide ? "none" : "flex" }} >
@@ -109,18 +120,18 @@ function NodeView(props) {
             : <i className={((clickId === row.id ? " selected " : "")) + (" wasabi-tree-li-icon-line")}>
                 <span className="wasabi-tree-li-icon-afterBelow" style={{ height: (childrenLength + 1) * config.rowDefaultHeight + (row.isLast ? config.rowDefaultHeight * -1 : 0) }}></span>
             </i>}
-        {/* 勾选 可以是自定义的组件 */}
+        {  /* 勾选 可以是自定义的组件 */}
         {checkNode}
         {/* 文本节点 */}
-        <div id={row.nodeid} style={{width:`calc(100% - ${textwidthReduce}px)`}} className={clickId === row.id ? "wasabi-tree-li-node selected" : "wasabi-tree-li-node"}
+        <div id={row.nodeid} style={{ width: `calc(100% - ${textwidthReduce}px)` }} className={clickId === row.id ? "wasabi-tree-li-node selected" : "wasabi-tree-li-node"}
             title={title}
             onDrop={onNodeDrop}
             onDragOver={onNodeDragOver} onDragLeave={onNodeDragLeave}
-            onClick={onClick.bind(this, row.id, row.text, row)}
-            onDoubleClick={onDoubleClick.bind(this, row.id, row.text, row)} >
+            onClick={onClick.bind(this, row.id, row.text, props)}
+            onDoubleClick={onDoubleClick.bind(this, row.id, row.text, props)} >
             {rename ?
-                <Input type="text" id={row.textid} required={true} onKeyUp={onKeyUp} onBlur={onBlur}
-                    name={"key" + row.id} value={row.text} ></Input> :
+                <Text id={row.textid} required={true} onKeyUp={onKeyUp} onBlur={onBlur}
+                    name={"key" + row.id} value={row.text} ></Text> :
                 <div key="2" className="wasabi-tree-li-node-text-div" draggable={row.draggAble} onDragEnd={onNodeDragEnd} onDragStart={onNodeDragStart}>
                     {/* 没有勾选功能时并且有子节点时有虚线 */}
                     <i key="3" className={((!row.selectAble) && childrenLength ? " noCheckhasChildren " : "  ") + iconCls + " wasabi-tree-text-icon"} ></i>
@@ -131,7 +142,7 @@ function NodeView(props) {
                 !rename && renameAble ? <i key="edit" className={"icon-edit edit"} title="重命名" onClick={props.beforeNodeRename} ></i> : null
             }
             {
-                !rename && removeAble ? <i key="delete" className={"icon-delete edit"} title="删除" onClick={props.beforeNodeRemove} ></i> : null
+                !rename && removeAble ? <i key="delete" className={"icon-xx edit"} title="删除" onClick={props.beforeNodeRemove} ></i> : null
             }
         </div>
 
