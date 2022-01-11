@@ -11,7 +11,6 @@ date:2021-02-06 重新调整
  date:2021-06-22 拆分样式，取bootstrap5中的grid,与reboot
 */
 @import url("./reboot.css");
-@import url("./grid.css");
 @import url("./animation.css");
 @import url("./font/iconfont.css");
 :root {

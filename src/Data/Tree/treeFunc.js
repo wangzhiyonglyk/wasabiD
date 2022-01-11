@@ -490,13 +490,17 @@ const treeFunc = {
      * 添加子节点
      */
     appendChildren(data, children, row) {
-        //格式化
-        if (row && row._path) {
+        if (row ) {
+            if(!row._path)
+            {
+                row=treeFunc.findNodeById(data,row.id);
+            }
             let nodes = treeFunc.findLinkNodesByPath(data, row._path);
             if (nodes && nodes.length > 0) {
                 //找到了
                 let leaf = nodes[nodes.length - 1];
-                leaf.children = children;
+                let oldChildren=leaf.children??[];
+                leaf.children =[].concat(oldChildren, children);
                 //设置节点路径
                 leaf.children = treeFunc.setChildrenPath(leaf.id, leaf._path, leaf.children);
             }

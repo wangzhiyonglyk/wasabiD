@@ -19,8 +19,8 @@ import PivotView from "../Pivot/PivotView"
 class TreeContainer extends Component {
     constructor(props) {
         super(props);
-        this.treegrid=React.createRef();
-        this.pivot=React.createRef();
+        this.treegrid = React.createRef();
+        this.pivot = React.createRef();
         this.state = {
             treecontainerid: func.uuid(),
             treeid: func.uuid(),
@@ -49,7 +49,7 @@ class TreeContainer extends Component {
         this.checkedAll = this.checkedAll.bind(this);
         this.setClick = this.setClick.bind(this);
         this.remove = this.remove.bind(this);
-        this.filter = this.filter.bind(this);
+        this.filter = func.throttle(this.filter.bind(this),300).bind(this);
         this.append = this.append.bind(this);
         this.adjust = this.adjust.bind(this);
 
@@ -83,8 +83,8 @@ class TreeContainer extends Component {
      * @param {*} row 
      */
     onClick(id, text, row) {
-       
-        try{
+
+        try {
             this.setState({
                 clickId: id,
             })
@@ -92,12 +92,11 @@ class TreeContainer extends Component {
             this.pivot?.current?.grid?.current.setFocus(id);
             this.props.onClick && this.props.onClick(id, text, row);
 
-        }catch(e)
-        {
+        } catch (e) {
 
         }
-       
-    
+
+
     }
 
     /**
@@ -228,6 +227,7 @@ class TreeContainer extends Component {
             else if (dragType == "after") {
                 data = treeFunc.moveAterNode(this.state.data, dragNode, dropNode);
             }
+            this.props.onDrop && this.props.onDrop(dragNode, dropNode, dragType);
             this.handlerLoadData(data);
         }
 
@@ -317,6 +317,12 @@ class TreeContainer extends Component {
             this.handlerLoadData(data);
             this.props.onRemove && this.props.onRemove(row.id, row.text, row);
         }
+        else if (row.id) {
+            let findNode = treeFunc.findNodeById(this.state.data, row.id);
+            let data = treeFunc.removeNode(this.state.data, findNode);
+            this.handlerLoadData(data);
+            this.props.onRemove && this.props.onRemove(row.id, row.text, row);
+        }
 
     }
     /**
@@ -324,7 +330,7 @@ class TreeContainer extends Component {
      * @param {*} value 
      */
     filter(value) {
-        this.handlerLoadData(this.state.data, value)
+        this.handlerLoadData(this.state.data, value);
     }
     /**
      * 添加节点
@@ -332,7 +338,6 @@ class TreeContainer extends Component {
      * @param {*}node
      */
     append(children, node = null) {
-
         if (children && children.length > 0) {
             let data = treeFunc.appendChildren(this.state.data, children, node);
             this.handlerLoadData(data);
@@ -399,7 +404,7 @@ class TreeContainer extends Component {
         document.getElementById(this.state.treeid).style.transform = `translate3d(0,0,0)`;
         this.scrollShowVisibleData(0, this.visibleDataCount);
     }
- 
+
     /**
      * 滚动事件
      */
@@ -440,42 +445,42 @@ class TreeContainer extends Component {
             reVirualConfig: false
         })
     }
-       /**
-      * 
-      * @param {*} message 
-      */
-        loadError(message) {//查询失败
-            console.log("combobox-error", message);
-            this.setState({
-                loadingId: ""
-            })
-            Msg.error(message);
+    /**
+   * 
+   * @param {*} message 
+   */
+    loadError(message) {//查询失败
+        console.log("combobox-error", message);
+        this.setState({
+            loadingId: ""
+        })
+        Msg.error(message);
+    }
+    /**
+     * 数据加载成功
+     * @param {*} data 
+     */
+    loadSuccess(res) {//数据加载成功
+        if (typeof this.props.loadSuccess === "function") {
+            //正确返回
+            let resData = this.props.loadSuccess(res);
+            res = resData && resData instanceof Array ? resData : res;
         }
-        /**
-         * 数据加载成功
-         * @param {*} data 
-         */
-        loadSuccess(res) {//数据加载成功
-            if (typeof this.props.loadSuccess === "function") {
-                //正确返回
-                let resData = this.props.loadSuccess(res);
-                res = resData && resData instanceof Array ? resData : res;
-            }
-            let realData = func.getSource(res, this.props.dataSource || "data");
-            let row = window.sessionStorage.getItem("async-tree-node");
-            row = JSON.parse(row);
-            let asyncChildrenData = propsTran.formatterData("tree", "", realData, this.props.idField || "id", this.props.textField || "text", this.props.parentField || "pId", true);
-            let data = this.state.data;
-            nodes = treeFunc.findLinkNodesByPath(data, row._path);
-            if (nodes && nodes.length > 0) {
-                let leaf = nodes[nodes.length - 1];
-                leaf.children = asyncChildrenData;
-                //设置节点路径
-                treeFunc.setChildrenPath(leaf.id, leaf._path, leaf.children);
-            }
-            this.handlerLoadData(data);
-    
+        let realData = func.getSource(res, this.props.dataSource || "data");
+        let row = window.sessionStorage.getItem("async-tree-node");
+        row = JSON.parse(row);
+        let asyncChildrenData = propsTran.formatterData("tree", "", realData, this.props.idField || "id", this.props.textField || "text", this.props.parentField || "pId", true);
+        let data = this.state.data;
+        nodes = treeFunc.findLinkNodesByPath(data, row._path);
+        if (nodes && nodes.length > 0) {
+            let leaf = nodes[nodes.length - 1];
+            leaf.children = asyncChildrenData;
+            //设置节点路径
+            treeFunc.setChildrenPath(leaf.id, leaf._path, leaf.children);
         }
+        this.handlerLoadData(data);
+
+    }
     shouldComponentUpdate(nextProps, nextState) {
         //全部用浅判断
         if (func.diff(nextProps, this.props, false)) {
@@ -514,10 +519,10 @@ class TreeContainer extends Component {
         }
 
         return <div id={this.state.treecontainerid} onScroll={this.onScroll}
-            className={"wasabi-tree-parent "+ (this.props.className || "")}
+            className={"wasabi-tree-parent " + (this.props.className || "")}
             style={this.props.style}>
             {control}
-            <div style={{ left: 0, top: 0, height: this.state.flatData &&  this.state.flatData.length * config.rowDefaultHeight, position: "absolute", width: 1 }}></div>
+            <div style={{ left: 0, top: 0, height: this.state.flatData && this.state.flatData.length * config.rowDefaultHeight, position: "absolute", width: 1 }}></div>
         </div>
 
     }
@@ -525,8 +530,6 @@ class TreeContainer extends Component {
 TreeContainer.propTypes = {
     componentType: PropTypes.oneOf(["tree", "treegrid", "pivot"]),//类型
     name: PropTypes.string,//树名称
-    value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),//选中的id值
-    text: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),//选中的标题
     idField: PropTypes.string,//数据字段值名称
     parentField: PropTypes.string,//数据字段父节点名称
     textField: PropTypes.string,//数据字段文本名称
@@ -535,7 +538,7 @@ TreeContainer.propTypes = {
 
     params: PropTypes.object,//向后台传输的额外参数
     dataSource: PropTypes.string,//ajax的返回的数据源中哪个属性作为数据源,为null时直接后台返回的数据作为数据源
-    headers:PropTypes.array,//表头
+    headers: PropTypes.array,//表头
     data: PropTypes.array,//节点数据
     simpleData: PropTypes.bool,//是否使用简单的数据格式
     selectAble: PropTypes.bool,//是否允许勾选
@@ -550,7 +553,6 @@ TreeContainer.propTypes = {
     onClick: PropTypes.func,//单击的事件
     onDoubleClick: PropTypes.func,//双击事件
     onCheck: PropTypes.func,//勾选/取消勾选事件
-    onCollapse: PropTypes.func,//折叠事件
     onExpand: PropTypes.func,//展开事件
     onRename: PropTypes.func,//重命名事件
     onRemove: PropTypes.func,//删除事件

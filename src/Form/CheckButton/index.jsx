@@ -3,7 +3,7 @@
  * 添加类型按钮的筛选框
  * 
  */
-import React, { useCallback } from "react";
+import React from "react";
 import Button from "../../Buttons/Button"
 import loadDataHoc from "../../loadDataHoc";
 import validateHoc from "../validateHoc";
@@ -14,13 +14,13 @@ import Msg from "../../Info/Msg";
 function LiView(props) {
     let control = null;
     const { data, value, readOnly, onSelect } = props;
-    const isChecked = useCallback((child) => {
+    const isChecked = (child) => {
         let checked = false;
         if (value && (("," + value.toString() + ",").indexOf("," + child.value + ",") > -1)) {
             checked = true;
         }
         return checked;
-    });
+    }
     if (data && data instanceof Array && data.length > 0) {
         control = data.map((child, index) => {
             let checked = isChecked(child);

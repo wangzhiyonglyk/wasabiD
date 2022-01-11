@@ -3,7 +3,7 @@
  * 2020-11-08
  * 复选框组件
  */
-import React, { useCallback } from "react";
+import React from "react";
 import loadDataHoc from "../../loadDataHoc";
 import validateHoc from "../validateHoc";
 import func from "../../libs/func"
@@ -15,13 +15,13 @@ function LiView(props) {
     //half,是从tree那里来的
     const { data, value, half, readOnly, onSelect } = props;
     let control = null;
-    const isChecked = useCallback((child) => {
+    const isChecked = (child) => {
         let checked = false;
         if (value && (("," + value.toString() + ",").indexOf("," + child.value + ",") > -1)) {
             checked = true;
         }
         return checked;
-    });
+    }
     if (data && data instanceof Array && data.length > 0) {
         control = data.map((child, index) => {
             let checked = isChecked(child);
@@ -75,7 +75,6 @@ class CheckBox extends React.Component {
      * @returns 
      */
     onSelect(value = "", text,row) {//选中事件
-        console.log("select",text,value)
         if (this.props.readOnly) {
             return;
         }
