@@ -74,7 +74,7 @@ class Dropdown extends Component {
             className:
                 'wasabi-dropdown ' + 
                 this.props.theme+" " +
-                (this.props.className||""),
+                (this.props.className??""),
             style: this.props.style ? this.props.style : {},
             disabled: this.props.disabled == true ? 'disabled' : null,
             //文字提示
@@ -87,7 +87,7 @@ class Dropdown extends Component {
               onClick={this.showMenu} 
              theme={this.props.theme} size={this.props.size} 
              title={this.props.title}>{this.props.label}</LinkButton>
-            <i className={"wasabi-dropdown-arrow  "+(this.props.menuIconCls||"")+(this.props.iconCls?"":"noicon") } onClick={this.showMenu}></i>
+            <i className={"wasabi-dropdown-arrow  "+(this.props.menuIconCls??"")+(this.props.iconCls?"":"noicon") } onClick={this.showMenu}></i>
             <ul className={"wasabi-dropdown-menu "} style={{ display: this.state.menuShow ? "block" : "none" }}>
                 {
                     React.Children.map(this.props.children, (child, index) => {

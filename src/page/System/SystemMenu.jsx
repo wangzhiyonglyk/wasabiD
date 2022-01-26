@@ -16,7 +16,7 @@ class SystemMenu extends React.Component {
                 {
                     this.props.menus && this.props.menus.map((item, index) => {
                         if (item.children && item.children.length > 0) {
-                            return <MenuPanel iconCls={item.iconCls} key={index} expand={item.expand != null && item.expand != undefined ? item.expand : true} name={item.name} title={item.title}>
+                            return <MenuPanel iconCls={item.iconCls} key={index} expand={item.expand !==null && item.expand !==undefined ? item.expand : true} name={item.name} title={item.title}>
                                 {
                                     item.children && item.children.map((route, subIndex) => {
                                         if (route.hide) {

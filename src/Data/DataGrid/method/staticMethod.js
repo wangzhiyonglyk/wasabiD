@@ -49,7 +49,7 @@ export default {
      * @param {*} index 
      */
     getRowData: function (index) {//获取当前焦点行的数据
-        if (index != null && index != undefined) {
+        if (index !==null && index !==undefined) {
 
         }
         else {

@@ -24,7 +24,7 @@ class Rate extends Component {
 
 
     static getDerivedStateFromProps(props, state) {
-        if (props.value != state.oldPropsValue) {//强行刷新
+        if (props.value !==state.oldPropsValue) {//强行刷新
             return {
                 value: props.value,
                 oldPropsValue: props.value,

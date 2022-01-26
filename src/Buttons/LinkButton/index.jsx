@@ -19,7 +19,7 @@ class LinkButton extends React.PureComponent {
             return;
         }
 
-        if (this.props.onClick != null) {
+        if (this.props.onClick !==null) {
             this.props.onClick(this.props.name, this.props.title, event);
         }
     }

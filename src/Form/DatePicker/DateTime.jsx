@@ -27,7 +27,7 @@ class DateTime extends Component {
     }
     static getDerivedStateFromProps(props, state) {
         let newState = {};
-        if ((props.year || "") + "-" + (props.month || "") + "-" + (props.day || "") + " " + (props.time || "") != state.oldPropsValue) {
+        if ((props.year || "") + "-" + (props.month || "") + "-" + (props.day || "") + " " + (props.time || "") !==state.oldPropsValue) {
             newState.year = props.year ? props.year : state.year;
             newState.month = props.month ? props.month : state.month;
             newState.day = props.day || state.day;

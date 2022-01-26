@@ -2,11 +2,10 @@
 create by wangzhiyong 树组件业务容器
  创建 date:2022-01-06 树组件业务容器，用于tree,treegrid,pivot，操作逻辑是一样的
 date :2022-01-07 修复tregrid单击联动的bug
-todo 后期应该改成 render props的形式 目前不熟悉，暂时不动
+  2022-01-18 将tree组件全部改为hook
  */
-import React, { Component } from "react";
+import React, { useState, useReducer, useCallback, useEffect, useImperativeHandle, useRef } from "react";
 import PropTypes from "prop-types";
-import Msg from "../../Info/Msg";
 import func from "../../libs/func.js";
 import treeFunc from "./treeFunc";
 import propsTran from "../../libs/propsTran";
@@ -15,518 +14,454 @@ import "./tree.css"
 import config from "./config";
 import TreeView from "./TreeView";
 import TreeGridView from "../TreeGrid/TreeGridView";
-import PivotView from "../Pivot/PivotView"
-class TreeContainer extends Component {
-    constructor(props) {
-        super(props);
-        this.treegrid = React.createRef();
-        this.pivot = React.createRef();
-        this.state = {
-            treecontainerid: func.uuid(),
-            treeid: func.uuid(),
-            rawData: [],
-            data: [],
-            visibleData: [],//可见数据
-            filterValue: "",
-            filter: [],
-            clickId: "",//单击的id
-            loadingId: "",//正在异步的节点
-            reVirualConfig: false,
+import Msg from "../../Info/Msg.jsx";
+
+/**
+ * 加工数据
+ * @param {*} state 旧的状态值
+ * @param {*} data 数据源
+ * @param {*} filterValue 筛选值 
+ * @param {*} sliceBeginIndex 切割开始下标，
+ * @param {*} sliceEndIndex 切割结束下标
+ * @returns 
+ */
+const handlerLoadData = function (state, data, filterValue, sliceBeginIndex, sliceEndIndex) {
+
+    //同时处理筛选数据保持一致 
+    let filter = treeFunc.filter(data, filterValue);
+    //数据扁平化
+    let flatData = func.treeDataToFlatData(filterValue ? filter : data);
+    //切割
+    let sliceData = flatData.slice(sliceBeginIndex, sliceEndIndex);
+    //设置可见的数据的操作相关属性，因为对数据的checked,open,都是存在data中
+    let visibleData = treeFunc.setVisibleDataProps(sliceData, data);
+
+    return {
+        ...state,
+        filter: filter,
+        data: data,
+        flatData: flatData,
+        visibleData: visibleData,
+        sliceBeginIndex: sliceBeginIndex,
+        sliceEndIndex: sliceEndIndex,
+        loadingId: null
+    }
+}
+
+/**
+ * 请求数据
+ * @param {*} url 
+ * @param {*} httpType 
+ * @param {*} contentType 
+ *  * @param {*} headers 头部
+ * @param {*} params 参数
+ * @param {*} loadSuccess 
+ * @param {*} loadError 
+ */
+const getData = function (url, httpType, contentType, headers, params = {}, loadSuccess = null, loadError = null) {
+    //请求数据
+    let fetchmodel = {
+        type: httpType || "post",
+        contentType: contentType,
+        url: url,
+        headers: headers || {},
+        data: params,
+        success: loadSuccess,
+        error: loadError
+    };
+    let wasabi_api = window.api || api;
+    wasabi_api.ajax(fetchmodel);
+    console.log("tree async-fetch", fetchmodel);
+}
+//状态值
+const myReducer = function (state, action) {
+    try {
+        let data = null;
+        let payload = action.payload;
+        switch (action.type) {
+            //节点加载
+            case "loading":
+                return {
+                    ...state,
+                    loadingId: payload
+                }
+            //单击，双击
+            case "onClick":
+            case "onDoubleClick":
+                return {
+                    ...state,
+                    clickId: payload
+                }
+            //勾选
+            case "onChecked":
+                let checked = (payload.id + "") === (payload.checkValue + "");
+                data = [];
+                if (payload.checkStyle === "checkbox") {
+                    data = treeFunc.setChecked(state.data, payload.row, checked, payload.checkType);
+                }
+                else if (payload.checkStyle === "radio") {
+                    data = treeFunc.setRadioChecked(state.data, payload.row, checked, payload.radioType);
+                }
+                return handlerLoadData(state, data, state.filterValue, state.sliceBeginIndex, state.sliceEndIndex);
+            //设置勾选
+            case "setChecked":
+                if (payload.id) {
+                    //先找到节点
+                    let node = treeFunc.findNodeById(state.data, payload.id);
+                    if (node) {
+                        if (payload.checkStyle === "checkbox") {
+                            data = treeFunc.setChecked(state.data, payload.node, !!payload.checked, payload.checkType);
+                        }
+                        else if (payload.checkStyle === "radio") {
+                            data = treeFunc.setRadioChecked(state.data, payload.node, !!payload.checked, payload.radioType);
+                        }
+                        return handlerLoadData(state, data, state.filterValue, state.sliceBeginIndex, state.sliceEndIndex);
+                    }
+                }
+            //全部清除
+            case "clearChecked":
+                data = treeFunc.clearChecked(state.data);
+                return handlerLoadData(state, data, state.filterValue, state.sliceBeginIndex, sliceEndIndex);
+            //全选
+            case "checkedAll":
+                data = treeFunc.checkedAll(state.data);
+                return handlerLoadData(state, data, state.filterValue, state.sliceBeginIndex, state.sliceEndIndex);
+
+            //重命名
+            case "onRename":
+                data = treeFunc.renameNode(state.data, payload.row, payload.newText);
+                return handlerLoadData(state, data, state.filterValue, state.sliceBeginIndex, state.sliceEndIndex);
+            //移除
+            case "onRemove":
+                data = treeFunc.removeNode(state.data, payload.row);
+                return handlerLoadData(state, data, state.filterValue, state.sliceBeginIndex, state.sliceEndIndex);
+
+            //停靠
+            case "onDrop":
+                const { dragNode, dropNode, dragType } = payload;
+
+                if (dragNode.id !== dropNode.id) {
+                    data = null;
+                    if (dragType == "in") {
+                        if (dragNode.pId !== dropNode.id) {
+
+                            data = treeFunc.moveInNode(state.data, dragNode, dropNode);
+                        }
+                    }
+                    else if (dragType == "before") {
+                        data = treeFunc.moveBeforeNode(state.data, dragNode, dropNode);
+                    }
+                    else if (dragType == "after") {
+                        data = treeFunc.moveAterNode(state.data, dragNode, dropNode);
+                    }
+                    if (data) {
+                        return handlerLoadData(state, data, state.filterValue, state.sliceBeginIndex, state.sliceEndIndex);
+                    }
+                    else {
+                        return state;
+                    }
+
+                }
+            /**
+             * 虚拟列表
+             */
+            case "showVisibleData":
+                return handlerLoadData(state, payload.data, payload.filterValue, payload.sliceBeginIndex, payload.sliceEndIndex);
+            //设置折叠或展开
+            case "setOpen":
+                data = treeFunc.setOpen(state.data, payload.row, payload.open);
+                return handlerLoadData(state, data, state.filterValue, state.sliceBeginIndex, state.sliceEndIndex);
+            case "remove":
+                data = treeFunc.removeNode(state.data, a);
+                return handlerLoadData(state, data, state.filterValue, state.sliceBeginIndex, state.sliceEndIndex);
+            //追加
+            case "append":
+                const { children, row } = payload;
+                data = treeFunc.appendChildren(state.data, children, row);
+                return handlerLoadData(state, data, state.filterValue, state.sliceBeginIndex, state.sliceEndIndex);
+            //筛选
+            case "filter":
+                return handlerLoadData(state, state.data, payload, state.sliceBeginIndex, state.sliceEndIndex);
+            default:
+                return state;
         }
-        //单击与双击需要改变样式
-        this.onClick = this.onClick.bind(this);
-        this.onDoubleClick = this.onDoubleClick.bind(this);
-        this.onChecked = this.onChecked.bind(this)
-        this.onExpand = this.onExpand.bind(this)
-        this.onRename = this.onRename.bind(this);
-        this.onRemove = this.onRemove.bind(this);
-        this.onDrop = this.onDrop.bind(this);
-        this.onScroll = this.onScroll.bind(this)
-
-        this.getChecked = this.getChecked.bind(this);
-        this.setChecked = this.setChecked.bind(this);
-        this.clearChecked = this.clearChecked.bind(this);
-        this.checkedAll = this.checkedAll.bind(this);
-        this.setClick = this.setClick.bind(this);
-        this.remove = this.remove.bind(this);
-        this.filter = func.throttle(this.filter.bind(this),300).bind(this);
-        this.append = this.append.bind(this);
-        this.adjust = this.adjust.bind(this);
-
-
-
-
-
-
-
     }
-    //todo
-    static getDerivedStateFromProps(props, state) {
-        let newState = {};
-        if (props.data && props.data instanceof Array && func.diff(props.data, state.rawData)) {
-            newState.rawData = (props.data);
-            let flatData = func.treeDataToFlatData(props.data)
-            newState.data = func.clone(props.data);
-            newState.flatData = flatData;//数据扁平化
-
-            newState.reVirualConfig = true;
-            return newState;
-
-        }
-        return null;
-
-    }
-    /**
-     * 单击事件
-     * @param {*} id 值
-     * @param {*} text 文本
-     * @param {*} row 
-     */
-    onClick(id, text, row) {
-
-        try {
-            this.setState({
-                clickId: id,
-            })
-            this.treegrid?.current?.grid?.current.setFocus(id);
-            this.pivot?.current?.grid?.current.setFocus(id);
-            this.props.onClick && this.props.onClick(id, text, row);
-
-        } catch (e) {
-
-        }
-
-
+    catch (e) {
+        console.log("reduce error", e)
     }
 
-    /**
-     * 双击事件
-     * @param {*} id 
-     * @param {*} text 
-     * @param {*} children 
-     */
-    onDoubleClick(id, text, row) {
-        this.props.onDoubleClick && this.props.onDoubleClick(id, text, row);
-    }
-    /**
-       * 节点勾选
-       * @param {*} id 
-       * @param {*} text 
-       * @param {*} row 
-       * @param {*} checkValue 
-       */
-    onChecked(id, text, row, checkValue) {
+}
+function TreeContainer(props, ref) {
+    const [treecontainerid] = useState(func.uuid());
+    const treeid = useState(func.uuid());
+    const treegrid = useRef(null);
+    const [state, dispatch] = useReducer(myReducer, {
+        filter: null,//过滤的数据
+        data: null,//源数据
+        flatData: null,//扁平化数据
+        visibleData: null,//可见数据
+        sliceBeginIndex: 0,//切割开始下标，
+        sliceEndIndex: 0,//切割结束下标，
+        loadingId: null,//加载的节点id
+        clickId: null//选中的节点id
+    });
+
+    //定义事件
+    const onClick = useCallback((id,text,row) => {
+        dispatch({ type: "onClick", payload: id }),
+        treegrid?.current?.setFocus(id);  //如果是树表格
+        props.onClick&&props.onClick(id,text,row);
+    }, [state.clickId]);
+    const onDoubleClick = useCallback((id,text,row) => { dispatch({ type: "onDoubleClick", payload: id });   props.onDoubleClick&&props.onDoubleClick(id,text,row); }, []);
+    const onChecked = useCallback((id, text, row, checkValue) => {
+        dispatch(
+            {
+                type: "onChecked",
+                payload: { id, text, row, checkValue, checkType: props.checkType, checkStyle: props.checkStyle, radioType: props.radioType }
+            }
+        );
         let checked = (id + "") === (checkValue + "");
-        let data = [];
-        if (this.props.checkStyle === "checkbox") {
-            data = treeFunc.setChecked(this.state.data, row, checked, this.props.checkType);
-            this.handlerLoadData(data);
+        props.onChecked && props.onChecked(checked, id, text, row);
+    }, []);
+    const onRemove = useCallback((id, text, row) => {
+        if (Msg.confirm("您确定删除【" + text + "]吗")) {
+            dispatch({ type: "onRemove", payload: { id, text, row } })
+            props.onRemove && props.onRemove(id, text, row);
         }
-        else if (this.props.checkStyle === "radio") {
-            data = treeFunc.setRadioChecked(this.state.data, row, checked, this.props.radioType);
-            this.handlerLoadData(data);
+    }, []);
+    const onRename = useCallback((id, text, row, newText) => {
+        dispatch({ type: "onRename", payload: { id, text, row, newText } });
+        props.onRename && props.onRename(id, text, row, newText);
+    }, []);
+    const onDrop = useCallback((dragNode, dropNode, dragType) => { dispatch({ type: "onDrop", payload: { dragNode, dropNode, dragType } }) }, []);
+
+    //加载子节点成功
+    const loadSuccess = useCallback((res) => {
+        dispatch({ type: "loading", payload: null });//
+        if (typeof props.loadSuccess === "function") {
+            //正确返回
+            let resData = props.loadSuccess(res);
+            res = resData && resData instanceof Array ? resData : res;
         }
+        let realData = func.getSource(res, props.dataSource || "data");
+        let row = window.sessionStorage.getItem("async-tree-node");
+        row = JSON.parse(row);
+        //格式化数据
+        let asyncChildrenData = propsTran.formatterData("tree", "", realData, props.idField || "id", props.textField || "text", props.parentField || "pId", props.simpleData);
+        dispatch({ type: "append", payload: { children: asyncChildrenData, row: row } })
+    }, []);
 
-        this.props.onChecked && this.props.onChecked(checked, id, text, row);
+    //加载子节点失败
+    const loadError = useCallback(() => {
+        dispatch({ type: "loading", payload: null });//
+    }, []);
 
-    }
-    /**
-     * 树展开与折叠事件
-     * @param {*} open 是否展开
-     * @param {*} id id,
-     * @param {*} text 文本
-     * @param {*} children  子节点
-     */
-    onExpand(open, id, text, row) {
-        let data = treeFunc.setOpen(this.state.data, row);//先处理折叠
-        if (this.props.asyncAble && (!row.children || row.children.length == 0)) {//没有数据
+    //展开节点
+    const onExpand = useCallback((open, id, text, row) => {
+        //先设置折叠或者展开
+        dispatch({ type: "setOpen", payload: { row, open } });//设置折叠与展开
+        if (props.asyncAble && (!row.children || row.children.length == 0)) {//没有数据
             let asyncChildrenData = [];
-            if (this.props.onAsync && typeof this.props.onAsync === "function") {//自行处理
-                this.setState({
-                    loadingId: id
-                })
-                asyncChildrenData = this.props.onAsync(id, text, row);//得到数据
+            if (props.onAsync && typeof props.onAsync === "function") {//自行处理
+                //得到子节点
+                asyncChildrenData = props.onAsync(id, text, row);//得到数据
                 if (asyncChildrenData && asyncChildrenData instanceof Array && asyncChildrenData.length > 0) {
                     //格式化数据
-                    asyncChildrenData = propsTran.formatterData("tree", "", asyncChildrenData, this.props.idField || "id", this.props.textField || "text", this.props.parentField || "pId", true);
-                    data = treeFunc.appendChildren(data, row, asyncChildrenData);
-                    this.handlerLoadData(data);
+                    asyncChildrenData = propsTran.formatterData("tree", "", asyncChildrenData, props.idField || "id", props.textField || "text", props.parentField || "pId", props.simpleData);
+                    dispatch({ type: "append", payload: { children: asyncChildrenData, row: row } })
+
                 }
             }
-            else if (this.props.url) {
+            else if (props.url) {
                 //没有设置异步函数
+                dispatch({ type: "loading", payload: id });//
+                //先保存节点数据
                 window.sessionStorage.setItem("async-tree-node", JSON.stringify(row));
-                let params = func.clone(this.props.params) || {};
-                params[this.props.idField || "id"] = id;
-                let fetchmodel = { type: this.props.httpType || "post", url: this.props.url, success: this.loadSuccess, data: this.props.params, error: this.loadError };
-                fetchmodel.headers = this.props.httpHeaders;
-                fetchmodel.contentType = this.props.contentType;
-                let wasabi_api = window.api || api;
-                this.setState({
-                    loadingId: id,
-                    data: data,
-                })
-                wasabi_api.ajax(fetchmodel);
-                console.log("tree async-fetch", fetchmodel);
+                //请求数据
+                let params = func.clone(props.params) || {};
+                params[props.idField || "id"] = id;
+                getData(props.url, props.httpType, props.contentType, props.headers, params, loadSuccess, loadError)
+
             }
 
         }
-        else {
-            this.handlerLoadData(data);
-        }
 
-        this.props.onExpand && this.props.onExpand(open, id, text, row);
-
-    }
-
-    /**
-     * 重命名
-     * @param {*} id 
-     * @param {*} text 
-     * @param {*} row 
-     * @param {*} newText 
-     */
-    onRename(id, text, row, newText) {
-        let data = treeFunc.renameNode(this.state.data, row, newText);
-        this.handlerLoadData(data);
-        this.props.onRename && this.props.onRename(id, text, row, newText);
-    }
-    /**
-    * 处理删除与移动时的删除
-    * @param {*}
-    */
-    onRemove(id, text, row) {
-        Msg.confirm("您确定删除[" + text + "]吗？", () => {
-            let data = treeFunc.removeNode(this.state.data, row);
-            this.handlerLoadData(data);
-            this.props.onRemove && this.props.onRemove(id, text, row);
-        })
-
-    }
-
-    /**
-     * 停靠事件
-     * @param {*} dragNode 移动节点
-     * @param {*} dropNode 停靠节点
-     * @param {*} dragType 停靠方式
-     */
-    onDrop(dragNode, dropNode, dragType) {
-        if (dragNode.id !== dropNode.id) {
-            let data = [];
-            if (dragType == "in") {
-                if (dragNode.pId !== dropNode.id) {
-                    data = treeFunc.moveInNode(this.state.data, dragNode, dropNode);
-
-                } else {
-                    return;
-                }
-            }
-            else if (dragType == "before") {
-                data = treeFunc.moveBeforeNode(this.state.data, dragNode, dropNode);
-            }
-            else if (dragType == "after") {
-                data = treeFunc.moveAterNode(this.state.data, dragNode, dropNode);
-            }
-            this.props.onDrop && this.props.onDrop(dragNode, dropNode, dragType);
-            this.handlerLoadData(data);
-        }
-
-    }
-
-    /********  以下方法是给父组件调用的 **************/
-    /**
-    * 返回勾选的数据
-    */
-    getChecked() {
-        return treeFunc.getChecked(this.state.data);
-    }
-    /**
-     * 设置勾选
-     */
-    setChecked(id, checked) {
-        if (id) {
-            //先找到节点
-            let node = treeFunc.findNodeById(this.state.data, id);
-            if (node)
-                node.checked = checked;
-            {
-                if (this.props.checkStyle === "checkbox") {
-                    data = treeFunc.setChecked(this.state.data, node, checked, this.props.checkType);
-                }
-                else if (this.props.checkStyle === "radio") {
-                    data = treeFunc.setRadioChecked(this.state.data, node, checked, this.props.radioType);
-                }
-                this.handlerLoadData(this.state.data);
-                return node;
-            }
-        }
-        return null;
-
-
-    }
-    /**
-    * 清除勾选
-    */
-    clearChecked() {
-        let data = treeFunc.clearChecked(this.state.data);
-        this.handlerLoadData(data);
-        return data;
-    }
-    /**
-     * 全部勾选
-     */
-    checkedAll() {
-        if (this.props.checkStyle === "checkbox") {
-            let data = treeFunc.checkedAll(this.state.data);
-            this.handlerLoadData(data);
-            return data;
-        }
-
-    }
-    /**
-    * 为了给交叉表与树表格内部使用的单击事件
-    * @param {*} id 
-     */
-    setClick(id) {
-        let node = treeFunc.findNodeById(this.state.visibleData, id);
-        if (!node) {
-            //没有找到,节点不可见,滚动到可见
-            let index = this.state.flatData.findIndex((item) => {
-                return item.id === id;
-            })
-            this.scrollShowVisibleData(index, index + this.visibleDataCount);
-        }
-        this.setState({
-            clickId: id,
-
-        }, () => {
-
-        })
-        //如果是树表格或者交叉表
-        this.pivot?.current?.grid?.current.setFocus(id);
-        this.treegrid?.current?.grid?.current.setFocus(id);
-
-    }
-    /**
-      * 删除某个节点，给父组件调用
-      * @param {*} row 节点
-      */
-    remove(row) {
-        if (row && row._path) {
-            let data = treeFunc.removeNode(this.state.data, row);
-            this.handlerLoadData(data);
-            this.props.onRemove && this.props.onRemove(row.id, row.text, row);
-        }
-        else if (row.id) {
-            let findNode = treeFunc.findNodeById(this.state.data, row.id);
-            let data = treeFunc.removeNode(this.state.data, findNode);
-            this.handlerLoadData(data);
-            this.props.onRemove && this.props.onRemove(row.id, row.text, row);
-        }
-
-    }
-    /**
-     * 筛选节点
-     * @param {*} value 
-     */
-    filter(value) {
-        this.handlerLoadData(this.state.data, value);
-    }
-    /**
-     * 添加节点
-     * @param {*} children 
-     * @param {*}node
-     */
-    append(children, node = null) {
-        if (children && children.length > 0) {
-            let data = treeFunc.appendChildren(this.state.data, children, node);
-            this.handlerLoadData(data);
-        }
-    }
-
-    /**
-    * 重新调整
-    */
-    adjust() {
-        try {
-            //重新设计高度 
-            let height = document.getElementById(this.state.treecontainerid).clientHeight || window.innerHeight;
-            this.visibleDataCount = Math.ceil(height / config.rowDefaultHeight);
-            this.onScroll();
-        }
-
-        catch (e) {
-            console.log("ee", e)
-        }
-    }
-
-    /********  以上方法是给父组件调用的 **************/
-
-
-    /**
-     * 对请求的数据加工
-     * @param {*} data 加工的数据
-     * @param {*} filterValue 筛选值
-     */
-    handlerLoadData(data, filterValue) {
-        //同时处理筛选数据保持一致 
-        let filter = treeFunc.filter(data, filterValue || this.state.filterValue);
-        //数据扁平化
-        let flatData = func.treeDataToFlatData(this.state.filterValue ? filter : data);
-        //切割
-        let sliceData = flatData.slice(this.sliceBeginIndex, this.sliceEndIndex);
-        //设置可见的数据的操作相关属性，因为对数据的checked,open,都是存在data中
-        let visibleData = treeFunc.setVisibleDataProps(sliceData, this.state.data);
-        this.setState({
-            filter: filter,
-            data: data,
-            flatData: flatData,
-            sliceData: sliceData,
-            visibleData: visibleData,
-            loadingId: null
-        })
-    }
-    componentDidMount() {
-    }
-    componentDidUpdate() {
-        if (this.state.reVirualConfig) {
-            this.visibleDataInit();
-        }
-
-    }
-    /**
-     * 可见数据初始化
-     */
-    visibleDataInit() {
-        let height = document.getElementById(this.state.treecontainerid).clientHeight || window.innerHeight;
-        this.visibleDataCount = Math.ceil(height / config.rowDefaultHeight);
-        this.scrollShowVisibleData(0, this.visibleDataCount);
-    }
+        props.onExpand && props.onExpand(open, id, text, row);
+    }, [props.url, props.httpType, props.contentType, props.params, props.headers, props.idField]);//
 
     /**
      * 滚动事件
      */
-    onScroll() {
-        let scrollTop = document.getElementById(this.state.treecontainerid).scrollTop
-        let startIndex = Math.floor(scrollTop / config.rowDefaultHeight);
-        let endIndex = startIndex + config.bufferScale * this.visibleDataCount;
-        this.scrollShowVisibleData(startIndex, endIndex)
-
-    }
+    const onScroll = useCallback(
+        (data) => {
+            let height = document.getElementById(treecontainerid).clientHeight || window.innerHeight;
+            let visibleDataCount = Math.ceil(height / config.rowDefaultHeight);
+            let scrollTop = document.getElementById(treecontainerid).scrollTop
+            let startIndex = Math.floor(scrollTop / config.rowDefaultHeight);
+            let endIndex = startIndex + config.bufferScale * visibleDataCount;
+            scrollShowVisibleData(startIndex, endIndex, visibleDataCount, data)
+        }, []);
     /**
    * 渲染当前可见数据
    * @param {*} startIndex 可见区数据的开始下标
    * @param {*} endIndex 可见区数据的结束下标
    */
-    scrollShowVisibleData(startIndex, endIndex) {
-        let startOffset;
-        if (startIndex >= 1) {
-            //减去上部预留的高度
-            let size = (startIndex + 1) * config.rowDefaultHeight - (startIndex - config.bufferScale * this.visibleDataCount >= 0 ? (startIndex - config.bufferScale * this.visibleDataCount) * config.rowDefaultHeight : 0);
-            startOffset = startIndex * config.rowDefaultHeight - size;
-        } else {
-            startOffset = 0;
-        }
-        document.getElementById(this.state.treeid).style.transform = `translate3d(0,${startOffset}px,0)`;
 
-        //当前切割的数据开始下标
-        this.sliceBeginIndex = startIndex - config.bufferScale * this.visibleDataCount;
-        this.sliceBeginIndex = this.sliceBeginIndex < 0 ? 0 : this.sliceBeginIndex;
-        // //当前切割的数据结束下标
-        this.sliceEndIndex = endIndex + config.bufferScale * this.visibleDataCount;
-        let sliceData = this.state.flatData.slice(this.sliceBeginIndex, this.sliceEndIndex);
+    const scrollShowVisibleData = useCallback(
+        (startIndex, endIndex, visibleDataCount, data = null) => {
+            let startOffset;
+            if (startIndex >= 1) {
+                //减去上部预留的高度
+                let size = (startIndex + 1) * config.rowDefaultHeight - (startIndex - config.bufferScale * visibleDataCount >= 0 ? (startIndex - config.bufferScale * visibleDataCount) * config.rowDefaultHeight : 0);
+                startOffset = startIndex * config.rowDefaultHeight - size;
+            } else {
+                startOffset = 0;
+            }
+            document.getElementById(treeid).style.transform = `translate3d(0,${startOffset}px,0)`;
 
-        //对可见的数据设置属性，因为对数据的操作都在data
-        let visibleData = treeFunc.setVisibleDataProps(sliceData, this.state.data);
-        this.setState({
-            visibleData: visibleData,
-            reVirualConfig: false
-        })
-    }
-    /**
-   * 
-   * @param {*} message 
-   */
-    loadError(message) {//查询失败
-        console.log("combobox-error", message);
-        this.setState({
-            loadingId: ""
-        })
-        Msg.error(message);
-    }
-    /**
-     * 数据加载成功
-     * @param {*} data 
-     */
-    loadSuccess(res) {//数据加载成功
-        if (typeof this.props.loadSuccess === "function") {
-            //正确返回
-            let resData = this.props.loadSuccess(res);
-            res = resData && resData instanceof Array ? resData : res;
+            //当前切割的数据开始下标
+            let sliceBeginIndex = startIndex - config.bufferScale * visibleDataCount;
+            sliceBeginIndex = sliceBeginIndex < 0 ? 0 : sliceBeginIndex;
+            // //当前切割的数据结束下标
+            let sliceEndIndex = endIndex + config.bufferScale * visibleDataCount;
+            dispatch({ type: "showVisibleData", payload: { sliceBeginIndex, sliceEndIndex, filterValue: state.filterValue, data: data } });
+        },
+        [state.filterValue],
+    )
+    //对外接口
+    useImperativeHandle(ref, () => ({
+        /**
+         * 设置值
+         * @param {*} newValue 
+         */
+        getChecked() {
+            return treeFunc.getChecked(state.data);
+        },
+        /**
+         * 设置勾选
+         * @returns 
+         */
+        setChecked(id, checked) {
+            if (id !== null && id !== undefined && id !== "") {
+                dispatch({ type: "setChecked", payload: { id, checked, checkType: props.checkType, checkStyle: props.checkStyle, radioType: props.radioType } })
+            }
+        },
+        /**
+    * 清除勾选
+    */
+        clearChecked() {
+            dispatch({ type: "clearChecked" });
+        },
+        /**
+         * 全部勾选
+         */
+        checkedAll() {
+            dispatch({ type: "checkedAll" });
+        },
+        /**
+         * 单击节点
+         */
+        setClick(id) {
+            dispatch({ type: "setClick", payload: id });
+            treegrid?.current?.grid?.current.setFocus(id);  //如果是树表格或者交叉表
+
+            onscroll();
+        },
+        /**
+         * 展开或折叠节点
+         * @param {*} id 
+         * @param {*} open 
+         */
+        setOpen(id, open) {
+            dispatch({ type: "setOpen", payload: { id, open } });
+        },
+        /**
+         * 移除某个节点
+         * @param {*} row 
+         */
+        remove(node) {
+            dispatch({ type: "remove", payload: node });
+        },
+        /**
+         * 筛选
+         * @param {*} value 
+         */
+        filter(value) {
+            dispatch({ type: "filter", payload: value });
+        },
+        /**
+         *追加节点
+         * @param {*} children 
+         * @param {*} node 
+         */
+        append(children, node = null) {
+            if (children && children.length > 0) {
+                dispatch({ type: "append", payload: { children: children, node } })
+            }
+        },
+        /**
+         * 
+         */
+        adjust() {
+            onscroll();
         }
-        let realData = func.getSource(res, this.props.dataSource || "data");
-        let row = window.sessionStorage.getItem("async-tree-node");
-        row = JSON.parse(row);
-        let asyncChildrenData = propsTran.formatterData("tree", "", realData, this.props.idField || "id", this.props.textField || "text", this.props.parentField || "pId", true);
-        let data = this.state.data;
-        nodes = treeFunc.findLinkNodesByPath(data, row._path);
-        if (nodes && nodes.length > 0) {
-            let leaf = nodes[nodes.length - 1];
-            leaf.children = asyncChildrenData;
-            //设置节点路径
-            treeFunc.setChildrenPath(leaf.id, leaf._path, leaf.children);
+    }))
+    //父组件加载数据
+    useEffect(() => {
+        if (props.url) {
+            //先记住下标
+            onScroll([]);
+            //再请求数据
+            getData(props.url, props.httpType, props.contentType, props.headers, props.params, loadSuccess, loadError)
         }
-        this.handlerLoadData(data);
+        else {//注意了，空数据也可以
+            let height = document.getElementById(treecontainerid).clientHeight || window.innerHeight;
+            let visibleDataCount = Math.ceil(height / config.rowDefaultHeight);
+            let scrollTop = document.getElementById(treecontainerid).scrollTop
+            let startIndex = Math.floor(scrollTop / config.rowDefaultHeight);
+            let endIndex = startIndex + config.bufferScale * visibleDataCount;
+            let data = propsTran.formatterData("tree", null, props.data, props.idField, props.textField, props.parentField, props.simpleData);
+            //如果拿不到高度则给默认值,防止因为元素隐藏等原因
+            scrollShowVisibleData(startIndex, endIndex || config.visibleCount, visibleDataCount || config.visibleCount, data || []);
+        }
+    }, [props.url, props.data])
+
+
+    //需要下传的事件
+    const treeEvents = {
+        beforeDrag: props.beforeDrag,
+        beforeRemove: props.beforeRemove,
+        beforeDrop: props.beforeDrop,
+        beforeRename: props.beforeRename,
+        onDrag: props.onDrag,
+        onClick: onClick,
+        onDoubleClick: onDoubleClick,
+        onChecked: onChecked,
+        onRemove: onRemove,
+        onExpand: onExpand,
+        onRename: onRename,
+        onDrop: onDrop,
 
     }
-    shouldComponentUpdate(nextProps, nextState) {
-        //全部用浅判断
-        if (func.diff(nextProps, this.props, false)) {
-            return true;
-        }
-        if (func.diff(nextState, this.state, false)) {
-            return true;
-        }
-        return false;
+    let control;
+    if (!props.componentType || props.componentType === "tree") {
+        control = <TreeView {...props} {...state} {...treeEvents} treeid={treeid}></TreeView>
     }
-    render() {
-        //全局事件
-        const treeEvents = {
-            beforeDrag: this.props.beforeDrag,
-            beforeRemove: this.props.beforeRemove,
-            beforeDrop: this.props.beforeDrop,
-            beforeRename: this.props.beforeRename,
-            onClick: this.onClick,
-            onDoubleClick: this.onDoubleClick,
-            onChecked: this.onChecked,
-            onRemove: this.onRemove,
-            onExpand: this.onExpand,
-            onRename: this.onRename,
-            onDrop: this.onDrop,
-            onDrag: this.props.onDrag
-        }
-        let control;
-        if (this.props.componentType === "tree") {
-            control = <TreeView {...this.props} {...this.state} {...treeEvents} ></TreeView>
-        }
-        else if (this.props.componentType === "treegrid") {
-            control = <TreeGridView ref={this.treegrid} {...this.props} {...this.state} {...treeEvents} ></TreeGridView>
-        }
-        else {
-            control = <PivotView ref={this.pivot} {...this.props} {...this.state} {...treeEvents} ></PivotView>
-        }
+    else if (props.componentType === "treegrid") {
 
-        return <div id={this.state.treecontainerid} onScroll={this.onScroll}
-            className={"wasabi-tree-parent " + (this.props.className || "")}
-            style={this.props.style}>
-            {control}
-            <div style={{ left: 0, top: 0, height: this.state.flatData && this.state.flatData.length * config.rowDefaultHeight, position: "absolute", width: 1 }}></div>
-        </div>
-
+        control = <TreeGridView ref={treegrid} {...props} {...state} {...treeEvents} treeid={treeid} ></TreeGridView>
     }
+    return <div id={treecontainerid} onScroll={onScroll.bind(this, state.data)}
+        className={"wasabi-tree-parent " + (props.className || "")}
+        style={props.style}>
+        {control}
+        <div style={{ left: 0, top: 0, height: state.flatData && state.flatData.length * config.rowDefaultHeight, position: "absolute", width: 1 }}></div>
+    </div>
+
 }
+TreeContainer = React.forwardRef(TreeContainer)
 TreeContainer.propTypes = {
-    componentType: PropTypes.oneOf(["tree", "treegrid", "pivot"]),//类型
+    componentType: PropTypes.oneOf(["tree", "treegrid"]),//类型
     name: PropTypes.string,//树名称
     idField: PropTypes.string,//数据字段值名称
     parentField: PropTypes.string,//数据字段父节点名称
@@ -583,4 +518,4 @@ TreeContainer.defaultProps = {
 
 
 }
-export default TreeContainer
+export default React.memo(TreeContainer);

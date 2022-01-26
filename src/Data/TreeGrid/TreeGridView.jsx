@@ -5,85 +5,125 @@
  */
 
 
- import React, { Component } from 'react';
+import React, { useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import DataGrid from "../DataGrid";
+import TreeView from "../Tree/TreeView";
+import "./index.css"
+import config from './config';
+import func from '../../libs/func';
 
- import func from "../../libs/func";
- import DataGrid from "../DataGrid";
- import TreeView from "../Tree/TreeView";
- import "./index.css"
- import config from './config';
- class TreeGrid extends React.PureComponent {
-     constructor(props) {
-         super(props);
-         this.grid=React.createRef();
-         this.state = {
-           
-         }
-        
-         this.dataGridClick=this.dataGridClick.bind(this);
-         
-     }
-     static getDerivedStateFromProps(props, state) {
-         let newState = {};
-         if (props.data && props.data instanceof Array && func.diff(props.data, state.rawData)) {
-             newState.rawData = (props.data);
-             let flatData = func.treeDataToFlatData(props.data)
-             newState.data = func.clone(props.data);
-             return newState;
+
+function TreeGrid(props, ref) {
+    const grid = useRef(null);
+    const [width, setWidth] = useState(config.leftWidth);
+    const [treegridid] = useState(func.uuid());
+    const [divideid] = useState(func.uuid());
+
+    let treeTopHeight = 0;//计算得到表头的高度 todo
+    if (props.headers instanceof Array && props.headers.length > 0) {
+        if (props.headers[0] instanceof Array) {
+            treeTopHeight = props.headers.length * config.topHeight;
+        }
+        else {
+            treeTopHeight = config.topHeight;;
+        }
+    }
+    /**
+        * 表格的单击事件
+        * @param {*} rowData 
+        * @param {*} rowIndex 
+        */
+    const dataGridClick = useCallback(
+        (rowData, rowIndex) => {
+            props.onClick && props.onClick((rowData[props.idField] ?? rowIndex));
+        },
+        []
+    )
+    /**
+     * 分隔线事件
+     */
+    const onDivideMouseMove = useCallback((event) => {
+        let divide = document.getElementById(divideid);
+        let treegrid = document.getElementById(treegridid);
+        treegrid.style.userSelect = "none";
+        let left = treegrid.getBoundingClientRect().left;
+        divide.style.left = (event.clientX - left) + "px";//这个位置才是相对容器的位置
+    }, [])
+    const onDivideMouseUp = useCallback((event) => {
+        let divide = document.getElementById(divideid);
+        divide.style.display = "none";
+        let treegrid = document.getElementById(treegridid);
+        treegrid.style.userSelect = null;
+        setWidth(parseInt(divide.style.left));
+        document.removeEventListener("mousemove", onDivideMouseMove);
+        document.removeEventListener("mouseup", onDivideMouseUp);
+    }, [])
+
+    /**
+  * 左侧树的鼠标监听事件
+  * @param {*} event 
+  */
+    const onMouseMove = useCallback((event) => {
+        try {
+            let offsetX = event && event.nativeEvent && event.nativeEvent.offsetX;
+            let width = event.target.getBoundingClientRect().width;
+   
+            if (width - offsetX <= 4) {
+                console.log("width",width,event.target)
+                event.target.style.cursor = "ew-resize";
+            }
+            else {
+                event.target.style.cursor = "pointer";
+
+            }
+        }
+        catch (e) {
+
+        }
+
+    }, [])
  
-         }
-         return null;
- 
-     }
-    
-     /**
-      * 表格的单击事件
-      * @param {*} rowData 
-      * @param {*} rowIndex 
-      */
-     dataGridClick(rowData, rowIndex) {
-         this.props.onClick && this.props.onClick(rowData[this.props.priKey]);
- 
-     }
-     /**
-      * 设置焦点行
-      * @param {*} id 
-      */
-     setFocus(id){
-         this.grid.current.setFocus(id);
-     }
-     render() {
-         let treeTopHeight = 0;
-         if (this.props.headers instanceof Array && this.props.headers.length > 0) {
-             if (this.props.headers[0] instanceof Array) {
-                 treeTopHeight = this.props.headers.length * config.topHeight;
-             }
-             else {
-                 treeTopHeight = config.topHeight;;
-             }
-         }
- 
-         return <div className={"wasabi-treegrid "}>
-             <div className="wasabi-treegrid-left" style={{width:config.leftWidth}}>
-                 <div className="wasabi-treegrid-configuration" style={{ height: treeTopHeight ,lineHeight:treeTopHeight+"px"}}>
-                     {this.props.treeHeader}
-                 </div>
-                 <div className="wasabi-treegrid-rowsData" >
-                     <TreeView {...this.props}
+    const onMouseDown = useCallback((event) => {
+        if (event.target.style.cursor === "ew-resize") {
+            document.getElementById(divideid).style.left = event.target.getBoundingClientRect().width + "px";
+            document.getElementById(divideid).style.display = "block";
+            document.addEventListener("mousemove", onDivideMouseMove);
+            document.addEventListener("mouseup", onDivideMouseUp);
+
+        }
+    })
+
+    useImperativeHandle(ref, () => ({
+        /**
+             * 设置焦点行
+             * @param {*} id 
+             */
+        setFocus(id) {
+            grid?.current.setFocus(id);
+        }
+    }))
+    return <div className={"wasabi-treegrid "} id={treegridid}>
+        <div className="wasabi-treegrid-left" style={{ width: width }} >
+            <div className="wasabi-treegrid-configuration" onMouseMove={onMouseMove} onMouseDown={onMouseDown}
+                style={{ height: treeTopHeight, lineHeight: treeTopHeight + "px" }}>
+                {props.treeHeader}
+            </div>
+            <div className="wasabi-treegrid-rowsData"  >
+                <TreeView {...props}
                     //  取消虚线
-                     dotted={false}
-                     ></TreeView>
-                 </div>
-             </div>
-             <div className="wasabi-treegrid-right">
-                 <DataGrid ref={this.grid}  pagination={false} rowNumber={false}
-                     headers={this.props.headers} data={this.props.visibleData}
-                    onClick={this.dataGridClick}
-                   ></DataGrid>
-             </div>
-         </div>
-     }
- }
+                    dotted={false}
+                ></TreeView>
+            </div>
+        </div>
+        <div className="wasabi-treegrid-right"  style={{width:`calc(100% - ${width}px)`}}>
+            <DataGrid ref={grid} pagination={false} rowNumber={false}
+                priKey={props.idField || "id"}
+                headers={props.headers} data={props.visibleData}
+                onClick={dataGridClick}
+            ></DataGrid>
+        </div>
+        <div className="wasabi-treegrid-divide" id={divideid}></div>
+    </div>
+}
 
- 
- export default TreeGrid;
+export default React.memo(React.forwardRef(TreeGrid), (pre, next) => { return !func.diff(pre, next, false) });

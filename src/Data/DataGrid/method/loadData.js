@@ -162,7 +162,7 @@ import config from "../config.js";
             "原数据": result,
             "处理后的数据": dataResult
         });
-        if (totalResult > 0 && dataResult && dataResult instanceof Array && dataResult.length == 0 && totalResult > 0 && pageIndex != 1) {
+        if (totalResult > 0 && dataResult && dataResult instanceof Array && dataResult.length == 0 && totalResult > 0 && pageIndex !==1) {
             //有总记录，没有当前记录数,不是第一页，继续查询转到上一页,
             //目的是为了防止手动换页时，到最后一页根本没有数据
             this.loadData(url, pageSize, pageIndex - 1, sortName, sortOrder, params);

@@ -260,7 +260,7 @@ class Transfer extends React.Component {
         }
     }
     itemDownHandler() {//向下
-        if (this.state.leftOnIndex != null && !(this.state.leftOnIndex instanceof Array) && this.state.leftOnIndex < this.state.data.length - 1) {//左边
+        if (this.state.leftOnIndex !==null && !(this.state.leftOnIndex instanceof Array) && this.state.leftOnIndex < this.state.data.length - 1) {//左边
 
             this.state.data.splice(this.state.leftOnIndex, 2, this.state.data[this.state.leftOnIndex + 1], this.state.data[this.state.leftOnIndex]);
             this.setState({
@@ -271,7 +271,7 @@ class Transfer extends React.Component {
                 this.props.onSelect && this.props.onSelect(this.state.selectData, this.state.data)
             })
         }
-        else if (this.state.rightOnIndex != null && !(this.state.rightOnIndex instanceof Array) && this.state.rightOnIndex < this.state.selectData.length - 1) {//右边
+        else if (this.state.rightOnIndex !==null && !(this.state.rightOnIndex instanceof Array) && this.state.rightOnIndex < this.state.selectData.length - 1) {//右边
             this.state.selectData.splice(this.state.rightOnIndex, 2, this.state.selectData[this.state.rightOnIndex + 1], this.state.selectData[this.state.rightOnIndex]);
             this.setState({
                 selectData: this.state.selectData,

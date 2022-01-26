@@ -51,7 +51,7 @@ const loadDataHoc = function (Widget, componentType = "select") {
                 newState.rawData = props.data;//保留原始数据,用于后期对比       
             }
           
-            else if (props.url && props.url != state.url || func.diff(props.params, state.rawParams)) {
+            else if (props.url && props.url !==state.url || func.diff(props.params, state.rawParams)) {
                 //传的请求参数发生改变
                 newState = {
                     loadDataStatus: "url",//通过url加载数据
@@ -131,7 +131,7 @@ const loadDataHoc = function (Widget, componentType = "select") {
             })
         }
 
-        //以下三个方法方便给父组件，ref调用
+        //以下方法方便给父组件，ref调用
         /**
          * 
          * @param {*} value 
@@ -166,7 +166,34 @@ const loadDataHoc = function (Widget, componentType = "select") {
             }
            
         }
-        
+        getChecked(){
+            return  this.input.current&&this.input.current.getChecked();
+         }
+         setChecked(id,checked){
+             return  this.input.current&&this.input.current.setChecked(id,checked);
+         }
+         clearChecked(){
+             return  this.input.current&&this.input.current.clearChecked();
+         }
+         checkedAll(){
+             return  this.input.current&&this.input.current.checkedAll();
+         }
+         setClick(id){
+             return  this.input.current&&this.input.current.setClick(id);
+         }
+         remove(node){
+             return  this.input.current&&this.input.current.remove(node);
+         }
+         append(children,node){
+             return  this.input.current&&this.input.current.append(children,node);
+         }
+         filter(value)
+         {
+             return  this.input.current&&this.input.current.filter(value);
+         }
+         adjust(){
+             return  this.input.current&&this.input.current.adjust();
+         }
         shouldComponentUpdate(nextProps, nextState) {
             //全部用浅判断
             if (func.diff(nextProps, this.props, false)) {

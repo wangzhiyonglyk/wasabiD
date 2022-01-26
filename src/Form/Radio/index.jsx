@@ -12,15 +12,15 @@ import Msg from "../../Info/Msg";
 
 function LiView(props) {
     let control = null;
-    const { data, value, readOnly, onSelect } = props;
+    let { data, value = "", readOnly, onSelect } = props;
     if (data && data instanceof Array && data.length > 0) {
         let className = "wasabi-radio-btn " + (readOnly ? " readOnly" : "");
         control = data.map((child, index) => {
             return (
                 <li key={index}>
-                    <div className={className + ((value && (value+"")=== (child.value+"")) ? " checkedRadio" : "")}
+                    <div className={className + ((value + "") === ((child.value ?? "") + "") ? " checkedRadio" : "")}
                         onClick={onSelect.bind(this, child.value, child.text, child)}><i></i></div>
-                    <div className={"radiotext " + (readOnly ? " readOnly" : "") + ((value && (value+"")=== (child.value+"")) ? " checkedRadio" : "")} onClick={onSelect.bind(this, child.value, child.text, child)}>{child.text}
+                    <div className={"radiotext " + (readOnly ? " readOnly" : "") + (((value + "") === ((child.value??"") + "")) ? " checkedRadio" : "")} onClick={onSelect.bind(this, child.value, child.text, child)}>{child.text}
                     </div>
                 </li>
             );
@@ -38,11 +38,12 @@ class Radio extends Component {
         }
         this.setValue = this.setValue.bind(this);
         this.getValue = this.getValue.bind(this);
+        this.onClear = this.onClear.bind(this);
         this.onSelect = this.onSelect.bind(this);
 
     }
     static getDerivedStateFromProps(props, state) {
-        if (props.value != state.oldPropsValue) {//父组件强行更新了            
+        if (props.value !== state.oldPropsValue) {//父组件强行更新了            
             return {
                 value: props.value || "",
                 text: propsTran.processText(props.value, props.data).join(","),
@@ -61,31 +62,38 @@ class Radio extends Component {
     getValue() {
         return this.state.value;
     }
+    onClear() {
+        this.setState({
+            value: "",
+            text: "",
+        })
+        this.props.onSelect && this.props.onSelect("", "", this.props.name, {});
+    }
 
-    onSelect(value="", text, name, row) {
+    onSelect(value = "", text, name, row) {
 
         if (this.props.readOnly) {
             return;
         }
-        if (value!=null&&value!=undefined&&value!="") {//0是有效值
+        if (value !== "") {//0是有效值
             //更新
             this.setState({
-                value: value+"",
-                text: text+"",
+                value: value + "",
+                text: text + "",
             })
-            this.props.validate && this.props.validate(value+"");
-            this.props.onSelect && this.props.onSelect(value+"", text, name, row);
+            this.props.validate && this.props.validate(value + "");
+            this.props.onSelect && this.props.onSelect(value + "", text, name, row);
         }
-        else{
+        else {
             Msg.info("值是空值");
         }
 
     }
     render() {
         const { data, readOnly } = this.props;
-        const liProps = { data, readOnly,value:this.state.value, onSelect: this.onSelect }
+        const liProps = { data, readOnly, value: this.state.value, onSelect: this.onSelect }
         return <ul className="wasabi-checkul radio"> <LiView {...liProps} onSelect={this.onSelect.bind(this)}></LiView> {this.props.children}</ul>
     }
 }
 
-export default validateHoc(loadDataHoc(Radio, "radio"),"radio");
+export default validateHoc(loadDataHoc(Radio, "radio"), "radio");

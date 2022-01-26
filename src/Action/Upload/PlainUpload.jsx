@@ -47,7 +47,7 @@ class Upload extends Component {
 
     }
     onDrop(event) {
-        if (this.props.disabled || this.state.uploadSuccessStatus != -1) {
+        if (this.props.disabled || this.state.uploadSuccessStatus !==-1) {
             return;
         }
       
@@ -236,7 +236,7 @@ class Upload extends Component {
      * 选择文件
      */
     onClick() {
-        if (this.props.disabled || this.state.uploadSuccessStatus != -1) {
+        if (this.props.disabled || this.state.uploadSuccessStatus !==-1) {
             return;
         }
         else {
@@ -301,7 +301,7 @@ class Upload extends Component {
                     <div key="preview" onClick={this.onClick.bind(this)} className="wasabi-uplaod-files preview" style={{
                         display: ((this.state.files && this.state.files.length == 0)&&this.props.type=="image" && this.props.value ? "block" : "none")
                     }}>
-                        <img src={this.props.value||""} id={this.state.defaultImgid} onLoad={this.imgLoad} alt="点击上传" style={{ width: "100%" }}></img>
+                        <img src={this.props.value??""} id={this.state.defaultImgid} onLoad={this.imgLoad} alt="点击上传" style={{ width: "100%" }}></img>
 
                     </div>
                     {/* 单图片上传预览 */}

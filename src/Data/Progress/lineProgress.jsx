@@ -17,9 +17,9 @@ class LineProgress extends React.Component {
     }
 
     static getDerivedStateFromProps(props, state) {
-        if (props.value != state.oldPropsValue) {
+        if (props.value !==state.oldPropsValue) {
             return {
-                value: props.value||"",
+                value: props.value??"",
                 oldPropsValue: props.value
             }
         }

@@ -44,7 +44,7 @@ class MessageView extends Component {
         this.setState({
             visible: false
         })
-        if (this.props.OKHandler != null) {
+        if (this.props.OKHandler !==null) {
             this.props.OKHandler();
         }
     }
@@ -52,7 +52,7 @@ class MessageView extends Component {
         this.setState({
             visible: false
         })
-        if (this.props.cancelHandler != null) {
+        if (this.props.cancelHandler !==null) {
             this.props.cancelHandler();
         }
     }

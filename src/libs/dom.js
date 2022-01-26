@@ -85,9 +85,9 @@ let dom = {
     scrollParent(el) {
         let node = el.parentNode;
 
-        while (node !== null && node != document.documentElement) {
+        while (node !== null && node !==document.documentElement) {
             let overflow = this.computedStyle(node, "overflow");
-            if (node.scrollHeight > node.offsetHeight && overflow != "visible" && overflow != "hidden") {
+            if (node.scrollHeight > node.offsetHeight && overflow !=="visible" && overflow !=="hidden") {
                 return node;
             } else {
                 node = node.parentNode;
@@ -103,7 +103,7 @@ let dom = {
     scrollVisible(el, pad = 0) {
         let scrollParent = dom.scrollParent(el);
         if (el && scrollParent && dom.overView(el, scrollParent, pad)) { //判断是否不可见
-            if (scrollParent && scrollParent != window) {
+            if (scrollParent && scrollParent !==window) {
                 scrollParent.scrollTop = (scrollParent.scrollHeight - scrollParent.offsetHeight)
             }
         }

@@ -71,6 +71,9 @@ desc:checkbox
   top: -2px;
   font-size: var(--font-size);
   background-repeat: no-repeat;
+  color: transparent;
+}
+.wasabi-checkul .checkbox-label.checked::after{
   color: white;
 }
 .wasabi-checkul .checkbox-label.halfcheck {
@@ -99,7 +102,7 @@ desc:checkbox
   width: 16px;
   height: 16px;
   display: inline-block;
-  margin-top: -1px;
+  margin-top: 4px;
   cursor: pointer;
   position: relative;
   -webkit-border-radius: 100%;

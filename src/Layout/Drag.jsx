@@ -40,7 +40,7 @@ class Drag extends React.Component {
   // }
 
   // mouseMoveHandler(event) {
-  //   if (this.position != null) {
+  //   if (this.position !==null) {
   //     let dot = document.getElementById(this.state.dotid);
   //     dot.style.left = (this.position.left + event.clientX - this.oldClientX) + "px";
   //     dot.style.top = (this.position.top + event.clientY - this.oldClientY) + "px";
@@ -68,7 +68,7 @@ class Drag extends React.Component {
 
   // }
   onDragStart(){
-    window.localStorage.setItem("wasabi-dragItem",JSON.stringify(this.props.data||""));
+    window.localStorage.setItem("wasabi-dragItem",JSON.stringify(this.props.data??""));
         this.props.onDragStart && this.props.onDragStart(this.props.data);
   }
   onDragEnd(){

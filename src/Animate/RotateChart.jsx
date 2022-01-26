@@ -237,7 +237,7 @@ class RotateChart extends React.Component {
 
   componentWillReceiveProps(nextProps) {
 
-    if (nextProps.data && (this.props.data && (nextProps.data.join(",") != this.props.data.join(",")) || !this.props.data)) {
+    if (nextProps.data && (this.props.data && (nextProps.data.join(",") !==this.props.data.join(",")) || !this.props.data)) {
       //数据有改变
       this.refresh();
     }

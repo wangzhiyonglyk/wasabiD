@@ -22,7 +22,7 @@ export default function (WrappedComponent) {
 
         static getDerivedStateFromProps(props, state) {
 
-            if ((props.firstDate || "") + (props.firstTime || "") + (props.secondDate || "") + (props.secondTime || "") != state.oldPropsValue) {
+            if ((props.firstDate || "") + (props.firstTime || "") + (props.secondDate || "") + (props.secondTime || "") !==state.oldPropsValue) {
                 return propsTran.setDateRangeDefaultState(props);
             }
             return null;

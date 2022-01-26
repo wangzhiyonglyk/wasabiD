@@ -118,7 +118,7 @@ class Container extends React.PureComponent {
         let combinxRefs = this.getRefs();
         for (let i = 0; i < combinxRefs.length; i++) {
             let cref = combinxRefs[i];
-            if (cref && cref.props.name && data[cref.props.name] != null && data[cref.props.name] != undefined) {
+            if (cref && cref.props.name && data[cref.props.name] !==null && data[cref.props.name] !==undefined) {
                 cref.setValue && cref.setValue(data[cref.props.name]);
             }
             else if (cref && cref.setData) {//表单或者布局组件
@@ -159,7 +159,7 @@ class Container extends React.PureComponent {
     render() {
         this.inputs = [];//先清空
         let maxWidth = this.computerLabelWidth();
-        return <div className={" wasabi-container container-"+(this.props.size||"")+" " + this.props.className} style={this.props.style}>{
+        return <div className={" wasabi-container container-"+(this.props.size??"")+" " + this.props.className} style={this.props.style}>{
             React.Children.map(this.props.children, (child, index) => {
                 if (typeof child.type !== "function") {//非react组件
                     return child;

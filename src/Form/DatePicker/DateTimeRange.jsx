@@ -28,7 +28,7 @@ class DateTimeRange extends Component {
 
     }
     static getDerivedStateFromProps(props, state) {
-        if (((props.firstTime || "") + (props.secondTime || "")) != state.oldPropsValue) {
+        if (((props.firstTime || "") + (props.secondTime || "")) !==state.oldPropsValue) {
             return {
                 firstTime: props.firstTime,
                 secondTime: props.secondTime,
@@ -38,17 +38,17 @@ class DateTimeRange extends Component {
     }
     onSelectHandler() {
         let firstDate, secondDate;
-        if (this.state.first_min != "") {
+        if (this.state.first_min !=="") {
             firstDate = this.props.first_year + "-" + (this.state.first_month.toString().length == 1 ? "0" + this.props.first_month : this.props.first_month) + "-" + (this.state.first_min.toString().length == 1 ? "0" + this.props.first_min : this.props.first_min);
         }
-        else if (this.state.second_min != "") {
+        else if (this.state.second_min !=="") {
             firstDate = this.props.second_year + "-" + (this.state.second_month.toString().length == 1 ? "0" + this.props.second_month : this.props.second_month) + "-" + (this.state.second_min.toString().length == 1 ? "0" + this.props.second_min : this.props.second_min);
         }
 
-        if (this.state.second_max != "") {
+        if (this.state.second_max !=="") {
             secondDate = this.props.second_year + "-" + (this.state.second_month.toString().length == 1 ? "0" + this.props.second_month : this.props.second_month) + "-" + (this.state.second_max.toString().length == 1 ? "0" + this.props.second_max : this.props.second_max);
         }
-        else if (this.state.first_max != "") {
+        else if (this.state.first_max !=="") {
             secondDate = this.props.first_year + "-" + (this.state.first_month.toString().length == 1 ? "0" + this.props.first_month : this.props.first_month) + "-" + (this.state.first_max.toString().length == 1 ? "0" + this.props.first_max : this.props.first_max);
         }
         if (firstDate && secondDate) {

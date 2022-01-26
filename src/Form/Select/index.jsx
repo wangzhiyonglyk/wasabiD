@@ -59,7 +59,7 @@ class Select extends Component {
             newState.inputText=newState.text||state.inputText;
             
         }
-        if (props.value != state.oldPropsValue) {//父组件强行更新了
+        if (props.value !==state.oldPropsValue) {//父组件强行更新了
             let text = propsTran.processText(props.value, newState.data || state.data);
           
             newState = {
@@ -154,7 +154,7 @@ class Select extends Component {
      */
     addHandler(event) {
         let formatValue = this.regValue(event);
-        let newValue =this.state.value!=undefined&&this.state.value!=null ? this.state.value.toString().split(",") : [];
+        let newValue =this.state.value!==undefined&&this.state.value!==null ? this.state.value.toString().split(",") : [];
         let newText = this.state.text ? this.state.text.toString().split(",") : [];
         ////如果允许添加，则把未匹配的，添加到数据源中
         if (this.props && (this.props.attachAble) && formatValue.length > 0) {
@@ -275,7 +275,7 @@ class Select extends Component {
             return item;//再次除去两端空格
         }) : [];
         formatValue = formatValue.filter(item => {
-            return item != null && item != "";//除去空值的
+            return item !==null && item !=="";//除去空值的
         });
         return formatValue;
     }
@@ -298,8 +298,8 @@ class Select extends Component {
             let newValue = [], newText = [];
             let inputText = [];
             if (this.props.multiple) {//多选
-                if (this.state.value!=undefined&&this.state.value!=null) {
-                    newValue = this.state.value!=undefined&&this.state.value!=null ? this.state.value.toString().split(',') : [];
+                if (this.state.value!==undefined&&this.state.value!==null) {
+                    newValue = this.state.value!==undefined&&this.state.value!==null ? this.state.value.toString().split(',') : [];
                     newText = this.state.text ? this.state.text.toString().split(',') : [];
                     inputText = this.state.inputText ? this.state.inputText.split(",") : [];
                 }
@@ -421,11 +421,11 @@ class Select extends Component {
             <ArrowInput
                 ref={this.input}
                 show={this.state.show}
-                value={this.state.inputText||""}
+                value={(this.state.inputText??"")}
                 attachAble={this.props.attachAble}
                 name={this.props.name}
-                title={this.props.title||""}
-                placeholder={this.props.placeholder||""}
+                title={(this.props.title??"")}
+                placeholder={(this.props.placeholder??"")}
                 sortType={this.state.sortType}
                 readOnly={this.props.readOnly}
                 onChange={this.onChange.bind(this)}

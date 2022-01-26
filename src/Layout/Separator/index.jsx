@@ -11,7 +11,7 @@ import "./separator.css"
          super(props);
      }
      render(){
-       return  <div className={"wasabi-separator " +(this.props.className||"") +" " +(this.props.theme||"")} style={this.props.style}>
+       return  <div className={"wasabi-separator " +(this.props.className??"") +" " +(this.props.theme??"")} style={this.props.style}>
             <span className={"wasabi-separator-text"}>{this.props.children}</span>
          </div>
      }

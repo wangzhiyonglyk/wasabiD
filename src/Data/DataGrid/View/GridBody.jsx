@@ -186,7 +186,7 @@ class GridBody extends React.PureComponent {
     setCellComponent(header, rowData, rowOrderIndex, columnIndex, stickyLeft) {
      
         //处理数据单元格
-        let editAble = this.props.editIndex != null && this.props.editIndex === (rowOrderIndex + "-" + columnIndex) && header.editor;
+        let editAble = this.props.editIndex !==null && this.props.editIndex === (rowOrderIndex + "-" + columnIndex) && header.editor;
 
         return <TableCell
         name={header.name||header.label}
@@ -254,7 +254,7 @@ class GridBody extends React.PureComponent {
                                 this.setCellComponent(header, rowData, rowData._orderIndex??rowDataIndex, columnIndex, stickyLeft)
                             );
                             //处理固定列的left值
-                            if (preRowDataIndex != rowDataIndex) {
+                            if (preRowDataIndex !==rowDataIndex) {
                                 //第一次跳转到本行
                                 let width = header.width ? header.width : this.props?.headerWidth&&this.props?.headerWidth[header.name] || config.minWidth;
                                 stickyLeft += header.sticky ? width : 0;
@@ -270,7 +270,7 @@ class GridBody extends React.PureComponent {
                             this.setCellComponent(trheader, rowData, rowData._orderIndex??rowDataIndex, columnIndex, stickyLeft)
                         );
                         //处理固定列的left值
-                        if (preRowDataIndex != rowDataIndex) {
+                        if (preRowDataIndex !==rowDataIndex) {
                             //第一次跳转到本行
                             let width = trheader.width ? trheader.width : this.props?.headerWidth&&this.props?.headerWidth[trheader.name] || config.minWidth;
                             stickyLeft += trheader.sticky ? width : 0;

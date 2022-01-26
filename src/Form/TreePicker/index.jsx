@@ -30,7 +30,7 @@ class TreePicker extends Component {
         this.checkedAll = this.checkedAll.bind(this);
     }
     static getDerivedStateFromProps(props, state) {
-        if (props.value != state.oldPropsValue) {//父组件强行更新了
+        if (props.value !==state.oldPropsValue) {//父组件强行更新了
             return {
                 value: props.value || "",
                 text: propsTran.processText(props.value, props.data).join(","),

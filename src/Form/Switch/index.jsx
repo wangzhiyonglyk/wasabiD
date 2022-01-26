@@ -21,7 +21,7 @@ class Switch extends Component {
     }
 
     static getDerivedStateFromProps(props, state) {
-        if (props.value != state.oldPropsValue) {
+        if (props.value !==state.oldPropsValue) {
             return {
                 checked: props.value ? 1 : 0
             }
@@ -50,7 +50,7 @@ class Switch extends Component {
             checked: !this.state.checked
         });
 
-        if (this.props.onSelect != null) {//返回给comboBox组件
+        if (this.props.onSelect !==null) {//返回给comboBox组件
             this.props.onSelect(!this.state.checked, this.state.checked, this.props.name);
         }
 
@@ -75,7 +75,7 @@ class Switch extends Component {
                         <div className={"slideblock "}></div>
                     </div>
                     <small className={"wasabi-help-block "} style={{
-                        display: (this.state.inValidateText && this.state.inValidateText != "") ?
+                        display: (this.state.inValidateText && this.state.inValidateText !=="") ?
                             this.state.inValidateShow : "none"
                     }}>
                         {this.state.inValidateText}

@@ -51,7 +51,7 @@ class ArrowInput extends React.PureComponent {
                 ref={this.input}
                 name={this.props.name}
                 title={this.props.title}
-                placeholder={(this.props.placeholder||"") + (this.props.attachAble ? "回车添加" : "")}
+                placeholder={(this.props.placeholder??"") + (this.props.attachAble ? "回车添加" : "")}
                 readOnly={this.props.readOnly}
                 value={this.props.value || ""}
                 onClick={this.props.onClick}

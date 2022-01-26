@@ -23,7 +23,7 @@ function HotView(props) {
     if (data && data instanceof Array && data.length > 0) {
         return <div>
             <div className="hot-wrap">
-                <p style={{ display: (hotTitle && hotTitle != "") ? "block" : "none" }}>{hotTitle}</p>
+                <p style={{ display: (hotTitle && hotTitle !=="") ? "block" : "none" }}>{hotTitle}</p>
                 <ul>{data.map((item, index) => {
                     return (< li key={"hot" + item.text} className="hot-item"
                         onClick={activeHot.bind(this, item.value, item.text)} title={item.text}>{item.text}</li>);
@@ -49,7 +49,7 @@ function ProvinceView(props) {
                 <ul className="picker-container-wrap" style={{ display: (child.expand ? "block" : "none"), left: left }}>
                     <CityView data={child.children} provinceActiveIndex={provinceActiveIndex} activeCity={activeCity} activeDistinct={activeDistinct} distinctActiveIndex={distinctActiveIndex}></CityView>
                 </ul>
-                <div className={"picker-container-name " + (child.expand ? "expand" : "")} onClick={activeProvince.bind(this, index, child.value)} title={child.text}>{child.text}</div>
+                <div className={"picker-container-name " + (child.expand ? "expand" : "")} onClick={activeProvince.bind(this, index, (child.value??""))} title={child.text}>{child.text}</div>
             </li>
             );
         });
@@ -78,7 +78,7 @@ function CityView(props) {
                         <DistinctView data={child.children} distinctActiveIndex={distinctActiveIndex} activeDistinct={activeDistinct} ></DistinctView>
                     </ul>
                     <div className={"picker-container-name " + (child.expand ? "expand" : "")}
-                        onClick={activeCity.bind(this, provinceActiveIndex, index, child.value)} title={child.text}>{child.text}</div>
+                        onClick={activeCity.bind(this, provinceActiveIndex, index,(child.value??""))} title={child.text}>{child.text}</div>
                 </li>
             )
         });
@@ -136,7 +136,7 @@ class Picker extends Component {
         this.onClear = this.onClear.bind(this);
         this.showPicker = this.showPicker.bind(this);
         this.hidePicker = this.hidePicker.bind(this);
-        this.setPickerModel = this.setPickerModel.bind(this);
+      
         this.activeHot = this.activeHot.bind(this);
         this.activeProvince = this.activeProvince.bind(this);
         this.activeCity = this.activeCity.bind(this);
@@ -153,7 +153,7 @@ class Picker extends Component {
             newState.rawData = (props.data);
             newState.data = func.clone(props.data)//复制一份
         }
-        if (props.value != state.oldPropsValue) {//父组件强行更新了
+        if (props.value !==state.oldPropsValue) {//父组件强行更新了
             let text = propsTran.processText(props.value, newState.data || state.data);
             newState = {
                 value: props.value || "",
@@ -237,26 +237,13 @@ class Picker extends Component {
         }
 
     }
-    setPickerModel(data) {//根据数据生成标准格式
-        let realData = [];
-        for (let index = 0; index < data.length; index++) {
-            let pickerModel = {
-                value: data[index][this.props.valueField],
-                text: data[index][this.props.textField ? this.props.textField : "text"],//标题
-                expand: false,
-                children: [],
-            };
-            realData.push(pickerModel);
-        }
-        return realData;
-    }
     activeHot(value, text) {
         this.setState({
             show: false,
             value: value,
             text: text,
         });
-        if (this.props.onSelect != null) {
+        if (this.props.onSelect !==null) {
             this.props.onSelect(value, text, this.props.name);
         }
     }
@@ -286,7 +273,7 @@ class Picker extends Component {
                 selectValue = newData[currentProvinceIndex].value;
                 selectText = newData[currentProvinceIndex].text;
                 show = false;
-                if (this.props.onSelect != null) {
+                if (this.props.onSelect !==null) {
                     this.props.onSelect(selectValue, selectText, this.props.name, null);
                 }
 
@@ -304,7 +291,7 @@ class Picker extends Component {
         }
         else {
             //当前节点不是激活节点
-            if (this.props.secondUrl != null && this.state.data[currentProvinceIndex].children == null) {//存在二级节点url并且没有查询过
+            if (this.props.secondUrl !==null && this.state.data[currentProvinceIndex].children == null) {//存在二级节点url并且没有查询过
 
                 let url = this.props.secondUrl;
                 let params = this.state.secondParams;
@@ -313,7 +300,7 @@ class Picker extends Component {
                 }
                 else {
                     params = {};
-                    if (this.state.secondParamsKey != null) {
+                    if (this.state.secondParamsKey !==null) {
                         params[this.state.secondParamsKey] = currentProvinceValue;
                     }
 
@@ -347,7 +334,7 @@ class Picker extends Component {
                     selectText = newData[currentProvinceIndex].text;
                     show = false;
 
-                    if (this.props.onSelect != null) {
+                    if (this.props.onSelect !==null) {
                         this.props.onSelect(selectValue, selectText, this.props.name, null);
                     }
 
@@ -368,8 +355,7 @@ class Picker extends Component {
 
     }
     loadCitySuccess(currentProviceIndex, data) {//二级节点的数据加载成功
-        let cityData = [];//当前一级节点的二级节点数据
-        let realData = data;
+        let cityData = data;//当前一级节点的二级节点数据
         let newData = this.state.data;
         let selectValue = this.state.value;
         let selectText = this.state.text;
@@ -377,9 +363,9 @@ class Picker extends Component {
         if (this.props.dataSource == null) {
         }
         else {
-            realData = func.getSource(data, this.props.dataSource);
+            cityData = func.getSource(data, this.props.dataSource);
         }
-        cityData = this.setPickerModel(realData);//生成二级节点数据模型
+       
         if (cityData instanceof Array && cityData.length > 0) {//有数据
             newData[currentProviceIndex].children = cityData;//将查询的二级节点赋值给一级激活节点
             let expand = newData[currentProviceIndex].expand;
@@ -389,7 +375,7 @@ class Picker extends Component {
         else {//没有数据,则直接执行选择事件
             selectValue = newData[currentProviceIndex].value;
             selectText = newData[currentProviceIndex].text;
-            if (this.props.onSelect != null) {
+            if (this.props.onSelect !==null) {
                 this.props.onSelect(selectValue, selectText, this.props.name, null);
             }
         }
@@ -423,7 +409,7 @@ class Picker extends Component {
                 selectValue = newData[this.state.provinceActiveIndex].value + "," + newData[this.state.provinceActiveIndex].children[currentCityIndex].value;
                 selectText = newData[this.state.provinceActiveIndex].text + "," + newData[this.state.provinceActiveIndex].children[currentCityIndex].text;
 
-                if (this.props.onSelect != null) {
+                if (this.props.onSelect !==null) {
                     this.props.onSelect(selectValue, selectText, this.props.name, newData[this.state.provinceActiveIndex]);
                 }
             }
@@ -440,7 +426,7 @@ class Picker extends Component {
 
         }
         else {
-            if (this.props.thirdUrl != null && (this.state.data[this.state.provinceActiveIndex].children[currentCityIndex].children == null)) {//存在三级节点url并且没有查询过
+            if (this.props.thirdUrl !==null && (this.state.data[this.state.provinceActiveIndex].children[currentCityIndex].children == null)) {//存在三级节点url并且没有查询过
                 let url = this.props.thirdUrl;
                 let params = this.state.thirdParams;
                 if (typeof params == "object") {//判断是否为对象
@@ -448,7 +434,7 @@ class Picker extends Component {
                 }
                 else {
                     params = {};
-                    if (this.state.thirdParamsKey != null) {
+                    if (this.state.thirdParamsKey !==null) {
                         params[this.state.thirdParamsKey] = currentCityValue;
                     }
                 }
@@ -486,7 +472,7 @@ class Picker extends Component {
                     selectValue = newData[this.state.provinceActiveIndex].value + "," + newData[this.state.provinceActiveIndex].children[currentCityIndex].value;
                     selectText = newData[this.state.provinceActiveIndex].text + "," + newData[this.state.provinceActiveIndex].children[currentCityIndex].text;
 
-                    if (this.props.onSelect != null) {
+                    if (this.props.onSelect !==null) {
                         this.props.onSelect(selectValue, selectText, this.props.name, newData[this.state.provinceActiveIndex]);
                     }
                 }
@@ -504,17 +490,17 @@ class Picker extends Component {
 
     }
     loadDistinctSuccess(currentCityIndex, data) {//三级节点查询成功
-        let distinctData = [];//当前二级节点的二级节点数据
-        let realData = data;
+       
+        let distinctData = data;//当前二级节点的二级节点数据
         let selectValue = this.state.value;
         let selectText = this.state.text;
         //获取真实数据
         if (this.props.dataSource == null) {
         }
         else {
-            realData = func.getSource(data, this.props.dataSource);
+            distinctData = func.getSource(data, this.props.dataSource);
         }
-        distinctData = this.setPickerModel(realData);//生成二级节点数据模型
+    
         let newData = this.state.data;
         if (distinctData instanceof Array && distinctData.length > 0) {//有数据
             for (let index = 0; index < newData[this.state.provinceActiveIndex].children.length; index++) {
@@ -530,7 +516,7 @@ class Picker extends Component {
         else {
             selectValue = newData[this.state.provinceActiveIndex].value + "," + newData[this.state.provinceActiveIndex].children[currentCityIndex].value;
             selectText = newData[this.state.provinceActiveIndex].text + "," + newData[this.state.provinceActiveIndex].children[currentCityIndex].text;
-            if (this.props.onSelect != null) {
+            if (this.props.onSelect !==null) {
                 this.props.onSelect(selectValue, selectText, this.props.name, null);
             }
         }
@@ -562,7 +548,7 @@ class Picker extends Component {
         selectText = newData[this.state.provinceActiveIndex].text + ","
             + newData[this.state.provinceActiveIndex].children[this.state.cityActiveIndex].text + ","
             + newData[this.state.provinceActiveIndex].children[this.state.cityActiveIndex].children[currentDistinctIndex].text;
-        if (this.props.onSelect != null) {
+        if (this.props.onSelect !==null) {
             this.props.onSelect(selectValue, selectText, this.props.name, newData[this.state.provinceActiveIndex]);
         }
 

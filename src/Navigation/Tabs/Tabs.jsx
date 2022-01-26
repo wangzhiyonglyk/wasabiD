@@ -22,7 +22,7 @@ class Tabs extends React.Component {
     }
     static getDerivedStateFromProps(props, state) {
         let newState = {};
-        if (React.Children.count(props.children) != state.childrenlength) {
+        if (React.Children.count(props.children) !==state.childrenlength) {
             newState.activeIndex = props.children.length - 1
             newState.childrenlength = React.Children.count(props.children) || 0
             return newState;

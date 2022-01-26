@@ -86,7 +86,7 @@ class Sheet extends React.Component {
      */
     onChange(event) {
         let sheet = JSON.parse(JSON.stringify(this.state.sheet));
-        if (this.state.startRowIndex != null && this.state.startColumnIndex != null) {
+        if (this.state.startRowIndex !==null && this.state.startColumnIndex !==null) {
             //浅复制就行了
             sheet.cells[this.state.startRowIndex][this.state.startColumnIndex].label = event.target.value;
             sheet.cells[this.state.startRowIndex][this.state.startColumnIndex].value = event.target.value;
@@ -143,7 +143,7 @@ class Sheet extends React.Component {
      * @param {*} colSpan 
      */
     onMouseUp(rowIndex, columnIndex, rowSpan, colSpan, event) {
-        if (this.startRowIndex != null && this.startRowIndex != undefined) {
+        if (this.startRowIndex !==null && this.startRowIndex !==undefined) {
             let selectIndexs = this.getRowColIndex(rowIndex, columnIndex, rowSpan, colSpan);//得到真实的选择范围
             this.cancelChosed();//取消选择
             try {
@@ -173,12 +173,12 @@ class Sheet extends React.Component {
 
     }
     onMouseMove(event) {
-        if (this.startRowIndex != null && this.startRowIndex != undefined) {
+        if (this.startRowIndex !==null && this.startRowIndex !==undefined) {
             let rowIndex = event.target.getAttribute("data-rowindex") * 1;
             let columnIndex = event.target.getAttribute("data-columnindex") * 1;
             let rowSpan = event.target.getAttribute("rowspan") * 1;
             let colSpan = event.target.getAttribute("colspan") * 1;
-            if (rowIndex != null && columnIndex != null && this.moveIndex != (rowIndex + "-" + columnIndex)) {
+            if (rowIndex !==null && columnIndex !==null && this.moveIndex !==(rowIndex + "-" + columnIndex)) {
                 //防止重复处理,因为move事件在一个单元格会执行多次
                 this.moveIndex = rowIndex + "-" + columnIndex;
                 let selectIndexs = this.getRowColIndex(rowIndex, columnIndex, rowSpan, colSpan)
@@ -214,7 +214,7 @@ class Sheet extends React.Component {
     dotHander(selectIndexs) {
 
         try {
-            if (this.endRowIndex != undefined && this.endRowIndex != null) {//是点的拖动
+            if (this.endRowIndex !==undefined && this.endRowIndex !==null) {//是点的拖动
                 if (selectIndexs.startColumnIndex === selectIndexs.endColumnIndex) {
                     //列的拖动
                     if (this.startRowIndex === this.endRowIndex && this.startColumnIndex === this.endColumnIndex) {
@@ -417,7 +417,7 @@ class Sheet extends React.Component {
     onContextMenu(event) {
         let rowIndex = event.target.getAttribute("data-rowindex") * 1;
         let columnIndex = event.target.getAttribute("data-columnindex") * 1;
-        if (this.state.startRowIndex != null && rowIndex >= this.state.startRowIndex && rowIndex <= this.state.endRowIndex && columnIndex >= this.state.startColumnIndex && columnIndex <= this.state.endColumnIndex) {
+        if (this.state.startRowIndex !==null && rowIndex >= this.state.startRowIndex && rowIndex <= this.state.endRowIndex && columnIndex >= this.state.startColumnIndex && columnIndex <= this.state.endColumnIndex) {
             //在区间内不处理
         }
         else {
@@ -474,7 +474,7 @@ class Sheet extends React.Component {
      * 合并单元格   
      */
     merge() {
-        if (this.state.startRowIndex != null && (this.state.startRowIndex != this.endRowIndex && this.state.startColumnIndex != this.endColumnIndex)) {
+        if (this.state.startRowIndex !==null && (this.state.startRowIndex !==this.endRowIndex && this.state.startColumnIndex !==this.endColumnIndex)) {
             let sheet = JSON.parse(JSON.stringify(this.state.sheet));
             let { startRowIndex, endRowIndex, startColumnIndex, endColumnIndex } = this.state;
             for (let i = startRowIndex; i <= endRowIndex; i++) {
@@ -497,7 +497,7 @@ class Sheet extends React.Component {
      */
     changeProps(props, value) {
         try{
-            if (this.state.startRowIndex != null) {
+            if (this.state.startRowIndex !==null) {
                 let sheet = JSON.parse(JSON.stringify(this.state.sheet));
                 let { startRowIndex, endRowIndex, startColumnIndex, endColumnIndex } = this.state;
                 for (let i = startRowIndex; i <= endRowIndex; i++) {
@@ -523,7 +523,7 @@ class Sheet extends React.Component {
     changeCells(props) {
         let sheet = this.state.sheet;
         try {
-            if (this.state.startRowIndex != undefined && this.state.startRowIndex != undefined) {
+            if (this.state.startRowIndex !==undefined && this.state.startRowIndex !==undefined) {
                 switch (props) {
                     case "addCellDown":
                         break;
@@ -571,7 +571,7 @@ class Sheet extends React.Component {
     render() {
         if (this.props.active) {
             //取选中的单元格中的第一个单元格作为属性
-            let selectionCellProps = this.state.startRowIndex != null ? this.state.sheet.cells[this.state.startRowIndex][this.state.startColumnIndex] : {};
+            let selectionCellProps = this.state.startRowIndex !==null ? this.state.sheet.cells[this.state.startRowIndex][this.state.startColumnIndex] : {};
             let position = this.getSelectionPosition();
             return <div className="wasabi-excel-sheet" id={this.state.sheetcontainerid}>
                 <Tool ref={this.tool} cellProps={selectionCellProps} value={this.state.value} onClick={this.onToolClick} onChange={this.onChange} activeIndex={this.state.activeIndexTool} changeToolActive={this.changeToolActive}></Tool>

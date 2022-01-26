@@ -177,7 +177,7 @@ export default {
                                 for (let k = 0; k < headerNames.length - 1; k++) {
                                     let cname = headerNames[k].split("|");//得到在数据中的列名，及值 
         
-                                    if (dataCurrentRow[cname[0]] != cname[1]) {
+                                    if (dataCurrentRow[cname[0]] !==cname[1]) {
                                         //当前行找不到rows对应的数据
                                         find = false;
                                     }
@@ -186,7 +186,7 @@ export default {
                                 for(let r=0;r<rowsTreeDataId.length;r++){
                                     let rname = rowsTreeDataId[r].split("|");//得到在数据中的列名，及值 
         
-                                    if (dataCurrentRow[rname[0]] != rname[1]) {
+                                    if (dataCurrentRow[rname[0]] !==rname[1]) {
                                         //当前行找不到rows对应的数据
                                         find = false;
                                     }

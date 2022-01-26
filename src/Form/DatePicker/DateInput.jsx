@@ -23,7 +23,7 @@ class DateInput extends React.Component {
         this.timeInput = this.timeInput.bind(this);
     }
     static getDerivedStateFromProps(props, state) {
-        if (props.value != state.oldPropsValue) {//父组件强行更新了            
+        if (props.value !==state.oldPropsValue) {//父组件强行更新了            
             return {
                 value: props.value || "",
                 oldPropsValue: props.value
@@ -66,7 +66,7 @@ class DateInput extends React.Component {
         switch (this.props.type) {
             case "time":
                 reg = /^\d{1,2}$|^\d{2,2}:?$|^\d{2,2}:([0-5]|[0-5]\d)$/;
-                if (value.length == event.target.selectionStart && reg.test(value) != true) {//值的输入不合法
+                if (value.length == event.target.selectionStart && reg.test(value) !==true) {//值的输入不合法
                     //末尾输入，格式不正确，
                     return false;
                 }
@@ -76,7 +76,7 @@ class DateInput extends React.Component {
                 break;
             case "date":
                 reg = /^\d{1,4}-?$|^\d{4,4}-(0[1-9]*|1[0-2]*)-?$|^\d{4,4}-(0[1-9]|1[0-2])-(0[1-9]*|[1-2][0-9]*|3[0-1]*)$/;
-                if (value.length == event.target.selectionStart && reg.test(value) != true) {
+                if (value.length == event.target.selectionStart && reg.test(value) !==true) {
                     //末尾输入，格式不正确
                     return false;
                 }
@@ -87,7 +87,7 @@ class DateInput extends React.Component {
             case "datetime":
                 //时间后面的输入只做了简单验证，否则太长了，通过控制输入来处理
                 reg = /^\d{1,4}-?$|^\d{4,4}-(0[1-9]*|1[0-2]*)-?$|^\d{4,4}-(0[1-9]|1[0-2])-(0[1-9]*|[1-2][0-9]*|3[0-1]*)$|^\d{4,4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\s?[\d:]*$/;
-                if (value.length == event.target.selectionStart && reg.test(value) != true) {
+                if (value.length == event.target.selectionStart && reg.test(value) !==true) {
                     //末尾输入，格式不正确
                     return false;
                 }

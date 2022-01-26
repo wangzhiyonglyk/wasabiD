@@ -13,11 +13,11 @@ import Msg from "../../Info/Msg";
 
 function LiView(props) {
     //half,是从tree那里来的
-    const { data, value, half, readOnly, onSelect } = props;
+    let { data, value = "", half, readOnly, onSelect } = props;
     let control = null;
     const isChecked = (child) => {
         let checked = false;
-        if (value && (("," + value.toString() + ",").indexOf("," + child.value + ",") > -1)) {
+        if ((("," + value.toString() + ",").indexOf("," + (child.value ?? "") + ",") > -1)) {
             checked = true;
         }
         return checked;
@@ -25,9 +25,9 @@ function LiView(props) {
     if (data && data instanceof Array && data.length > 0) {
         control = data.map((child, index) => {
             let checked = isChecked(child);
-            return <li key={index} onClick={onSelect.bind(this, child.value, child.text, child)}  >
-            
-                <label className={("checkbox-label ")+(checked?" checked ":" ")+(half?" halfcheck ":"")} readOnly={readOnly} ></label>
+            return <li key={index} onClick={onSelect.bind(this, (child.value ?? ""), child.text, child)}  >
+
+                <label className={("checkbox-label ") + (checked ? " checked " : " ") + (half ? " halfcheck " : "")} readOnly={readOnly} ></label>
                 <div className={"checktext " + (checked ? " checked" : "")} readOnly={readOnly} >{child.text}</div>
             </li >
         })
@@ -44,12 +44,13 @@ class CheckBox extends React.Component {
         }
         this.setValue = this.setValue.bind(this);
         this.getValue = this.getValue.bind(this);
+        this.onClear = this.onClear.bind(this);
         this.onSelect = this.onSelect.bind(this);
     }
     static getDerivedStateFromProps(props, state) {
-        if (props.value != state.oldPropsValue) {//父组件强行更新了            
+        if (props.value !== state.oldPropsValue) {//父组件强行更新了            
             return {
-                value: props.value || "",
+                value: props.value??"",
                 text: propsTran.processText(props.value, props.data).join(","),
                 oldPropsValue: props.value
             }
@@ -67,6 +68,13 @@ class CheckBox extends React.Component {
         return this.state.value;
     }
 
+    onClear() {
+        this.setState({
+            value: "",
+            text: "",
+        })
+        this.props.onSelect && this.props.onSelect("", "", this.props.name, {});
+    }
     /**
      * 选择事件
      * @param {*} value 
@@ -74,11 +82,12 @@ class CheckBox extends React.Component {
      * @param {*} row 
      * @returns 
      */
-    onSelect(value = "", text,row) {//选中事件
+    onSelect(value = "", text, row) {//选中事件
         if (this.props.readOnly) {
             return;
         }
-        if (value!=null&&value!=undefined&&value!="") {//0是有效值
+        console.log("test");
+        if (value !== "") {//0是有效值
             let newValue = this.state.value.toString() || ""
             let newText = this.state.text.toString() || "";
             newValue = newValue ? newValue.split(",") : [];
@@ -94,8 +103,8 @@ class CheckBox extends React.Component {
 
             }
             else {
-                newValue.push(value+"");
-                newText.push(text+"");
+                newValue.push(value + "");
+                newText.push(text + "");
             }
             this.setState({
                 value: newValue.join(","),
@@ -110,7 +119,7 @@ class CheckBox extends React.Component {
 
     }
     shouldComponentUpdate(nextProps, nextState) {
-        if (func.diff(nextProps, this.props,false)) {
+        if (func.diff(nextProps, this.props, false)) {
             return true;
         }
         if (func.diff(nextState, this.state)) {
@@ -122,8 +131,8 @@ class CheckBox extends React.Component {
     render() {
         const { data, half, readOnly } = this.props;
 
-        const liprops = { data, half, readOnly, onSelect: this.onSelect,value:this.state.value };
+        const liprops = { data, half, readOnly, onSelect: this.onSelect, value: this.state.value };
         return <ul className="wasabi-checkul" ><LiView {...liprops} ></LiView> {this.props.children} </ul>
     }
 }
-export default validateHoc(loadDataHoc(CheckBox, "checkbox"),"checkbox");
+export default validateHoc(loadDataHoc(CheckBox, "checkbox"), "checkbox");

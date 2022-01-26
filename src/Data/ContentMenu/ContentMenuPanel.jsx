@@ -41,7 +41,7 @@ class ContentMenuPanel extends React.Component {
     }
     render() {
         return <div id={this.containerid} className={"menu-item " + (this.props.className || "")} style={this.props.style || null}
-            onClick={this.onClick.bind(this,this.props.name||"")} onMouseOver={this.onMouseOver.bind(this, this.props.index)} onMouseOut={this.onMouseOut}>
+            onClick={this.onClick.bind(this,this.props.name??"")} onMouseOver={this.onMouseOver.bind(this, this.props.index)} onMouseOut={this.onMouseOut}>
                {
                 React.Children.map(this.props.children, (child, index) => {
                     if (child) {

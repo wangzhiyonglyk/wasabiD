@@ -17,10 +17,10 @@ class Box extends  React.Component{
     }
  
     render(){
-    return     <div   className={"box "+(this.props.className||"")} style={this.props.style}>
+    return     <div   className={"box "+(this.props.className??"")} style={this.props.style}>
         <div className="box-title">
     <span className={"label label-"+this.props.theme}>{this.props.dateTitle}</span>
-    <h5>{this.props.title||""}</h5>
+    <h5>{(this.props.title??"")}</h5>
         </div>
         <div className="box-content">
             <h1 className="no-margins">{this.props.content}</h1>

@@ -97,8 +97,8 @@
               , e = Math.max(a.r, a.g, a.b)
               , c = e - d;
             b.b = e;
-            b.s = 0 != e ? 255 * c / e : 0;
-            b.h = 0 != b.s ? a.r == e ? (a.g - a.b) / c : a.g == e ? 2 + (a.b - a.r) / c : 4 + (a.r - a.g) / c : -1;
+            b.s = 0 !==e ? 255 * c / e : 0;
+            b.h = 0 !==b.s ? a.r == e ? (a.g - a.b) / c : a.g == e ? 2 + (a.b - a.r) / c : 4 + (a.r - a.g) / c : -1;
             e == d && (b.h = 0);
             b.h *= 60;
             0 > b.h && (b.h += 360);

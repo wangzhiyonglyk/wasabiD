@@ -38,7 +38,7 @@ export default {
             checkedIndex = new Map();
         }
         let key = this.getKey(index);//获取关键字
-        if (value && value != "") {
+        if (value && value !=="") {
             checkedData.set(key, this.state.data[index]);
             checkedIndex.set(index + "", index);
         } else {
@@ -50,7 +50,7 @@ export default {
             checkedData: checkedData,
             checkedIndex: checkedIndex
         })
-        if (this.props.onChecked != null) {
+        if (this.props.onChecked !==null) {
             var data = [];
             for (let value of checkedData.values()) {
                 data.push(value);
@@ -106,7 +106,7 @@ export default {
             }
         }
         this.setState({ checkedData: checkedData, checkedIndex: checkedIndex });
-        if (this.props.onChecked != null) {//执行父组件的onchecked事件
+        if (this.props.onChecked !==null) {//执行父组件的onchecked事件
             var data = [];
             for (let value of checkedData.values()) {
                 data.push(value);
@@ -282,7 +282,7 @@ export default {
             })
         }
         else {
-            if (this.props.onDetail != null) {
+            if (this.props.onDetail !==null) {
                 const detail = this.props.onDetail(rowData, rowIndex);
                 if (!detail) {
                     this.setState({

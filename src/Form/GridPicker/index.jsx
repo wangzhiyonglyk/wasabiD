@@ -31,7 +31,7 @@ class GridPicker extends Component {
         this.onSelect = this.onSelect.bind(this);
     }
     static getDerivedStateFromProps(props, state) {
-        if (props.value != state.oldPropsValue) {//父组件强行更新了
+        if (props.value !==state.oldPropsValue) {//父组件强行更新了
             return {
                 value: props.value || "",
                 oldPropsValue: props.value

@@ -25,7 +25,7 @@ class MenuItem extends React.Component {
     }
 
     render() {
-        return <li className={(this.props.className||"")+ " " + (this.props.active ? "active" : "")} onClick={this.props.onClick}>
+        return <li className={(this.props.className??"")+ " " + (this.props.active ? "active" : "")} onClick={this.props.onClick}>
             <a style={{ textAlign: "left", marginLeft: "40px" }} >
                 <i className={ this.props.iconCls||"icon-txt"} style={{marginRight:10}}></i>
                 <span >

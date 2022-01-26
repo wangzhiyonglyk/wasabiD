@@ -154,7 +154,7 @@ class DataGrid extends Component {
             }
             newState.total = props.total || props.data.length || 0
         }
-        else if (props.url  && (props.url != state.rawUrl || func.diff(props.params, state.rawParams))) {
+        else if (props.url  && (props.url !==state.rawUrl || func.diff(props.params, state.rawParams))) {
             //有url,并且分页,url或者参数有变
             newState = {
                 urlLoadData: true,//重新加载数据

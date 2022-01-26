@@ -54,7 +54,7 @@ class Modal extends React.Component {
         window.modalZindex = window.modalZindex || 10;
         window.modalZinde -= 1;
         this.setState({ visible: false });
-        if (this.props.close != null) {
+        if (this.props.close !==null) {
             this.props.close();
         }
     }
@@ -70,7 +70,7 @@ class Modal extends React.Component {
      */
     mouseMoveHandler(event) {
 
-        if (this.position != null) {
+        if (this.position !==null) {
             let target = this.resizeref.current.target();
             if (event.clientX - this.oldClientX > 5 || event.clientX - this.oldClientX < -5) {//防止抖动
                 target.style.left = (this.position.left + event.clientX - this.oldClientX) + "px";
@@ -108,13 +108,13 @@ class Modal extends React.Component {
     }
 
     OKHandler() {
-        if (this.props.OKHandler != null) {
+        if (this.props.OKHandler !==null) {
             this.props.OKHandler();
         }
     }
     cancelHandler() {
         this.close();//关闭
-        if (this.props.cancelHandler != null) {
+        if (this.props.cancelHandler !==null) {
             this.props.cancelHandler();
         }
     }

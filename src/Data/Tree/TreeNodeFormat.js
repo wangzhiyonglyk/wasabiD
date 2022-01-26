@@ -27,4 +27,16 @@ class TreeNodeRow {
         this.isLast=false;//是否是同级最后一个节点
     }
 }
-export default TreeNodeRow;
+function formatterTreeNode(props){
+    let row = new TreeNodeRow();//得到节点数据，有默认值，并且不包含方法
+    for (let key in props) {
+        if(typeof props[key]!=="function")
+        {
+            row[key] = props[key]??row[key];
+        }
+       
+    }
+    return row;
+}
+
+export default formatterTreeNode;

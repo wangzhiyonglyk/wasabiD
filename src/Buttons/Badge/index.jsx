@@ -30,7 +30,7 @@ class Badge extends Component {
     }
 
     render() {
-        return <div className={"wasabi-badge " +(this.props.className||"") +" "+ (this.props.theme||"primary")} style={this.props.style} onClick={this.props.onClick}>
+        return <div className={"wasabi-badge " +(this.props.className??"") +" "+ (this.props.theme||"primary")} style={this.props.style} onClick={this.props.onClick}>
             {this.props.children}
             <sup className="wasabi-badge-content" style={{display:this.state.hide?"none":"block"}}>{this.props.tag>this.props.max?this.props.max+"+":this.props.tag}</sup></div>
     }

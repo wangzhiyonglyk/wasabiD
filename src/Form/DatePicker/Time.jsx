@@ -45,8 +45,8 @@ class Time extends React.Component {
     static getDerivedStateFromProps(props, state) {
         if (func.diff((props.hour || "") + "-" + (props.minute || ""), state.oldPropsValue)) {
             let date = new Date();
-            let hour = props.hour != null && props.hour != undefined ? props.hour : date.getHours();
-            let minute = props.hour != null && props.hour != undefined ? props.minute : date.getMinutes();
+            let hour = props.hour !==null && props.hour !==undefined ? props.hour : date.getHours();
+            let minute = props.hour !==null && props.hour !==undefined ? props.minute : date.getMinutes();
             return {
                 oldPropsValue: (props.hour || "") + "-" + (props.minute || ""),
                 hour: hour,
@@ -118,7 +118,7 @@ class Time extends React.Component {
             minute: value * 1,
             hourVisible: true,
         }, () => {
-            if (this.props.onSelect != null) {
+            if (this.props.onSelect !==null) {
                 let value = this.getValue();
                 this.props.onSelect(value, value, this.props.name);
             }

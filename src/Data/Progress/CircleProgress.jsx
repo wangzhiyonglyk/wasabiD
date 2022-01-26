@@ -14,14 +14,14 @@ class CircleProgress extends React.Component {
             cantainerid:Math.random().toString(36).slice(-8) + 'cantainer',
             canvasid: Math.random().toString(36).slice(-8) + 'canvas',
             oldPropsValue: null,
-            value: this.props.value||"",//初始化的0
+            value: this.props.value??"",//初始化的0
         }
     }
 
     static getDerivedStateFromProps(props, state) {
-        if (props.value != state.oldPropsValue) {
+        if (props.value !==state.oldPropsValue) {
             return {
-                value: props.value||"",
+                value: props.value??"",
                 oldPropsValue: props.value
             }
         }

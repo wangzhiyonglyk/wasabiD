@@ -40,14 +40,14 @@ class Drop extends  React.Component {
         this.setState({
             dropClass: "drop"
         })
-        let dragData=window.localStorage.getItem("wasabi-dragItem")||"";
+        let dragData=window.localStorage.getItem("wasabi-dragItem")??"";
         window.localStorage.removeItem("wasabi-dragItem");
         this.props.onDrop(JSON.parse(dragData));
    
     }
     render() {
         return (
-            <div className={(this.props.className||"")+ " " + this.state.dropClass} style={this.props.style} onDrop={this.dropHandler}
+            <div className={(this.props.className??"")+ " " + this.state.dropClass} style={this.props.style} onDrop={this.dropHandler}
                  onDragEnter={this.dragEnterHandler} onDragOver={this.dragOverHandler}
                  onDragLeave={this.dragLeaveHandler}>
                 {

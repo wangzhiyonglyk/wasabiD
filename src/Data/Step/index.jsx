@@ -16,7 +16,7 @@ class Step extends React.Component {
         }
     }
     static getDerivedStateFromProps(props, state) {
-        if (props.activeIndex != state.oldPropsActiveIndex) {
+        if (props.activeIndex !==state.oldPropsActiveIndex) {
             return {
                 activeIndex: props.activeIndex,
                 oldPropsActiveIndex: props.activeIndex
@@ -39,7 +39,7 @@ class Step extends React.Component {
                             if (typeof child.type !== "function") {//非react组件
                                 return child;
                             } else {
-                                return React. cloneElement(child, {key: index, theme:this.props.theme,active:this.state.activeIndex!=null&&this.state.activeIndex!=undefined&&this.state.activeIndex>=(index)?true:false,stepIndex:(index+1) })
+                                return React. cloneElement(child, {key: index, theme:this.props.theme,active:this.state.activeIndex!==null&&this.state.activeIndex!==undefined&&this.state.activeIndex>=(index)?true:false,stepIndex:(index+1) })
                             }
 
                         })

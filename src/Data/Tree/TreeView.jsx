@@ -10,57 +10,57 @@ create by wangzhiyong 创建树组件
  2022-01-06 增加虚线可配功能
  2022-01-07 增加类型
  */
-import React from "react";
-import TreeNode from "./TreeNode.jsx";
-function TreeView(props) {
-    let nodeControl = [];
-    //全局属性
-    const { componentType,  selectAble, checkStyle, renameAble, removeAble, asyncAble } = props;
-    //得到传下去的属性
-    const treeProps = { componentType,selectAble, checkStyle, renameAble, removeAble, asyncAble, clickId: props.clickId, loadingId: props.loadingId };
-    //全局事件
-    const treeEvents = {
-        beforeDrag: props.beforeDrag,
-        beforeRemove: props.beforeRemove,
-        beforeDrop: props.beforeDrop,
-        beforeRename: props.beforeRename,
-        onClick: props.onClick,
-        onDoubleClick: props.onDoubleClick,
-        onChecked: props.onChecked,
-        onRemove: props.onRemove,
-        onExpand: props.onExpand,
-        onRename: props.onRename,
-        onDrop: props.onDrop,
-        onDrag: props.onDrag
-    }
-    let data =props.visibleData;
-    if (data instanceof Array && data.length > 0) {
-        data.map((item, index) => {
-            let isParent = false;//是否为父节点
-            if (item.isParent == true || (item.children instanceof Array && item.children.length > 0)) {//如果明确规定了，或者子节点不为空，则设置为父节点
-                isParent = true;
-            }
-
-            //通过输入框的值与自身的勾选情况综合判断
-            nodeControl.push(<TreeNode
-                key={"treenode-" + item.id || item.text}
-                {
-                ...treeProps
-                }
-                {...item}
-                isParent={isParent}
-                {
-                ...treeEvents
-                }
-            />);
-        });
-    }
-    return <ul id={props.treeid} className={"wasabi-tree clearfix " + (props.dotted === false ? " nodotted " : "") }>
-            {nodeControl}
-         </ul>
-  
-
-
-}
-
-export default React.memo(TreeView);
+ import React from "react";
+ import TreeNode from "./TreeNode.jsx";
+ function TreeView(props) {
+     let nodeControl = [];
+     //全局属性
+     const { componentType,  selectAble, checkStyle, renameAble, removeAble, asyncAble } = props;
+     //得到传下去的属性
+     const treeProps = { componentType,selectAble, checkStyle, renameAble, removeAble, asyncAble, clickId: props.clickId, loadingId: props.loadingId };
+     //全局事件
+     const treeEvents = {
+         beforeDrag: props.beforeDrag,
+         beforeRemove: props.beforeRemove,
+         beforeDrop: props.beforeDrop,
+         beforeRename: props.beforeRename,
+         onClick: props.onClick,
+         onDoubleClick: props.onDoubleClick,
+         onChecked: props.onChecked,
+         onRemove: props.onRemove,
+         onExpand: props.onExpand,
+         onRename: props.onRename,
+         onDrop: props.onDrop,
+         onDrag: props.onDrag
+     }
+     let data =props.visibleData;
+     if (data instanceof Array && data.length > 0) {
+         data.map((item, index) => {
+             let isParent = false;//是否为父节点
+             if (item.isParent == true || (item.children instanceof Array && item.children.length > 0)) {//如果明确规定了，或者子节点不为空，则设置为父节点
+                 isParent = true;
+             }
+ 
+             //通过输入框的值与自身的勾选情况综合判断
+             nodeControl.push(<TreeNode
+                 key={"treenode-" + item.id || item.text}
+                 {
+                 ...treeProps
+                 }
+                 {...item}
+                 isParent={isParent}
+                 {
+                 ...treeEvents
+                 }
+             />);
+         });
+     }
+     return <ul id={props.treeid} className={"wasabi-tree clearfix " + (props.dotted === false ? " nodotted " : "") }>
+             {nodeControl}
+          </ul>
+   
+ 
+ 
+ }
+ 
+ export default React.memo(TreeView);

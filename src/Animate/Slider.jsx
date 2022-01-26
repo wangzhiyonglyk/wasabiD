@@ -176,7 +176,7 @@ class Slider extends React.Component {
     // console.log("newWidthOffset",React.Children.count(this.props.children)+this.offsetIndex,preIndex,nextIndex)
     //处理子元素的动画
     for (let i = 0; i < this.banner.current.children.length; i++) {
-      if (preIndex != i) {//非上一张恢复透明
+      if (preIndex !==i) {//非上一张恢复透明
         this.banner.current.children[i].style.opacity = 1;
         this.banner.current.children[i].style.transitionProperty = null;
         this.banner.current.children[i].style.transitionDuration = "0ms";
@@ -225,7 +225,7 @@ class Slider extends React.Component {
 
     //处理子元素的动画
     for (let i = 0; i < this.banner.current.children.length; i++) {
-      if (preIndex != i) {//非上一张恢复透明
+      if (preIndex !==i) {//非上一张恢复透明
         this.banner.current.children[i].style.opacity = 1;
         this.banner.current.children[i].style.transitionProperty = null;
         this.banner.current.children[i].style.transitionDuration = "0ms";

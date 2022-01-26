@@ -31,7 +31,7 @@ class Panel extends React.Component {
         })
     }
     buttonClick(name, title) {
-        if (this.props.buttonClick != null) {
+        if (this.props.buttonClick !==null) {
             this.props.buttonClick(name, title);
         }
     }

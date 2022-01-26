@@ -1,7 +1,7 @@
-import func from "../../libs/func";
+
+
 //树的公共方法
 const treeFunc = {
-
     /***
      * 通过id找到节点
      */
@@ -94,24 +94,24 @@ const treeFunc = {
      * @returns 
      */
     setChecked(data, node, checked, checkType) {
-
         try {
             let nodes = this.findLinkNodesByPath(data, node._path);
             if (nodes && nodes.length > 0) {
                 let leaf = nodes[nodes.length - 1];//叶子节点，即实际勾选的节点
+                leaf.checked = !!checked;
                 //设置节点及子节点的勾选
                 if (checked && checkType && checkType.y && checkType.y.indexOf("s") > -1) {
-                    leaf = this.setNodeChildrenChecked(leaf, checked);
+                    leaf = this.setNodeChildrenChecked(leaf, leaf.checked);
                 }
                 else if (!checked && checkType && checkType.n && checkType.n.indexOf("s") > -1) {
-                    leaf = this.setNodeChildrenChecked(leaf, checked);
+                    leaf = this.setNodeChildrenChecked(leaf, leaf.checked);
 
                 }
                 //设置祖先节点
-                if (checked && checkType && checkType.y && checkType.y.indexOf("p") > -1) {
+                if (leaf.checked && checkType && checkType.y && checkType.y.indexOf("p") > -1) {
                     this.setNodeParentsChecked(nodes);
                 }
-                else if (!checked && checkType && checkType.n && checkType.n.indexOf("p") > -1) {
+                else if (!leaf.checked && checkType && checkType.n && checkType.n.indexOf("p") > -1) {
                     this.setNodeParentsChecked(nodes);
                 }
             }
@@ -119,12 +119,7 @@ const treeFunc = {
         catch (e) {
 
         }
-
         return data;
-
-
-
-
     },
     /**
      * 单选时的勾选
@@ -137,17 +132,14 @@ const treeFunc = {
         try {
             if (radioType == "all") {
                 data = treeFunc.clearChecked(data);
-                let nodes = this.findLinkNodesByPath(data, node._path);
-                if (nodes && nodes.length > 0) {
-                    nodes[nodes.length - 1].checked = checked;
-                    nodes[nodes.length - 1].half = false;
-                }
+                let node = this.findNodeByPath(data, (node._path ??treeFunc.findNodeById(node.id)._path));
+                node.checked = checked;
+                node.half = false;
             }
             else if (radioType == "level") {
-
-                let nodes = this.findLinkNodesByPath(data, node._path);
+                let nodes = this.findLinkNodesByPath(data, node._path ? node._path : treeFunc.findNodeById(node.id)?._path);
                 if (nodes && nodes.length >= 2) {
-                    //有父节点
+                    //有父节点,去设置兄弟节点
                     let parentRemoveNode = nodes[nodes.length - 2];
                     if (parentRemoveNode.children && parentRemoveNode.children.length > 0) {
                         for (let i = 0; i < parentRemoveNode.children.length; i++) {
@@ -286,16 +278,14 @@ const treeFunc = {
         }
     },
     /**
-     * 设置折叠
-     * @param {*} data 
-     * @param {*} node 
-     */
-    setOpen(data, node) {
-        let nodes = this.findLinkNodesByPath(data, node._path);
-        if (nodes && nodes.length > 0) {
-            let leaf = nodes[nodes.length - 1];//叶子节点，即实际的节点    
-            leaf.open = leaf.open == null || leaf.open == undefined ? false : !leaf.open;
-        }
+    * 设置折叠
+    * @param {*} data 
+    * @param {*} node 
+    * @param {*} open
+    */
+    setOpen(data, node, open) {
+        node = this.findNodeByPath(data, (node._path ??treeFunc.findNodeById(node.id)._path));
+        node.open = open;
         return data;
     },
     /**
@@ -306,7 +296,7 @@ const treeFunc = {
      */
     renameNode(data, node, newText) {
         if (data && data.length > 0) {
-            let nodes = treeFunc.findLinkNodesByPath(data, node._path);
+            let nodes = treeFunc.findLinkNodesByPath(data, (node._path ??treeFunc.findNodeById(node.id)._path));
             if (nodes) {
                 nodes[nodes.length - 1].text = newText;
             }
@@ -315,15 +305,21 @@ const treeFunc = {
     },
     /**
      * 删除节点
-     * @param {*} id 
+     * @param {*} node 
      */
     removeNode(data, node) {
-        let nodes = treeFunc.findLinkNodesByPath(data, node._path);
+        let nodes = treeFunc.findLinkNodesByPath(data, (node._path ??treeFunc.findNodeById(node.id)._path));
         if (nodes.length == 1) {
             //根节点
-            data.splice(nodes[0]._path[0], 1);//删除
-            //改变所有节点的路径
-            data = treeFunc.setChildrenPath("", [], data);
+            try {
+
+                data.splice(nodes[0]._path[0], 1);//删除
+               return treeFunc.setPath(data);
+
+            }
+            catch (e) {
+                console.log("removeNode", nodes)
+            }
         }
         else {
             //父节点删除子节点
@@ -430,6 +426,23 @@ const treeFunc = {
         }
         return data;
     },
+
+    /**
+     * 更改灵气节点的路径
+     * @param {*} data 数据
+     * @param {*} path 路径前缀
+     */
+    setPath(data, path=[]) {
+        if (data && data instanceof Array && data.length > 0) {
+            for (let i = 0; i < data.length; i++) {
+                data[i]._path = [...path, i];
+                if (data[i].children && data[i].children.length > 0) {
+                    treeFunc.setChildrenPath(data[i].pId, data[i]._path, data[i].children)
+                }
+            }
+        }
+        return data;
+    },
     /**
      * 更改子节点的路径
      * @param {*} pId 
@@ -444,7 +457,7 @@ const treeFunc = {
                     children[i]._path = [...path, i];
                 }
                 catch (e) {
-                    console.log(i, children, children[i])
+                    console.log("setChildrenPath", i, children, children[i])
                 }
                 children[i].pId = pId;
                 if (children[i].children && children[i].children.length > 0) {
@@ -489,27 +502,29 @@ const treeFunc = {
     /**
      * 添加子节点
      */
-    appendChildren(data, children, row) {
-        if (row ) {
-            if(!row._path)
-            {
-                row=treeFunc.findNodeById(data,row.id);
+    appendChildren(data=[], children, row) {
+        //格式化
+        if (row) {
+            if (!row._path) {//没有路径
+                row = treeFunc.findNodeById(data, row.id);
             }
             let nodes = treeFunc.findLinkNodesByPath(data, row._path);
             if (nodes && nodes.length > 0) {
                 //找到了
                 let leaf = nodes[nodes.length - 1];
-                let oldChildren=leaf.children??[];
-                leaf.children =[].concat(oldChildren, children);
+                let oldChildren = leaf.children ?? [];
+                leaf.children = [].concat(oldChildren, children);
                 //设置节点路径
                 leaf.children = treeFunc.setChildrenPath(leaf.id, leaf._path, leaf.children);
             }
             return data;
         }
         else {//根节点
-            data = data.concat(children);
-            data = treeFunc.setChildrenPath("", [], data);
+            data = data.concat(children);     
+            data = treeFunc.setPath(data);
+            return data;
         }
+    
 
     },
     /**
@@ -536,5 +551,4 @@ const treeFunc = {
         return [];
     }
 }
-
 export default treeFunc

@@ -261,7 +261,7 @@ let propsTran = {
      */
     handlerLabelStyle(labelStyle, maxWidth) {
         labelStyle = func.clone(labelStyle) || {};
-        labelStyle.width = labelStyle.width != null && labelStyle.width != undefined ? labelStyle.width : maxWidth;
+        labelStyle.width = labelStyle.width !==null && labelStyle.width !==undefined ? labelStyle.width : maxWidth;
         return labelStyle;
     },
 

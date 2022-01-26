@@ -21,7 +21,7 @@ class Header extends  React.Component{
     }
     
     render() {
-        return <div className={"wasabi-layout-header  layout-panel "+(this.props.className||"")  }
+        return <div className={"wasabi-layout-header  layout-panel "+(this.props.className??"")  }
          style={ {height:this.props.height}}>
             {  this.props.children}
         </div>

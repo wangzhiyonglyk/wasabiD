@@ -71,7 +71,7 @@ class Editor extends React.Component {
     render() {
         {/* 将生成编辑器 */ }
 
-        return <div> <div ref={this.editorElem} className={this.props.className||""} style={this.props.style}>
+        return <div> <div ref={this.editorElem} className={this.props.className??""} style={this.props.style}>
         </div>
         <Upload ref={this.upload} {...this.props}></Upload>
         </div>

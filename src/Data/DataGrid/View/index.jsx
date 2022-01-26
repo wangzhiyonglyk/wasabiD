@@ -43,7 +43,7 @@ class Grid extends React.PureComponent {
      * @param {*} event 
      */
     onDivideMouseMove(event) {
-        if (this.chosedHeaderColumnIndex != null) {
+        if (this.chosedHeaderColumnIndex !==null) {
             let divide = document.getElementById(this.props.divideid);
             divide.style.left = (event.clientX - this.left) + "px";//这个位置才是相对容器的位置
         }
@@ -53,7 +53,7 @@ class Grid extends React.PureComponent {
      * @param {*} event 
      */
     onDivideMouseUp(event) {
-        if (this.chosedHeaderColumnIndex != null) {
+        if (this.chosedHeaderColumnIndex !==null) {
             let chosedHeaderColumnIndex=this.chosedHeaderColumnIndex;
             if (this.props.detailAble) {chosedHeaderColumnIndex++;}
             if (this.props.rowNumber){chosedHeaderColumnIndex++;}

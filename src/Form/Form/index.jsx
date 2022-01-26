@@ -28,7 +28,7 @@ class Form extends Component {
     }
 
     static getDerivedStateFromProps(props, state) {
-        if (props.disabled != state.rawDisabled) {
+        if (props.disabled !==state.rawDisabled) {
             return {
                 rawDisabled: props.disabled,
                 disabled: props.disabled,
@@ -125,7 +125,7 @@ class Form extends Component {
         let combinxRefs = this.getRefs();
         for (let i = 0; i < combinxRefs.length; i++) {
             let cref = combinxRefs[i];
-            if (cref && cref.props.name && data[cref.props.name] != null && data[cref.props.name] != undefined) {
+            if (cref && cref.props.name && data[cref.props.name] !==null && data[cref.props.name] !==undefined) {
                 cref.setValue && cref.setValue(data[cref.props.name]);
             }
             else if (cref && cref.setData) {//表单或者布局组件

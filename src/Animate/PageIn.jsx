@@ -55,7 +55,7 @@ class PageIn extends React.Component {
          this.props.close&&this.props.close()
     }
   render() {
-  return <div  onDoubleClick={this.onDoubleClick.bind(this)} className={"wasabi-section  " +(this.props.className||"")+" "+(this.state.animate==1?  "wasabi-section-anim "+this.props.inAnimate+"In":this.state.animate==0? "wasabi-section-anim "+this.props.inAnimate+"Out":"")} style={this.props.style}>{this.props.children}</div>
+  return <div  onDoubleClick={this.onDoubleClick.bind(this)} className={"wasabi-section  " +(this.props.className??"")+" "+(this.state.animate==1?  "wasabi-section-anim "+this.props.inAnimate+"In":this.state.animate==0? "wasabi-section-anim "+this.props.inAnimate+"Out":"")} style={this.props.style}>{this.props.children}</div>
   }
 
 

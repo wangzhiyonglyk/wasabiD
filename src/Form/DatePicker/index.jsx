@@ -43,7 +43,7 @@ class DatePicker extends Component {
     this.renderTimeRange = this.renderTimeRange.bind(this);
   }
   static getDerivedStateFromProps(props, state) {
-    if (props.value != state.oldPropsValue) {
+    if (props.value !==state.oldPropsValue) {
       return {
         value: props.value,
         oldPropsValue: props.value
@@ -163,7 +163,7 @@ class DatePicker extends Component {
     if (regs.datetime.test(datetime)) {
       //如果不为空
       var splitdate = datetime.split(" ")[0];
-      if (splitdate && splitdate != "") {
+      if (splitdate && splitdate !=="") {
         returnvalue = {
           year: splitdate.split("-")[0] * 1,
           month: splitdate.split("-")[1] * 1,

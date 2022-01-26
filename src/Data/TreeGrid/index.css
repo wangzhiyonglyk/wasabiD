@@ -2,6 +2,7 @@
     position: relative;
     width: 100%;
     display: flex;
+    overflow-y: hidden;
 }
 
 .wasabi-treegrid-left{
@@ -70,3 +71,16 @@
     overflow: hidden;
 }
 
+
+
+.wasabi-treegrid-divide{
+    position: absolute;
+    height: 10000px;
+    width: 1px;
+    z-index: 2;
+    top: 0px;
+    display: none;
+    cursor: ew-resize;
+    background-color: var(--border-color);
+      
+}

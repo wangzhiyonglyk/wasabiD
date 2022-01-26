@@ -44,7 +44,7 @@ class Article extends React.Component {
             newState.tempContent = this.formatContent(props.content);
             newState.oldPropsContent = func.clone(props.content);
         }
-        if (props.title != state.oldPropsTitle) {
+        if (props.title !==state.oldPropsTitle) {
             newState.title = props.title;
             newState.oldPropsTitle = props.title;
         }

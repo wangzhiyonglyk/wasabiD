@@ -59,6 +59,7 @@ class GridHeader extends React.Component {
     onMouseDown(headerColumnIndex, event) {
         if (event.target.style.cursor === "ew-resize") {
             let offsetX = event && event.nativeEvent && event.nativeEvent.offsetX;
+            //满足拖动条件，回传父组件处理
             this.props.onHeaderMouseDown && this.props.onHeaderMouseDown(offsetX <= 2 ? headerColumnIndex - 1 : headerColumnIndex, event);
         }
     }
