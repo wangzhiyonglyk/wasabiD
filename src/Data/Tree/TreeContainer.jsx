@@ -478,7 +478,7 @@ function TreeContainer(props, ref) {
          * @param {*} open 
          */
         setOpen(id, open) {
-            dispatch({ type: "setOpen", payload: { id, open } });
+            dispatch({ type: "setOpen", payload: { row:{id}, open } });
         },
         /**
          * 移除某个节点
