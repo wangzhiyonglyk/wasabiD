@@ -132,12 +132,12 @@ export function setRadioChecked(data, node, checked, radioType) {
     try {
         if (radioType ==="all") {
             data = clearChecked(data);
-             node = findNodeByPath(data, (node._path ?? findNodeById(node.id)._path));
+             node = findNodeByPath(data, (node._path ?? findNodeById(data,node.id)._path));
             node.checked = checked;
             node.half = false;
         }
         else if (radioType ==="level") {
-            let nodes = findLinkNodesByPath(data, node._path ? node._path : findNodeById(node.id)?._path);
+            let nodes = findLinkNodesByPath(data, node._path ? node._path : findNodeById(data,node.id)?._path);
             if (nodes && nodes.length >= 2) {
                 //有父节点,去设置兄弟节点
                 let parentRemoveNode = nodes[nodes.length - 2];
@@ -285,7 +285,7 @@ export function checkedAll(data) {
 */
 export function setOpen(data, node, open) {
     try {
-        node = findNodeByPath(data, (node._path ?? findNodeById(node.id)._path));
+        node = findNodeByPath(data, (node._path ?? findNodeById(data,node.id)._path));
         node.open = open;
         return data;
     }
@@ -302,7 +302,7 @@ export function setOpen(data, node, open) {
  */
 export function renameNode(data, node, newText) {
     if (data && data.length > 0) {
-        let nodes = findLinkNodesByPath(data, (node._path ?? findNodeById(node.id)._path));
+        let nodes = findLinkNodesByPath(data, (node._path ?? findNodeById(data,node.id)._path));
         if (nodes) {
             nodes[nodes.length - 1].text = newText;
         }
@@ -314,7 +314,7 @@ export function renameNode(data, node, newText) {
  * @param {*} node 
  */
 export function removeNode(data, node) {
-    let nodes = findLinkNodesByPath(data, (node._path ?? findNodeById(node.id)._path));
+    let nodes = findLinkNodesByPath(data, (node._path ?? findNodeById(data,node.id)._path));
     if (nodes.length === 1) {
         //根节点
         try {

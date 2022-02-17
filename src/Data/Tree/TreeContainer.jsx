@@ -263,7 +263,7 @@ const myReducer = function (state, action) {
                 preState = handlerVisibleData(state, state.sliceBeginIndex, state.sliceEndIndex, data);
                 break;
             case "remove":
-                data = removeNode(state.data, payload);
+                data = removeNode(state.data, {id:payload});
                 preState = handlerVisibleData(state, state.sliceBeginIndex, state.sliceEndIndex, data);
                 break;
             //追加
@@ -482,10 +482,10 @@ function TreeContainer(props, ref) {
         },
         /**
          * 移除某个节点
-         * @param {*} row 
+         * @param {*} id 
          */
-        remove(node) {
-            dispatch({ type: "remove", payload: node });
+        remove(id) {
+            dispatch({ type: "remove", payload: id });
         },
         /**
          * 筛选
