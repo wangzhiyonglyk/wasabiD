@@ -24,7 +24,6 @@ class Form extends Component {
         this.clearData = this.clearData.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
         this.getRefs = this.getRefs.bind(this);
-        this.computerLabelWidth = this.computerLabelWidth.bind(this)
     }
 
     static getDerivedStateFromProps(props, state) {
@@ -207,33 +206,12 @@ class Form extends Component {
             disabled: !!disabled
         })
     }
-    /**
-     * 得到表单中标签的最大宽度，方便对齐
-     */
-    computerLabelWidth() {
-        let maxWidth = 0;//得到最大宽度
-        React.Children.map(this.props.children, (child, index) => {
-
-            if (child && child.props && child.props.label) {
-                let labelStyle = func.clone(child.labelStyle) || {};
-                if (labelStyle && labelStyle.width) {
-                    //如果设置宽度，则不参与计算
-                } else {
-                    let width = func.charWidth(child.props.label);
-                    maxWidth = maxWidth < width ? width : maxWidth;
-                    maxWidth = maxWidth > 160 ? 165 : maxWidth;//超过160就不管了，否则很难看
-                    maxWidth = maxWidth <= 40 ? 60 : maxWidth;
-                }
-
-            }
-        })
-        return maxWidth;
-    }
+  
     render() {
         this.inputs = [];//先清空
-        let maxWidth = this.computerLabelWidth();
+      
         return (
-            <div className={"wasabi-form  clearfix " + (this.props.className || "")} style={this.props.style}>
+            <div className={"wasabi-form  clearfix "+(this.props.labelPosition||"right") + (this.props.className || "")} style={this.props.style}>
                 <div className={"form-body clearfix "} cols={this.props.cols}>
                     {
                         React.Children.map(this.props.children, (child, index) => {
@@ -245,14 +223,13 @@ class Form extends Component {
                                     let data = child.props.data
                                         ? JSON.parse(JSON.stringify(child.props.data))
                                         : null;
-                                    //统一处理标签样式问题，方便对齐
-                                    let labelStyle = propsTran.handlerLabelStyle(child.labelStyle, maxWidth);
+                                   
                                     let ref = child.ref ? child.ref : React.createRef();
                                     typeof ref === "object" ? this.inputs.push(ref) : void (0);//如果对象型添加，字符型（旧语法）事后通过refs来获取
                                     return React.cloneElement(child,
                                         {
                                             data: data,
-                                            labelStyle: labelStyle,
+                                       
                                             disabled: this.props.disabled,
                                             readOnly: this.state.disabled ? this.state.disabled : child.props.readOnly,
                                             key: index, ref: ref
@@ -284,12 +261,14 @@ Form.propTypes = {
     submitHide: PropTypes.bool,
     submitTheme: PropTypes.string,
     onSubmit: PropTypes.func,//提交成功后的回调事件
-    cols: PropTypes.number//一行几列
+    cols: PropTypes.number,//一行几列
+    labelPosition:PropTypes.oneOf(["right","left","top"]),//文本对齐方式
 };
 Form.defaultProps = {
     submitTitle: "提交",//查询按钮的标题
     submitHide: true,//是否隐藏按钮
     submitTheme: "primary",//主题
     cols: 3,//默认3个
+    labelPosition:"right",
 };
 export default Form;

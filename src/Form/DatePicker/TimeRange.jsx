@@ -65,10 +65,7 @@ class TimeRange extends Component {
             firstTime: value,
 
         }, () => {
-            if (this.props.onSelect !==null) {
-
-                this.props.onSelect(this.getValue(), this.getValue(), this.props.name, null);
-            }
+                this.props.onSelect&&this.props.onSelect(this.getValue(), this.getValue(), this.props.name, null);         
         })
 
     }
@@ -87,9 +84,9 @@ class TimeRange extends Component {
             secondTime: value,
 
         }, () => {
-            if (this.props.onSelect !==null) {
-                this.props.onSelect(this.getValue(), this.getValue(), this.props.name, true);
-            }
+       
+                this.props.onSelect&& this.props.onSelect(this.getValue(), this.getValue(), this.props.name, true);
+            
 
         })
 

@@ -18,8 +18,8 @@ class Transfer extends React.Component {
         this.transfer = React.createRef();
         this.up = React.createRef();
         this.down = React.createRef();
-        let realData = propsTran.formatterData("transfer", "", this.props.data, this.props.valueField, this.props.textField);
-        let realSelectData = propsTran.formatterData("transfer", "", this.props.selectData, this.props.valueField, this.props.textField);
+        let realData = propsTran.preprocessForm(this.props.data,this.props.valueField,null,this.props.textField)
+        let realSelectData = propsTran.preprocessForm(this.props.selectData,this.props.valueField,null,this.props.textField)
         this.state = {
             name: this.props.name,
             data: realData,

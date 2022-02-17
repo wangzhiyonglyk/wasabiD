@@ -11,7 +11,7 @@ class TreeNodeRow {
         this.iconCls = "";//默认图标
         this.iconClose = "";//[父节点]关闭图标
         this.iconOpen = "";//[父节点]打开图标
-        this.open = true;//是否处于打开状态
+        this.open = false;//是否处于打开状态
         this.checked = false;//是否被勾选
         this.selectAble = false;//是否允许勾选
         this.draggAble = false;//是否允许拖动，

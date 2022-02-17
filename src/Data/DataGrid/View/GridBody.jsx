@@ -195,7 +195,7 @@ class GridBody extends React.PureComponent {
             onClick={this.onClick.bind(this, rowData, rowOrderIndex, columnIndex)}
             onDoubleClick={this.onDoubleClick.bind(this, rowData, rowOrderIndex, columnIndex)}
             key={'cell-' + rowOrderIndex.toString() + '-' + columnIndex.toString()}
-            className={header.export === false ? "wasabi-noexport" : ""}//为了不导出
+            className={(this.props.focusIndex===rowOrderIndex&&this.props.focusColumnIndex===columnIndex?" focus ":"")+ (header.export === false ? "wasabi-noexport" : "")}//为了不导出
             tdStyle={{ textAlign: header.align, position: header.sticky ? "sticky" : null, zIndex: header.sticky ? 1 : null, left: header.sticky ? this.props.borderAble ? stickyLeft : stickyLeft : null }}
            
         >

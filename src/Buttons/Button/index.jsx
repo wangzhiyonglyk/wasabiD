@@ -74,16 +74,7 @@ class Button extends React.Component {
             isdelay:false
         })
     }
-    shouldComponentUpdate(nextProps, nextState) {
 
-        if (func.diff(nextProps, this.props,false)) {
-            return true;
-        }
-        if (func.diff(nextState, this.state)) {
-            return true;
-        }
-        return false;
-    }
     render() {
         let props = {
             className: "  wasabi-button " + (this.props.theme || " default ") + ' ' + (this.props.className || "") + " size-" + (this.props.size || ""),

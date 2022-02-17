@@ -50,7 +50,7 @@ class CheckBox extends React.Component {
     static getDerivedStateFromProps(props, state) {
         if (props.value !== state.oldPropsValue) {//父组件强行更新了            
             return {
-                value: props.value??"",
+                value: props.value ?? "",
                 text: propsTran.processText(props.value, props.data).join(","),
                 oldPropsValue: props.value
             }
@@ -86,16 +86,15 @@ class CheckBox extends React.Component {
         if (this.props.readOnly) {
             return;
         }
-        console.log("test");
-        if (value !== "") {//0是有效值
+        if ((value ?? "") !== "") {//0是有效值
             let newValue = this.state.value.toString() || ""
             let newText = this.state.text.toString() || "";
             newValue = newValue ? newValue.split(",") : [];
             newText = newText ? newText.split(",") : [];
             if (newValue.indexOf(value.toString()) > -1) {
-                newValue.splice(newValue.indexOf(value.toString()), 1);
+                newValue.splice(newValue.indexOf((value ?? "").toString()), 1);
                 try {
-                    newText.splice(newText.indexOf(text.toString()), 1);
+                    newText.splice(newText.indexOf((text ?? "").toString()), 1);
                 }
                 catch (e) {
 

@@ -26,10 +26,11 @@ date:2021-02-06 重新调整
   --danger-hover-color: #f78989;
   --warning-color: #e6a23c;
   --warning-hover-color: #ebb563;
-  --border-color: #dcdfe6;
+  --border-color: #ebeef5;
   --border-hover-color:#c0c4cc;
-  --background-color: #f6f6f6;
+  --background-color: #f5f7fa;
   --background-hover-color:#e7e7e7;
+  --header-color:#fafafa;
   --icon-color:#c0c4cc;
   --icon-hover-color:#409eff;
   --font-size: 14px;

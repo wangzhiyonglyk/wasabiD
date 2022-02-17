@@ -228,7 +228,7 @@ func.cookies = {
         let exp = new Date();
         exp.setTime(exp.getTime() - 1);
         let cval = this.get(key);
-        if (cval !==null)
+        if (cval !== null)
             document.cookie = key + "=" + cval + ";expires=" + exp.toGMTString();
     }
 }
@@ -238,6 +238,7 @@ func.cookies = {
  * @param {*} obj 源对象
  * @returns 
  */
+
 func.clone = function (obj) {
     let o;
     switch (typeof obj) {
@@ -310,38 +311,44 @@ func.shallowClone = function (obj) {
 
 }
 
-//获取真正的数据源
-func.getSource = function (data, source = "data") {
-    /// <summary>
-    /// 获取真正的数据源
-    /// </summary>
-    /// <param name="Data" type="object">Data</param>
-    /// <param name="source" type="string">source</param>
-    let sourceArr = new Array();
-    let returnData = data;
 
-    if (source.indexOf(".") > -1) {
-        sourceArr = source.split(".");
+/**
+ * 获取真正的数据源
+ * @param {*} data  数据
+ * @param {*} source 
+ * @returns 
+ */
+func.getSource = function (data, source = "data") {
+    if (typeof data === "object" && !(Array.isArray(data))) {
+        let sourceArr = [];
+        let returnData = data;
+
+        if (source.indexOf(".") > -1) {
+            sourceArr = source.split(".");
+        }
+        else {
+            sourceArr.push(source);
+        }
+        let i = 0;
+        try {
+            while (i < sourceArr.length) {
+                returnData = returnData[sourceArr[i]];
+                if (returnData == null) {
+                    return null;//直接返回
+                }
+                i++;
+
+            }
+        }
+        catch (e) {
+            return null;
+        }
+
+        return returnData;
     }
     else {
-        sourceArr.push(source);
+        return data;
     }
-    let i = 0;
-    try {
-        while (i < sourceArr.length) {
-            returnData = returnData[sourceArr[i]];
-            if (returnData == null) {
-                return null;//直接返回
-            }
-            i++;
-
-        }
-    }
-    catch (e) {
-        return null;
-    }
-
-    return returnData;
 }
 //判断是否空对象
 func.isEmptyObject = function (obj) {
@@ -431,9 +438,9 @@ func.diff = function (objA = null, objB = null, deep = true) {//
                 }
                 else {
                     //浅比较
-                    if(typeof propA==="function"){//如果属性是函数
-                        return objA.toString() !== objB.toString();
-                    } 
+                    if (typeof propA === "function" && propA.toString() !== propB.toString()) {//如果属性是函数
+                        return true;
+                    }
                     else if (propA !== propB) {
                         return true;
                     }
@@ -481,30 +488,30 @@ func.componentMixins = function (component, mixinClass = []) {
  * @param {string } parentField 父节点key
  * @param {string } textField 文本key
  */
-func.toTreeData = function (data, idField = "id", parentField = "pId", textField = "text") {
-    data = func.clone(data);//复制一份
+func.toTreeData = function (data = [], idField = "id", parentField = "pId", textField = "text") {
+   
     let tree = [];//最终树数据
     let pos = {};//临时节点对象
     let count = 0;//总次数，防止死循环
     let pId = "";//一级父节点pid值
     let ids = "";//所有id值
     for (let i = 0; i < data.length; i++) {
-        ids += "," + data[i][idField] + ","
+        ids += "," + (data[i][idField] ?? "") + ","
     }
     for (let i = 0; i < data.length; i++) {
-        if (ids.indexOf("," + data[i][parentField] + ",") <= -1) {//属于一级节点的pid值
-            pId += "," + data[i][parentField] + ",";
+        if (ids.indexOf("," + (data[i][parentField] ?? "") + ",") <= -1) {//属于一级节点的pid值
+            pId += "," + (data[i][parentField] ?? "") + ",";
         }
     }
     let index = 0;
-    while (data.length !== 0 && count < 2000000) {
+    while (data.length !== 0 && count < 20000000) {
         count++;
-        if (pId.indexOf("," + data[index][parentField] + ",") > -1 || !data[index][parentField]) {
+        if (pId.indexOf("," + (data[index][parentField] ?? "") + ",") > -1 || !(data[index][parentField] ?? "")) {
             //一级节点
             let item = {
                 ...data[index],
-                id: data[index][idField],
-                pId: data[index][parentField],
+                id: (data[index][idField] ?? ""),
+                pId: (data[index][parentField] ?? ""),
                 text: data[index][textField],
                 children: []
 
@@ -513,13 +520,11 @@ func.toTreeData = function (data, idField = "id", parentField = "pId", textField
             tree.push(item);
             pos[data[index][idField]] = [tree.length - 1];//节点路径
             item._path = [tree.length - 1]//保存路径,
-            //格式化子节点
-            item.children = func.formatTreeDataChildren(data[index].children, item.id, item._path, idField, parentField, textField);
             data.splice(index, 1);
             index--;
         } else {
             //非一级节点
-            let posArr = pos[data[index][parentField]];//拿出父节点的路径
+            let posArr = pos[(data[index][parentField] ?? "")];//拿出父节点的路径
             if (posArr) {
                 let currentNode = tree[posArr[0]];//找到在树中的位置
                 for (let j = 1; j < posArr.length; j++) {
@@ -528,15 +533,13 @@ func.toTreeData = function (data, idField = "id", parentField = "pId", textField
                 let item = {
                     ...data[index],
                     id: data[index][idField],
-                    pId: data[index][parentField],
+                    pId: (data[index][parentField] ?? ""),
                     text: data[index][textField],
-                    children: data[index].children || [],
+                    children: (data[index].children ?? []),
                 }
                 currentNode.children.push(item);
                 pos[data[index][idField]] = posArr.concat([currentNode.children.length - 1]);
                 item._path = pos[data[index][idField]];//保存路径
-                //格式化子节点
-                item.children = func.formatTreeDataChildren(data[index].children, item.id, item._path, idField, parentField, textField);
                 data.splice(index, 1);
                 index--;
             }
@@ -553,45 +556,20 @@ func.toTreeData = function (data, idField = "id", parentField = "pId", textField
 
 }
 
+
 /**
- * 如果树节点本身包含了子节点，格式化节点
- * @param {*} node 
- * @param {*} path 
+ * 将树型结构的数据扁平化
+ * @param {*} data 数据
+ * @returns 
  */
-func.formatTreeDataChildren = function (children, pId, path, idField = "id", parentField = "pId", textField = "text") {
-    if (children && children instanceof Array && children.length > 0) {
-        for (let i = 0; i < children.length; i++) {
-            let newPath = [...path, i];
-            children[i] = {
-                ...children[i],
-                id: children[i][idField],
-                pId: pId,
-                text: children[i][textField],
-                _path: newPath,
-                children: func.formatTreeDataChildren(children[i].children, children[i][idField], newPath, idField, parentField, textField)
-            };
-        }
-        return children;
-    }
-    return [];
-
-
-}
-
-/**
-* 将树型结构的数据扁平化
-* @param {*} data 
-*/
 func.treeDataToFlatData = function (data) {
     let result = [];
     if (data && data instanceof Array) {
         for (let i = 0; i < data.length; i++) {
-            result.push({
-                ...data[i],
-                isLast: i === data.length - 1 ? true : false
-            });
-            if (data[i].children && data[i].children.length > 0&&data[i].open!==false) {
-                result = result.concat(func.treeDataToFlatData(data[i].children));
+                data[i]._isLast = i === data.length - 1 ? true : false//目的为了画向下的虚线最一个不需要
+                result.push(data[i])
+            if (data[i].children && data[i].children.length > 0 && data[i].open === true) {         
+              result= result.concat(func.treeDataToFlatData(data[i].children));
             }
         }
     }

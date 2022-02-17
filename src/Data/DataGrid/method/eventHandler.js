@@ -123,8 +123,10 @@ export default {
      * @param {*} event 
      */
     onClick: function (rowData, rowIndex, columnIndex) {
+        console.log("row",rowData,rowIndex,columnIndex)
         this.setState({
-            focusIndex: rowIndex
+            focusIndex: rowIndex,
+            focusColumnIndex:columnIndex
         })
         if (this.props.selectChecked == true) {
 
@@ -140,8 +142,6 @@ export default {
             this.setState({
                 ...this.setHeaderEditor(),//设置表头
                 editIndex: rowIndex + "-" + columnIndex,
-            }, () => {
-                this.focusCell(rowIndex, columnIndex);
             })
 
         }
@@ -158,27 +158,7 @@ export default {
     onDoubleClick: function (rowData, rowIndex, columnIndex) {
         this.props.onDoubleClick && this.props.onDoubleClick(rowData, rowIndex, columnIndex);
     },
-    /**
-     * 编辑的单元格获取得焦点
-     * @param {*} rowIndex 
-     * @param {*} columnIndex 
-     */
-    focusCell(rowIndex, columnIndex) {
-        try {
-            if (this.props.rowNumber) { columnIndex++ };
-            if (this.props.detailAble) { columnIndex++ };
-            if (this.props.selectAble) { columnIndex++ };
 
-            let f = document.getElementById(this.state.realTableId).children[1].querySelector(".focus");
-            if (f) { f.className = "" };
-            document.getElementById(this.state.realTableId).children[1].children[rowIndex].children[columnIndex].className = "focus";
-            document.getElementById(this.state.realTableId).children[1].children[rowIndex].children[columnIndex].querySelector("input").focus()
-        }
-        catch (e) {
-
-        }
-
-    },
     /**
      * 页号,与大小改变
      * @param {*} pageIndex 

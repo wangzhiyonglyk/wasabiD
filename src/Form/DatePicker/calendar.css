@@ -13,8 +13,12 @@
   border:1px solid var(--border-color);
   border-radius: 4px;
 }
+
 .daterangeinput:hover {
   border-color: var(--border-hover-color);
+}
+.daterangeinput.focus{
+  border-color: var(--primary-color);
 }
 .wasabi-has-error .daterangeinput {
   border-color: var(--danger-color);
@@ -114,6 +118,8 @@ background-color: var(--primary-color);
   width: 90px;
   text-align: center;
   height: 40px;
+  color: var(--color);
+  font-size: var(--font-size);
 }
 
 .wasabi-datetime-year input:hover {
@@ -544,6 +550,12 @@ background-color: var(--primary-color);
   font-size: var(--font-size);
   color: var(--color);
   cursor: pointer;
+}
+.wasabi-time-ok input{
+  border: 1px solid var(--border-color);
+  outline: none;
+  color: var(--color);
+  font-size: var(--font-size);
 }
 
 .wasabi-time-ok span>a {

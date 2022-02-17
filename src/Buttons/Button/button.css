@@ -60,7 +60,7 @@
 
 
 
-.wasabi-button.default {
+.wasabi-button.default , .wasabi-button.cancel {
   background: #fff;
   border: 1px solid var(--border-color);
   color: var(--color);
@@ -79,7 +79,7 @@
 }
 
 
-.wasabi-button.info, .wasabi-button.cancel {
+.wasabi-button.info{
   color: #fff;
   background-color: var(--info-color);
   border-color: var(--info-color);

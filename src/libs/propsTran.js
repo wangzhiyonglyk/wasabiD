@@ -6,51 +6,71 @@
 import func from "./func";
 import regs from "./regs.js";
 let propsTran = {
-    /**  
-     * 格式化数据，checkbox ,radio,select ,picker,treepicker,tree,treegrid
-     * @param {string|number} value 选择的值,处理勾选情况
-     * @param {Array} realData 数据
-     * @param {string } idOrValueField id或value对应的字段名
-     * @param {string} textField  文本对应的字段名
-     * @param {*} parentField 父节点对应字段名
-     * @param {*} simpleData 是否是简单数据格式
-     * @returns 
-     */
-    formatterData(type, value, data = [], idOrValueField = "value", textField = "text", parentField = "pId", simpleData = true) {
-        if (!data) {
-            return data;
+    /**
+    * * 对数据进行预处理， 方便后期操作 
+       * date:2020-11-06 edit 2022-10-27 重写
+       * 王志勇
+    * @param {*} data 数据
+    * @param {*} pId 父节点
+    * @param {*} path 初始化路径
+    * @param {*} idField id字段
+    * @param {*} parentField 父节点字段
+    * @param {*} textField 文本字段
+    * @param {*} childrenField 子节点字段
+    * @param {*} simpleData 是否简单数据
+    * @returns 
+    */
+      preprocess(data = [], pId = "", path = [], idField = "id", parentField = "pId", textField = "text", childrenField = "children", simpleData=false) {
+        let result=[];
+        if (Array.isArray(data)) {
+            data = simpleData ? func.toTreeData(data, idField, parentField, textField) : data;
+             result= data.map((item, index) => {
+                 item.id=item[idField];
+                 item.pId=pId;
+                 item._path=[...path, index];
+                 item.text=item[textField]
+                 item.children=(Array.isArray(item[childrenField])&&item[childrenField].length>0)? propsTran.preprocess(item[childrenField], item[idField], [...path, index], idField, parentField, textField, childrenField,false):[];
+                return item;
+            })
         }
-        let realData = func.clone(data);//复制,否则影响父节点，导致重复更新
-        if (realData && realData instanceof Array && realData.length > 0) {
-            for (let i = 0; i < realData.length; i++) {
-                if (type == "tree" || type == "treepicker" || type == "treegrid") {
-                    realData[i].id = realData[i].id || realData[i][idOrValueField];//追加这个属性
-                }
-                else {
-
-                    realData[i].value = realData[i].value || realData[i][idOrValueField];//追加这个属性
-                }
-
-                realData[i].text = realData[i].text || realData[i][textField];//追加这个属性
-                if (value && ("," + (value) + ",").indexOf("," + ((type == "tree" || type == "treepicker") ? realData[i].id : realData[i].value) + ",") > -1) {
-                    realData[i].checked = true;//节点选中，专门用于树组件
-                }
-                else {
-                    //不处理，不影响原因的
-                }
-                //如果有子节点的时候.tree,treepicker,picker
-                if (realData[i].children && realData[i].children.length > 0) {
-                    realData[i].children = propsTran.formatterData(type, value, realData[i].children, idOrValueField, textField, parentField, simpleData);
-                }
-            }
-        }
-        if ((type === "tree" || type === "treepicker" || type === "treegrid") && simpleData) {//格式化树型结构
-            realData = func.toTreeData(realData, idOrValueField, parentField, textField);
-        }
-        return realData;
+        return result;
     },
-
-
+    /**
+     * 预处理某个节点
+     * @param {*} node 节点
+      * @param {*} idField id字段
+    * @param {*} parentField 父节点字段
+    * @param {*} textField 文本字段
+    * @param {*} childrenField 子节点字段
+     */
+    preprocessNode(node,idField = "id", parentField = "pId", textField = "text", childrenField = "children")
+    {
+        node.id=node[idField];
+        node.pId=node[parentField];
+        node.text=node[textField]
+        node.children=(Array.isArray(node[childrenField])&&node[childrenField].length>0)? propsTran.preprocess(node[childrenField], node[idField], [...node._path], idField, parentField, textField, childrenField,false):[];
+        return node;
+    },
+/**
+ * 对表单数据进行预处理，方便后期操作 
+ * @param {*} data 
+ * @param {*} valueField 
+ * @param {*} textField 
+ * @returns 
+ */
+    preprocessForm(data = [],valueField="value",textField="text") {
+        if (Array.isArray(data)) {
+          return data.map((item, index) => {
+                return {
+                    ...item,//保留原有字段
+                    //附加字段，方便后期操作
+                    value: item[valueField],            
+                    text: item[textField],
+                };
+            })
+        }
+        return [];
+    },
     /**
    * * 设置下拉组件的文本值,用于赋值的时候
    * @param {*} value 
@@ -261,13 +281,13 @@ let propsTran = {
      */
     handlerLabelStyle(labelStyle, maxWidth) {
         labelStyle = func.clone(labelStyle) || {};
-        labelStyle.width = labelStyle.width !==null && labelStyle.width !==undefined ? labelStyle.width : maxWidth;
+        labelStyle.width = labelStyle.width !== null && labelStyle.width !== undefined ? labelStyle.width : maxWidth;
         return labelStyle;
     },
 
- 
 
-  
+
+
 
 }
 export default propsTran;

@@ -118,10 +118,10 @@ class Time extends React.Component {
             minute: value * 1,
             hourVisible: true,
         }, () => {
-            if (this.props.onSelect !==null) {
+          
                 let value = this.getValue();
-                this.props.onSelect(value, value, this.props.name);
-            }
+                this.props.onSelect&&this.props.onSelect(value, value, this.props.name);
+            
 
         })
     }

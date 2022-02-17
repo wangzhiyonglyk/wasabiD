@@ -74,7 +74,7 @@ grid
   top: 0px;
   z-index: 2;
   width: 100%;
-  background-color: var(--background-color);
+  background-color: var(--header-color);
 }
 
 

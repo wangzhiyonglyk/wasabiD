@@ -152,6 +152,7 @@ class Grid extends React.PureComponent {
             detailIndex={this.props.detailIndex}
             detailView={this.props.detailView}
             focusIndex={this.props.focusIndex}
+            focusColumnIndex={this.props.focusColumnIndex}
             rowAllowChecked={this.props.rowAllowChecked}
             getKey={this.props.getKey}
             onClick={this.props.onClick}
@@ -183,7 +184,7 @@ class Grid extends React.PureComponent {
             {/* 表头独立是为了在紧凑表格宽度不够时 更好看一点*/}
             <div className="table-fixedth">
             <Table 
-                className={this.props.borderAble ? ' ' : ' table-no-bordered '}
+                className={(this.props.borderAble ? ' ' : ' table-no-bordered ')+(this.props.editAble ?" edit ":"")}
                 id={this.props.fixTableId} >
                      {
                     /**colgroup */

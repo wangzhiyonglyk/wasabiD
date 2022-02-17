@@ -19,11 +19,12 @@ class DateInput extends React.Component {
         this.autoForMat = this.autoForMat.bind(this);
         this.inputClick = this.inputClick.bind(this);
         this.inputFocus = this.inputFocus.bind(this);
+        this.inputBlur=this.inputBlur.bind(this);
         this.dateInput = this.dateInput.bind(this);
         this.timeInput = this.timeInput.bind(this);
     }
     static getDerivedStateFromProps(props, state) {
-        if (props.value !==state.oldPropsValue) {//父组件强行更新了            
+        if (props.value !== state.oldPropsValue) {//父组件强行更新了            
             return {
                 value: props.value || "",
                 oldPropsValue: props.value
@@ -43,8 +44,12 @@ class DateInput extends React.Component {
             }, () => {
                 this.props.setValue && this.props.setValue(value);
             });
-        } else {
-
+        } else if (event.target.value === "") {
+            this.setState({
+                value: value,
+            }, () => {
+                this.props.setValue && this.props.setValue(value);
+            });
         }
 
 
@@ -66,7 +71,7 @@ class DateInput extends React.Component {
         switch (this.props.type) {
             case "time":
                 reg = /^\d{1,2}$|^\d{2,2}:?$|^\d{2,2}:([0-5]|[0-5]\d)$/;
-                if (value.length == event.target.selectionStart && reg.test(value) !==true) {//值的输入不合法
+                if (value.length == event.target.selectionStart && reg.test(value) !== true) {//值的输入不合法
                     //末尾输入，格式不正确，
                     return false;
                 }
@@ -76,7 +81,7 @@ class DateInput extends React.Component {
                 break;
             case "date":
                 reg = /^\d{1,4}-?$|^\d{4,4}-(0[1-9]*|1[0-2]*)-?$|^\d{4,4}-(0[1-9]|1[0-2])-(0[1-9]*|[1-2][0-9]*|3[0-1]*)$/;
-                if (value.length == event.target.selectionStart && reg.test(value) !==true) {
+                if (value.length == event.target.selectionStart && reg.test(value) !== true) {
                     //末尾输入，格式不正确
                     return false;
                 }
@@ -87,7 +92,7 @@ class DateInput extends React.Component {
             case "datetime":
                 //时间后面的输入只做了简单验证，否则太长了，通过控制输入来处理
                 reg = /^\d{1,4}-?$|^\d{4,4}-(0[1-9]*|1[0-2]*)-?$|^\d{4,4}-(0[1-9]|1[0-2])-(0[1-9]*|[1-2][0-9]*|3[0-1]*)$|^\d{4,4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\s?[\d:]*$/;
-                if (value.length == event.target.selectionStart && reg.test(value) !==true) {
+                if (value.length == event.target.selectionStart && reg.test(value) !== true) {
                     //末尾输入，格式不正确
                     return false;
                 }
@@ -114,6 +119,7 @@ class DateInput extends React.Component {
      * @returns 
      */
     dateInput(value, event) {
+
         if (value && event.target.selectionStart === 4) {//年输入完成,年不用验证正确性
             if (value.length == 4) {
                 //后面没有值
@@ -184,7 +190,7 @@ class DateInput extends React.Component {
      * @returns 
      */
     timeInput(value, event, beginIndex = 0) {
-     
+
         if (value && event.target.selectionStart === beginIndex + 2) {//时输入完时
             const hour = value.slice(beginIndex + 0, beginIndex + 2);
             if (/^(20|21|22|23|[0-1]\d{0,1})$/.test(hour) !== true) {
@@ -224,7 +230,7 @@ class DateInput extends React.Component {
         //                 event.target.selectionEnd = 8 + beginIndex;
         //             }
         //         }
-               
+
         //     }
         // }
         return value;
@@ -233,7 +239,7 @@ class DateInput extends React.Component {
      * 控制光标
      */
     inputClick(event) {
-        this.props.showPicker&&this.props.showPicker();
+        this.props.showPicker && this.props.showPicker();
         switch (this.props.type) {
             case "time":
                 if (event.target.selectionStart <= 2) {
@@ -291,6 +297,8 @@ class DateInput extends React.Component {
                 break;
 
         }
+        
+       
     }
     /**
      * 得到焦点
@@ -310,6 +318,11 @@ class DateInput extends React.Component {
 
 
         }
+        event.target.parentNode.className=event.target.parentNode.className.replace(" focus","");
+        event.target.parentNode.className+=" focus";
+    }
+    inputBlur(event){
+        event.target.parentNode.className=  event.target.parentNode.className.replace(" focus","");
     }
 
     render() {
@@ -328,6 +341,7 @@ class DateInput extends React.Component {
                 onClick={this.inputClick}
                 onDoubleClick={this.props.showPicker}
                 onFocus={this.inputFocus}
+                onBlur={this.inputBlur}
             />
         </React.Fragment>
 

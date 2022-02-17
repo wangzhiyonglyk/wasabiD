@@ -38,7 +38,7 @@ border奇怪的现象，出现变粗的现象
 背景颜色
 */
 .wasabi-table th{
-  background-color: var(--background-color);
+  background-color: var(--header-color);
 }
 .wasabi-table tr:hover td{
   background-color: var(--background-color);
@@ -89,6 +89,7 @@ border奇怪的现象，出现变粗的现象
   padding: 0px;
   border: 1px solid var(--primary-color);
   overflow: visible;
+  left:1px;
 }
 .wasabi-table td.focus .wasabi-table-cell .wasabi-form-group {
   margin: 0;
@@ -120,6 +121,7 @@ border奇怪的现象，出现变粗的现象
   font-size: inherit;
   /* 保证文字行不换行 */
   white-space: nowrap; 
+  min-height: 40px;
 }
 .wasabi-table  th .wasabi-table-cell{
   overflow: hidden;
@@ -127,12 +129,7 @@ border奇怪的现象，出现变粗的现象
   height: 40px;
 }
 
-.wasabi-pivot .wasabi-table-cell{
-  overflow: hidden;
-  text-overflow: clip;
-  height: 40px;
-}
-.wasabi-treegrid .wasabi-table-cell{
+.wasabi-table.edit .wasabi-table-cell,.wasabi-pivot .wasabi-table-cell,.wasabi-treegrid .wasabi-table-cell{
   overflow: hidden;
   text-overflow: clip;
   height: 40px;

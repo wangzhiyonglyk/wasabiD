@@ -80,7 +80,7 @@ desc:模态窗口样式
   line-height: 50px;
   padding-left: 20px;
   text-align: left;
-  background-color: var(--background-color);
+  background-color: var(--header-color);
   border-bottom: 1px solid var(--border-color);
   cursor: move;
   -webkit-user-select: none;
