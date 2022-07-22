@@ -5,7 +5,7 @@
 import React from "react";
 import func from "../../../libs/func.js";
 import Msg from "../../../Info/Msg"
-import excel from "../../../libs/excel.js";
+// import excel from "../../../libs/excel.js";
 export default {
     /**
     * 设置焦点行
@@ -13,7 +13,7 @@ export default {
     */
     setFocus(key) {
         for (let i = 0; i < this.state.data.length; i++) {
-            if (this.state.data[i][this.props.priKey||"id"] == key) {
+            if (this.state.data[i][this.props.priKey || "id"] == key) {
                 this.setState({
                     focusIndex: i
                 })
@@ -49,7 +49,7 @@ export default {
      * @param {*} index 
      */
     getRowData: function (index) {//获取当前焦点行的数据
-        if (index !==null && index !==undefined) {
+        if (index !== null && index !== undefined) {
 
         }
         else {
@@ -243,9 +243,9 @@ export default {
     reload: function (params = null, url = "") {//重新查询数据,
         url = url || this.state.url;//得到旧的url
         params = params || this.state.params;//如果不传则用旧的
-       //查询条件发生，查询第一页
-       let pageIndex = func.diff(params, this.state.params, false) ? 1 : this.state.pageIndex
-       this.loadData(url, this.state.pageSize, pageIndex, this.state.sortName, this.state.sortOrder, params);
+        //查询条件发生，查询第一页
+        let pageIndex = func.diff(params, this.state.params, false) ? 1 : this.state.pageIndex
+        this.loadData(url, this.state.pageSize, pageIndex, this.state.sortName, this.state.sortOrder, params);
     },
 
     /**
@@ -253,7 +253,7 @@ export default {
      * @param {*} selected 是否只导出选择行
      * @param {*} title 导出标题
      */
-    export(selected = false, title = "grid-") {
+    exportbyXslx(selected = false, title = "grid-") {
 
         let fixTable = document.getElementsById(this.state.fixTableId);
         let realTable = document.getElementById(this.state.realTableId);
@@ -313,5 +313,70 @@ export default {
 
     },
 
+    /**
+         * 导出
+         * @param {*} selected 是否只导出选择行
+         * @param {*} title 导出标题
+         */
+    export(selected, title = "grid-") {
+
+        let fixTable = document.getElementsById(this.state.fixTableId);
+        let realTable = document.getElementById(this.state.realTableId);
+        title = title + func.dateformat(new Date(), "yyyy-MM-dd");
+        //导出表头
+        tableHtml += "<thead>";
+        for (let rowIndex = 0; rowIndex < fixTable.children[1].children.length;  rowIndex++) {
+            tableHtml += "<tr>"
+            for (let columnIndex = 0; columnIndex < fixTable.children[1].children[rowIndex].children.length; columnIndex++) {
+                let html =fixTable.children[1].children[rowIndex].children[columnIndex].outerHTML;
+                if (html.indexOf("wasabi-detail-column") > -1 || html.indexOf("wasabi-order-column") > -1 || html.indexOf("wasabi-select-column") > -1 || html.indexOf("wasabi-noexport") > -1) {//除去序号列与选择列及不需要导出的列
+                    continue;
+                }
+                tableHtml += html;
+            }
+            tableHtml += "</tr>"
+        }
+
+        tableHtml += "</thead><tbody>";
+        //导出表体
+        if (selected) {//导出选择的行
+            for (let value of this.state.checkedIndex.values()) {
+                tableHtml += "<tr>"
+                for (let i = 0; i < realTable.children[1].children[value].children.length; i++) {
+                    let html = realTable.children[1].children[value].children[i].outerHTML;
+                    if ( html.indexOf("wasabi-detail-column")>-1||html.indexOf("wasabi-order-column") > -1 || html.indexOf("wasabi-check-column") > -1 || html.indexOf("wasabi-noexport") > -1) {//除去序号列与选择列及不需要导出的列
+                        continue;
+                    }
+                    tableHtml += html;
+                }
+                tableHtml += "</tr>";
+            }
+        }
+        else {//导出全部行
+            for (let rowIndex = 0; rowIndex <  realTable.children[2].children.length; rowIndex++) {
+                tableHtml += "<tr>"
+                for (let columnIndex = 0; columnIndex < realTable.children[2].children[rowIndex].children.length; columnIndex++) {
+                    if (realTable.children[2].children.length > rowIndex) {
+                        let html =  realTable.children[2].children[rowIndex].children[columnIndex].outerHTML;
+                        if ( html.indexOf("wasabi-detail-column")>-1|| html.indexOf("wasabi-order-column") > -1 || html.indexOf("wasabi-check-column") > -1 || html.indexOf("wasabi-noexport") > -1) {//除去序号列与选择列及不需要导出的列
+                            continue;
+                        }
+                        tableHtml += html;
+                    }
+                }
+                tableHtml += "</tr>";
+            }
+
+
+        }
+        tableHtml += "</tbody></table>";
+        let html = "<html><head><meta charset='UTF-8'></head><body>" + tableHtml + "</body></html>";
+        //为了导出时的数据格式问题
+        html = html.replace(/export=\"1\"/g, "style=\"mso-number-format:\'\@\';\"");
+        // 创建一个Blob对象，第一个参数是文件的数据，第二个参数是文件类型属性对象
+        var blob = new Blob([html], { type: "application/vnd.ms-excel" });
+        func.download(blob,title);
+
+    }
 
 }

@@ -1,6 +1,8 @@
 import React from "react";
 import PropTypes from 'prop-types';
-
+/***
+ * 注意tdStyle与style的区别
+ */
 class TableCell extends React.PureComponent {
     constructor(props) {
         super(props);
@@ -40,11 +42,14 @@ class TableCell extends React.PureComponent {
     }
     renderTd() {
         
+        let style=this.props.tdStyle||{};
+        style.msoNumberFormat="'\@\'";
         return <td  name={this.props.name}  id={this.props.id} data-rowindex={this.props.rowIndex} 
         data-columnindex={this.props.columnIndex} 
         align={this.props.align} 
          colSpan={this.props.colSpan || 1} rowSpan={this.props.rowSpan || 1} 
-         style={this.props.tdStyle}
+         style={style}
+         export="1"
          className={(this.props.className || "") + (this.props.position !== "body" ? ' nowrap ' : "")}  
             onClick={this.props.onClick} onDoubleClick={this.props.onDoubleClick}
             onMouseDown={this.props.onMouseDown}

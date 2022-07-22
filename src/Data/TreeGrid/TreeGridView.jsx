@@ -111,7 +111,7 @@ function TreeGrid(props, ref) {
             <div className="wasabi-treegrid-rowsData"  >
                 <TreeView {...props}
                     //  取消虚线
-                    dotted={false}
+                    dottedAble={false}
                 ></TreeView>
             </div>
         </div>

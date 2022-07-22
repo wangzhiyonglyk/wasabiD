@@ -98,14 +98,9 @@ export default {
 
                 if (beginRowIndex < oldData.length) {
                     //替换
-                    oldData[beginRowIndex] = {
-                        ...oldData[beginRowIndex],
-                        ...rowData
-                    }
-                    this.state.updateData.set(this.getKey(beginRowIndex), {
-                        ...oldData[beginRowIndex],
-                        ...rowData
-                    });//更新某一行
+                    oldData[beginRowIndex] = Object.assign(oldData[beginRowIndex],rowData);
+                     
+                    this.state.updateData.set(this.getKey(beginRowIndex), oldData[beginRowIndex]);//更新某一行
                 }
                 else {
                     addData.push(rowData)

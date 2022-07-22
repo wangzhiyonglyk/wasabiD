@@ -12,49 +12,82 @@ create by wangzhiyong 创建树组件
 import React from "react";
 import TreeNode from "./TreeNode.jsx";
 function TreeView(props) {
-    let nodeControl = [];
-    //全局属性
-    const { componentType,  selectAble, checkStyle, renameAble, removeAble, draggAble,dropAble, asyncAble } = props;
-    //得到传下去的属性
-    const treeProps = { componentType,selectAble, checkStyle, renameAble, removeAble,draggAble,dropAble,  asyncAble, clickId: props.clickId, loadingId: props.loadingId };
-    //全局事件
-    const treeEvents = {
-        beforeDrag: props.beforeDrag,
-        beforeRemove: props.beforeRemove,
-        beforeDrop: props.beforeDrop,
-        beforeRename: props.beforeRename,
-        onClick: props.onClick,
-        onDoubleClick: props.onDoubleClick,
-        onChecked: props.onChecked,
-        onRemove: props.onRemove,
-        onExpand: props.onExpand,
-        onRename: props.onRename,
-        onDrop: props.onDrop,
-        onDrag: props.onDrag,
-        textFormatter:props.textFormatter,
-    }
-    let data =props.visibleData;
-    if (Array.isArray(data)) {
-      nodeControl=  data.map((item, index) => {
-            let isParent = false;//是否为父节点
-            if (item.isParent === true || (Array.isArray(item.children)&&item.children.length>0)) {//如果明确规定了，或者子节点不为空，则设置为父节点
-                isParent = true;
-            }
-        return (<TreeNode
-                key={"treenode-" + item.id}
-                {
-                ...treeProps
-                }
-                {...item}
-                isParent={isParent}
-                {
-                ...treeEvents
-                }
-            />);
-        });
-    }
-    return <ul id={props.treeid} className={"wasabi-tree clearfix " + (props.dotted === false ? " nodotted " : "") }>
-            {nodeControl}
-         </ul>
+  let nodeControl = [];
+  //得到传下去的属性
+  const {
+    componentType,
+    selectAble,
+    checkStyle,
+    renameAble,
+    removeAble,
+    draggAble,
+    dropAble,
+    dropType,
+    clickId,
+    loadingId,
+  } = props;
+
+  const treeProps = {
+    componentType,
+    selectAble,
+    checkStyle,
+    renameAble,
+    removeAble,
+    draggAble,
+    dropAble,
+    dropType,
+
+    clickId,
+    loadingId,
+  };
+  //全局事件
+  const treeEvents = {
+    beforeDrag: props.beforeDrag,
+    beforeRemove: props.beforeRemove,
+    beforeDrop: props.beforeDrop,
+    beforeRename: props.beforeRename,
+    onClick: props.onClick,
+    onDoubleClick: props.onDoubleClick,
+    onChecked: props.onChecked,
+    onRemove: props.onRemove,
+    onExpand: props.onExpand,
+    onRename: props.onRename,
+    onDrop: props.onDrop,
+    onDrag: props.onDrag,
+    textFormatter: props.textFormatter,
+  };
+  let data = props.visibleData;
+  if (Array.isArray(data)) {
+    nodeControl = data.map((item, index) => {
+      let isParent = false; //是否为父节点
+      if (
+        item.isParent === true ||
+        (Array.isArray(item.children) && item.children.length > 0)
+      ) {
+        //如果明确规定了，或者子节点不为空，则设置为父节点
+        isParent = true;
+      }
+      return (
+        <TreeNode
+          key={"treenode-" + item.pId + "-" + item.id}
+          {...treeProps}
+          {...item}
+          isParent={isParent}
+          {...treeEvents}
+        />
+      );
+    });
+  }
+  return (
+    <ul
+      id={props.treeid}
+      className={
+        "wasabi-tree clearfix " +
+        (props.dottedAble === false ? " nodotted " : "")
+      }
+    >
+      {nodeControl}
+    </ul>
+  );
 }
 export default React.memo(TreeView);

@@ -17,13 +17,13 @@ let propsTran = {
     * @param {*} parentField 父节点字段
     * @param {*} textField 文本字段
     * @param {*} childrenField 子节点字段
-    * @param {*} simpleData 是否简单数据
+    * @param {*} isSimpleData 是否简单数据
     * @returns 
     */
-      preprocess(data = [], pId = "", path = [], idField = "id", parentField = "pId", textField = "text", childrenField = "children", simpleData=false) {
+      preprocess(data = [], pId = "", path = [], idField = "id", parentField = "pId", textField = "text", childrenField = "children", isSimpleData=false) {
         let result=[];
         if (Array.isArray(data)) {
-            data = simpleData ? func.toTreeData(data, idField, parentField, textField) : data;
+            data = isSimpleData ? func.toTreeData(data, idField, parentField, textField) : data;
              result= data.map((item, index) => {
                  item.id=item[idField];
                  item.pId=pId;

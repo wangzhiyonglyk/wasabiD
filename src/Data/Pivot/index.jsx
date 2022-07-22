@@ -95,7 +95,7 @@ import "./index.css"
 //             <div className="wasabi-pivot-left">
 //                 <Configuration height={treeTop}></Configuration>
 //                 <div className="wasabi-pivot-rowsData" >
-//                     <Tree checkAble={this.props.checkAble} ref={this.tree} onClick={this.treeClick.bind(this)}  data={this.state.rowsTreeData} simpleData={true} ></Tree>
+//                     <Tree checkAble={this.props.checkAble} ref={this.tree} onClick={this.treeClick.bind(this)}  data={this.state.rowsTreeData} isSimpleData={true} ></Tree>
 //                 </div>
 //             </div>
 //             <div className="wasabi-pivot-right">

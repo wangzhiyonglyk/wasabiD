@@ -1,374 +1,352 @@
-.wasabi-tree-parent{
-    position: relative;
-    font-size: var(--font-size);
-    color: var(--color);
-    margin: 0px;
-    padding: 0px;
-    width: 100%;
-    overflow: auto;
+.wasabi-tree-parent {
+  position: relative;
+  font-size: var(--font-size);
+  color: var(--color);
+  margin: 0px;
+  padding: 0px;
+  width: 100%;
+  overflow: auto;
+  height: 100%;
 }
 .wasabi-tree {
-    position: relative;
-    margin: 0px;
-    padding: 0px;
-    --dotted-color: var(--border-color);
-    height: 100%;
+  margin: 0px;
+  padding: 0px;
+  --dotted-color: var(--border-color);
+  font-size: var(--font-size);
 }
 
 /* 虚线隐藏 */
 .wasabi-treegrid.nodotted {
-    --dotted-color: transparent;
+  --dotted-color: transparent;
 }
 /* 树表格与交叉表把父子关系的虚线隐藏 */
 .wasabi-treegrid .wasabi-tree {
-    --dotted-color: transparent;
+  --dotted-color: transparent;
 }
 
 .wasabi-pivot .wasabi-tree {
-    --dotted-color: transparent;
+  --dotted-color: transparent;
 }
 
 /*树中图标的颜色*/
 .wasabi-tree [class*=" icon-"],
-.wasabi-tree [class^=icon-] {
-    color: var(--icon-color);
+.wasabi-tree [class^="icon-"] {
+  color: var(--icon-color);
 }
-
 
 /*树节点*/
 .wasabi-tree li.wasabi-tree-li {
-    list-style: none;
-    cursor: pointer;
-    position: relative;
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: flex-start;
+  list-style: none;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
 }
 
 /*树的折叠图标， 因为checkbox宽度是20px 字体小一点*/
 .wasabi-tree .wasabi-tree-li-icon {
-    font-size: 14px;
-    width: 20px;
-    height: 100%;
-    position: relative;
-    padding-top: 9px;
- 
+  font-size: inherit;
+  width: 20px;
+  height: 100%;
+  position: relative;
+  padding-top: 9px;
 }
 
 .wasabi-tree .wasabi-tree-li-icon.selected {
-    background-color: var(--background-color);
+  background-color: var(--background-color);
 }
 
 /* 树表格与交叉表底部的分隔线及高度 */
 .wasabi-treegrid .wasabi-tree .wasabi-tree-li-icon {
-    border-bottom: 1px solid var(--border-color);
-    height: 41px;
-    padding-top: 14px;
+  border-bottom: 1px solid var(--border-color);
+  height: 41px;
+  padding-top: 14px;
 }
 
 .wasabi-pivot .wasabi-tree .wasabi-tree-li-icon {
-    border-bottom: 1px solid var(--border-color);
-    height: 41px;
-    padding-top: 14px;
+  border-bottom: 1px solid var(--border-color);
+  height: 41px;
+  padding-top: 14px;
 }
-
-
 
 /* 树的折叠图标右边的虚线 */
 .wasabi-tree .wasabi-tree-li-icon-beforeRight::after {
-    content: "";
-    position: absolute;
-    border-bottom: 1px dotted var(--dotted-color);
-    height: 1px;
-    right: 0px;
-    top: 16px;
-    width: 10px;
+  content: "";
+  position: absolute;
+  border-bottom: 1px dotted var(--dotted-color);
+  height: 1px;
+  right: 0px;
+  top: 16px;
+  width: 10px;
 }
 /*树节点向下的虚线*/
-.wasabi-tree .wasabi-tree-li-icon-afterBelow{
-    position: absolute;
-    height: 30px;
-    border-left: 1px dotted var(--dotted-color);
-    left: 7px;
-    top:15px;
-  
-   
+.wasabi-tree .wasabi-tree-li-icon-afterBelow {
+  position: absolute;
+  height: 40px;
+  border-left: 1px dotted var(--dotted-color);
+  left: 7px;
+  top: 10px;
 }
 /* 树表格与交叉表的底部分隔线,增加宽度是为了线足够长 */
 .wasabi-treegrid .wasabi-tree .wasabi-tree-li-icon::after {
-    content: "";
-    position: absolute;
-    border-left: none;
-    border-bottom: 1px solid var(--border-color);
-    width: 1000px;
-    left: -1000px;
-    height: 41px;
-    top: 0px;
-
+  content: "";
+  position: absolute;
+  border-left: none;
+  border-bottom: 1px solid var(--border-color);
+  width: 1000px;
+  left: -1000px;
+  height: 41px;
+  top: 0px;
 }
 
 .wasabi-pivot .wasabi-tree .wasabi-tree-li-icon::after {
-    content: "";
-    position: absolute;
-    border-left: none;
-    border-bottom: 1px solid var(--border-color);
-    width: 1000px;
-    left: -1000px;
-    height: 41px;
-    top: 0px;
+  content: "";
+  position: absolute;
+  border-left: none;
+  border-bottom: 1px solid var(--border-color);
+  width: 1000px;
+  left: -1000px;
+  height: 41px;
+  top: 0px;
 }
 
 .wasabi-treegrid .wasabi-tree .wasabi-tree-li-icon.selected::after {
-    background-color: var(--background-color);
+  background-color: var(--background-color);
 }
 
 .wasabi-pivot .wasabi-tree .wasabi-tree-li-icon.selected::after {
-    background-color: var(--background-color);
+  background-color: var(--background-color);
 }
-
-
 
 /* 没有折叠图标的图标占位符 */
 .wasabi-tree .wasabi-tree-li-icon-line {
-    width: 20px;
-    height: 100%;
-    position: relative;
+  width: 20px;
+  height: 100%;
+  position: relative;
 }
 
 .wasabi-tree .wasabi-tree-li-icon-line.selected {
-    background-color: var(--background-color);
+  background-color: var(--background-color);
 }
 
 /* 树表格与交叉表底部的分隔线 */
 .wasabi-treegrid .wasabi-tree .wasabi-tree-li-icon-line {
-    height: 41px;
-    border-bottom: 1px solid var(--border-color);
-
-
+  height: 41px;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .wasabi-pivot .wasabi-tree .wasabi-tree-li-icon-line {
-    height: 41px;
-    border-bottom: 1px solid var(--border-color);
+  height: 41px;
+  border-bottom: 1px solid var(--border-color);
 }
-
 
 /* 折叠图标前面的向右虚线 */
 .wasabi-tree .wasabi-tree-li-icon-line::after {
-    content: "";
-    border-bottom: 1px dotted var(--dotted-color);
-    width: 12px;
-    position: absolute;
-    top: 15px;
-    right: 0px;
+  content: "";
+  border-bottom: 1px dotted var(--dotted-color);
+  width: 12px;
+  position: absolute;
+  top: 15px;
+  right: 0px;
 }
 
 /* 树表格与交叉表底部的分隔线 增加宽度是为了线足够长 */
 .wasabi-treegrid .wasabi-tree .wasabi-tree-li-icon-line::before {
-    content: "";
-    border-left: none;
-    position: absolute;
-    border-bottom: 1px solid var(--border-color);
-    left: -100000px;
-    height: 41px;
-    top: 0px;
-    width: 100000px;
+  content: "";
+  border-left: none;
+  position: absolute;
+  border-bottom: 1px solid var(--border-color);
+  left: -100000px;
+  height: 41px;
+  top: 0px;
+  width: 100000px;
 }
 
 .wasabi-pivot .wasabi-tree .wasabi-tree-li-icon-line::before {
-    content: "";
-    border-left: none;
-    position: absolute;
-    border-bottom: 1px solid var(--border-color);
-    left: -100000px;
-    height: 41px;
-    top: 0px;
-    width: 100000px;
+  content: "";
+  border-left: none;
+  position: absolute;
+  border-bottom: 1px solid var(--border-color);
+  left: -100000px;
+  height: 41px;
+  top: 0px;
+  width: 100000px;
 }
 
 .wasabi-treegrid .wasabi-tree .wasabi-tree-li-icon-line.selected::before {
-    background-color: var(--background-color);
+  background-color: var(--background-color);
 }
 
 .wasabi-pivot .wasabi-tree .wasabi-tree-li-icon-line.selected::before {
-    background-color: var(--background-color);
+  background-color: var(--background-color);
 }
 
 /*树的勾选框*/
 .wasabi-tree .wasabi-form-group {
-    margin-left: 0px;
-    margin-right: 0px;
-    padding-right: 4px;
-    margin-top:0px;
-    height: 30px;
-    margin-bottom: 0px;
-    width:20px;
+  margin-left: 0px;
+  margin-right: 0px;
+  padding-right: 4px;
+  margin-top: 0px;
+  height: 30px;
+  margin-bottom: 0px;
+  width: 20px;
 }
 
 .wasabi-tree .wasabi-form-group.selected {
-    background-color: var(--background-color);
+  background-color: var(--background-color);
 }
 
 /* 树表格与交叉表的高度*/
 .wasabi-treegrid .wasabi-tree .wasabi-form-group {
-    height: 41px;
-    border-bottom: 1px solid var(--border-color);
-    padding-top: 4px;
-    margin-top: 0px;
+  height: 41px;
+  border-bottom: 1px solid var(--border-color);
+  padding-top: 4px;
+  margin-top: 0px;
 }
 
 .wasabi-pivot .wasabi-tree .wasabi-form-group {
-    height: 41px;
-    border-bottom: 1px solid var(--border-color);
-    padding-top: 4px;
-    margin-top: 0px;
-   
+  height: 41px;
+  border-bottom: 1px solid var(--border-color);
+  padding-top: 4px;
+  margin-top: 0px;
 }
 
 /*有子节点勾选框有向下的虚线 */
 .wasabi-tree .wasabi-form-group.hasChildren::after {
-    content: "";
-    position: absolute;
-    border-left: 1px dotted var(--dotted-color);
-    height: 20px;
-    left: 7px;
-    top: 25px;
+  content: "";
+  position: absolute;
+  border-left: 1px dotted var(--dotted-color);
+  height: 20px;
+  left: 7px;
+  top: 25px;
 }
 
 .wasabi-tree .wasabi-checkul {
-    padding-top: 8px;
+  padding-top: 8px;
 }
 
 .wasabi-tree .wasabi-checkul li {
-    margin-right: 0px;
+  margin-right: 0px;
 }
 
 .wasabi-tree .wasabi-checkul .checktext {
-    margin: 0px;
+  margin: 0px;
 }
-
-
 
 /*树的节点容器*/
 .wasabi-tree .wasabi-tree-li-node {
-    line-height: 30px;
-    height: 30px;
-    box-sizing: border-box;
-    display: flex;
-    position: relative;
+  line-height: 30px;
+  height: 30px;
+  box-sizing: border-box;
+  display: flex;
+  position: relative;
+  padding-top: 3px;
 }
-.wasabi-tree .wasabi-tree-li-node .wasabi-form-group{
-    width: 100%;
+.wasabi-tree .wasabi-tree-li-node .wasabi-form-group {
+  width: 100%;
 }
 
 /* 树表格与交叉表底部的高度 */
 .wasabi-treegrid .wasabi-tree .wasabi-tree-li-node {
-    height: 41px;
-    line-height: 41px;
-    border-bottom: 1px solid var(--border-color);
+  height: 41px;
+  line-height: 41px;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .wasabi-pivot .wasabi-tree .wasabi-tree-li-node {
-    height: 41px;
-    line-height: 41px;
-    border-bottom: 1px solid var(--border-color);
+  height: 41px;
+  line-height: 41px;
+  border-bottom: 1px solid var(--border-color);
 }
 
-
 .wasabi-tree .wasabi-tree-li-node.selected {
-    background-color: var(--background-color);
+  background-color: var(--background-color);
 }
 
 .wasabi-tree .wasabi-tree-li-node:hover a,
 .wasabi-tree .wasabi-tree-li-node:hover i {
-    color: var(--primary-color);
-
+  color: var(--primary-color);
 }
 
 /*文本框容器*/
 .wasabi-tree-li-node-text-div {
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: clip;
-    word-break: break-all;
-    display: flex;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: clip;
+  word-break: break-all;
+  display: flex;
 }
 
 /*文本图标*/
 .wasabi-tree .wasabi-tree-text-icon {
-    font-size: 16px;
-    height: 100%;
-    padding-top: 7px;
-    position: relative;
-    padding-right: 4px;
+  font-size: inherit;
+  height: 100%;
+  padding-top: 7px;
+  position: relative;
+  padding-right: 4px;
 }
 
 /* 树表格与交叉表高度对齐 */
 .wasabi-treegrid .wasabi-tree .wasabi-tree-text-icon {
-    padding-top: 12px;
+  padding-top: 12px;
 }
 
 .wasabi-pivot .wasabi-tree .wasabi-tree-text-icon {
-    padding-top: 12px;
+  padding-top: 12px;
 }
 
 /*没有勾选功能时并且有子节点时有向下虚线*/
 .wasabi-tree .wasabi-tree-text-icon.noCheckhasChildren::after {
-    content: "";
-    position: absolute;
-    border-left: 1px dotted var(--dotted-color);
-    height: 7px;
-    bottom: 0px;
-    left: 7px;
-
+  content: "";
+  position: absolute;
+  border-left: 1px dotted var(--dotted-color);
+  height: 7px;
+  bottom: 0px;
+  left: 7px;
 }
 
 /*文本*/
 .wasabi-tree .wasabi-tree-txt {
-    position: relative;
-    color: var(--color);
-    word-break: break-all;
+  position: relative;
+  color: var(--color);
+  word-break: break-all;
 }
 
 /*子节点容器要跟外层折叠图标对齐*/
 .wasabi-tree .wasabi-tree-sub {
-    position: relative;
-    width: 100%;
-    padding: 0px;
-    padding-left: 20px;
+  position: relative;
+  width: 100%;
+  padding: 0px;
+  padding-left: 20px;
 }
 
 /**子节点容器的向左虚线与折叠图标对齐**/
 .wasabi-tree .wasabi-tree-sub::before {
-    content: "";
-    position: absolute;
-    border-left: 1px dotted var(--dotted-color);
-    height: 100%;
-    left: 7px;
+  content: "";
+  position: absolute;
+  border-left: 1px dotted var(--dotted-color);
+  height: 100%;
+  left: 7px;
 }
-
 
 /* 编辑时 */
 .wasabi-tree .wasabi-input {
-    height: 30px;
-
+  height: 30px;
 }
 
 /* 树表格与交叉表高度对齐 */
 .wasabi-treegrid .wasabi-tree .wasabi-input {
-    height: 41px;
-
+  height: 41px;
 }
 
 .wasabi-pivot .wasabi-tree .wasabi-input {
-    height: 41px;
-
+  height: 41px;
 }
 
 /* 编辑，重命名等图标 */
 .wasabi-tree .edit {
-    font-size: 16px;
-    transform: translateY(8px);
-    margin-left: 4px;
-
+  font-size: inherit;
+  transform: translateY(8px);
+  margin-left: 4px;
 }

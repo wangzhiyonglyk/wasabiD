@@ -38,9 +38,6 @@ export default {
         this.scrollShowVisibleData(0, this.virtualConfig.visibleCount);
 
     },
-
-
-
     /**
    * 监听滚动事件,防止白屏现象
    * @param {*} event 

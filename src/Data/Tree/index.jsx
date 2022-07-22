@@ -10,14 +10,14 @@ create by wangzhiyong 创建树组件
  2022-01-06 增加虚线可配功能
   2022-01-06 拆分业务与视图 将业务容器适用于tree,treegrid,pivot等组件
    2022-01-07 修复树节点中文本节点宽度的bug
-   2022-01-11 修复tree的bug，并且独立出去
-    2022-01-25 改为hook,模式
-    2022-02-08 优化算法
+   2022-01-11 将tree组件独立出来
+   2022-01-18 将tree组件全部改为hook
+   2022-01-27 优化代码
  */
- import React, { Component } from "react";
- import TreeContainer from "./TreeContainer";
+import React from "react";
+import TreeContainer from "./TreeContainer";
 
- function Tree (props,ref){
+function Tree(props, ref) {
   return <TreeContainer {...props} ref={ref} componentType={"tree"}></TreeContainer>
 }
 export default React.memo(React.forwardRef(Tree));

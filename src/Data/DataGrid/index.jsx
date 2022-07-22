@@ -100,10 +100,8 @@ class DataGrid extends Component {
         });
        
     }
-    static getDerivedStateFromProps(props, state) {
-     
+    static getDerivedStateFromProps(props, state) {     
         let newState = {
-
         };//新的状态值
         // 处理Headers,因为交叉表的表头是后期传入的 
         {
@@ -137,8 +135,10 @@ class DataGrid extends Component {
         }
 
         if (props.data && props.data instanceof Array && func.diff(props.data, state.rawData, false)) {
-            //如果传了死数据,并且数据改变
-            newState.initVirtualConfig=props.data.length<config.minDataTotal?null:true;//数据比较小则不执行虚拟列表
+            //如果传了死数据,并且数据改变,浅比较
+
+            //数据比较大且不分页则执行虚拟列表
+            newState.initVirtualConfig=props.pagination!==true&&props.data.length<config.minDataTotal?null:true;
             newState.rawData = props.data;
             try {
                 //分页情况下，数据切割
@@ -147,9 +147,9 @@ class DataGrid extends Component {
                     : props.data : props.data;    
             }
             catch (e) {
-                newState.data = func.shallowClone(props.data);
+                newState.data =(props.data);
             }
-            if(newState.initVirtualConfig===null){
+            if(newState.initVirtualConfig===null){//不需要做虚拟列表
                 newState.visibleData=newState.data;
             }
             newState.total = props.total || props.data.length || 0

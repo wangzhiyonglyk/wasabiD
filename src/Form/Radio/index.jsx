@@ -92,7 +92,7 @@ class Radio extends Component {
     render() {
         const { data, readOnly } = this.props;
         const liProps = { data, readOnly, value: this.state.value, onSelect: this.onSelect }
-        return <ul className="wasabi-checkul radio"> <LiView {...liProps} onSelect={this.onSelect.bind(this)}></LiView> {this.props.children}</ul>
+        return <ul className="wasabi-checkul"> <LiView {...liProps} onSelect={this.onSelect.bind(this)}></LiView> {this.props.children}</ul>
     }
 }
 

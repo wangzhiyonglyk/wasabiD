@@ -86,7 +86,7 @@ export default {
         hotData: PropTypes.array,//热门选择的数据
         idField: PropTypes.string,//树组件/picker id字段名称
         parentField: PropTypes.string,//树组件/picker pId字段名称
-        simpleData: PropTypes.bool,//树组件/picker 是否启用简单数据格式
+        isSimpleData: PropTypes.bool,//树组件/picker 是否启用简单数据格式
         attachTime: PropTypes.bool,//日期组件时是否附带时间
         attachSecond: PropTypes.bool,//时间组件是否附带秒
         allMinute: PropTypes.bool,//时间组件是否显示全部分钟
